@@ -1,0 +1,11 @@
+@import "tailwindcss";
+
+:root {
+  --gradient-color: linear-gradient(141deg, #00c853 0%, #00b0ff 62.41%);
+  --primary-section-color: rgba(221, 244, 255, 1);
+  --secondary-section-color: rgb(245, 245, 245);
+}
+
+body {
+  font-family: "Montserrat", sans-serif;
+}

@@ -8,7 +8,17 @@ export default function ChangeLanguage() {
     <select
       value={language}
       onChange={(e) => changeLanguage(e.target.value)}
-      className="border rounded px-2 py-1"
+      className="
+        border border-gray-300 
+        rounded-lg 
+        p-0.5
+        shadow-sm 
+        transition 
+        duration-200 
+        ease-in-out
+      hover:border-gray-400
+        cursor-pointer
+      "
     >
       {languages.map((lang) => (
         <option key={lang.name} value={lang.name}>

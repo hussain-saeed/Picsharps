@@ -1,7 +1,8 @@
 function TitleBlock({ subtitle, title, description }) {
   return (
     <div className="py-[62px] text-center">
-      <span
+      
+      {subtitle && <span
         className="font-semibold text-white mb-[25px] inline-block"
         style={{
           background: "var(--gradient-color)",
@@ -11,8 +12,8 @@ function TitleBlock({ subtitle, title, description }) {
         }}
       >
         {subtitle}
-      </span>
-      <h1 className="font-black uppercase text-[48px] mb-1">{title}</h1>
+      </span>}
+      <h1 className="font-black text-[30px] sm:text-[48px] mb-1">{title}</h1>
       <p className="max-w-[800px] mx-auto">{description}</p>
     </div>
   );

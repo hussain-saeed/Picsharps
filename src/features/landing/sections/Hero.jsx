@@ -2,10 +2,10 @@ import Container from "../../../components/Container";
 
 function Hero() {
   return (
-    <div className="bg-(--secondary-section-color) min-h-[95vh] flex">
+    <div className="bg-(--secondary-section-color) flex">
       <Container className="flex flex-col items-center">
         <h1
-          className="text-[56px] sm:text-[96px]"
+          className="text-[40px] sm:text-[90px]"
           style={{
             marginTop: "72px",
             marginBottom: "14px",
@@ -19,7 +19,7 @@ function Hero() {
           DESIGN EASILY
         </h1>
         <p
-          className="w-[85%] md:w-[60%]"
+          className="w-[85%] lg:w-[60%]"
           style={{
             marginBottom: "62px",
             color: "rgba(0, 0, 0, 1)",
@@ -32,7 +32,7 @@ function Hero() {
         </p>
         <div
           style={{ boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.25)" }}
-          className="w-[85%] md:w-[60%] h-auto overflow-hidden rounded-[30px] mb-[123px]"
+          className="w-[85%] md:w-[60%] h-auto overflow-hidden rounded-[30px] mb-[110px]"
         >
           <img
             src="/images/hero.gif"

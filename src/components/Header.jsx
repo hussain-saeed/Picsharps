@@ -29,7 +29,7 @@ export default function Header() {
           }`}
         >
           <img src="/images/logo.png" alt="Logo" />
-          <span className="text-[20px] font-semibold text-[rgba(2, 38, 108, 1)]">
+          <span className="text-[20px] font-semibold" style={{color: "rgba(2, 38, 108, 1)"}}>
             Picsharps
           </span>
         </div>

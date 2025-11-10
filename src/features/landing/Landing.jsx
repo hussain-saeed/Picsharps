@@ -5,6 +5,8 @@ import Quick from "./sections/Quick";
 import PresentService from "../../components/PresentService";
 import { Link } from "react-router-dom";
 import How from "./sections/How";
+import Ready from "./sections/Ready";
+import Footer from "../../components/Footer";
 
 function Landing() {
   return (
@@ -41,6 +43,8 @@ function Landing() {
       </div>
 
       <How />
+      <Ready />
+      <Footer />
     </>
   );
 }

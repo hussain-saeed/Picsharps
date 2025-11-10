@@ -9,6 +9,7 @@ export default function ChangeLanguage() {
       value={language}
       onChange={(e) => changeLanguage(e.target.value)}
       className="
+        bg-transparent
         border border-gray-300 
         rounded-lg 
         p-0.5

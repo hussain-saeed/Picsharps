@@ -1,6 +1,11 @@
+import { useContext } from "react";
+import { LanguageContext } from "../../../context/LanguageContext";
 import Container from "../../../components/Container";
 
 function Hero() {
+  const { direction } = useContext(LanguageContext);
+  const isRTL = direction === "rtl";
+
   return (
     <div className="bg-(--secondary-section-color) flex">
       <Container className="flex flex-col items-center">
@@ -30,15 +35,80 @@ function Hero() {
           Enhance, retouch, remove backgrounds, and create stunning visuals in
           seconds — no design skills needed.
         </p>
+
         <div
-          style={{ boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.25)" }}
-          className="w-[85%] md:w-[60%] h-auto overflow-hidden rounded-[30px] mb-[110px]"
+          className={`flex justify-between flex-wrap gap-6 mb-30 ${
+            isRTL ? "flex-row-reverse" : ""
+          }`}
         >
-          <img
-            src="/images/hero.gif"
-            alt="Hero"
-            className="w-full h-full object-cover"
-          />
+          <div
+            style={{ boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.25)" }}
+            className=" overflow-hidden rounded-[30px] w-full lg:w-[48.5%]"
+          >
+            <img
+              src="/images/hero.gif"
+              alt="Hero"
+              className="w-full h-full object-cover"
+            />
+          </div>
+
+          <div
+            style={{
+              border: "2px dashed rgba(0, 0, 0, 0.31)",
+              padding: "70px",
+              textAlign: "center",
+              cursor: "pointer",
+              borderRadius: "20px",
+            }}
+            className="lg:w-[48.5%] w-full"
+          >
+            <div>
+              <div
+                style={{
+                  backgroundColor: "rgba(195, 231, 249, 1)",
+                  width: "fit-content",
+                  padding: "20px",
+                  borderRadius: "50%",
+                  margin: "auto",
+                  marginBottom: "14px",
+                }}
+              >
+                <img src="/images/upload.png" />
+              </div>
+              <h2
+                style={{
+                  fontWeight: "500",
+                  fontSize: "20px",
+                  marginBottom: "20px",
+                }}
+              >
+                Drag & Drop or Click to Upload
+              </h2>
+              <span
+                style={{
+                  fontSize: "15px",
+                  fontWeight: "300",
+                }}
+              >
+                PNG, JPG, JPEG --- Max size 10MB
+              </span>
+              <span
+                style={{
+                  display: "block",
+                  background: "var(--gradient-color)",
+                  margin: "auto",
+                  marginTop: "30px",
+                  width: "250px",
+                  textAlign: "center",
+                  padding: "10px 55px",
+                  color: "white",
+                  borderRadius: "20px",
+                }}
+              >
+                Upload Image
+              </span>
+            </div>
+          </div>
         </div>
       </Container>
     </div>

@@ -17,16 +17,16 @@ const PresentService = ({
   return (
     <div
       className={`
-        flex flex-col lg:flex-row items-center lg:items-space-between gap-10 lg:gap-[100px]
+        flex flex-col lg:flex-row items-center justify-center gap-12
         ${isRTL ? "lg:flex-row-reverse" : "lg:flex-row"}
       `}
     >
       {isTextFirst ? (
         <>
           <div
-            className={`flex flex-col ${
+            className={`flex flex-col lg:w-[46%] ${
               isRTL ? "lg:text-right" : "lg:text-left"
-            } lg:flex-1 text-center`}
+            } text-center`}
           >
             {category && <span>{category}</span>}
             <h2
@@ -40,9 +40,10 @@ const PresentService = ({
               {title}
             </h2>
             <p
-              className={`w-[90%] mx-auto ${
+              className={`mx-auto ${
                 isRTL ? "lg:mr-0" : "lg:ml-0"
-              } mb-8`}
+              } lg:text-justify mb-8`}
+              dir={isRTL ? "rtl" : "ltr"}
             >
               {description}
             </p>
@@ -54,28 +55,27 @@ const PresentService = ({
                 textAlign: "center",
                 padding: "10px 55px",
                 color: "white",
-                borderRadius: "10px",
+                borderRadius: "20px",
               }}
               to={linkTo}
             >
               {innerLinkText}
             </Link>
           </div>
-
-          <div className="lg:flex-1">
+          <div>
             <img src={imageSrc} alt={title} />
           </div>
         </>
       ) : (
         <>
-          <div className="lg:flex-1">
+          <div>
             <img src={imageSrc} alt={title} />
           </div>
 
           <div
-            className={`flex flex-col ${
+            className={`flex flex-col lg:w-[46%] ${
               isRTL ? "lg:text-right" : "lg:text-left"
-            } lg:flex-1 text-center`}
+            } text-center`}
           >
             {category && <span>{category}</span>}
             <h2
@@ -89,9 +89,10 @@ const PresentService = ({
               {title}
             </h2>
             <p
-              className={`w-[90%] mx-auto ${
+              className={`mx-auto ${
                 isRTL ? "lg:mr-0" : "lg:ml-0"
-              } mb-8`}
+              } lg:text-justify mb-8`}
+              dir={isRTL ? "rtl" : "ltr"}
             >
               {description}
             </p>
@@ -103,7 +104,7 @@ const PresentService = ({
                 textAlign: "center",
                 padding: "10px 55px",
                 color: "white",
-                borderRadius: "10px",
+                borderRadius: "20px",
               }}
               to={linkTo}
             >

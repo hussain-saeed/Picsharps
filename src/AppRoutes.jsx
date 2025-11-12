@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { LanguageProvider } from "./context/LanguageContext";
 import Landing from "./features/static/landing/Landing";
 import UploadPhoto from "./features/upload_photo/UploadPhoto";
+import AllTools from "./features/static/AllTools";
 
 const data = [
   "remove-background",
@@ -29,6 +30,8 @@ export default function AppRoutes() {
           {data.map((path) => (
             <Route key={path} path={`/${path}`} element={<UploadPhoto />} />
           ))}
+
+          <Route path="/all-tools" element={<AllTools />} />
 
           <Route path="*" element={<p>not found</p>} />
         </Routes>

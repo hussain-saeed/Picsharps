@@ -2,7 +2,7 @@ import React, { useState, useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 import { useLocation } from "react-router-dom";
 
-const ImageUploader = () => {
+const Dropzone = () => {
   const location = useLocation();
   const currentPath = location.pathname;
 
@@ -193,4 +193,4 @@ const ImageUploader = () => {
   );
 };
 
-export default ImageUploader;
+export default Dropzone;

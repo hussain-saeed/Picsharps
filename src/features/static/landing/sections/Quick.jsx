@@ -1,7 +1,7 @@
 import { useContext } from "react";
-import { LanguageContext } from "../../../context/LanguageContext";
-import Container from "../../../components/Container";
-import TitleBlock from "../../../components/TitleBlock";
+import { LanguageContext } from "/src/context/LanguageContext";
+import Container from "/src/components/Container";
+import TitleBlock from "/src/components/TitleBlock";
 
 const data = [
   {
@@ -36,7 +36,7 @@ function Quick() {
   const isRTL = direction === "rtl";
 
   return (
-    <div className="bg-(--primary-section-color) pb-12">
+    <div className="bg-(--primary-section-color) pb-8">
       <Container>
         <TitleBlock
           subtitle={"QUICK LINKS"}
@@ -53,7 +53,7 @@ function Quick() {
           {data.map((box, index) => (
             <div
               key={index}
-              className={`flex flex-col items-center text-center mb-6 w-full sm:w-[48%] lg:w-[17%]`}
+              className={`flex flex-col items-center text-center mb-14 w-full sm:w-[48%] lg:w-[17%]`}
             >
               <img src={box.image} alt={box.title} className="mb-[23px]" />
               <h3

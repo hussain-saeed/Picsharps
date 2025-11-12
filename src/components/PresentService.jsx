@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { LanguageContext } from "../context/LanguageContext";
 import { Link } from "react-router-dom";
 
@@ -10,9 +10,17 @@ const PresentService = ({
   description,
   linkTo,
   innerLinkText,
+  isNeedArrow,
 }) => {
   const { direction } = useContext(LanguageContext);
   const isRTL = direction === "rtl";
+  const [isLg, setIsLg] = useState(window.innerWidth >= 1024);
+
+  useEffect(() => {
+    const handleResize = () => setIsLg(window.innerWidth >= 1024);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   return (
     <div
@@ -21,7 +29,7 @@ const PresentService = ({
         ${isRTL ? "lg:flex-row-reverse" : "lg:flex-row"}
       `}
     >
-      {isTextFirst ? (
+      {isTextFirst && isLg ? (
         <>
           <div
             className={`flex flex-col lg:w-[46%] ${
@@ -68,8 +76,22 @@ const PresentService = ({
         </>
       ) : (
         <>
-          <div>
+          <div style={{ position: "relative" }}>
             <img src={imageSrc} alt={title} />
+            {isNeedArrow === true ? (
+              <img
+                src="/images/vector-2.png"
+                alt="arrow"
+                style={{
+                  position: "absolute",
+                  bottom: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, 50%)",
+                }}
+              />
+            ) : (
+              ""
+            )}
           </div>
 
           <div

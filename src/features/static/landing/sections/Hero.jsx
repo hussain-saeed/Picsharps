@@ -1,6 +1,6 @@
 import { useContext } from "react";
-import { LanguageContext } from "../../../context/LanguageContext";
-import Container from "../../../components/Container";
+import { LanguageContext } from "/src/context/LanguageContext";
+import Container from "/src/components/Container";
 
 function Hero() {
   const { direction } = useContext(LanguageContext);
@@ -37,13 +37,13 @@ function Hero() {
         </p>
 
         <div
-          className={`flex justify-between flex-wrap gap-6 mb-30 ${
+          className={`flex justify-center lg:justify-between flex-wrap gap-6 mb-30 ${
             isRTL ? "flex-row-reverse" : ""
           }`}
         >
           <div
             style={{ boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.25)" }}
-            className=" overflow-hidden rounded-[30px] w-full lg:w-[48.5%]"
+            className=" overflow-hidden rounded-[30px] w-[90%] lg:w-[48.5%]"
           >
             <img
               src="/images/hero.gif"
@@ -60,7 +60,7 @@ function Hero() {
               cursor: "pointer",
               borderRadius: "20px",
             }}
-            className="lg:w-[48.5%] w-full"
+            className="lg:w-[48.5%] w-[90%]"
           >
             <div>
               <div

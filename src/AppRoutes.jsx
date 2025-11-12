@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { LanguageProvider } from "./context/LanguageContext";
-import Landing from "./features/landing/Landing";
+import Landing from "./features/static/landing/Landing";
 import UploadPhoto from "./features/upload_photo/UploadPhoto";
 
 const data = [

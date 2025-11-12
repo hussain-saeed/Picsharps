@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
-import { LanguageContext } from "../../../context/LanguageContext";
-import Container from "../../../components/Container";
-import TitleBlock from "../../../components/TitleBlock";
+import { LanguageContext } from "/src/context/LanguageContext";
+import Container from "/src/components/Container";
+import TitleBlock from "/src/components/TitleBlock";
 
 const data = [
   { id: 1, img: "/images/click-1.png", text: "Choose AI tool" },

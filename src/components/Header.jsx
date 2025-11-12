@@ -7,6 +7,7 @@ import Container from "./Container";
 import ChangeLanguage from "./ChangeLanguage";
 import { FiChevronDown, FiMenu, FiX } from "react-icons/fi";
 import { Link } from "react-router-dom";
+import ToolsMenu from "./ToolsMenu";
 
 const translations = { English, French, Arabic };
 
@@ -15,6 +16,7 @@ export default function Header() {
   const t = translations[language] || translations["English"];
   const [menuOpen, setMenuOpen] = useState(false);
   const isRTL = direction === "rtl";
+  const [toolsMenuOpen, setToolsMenuOpen] = useState(false);
 
   return (
     <header className="shadow-md py-[22px]">
@@ -29,7 +31,10 @@ export default function Header() {
           }`}
         >
           <img src="/images/logo.png" alt="Logo" />
-          <span className="text-[20px] font-semibold" style={{color: "rgba(2, 38, 108, 1)"}}>
+          <span
+            className="text-[20px] font-semibold"
+            style={{ color: "rgba(2, 38, 108, 1)" }}
+          >
             Picsharps
           </span>
         </div>
@@ -49,6 +54,9 @@ export default function Header() {
               className={`flex items-center gap-1.5 ${
                 isRTL ? "flex-row-reverse" : ""
               } cursor-pointer`}
+              onClick={() => {
+                label === t.tools && setToolsMenuOpen(!toolsMenuOpen);
+              }}
             >
               <img src={`/images/${img}.png`} alt={label} />
               <span>{label}</span>
@@ -77,6 +85,8 @@ export default function Header() {
             {t.login}
           </button>
         </div>
+
+        <ToolsMenu toolsMenuOpen={toolsMenuOpen} />
 
         <button
           className="lg:hidden cursor-pointer"

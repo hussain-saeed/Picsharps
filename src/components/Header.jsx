@@ -8,6 +8,7 @@ import ChangeLanguage from "./ChangeLanguage";
 import { FiChevronDown, FiMenu, FiX } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import ToolsMenu from "./ToolsMenu";
+import { useOverlay } from "../context/OverlayContext";
 
 const translations = { English, French, Arabic };
 
@@ -17,9 +18,10 @@ export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const isRTL = direction === "rtl";
   const [toolsMenuOpen, setToolsMenuOpen] = useState(false);
+  const { isVisible, setIsVisible } = useOverlay();
 
   return (
-    <header className="shadow-md py-[22px]">
+    <header className="shadow-md py-[22px] fixed w-full bg-white z-200">
       <Container
         className={`flex items-center justify-between ${
           isRTL ? "flex-row-reverse" : ""
@@ -56,6 +58,7 @@ export default function Header() {
               } cursor-pointer`}
               onClick={() => {
                 label === t.tools && setToolsMenuOpen(!toolsMenuOpen);
+                label === t.tools && setIsVisible(!isVisible);
               }}
             >
               <img src={`/images/${img}.png`} alt={label} />
@@ -90,14 +93,17 @@ export default function Header() {
 
         <button
           className="lg:hidden cursor-pointer"
-          onClick={() => setMenuOpen(!menuOpen)}
+          onClick={() => {
+            setMenuOpen(!menuOpen);
+            setIsVisible(!isVisible);
+          }}
         >
           {menuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
         </button>
 
         {menuOpen && (
           <div
-            className={`shadow-md absolute top-[79px] bg-white p-6 flex flex-col gap-4 ${
+            className={`shadow-md absolute top-[78px] bg-white p-6 flex flex-col gap-4 ${
               isRTL ? "left-[5%]" : "right-[5%]"
             } rounded-b-[10px]`}
           >

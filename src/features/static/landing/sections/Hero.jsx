@@ -12,7 +12,7 @@ function Hero() {
         <h1
           className="text-[40px] sm:text-[90px]"
           style={{
-            marginTop: "72px",
+            marginTop: "130px",
             marginBottom: "14px",
             background: "var(--gradient-color)",
             WebkitBackgroundClip: "text",
@@ -37,7 +37,7 @@ function Hero() {
         </p>
 
         <div
-          className={`flex justify-center lg:justify-between flex-wrap gap-6 mb-30 ${
+          className={`flex justify-center lg:justify-between flex-wrap gap-6 mb-[100px] ${
             isRTL ? "flex-row-reverse" : ""
           }`}
         >

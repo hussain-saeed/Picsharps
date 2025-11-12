@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { LanguageProvider } from "./context/LanguageContext";
+import { OverlayProvider } from "./context/OverlayContext";
 import Landing from "./features/static/landing/Landing";
 import UploadPhoto from "./features/upload_photo/UploadPhoto";
 import AllTools from "./features/static/AllTools";
@@ -23,19 +24,21 @@ const data = [
 export default function AppRoutes() {
   return (
     <LanguageProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Landing />} />
+      <OverlayProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Landing />} />
 
-          {data.map((path) => (
-            <Route key={path} path={`/${path}`} element={<UploadPhoto />} />
-          ))}
+            {data.map((path) => (
+              <Route key={path} path={`/${path}`} element={<UploadPhoto />} />
+            ))}
 
-          <Route path="/all-tools" element={<AllTools />} />
+            <Route path="/all-tools" element={<AllTools />} />
 
-          <Route path="*" element={<p>not found</p>} />
-        </Routes>
-      </BrowserRouter>
+            <Route path="*" element={<p>not found</p>} />
+          </Routes>
+        </BrowserRouter>
+      </OverlayProvider>
     </LanguageProvider>
   );
 }

@@ -113,7 +113,7 @@ function UploadPhoto() {
       <div
         style={{
           backgroundColor: "rgba(238, 238, 238)",
-          padding: "120px 0 135px 0",
+          padding: "140px 0 135px 0",
         }}
       >
         <Container className="text-center">

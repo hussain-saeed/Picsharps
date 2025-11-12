@@ -46,7 +46,7 @@ function Landing() {
         <Container>
           <PresentService
             isTextFirst={false}
-            imageSrc="/images/remove object-exp.png"
+            imageSrc="/images/remove-object-exp.png"
             title="Remove Unwanted Objects"
             description="Clean up your photos in seconds with our smart AI object remover. Whether it's a stray person, a distracting item, or background clutter—just highlight it and let the magic happen. Your image stays flawless, your focus stays sharp."
             linkTo=""

@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 const PresentService = ({
   isTextFirst,
   imageSrc,
+  isCropped,
   category,
   title,
   description,
@@ -25,8 +26,10 @@ const PresentService = ({
   return (
     <div
       className={`
-        flex flex-col lg:flex-row items-center justify-center gap-12
-        ${isRTL ? "lg:flex-row-reverse" : "lg:flex-row"}
+        flex flex-col lg:flex-row justify-center gap-12
+        ${isRTL ? "lg:flex-row-reverse" : "lg:flex-row"} ${
+        isCropped === true ? "items-center lg:items-start" : "items-center"
+      }
       `}
     >
       {isTextFirst && isLg ? (
@@ -36,7 +39,18 @@ const PresentService = ({
               isRTL ? "lg:text-right" : "lg:text-left"
             } text-center`}
           >
-            {category && <span>{category}</span>}
+            {category && (
+              <span
+                style={{
+                  color: "rgba(114, 134, 255, 1)",
+                  fontSize: "14px",
+                  fontWeight: "600",
+                  letterSpacing: "4px",
+                }}
+              >
+                {category}
+              </span>
+            )}
             <h2
               style={{
                 marginBottom: "8px",
@@ -70,13 +84,44 @@ const PresentService = ({
               {innerLinkText}
             </Link>
           </div>
-          <div>
+          <div
+            style={{
+              position: "relative",
+              borderRadius: "15px",
+              overflow: "hidden",
+              boxShadow:
+                isCropped === true ? "0px 4px 4px 0px rgba(0, 0, 0, 0.25)" : "",
+            }}
+          >
             <img src={imageSrc} alt={title} />
+            {isNeedArrow === true ? (
+              <img
+                src="/images/vector-2.png"
+                alt="arrow"
+                style={{
+                  position: "absolute",
+                  bottom: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, 50%)",
+                }}
+              />
+            ) : (
+              ""
+            )}
           </div>
         </>
       ) : (
         <>
-          <div style={{ position: "relative" }}>
+          <div
+            style={{
+              position: "relative",
+              borderRadius: "15px",
+              overflow: "hidden",
+              boxShadow:
+                isCropped === true ? "0px 4px 4px 0px rgba(0, 0, 0, 0.25)" : "",
+              
+            }}
+          >
             <img src={imageSrc} alt={title} />
             {isNeedArrow === true ? (
               <img
@@ -99,7 +144,18 @@ const PresentService = ({
               isRTL ? "lg:text-right" : "lg:text-left"
             } text-center`}
           >
-            {category && <span>{category}</span>}
+            {category && (
+              <span
+                style={{
+                  color: "rgba(114, 134, 255, 1)",
+                  fontSize: "14px",
+                  fontWeight: "600",
+                  letterSpacing: "4px",
+                }}
+              >
+                {category}
+              </span>
+            )}
             <h2
               style={{
                 marginBottom: "8px",

@@ -1,33 +1,76 @@
+import { useContext, useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { FiChevronDown, FiMenu, FiX } from "react-icons/fi";
+import Container from "./Container";
+import ChangeLanguage from "./ChangeLanguage";
+import ToolsMenu from "./ToolsMenu";
+import { LanguageContext } from "../context/LanguageContext";
+import { useOverlay } from "../context/OverlayContext";
 import English from "../i18n/components/header/english.json";
 import French from "../i18n/components/header/french.json";
 import Arabic from "../i18n/components/header/arabic.json";
-import { useContext, useState } from "react";
-import { LanguageContext } from "../context/LanguageContext";
-import Container from "./Container";
-import ChangeLanguage from "./ChangeLanguage";
-import { FiChevronDown, FiMenu, FiX } from "react-icons/fi";
-import { Link } from "react-router-dom";
-import ToolsMenu from "./ToolsMenu";
-import { useOverlay } from "../context/OverlayContext";
 
 const translations = { English, French, Arabic };
 
 export default function Header() {
   const { language, direction } = useContext(LanguageContext);
-  const t = translations[language] || translations["English"];
-  const [menuOpen, setMenuOpen] = useState(false);
-  const isRTL = direction === "rtl";
-  const [toolsMenuOpen, setToolsMenuOpen] = useState(false);
   const { isVisible, setIsVisible } = useOverlay();
+  const location = useLocation();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [toolsMenuOpen, setToolsMenuOpen] = useState(false);
+  const [activeNavOrder, setActiveNavOrder] = useState(0);
+  const t = translations[language] || translations["English"];
+  const isRTL = direction === "rtl";
+
+  const handleHeaderClick = () => {
+    if (toolsMenuOpen === true) {
+      setToolsMenuOpen(false);
+      setIsVisible(false);
+    }
+    if (menuOpen === true) {
+      setMenuOpen(false);
+      setIsVisible(false);
+    }
+  };
+
+  const handleNavClick = (label) => {
+    if (label === t.tools) {
+      setToolsMenuOpen(!toolsMenuOpen);
+      setIsVisible(!isVisible);
+    }
+  };
+
+  useEffect(() => {
+    if (isVisible === false) {
+      setToolsMenuOpen(false);
+      setMenuOpen(false);
+    }
+  }, [isVisible]);
+
+  useEffect(() => {
+    if (location.pathname === "/" && !toolsMenuOpen) {
+      setActiveNavOrder(1);
+    } else if (location.pathname === "/all-tools" || toolsMenuOpen) {
+      setActiveNavOrder(2);
+    } else if (location.pathname === "/pricing") {
+      setActiveNavOrder(3);
+    } else {
+      setActiveNavOrder(0);
+    }
+  }, [location.pathname, toolsMenuOpen]);
 
   return (
-    <header className="shadow-md py-[22px] fixed w-full bg-white z-200">
+    <header
+      onClick={handleHeaderClick}
+      className="shadow-md py-[22px] fixed w-full bg-white z-200"
+    >
       <Container
         className={`flex items-center justify-between ${
           isRTL ? "flex-row-reverse" : ""
         }`}
       >
-        <div
+        <Link
+          to="/"
           className={`flex items-center gap-2.5 ${
             isRTL ? "flex-row-reverse" : ""
           }`}
@@ -39,31 +82,41 @@ export default function Header() {
           >
             Picsharps
           </span>
-        </div>
+        </Link>
 
         <nav
-          className={`hidden lg:flex items-center gap-16 font-medium text-black ${
+          className={`hidden lg:flex gap-16 font-medium text-black ${
             isRTL ? "flex-row-reverse" : ""
           }`}
         >
           {[
-            { img: "home", label: t.home },
+            { img: "home", label: t.home, to: "/" },
             { img: "extra-features", label: t.tools, icon: <FiChevronDown /> },
             { img: "tags", label: t.pricing },
-          ].map(({ img, label, icon }) => (
+          ].map(({ img, label, icon, to }, index) => (
             <Link
+              to={to}
               key={label}
-              className={`flex items-center gap-1.5 ${
+              className={`flex items-center gap-1.5 relative ${
                 isRTL ? "flex-row-reverse" : ""
               } cursor-pointer`}
-              onClick={() => {
-                label === t.tools && setToolsMenuOpen(!toolsMenuOpen);
-                label === t.tools && setIsVisible(!isVisible);
-              }}
+              onClick={() => handleNavClick(label)}
             >
               <img src={`/images/${img}.png`} alt={label} />
               <span>{label}</span>
               {icon}
+              <span
+                style={{
+                  position: "absolute",
+                  bottom: "-27.5px",
+                  width: "105%",
+                  height: "4px",
+                  borderTopLeftRadius: "5px",
+                  borderTopRightRadius: "5px",
+                  background: "var(--gradient-color)",
+                  display: index + 1 === activeNavOrder ? "block" : "none",
+                }}
+              ></span>
             </Link>
           ))}
         </nav>
@@ -83,6 +136,7 @@ export default function Header() {
               border: "1px solid #00d0ff",
               borderRadius: "30px",
               fontWeight: "600",
+              cursor: "pointer",
             }}
           >
             {t.login}
@@ -91,15 +145,22 @@ export default function Header() {
 
         <ToolsMenu toolsMenuOpen={toolsMenuOpen} />
 
-        <button
-          className="lg:hidden cursor-pointer"
-          onClick={() => {
-            setMenuOpen(!menuOpen);
-            setIsVisible(!isVisible);
-          }}
+        <div
+          className={`flex gap-6 lg:hidden ${
+            isRTL ? "flex-row-reverse" : "flex-row"
+          }`}
         >
-          {menuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
-        </button>
+          <ChangeLanguage />
+          <button
+            className="cursor-pointer"
+            onClick={() => {
+              setMenuOpen(!menuOpen);
+              setIsVisible(!isVisible);
+            }}
+          >
+            {menuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
+          </button>
+        </div>
 
         {menuOpen && (
           <div
@@ -115,7 +176,7 @@ export default function Header() {
                 icon: <FiChevronDown />,
               },
               { img: "tags", label: t.pricing },
-            ].map(({ img, label, icon }) => (
+            ].map(({ img, label }) => (
               <Link
                 key={label}
                 className={`flex items-center gap-1.5 ${
@@ -124,11 +185,9 @@ export default function Header() {
               >
                 <img src={`/images/${img}.png`} alt={label} />
                 <span>{label}</span>
-                {icon}
               </Link>
             ))}
 
-            <ChangeLanguage />
             <button
               style={{
                 padding: "5px 20px",
@@ -138,6 +197,7 @@ export default function Header() {
                 border: "1px solid #00d0ff",
                 borderRadius: "30px",
                 fontWeight: "600",
+                cursor: "pointer",
               }}
             >
               {t.login}

@@ -40,7 +40,8 @@ function Footer() {
               isRTL ? "items-end" : "items-start"
             } items-end`}
           >
-            <div
+            <Link
+              to="/"
               className={`flex items-center gap-2.5 ${
                 isRTL ? "flex-row-reverse text-right" : "text-left"
               }`}
@@ -52,7 +53,7 @@ function Footer() {
               >
                 Picsharps
               </span>
-            </div>
+            </Link>
             <p
               style={{ fontSize: "15px" }}
               className="lg:w-[55%] mb-10 lg:mb-0 text-[rgba(0, 0, 0, 0.52)]"
@@ -88,7 +89,7 @@ function Footer() {
             ))}
           </div>
         </div>
-        
+
         <div
           className={`flex items-center justify-between pb-10 flex-wrap flex-col gap-4 ${
             isRTL ? "sm:flex-row-reverse" : "sm:flex-row"

@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { LanguageContext } from "../context/LanguageContext";
 import Container from "./Container";
 import { Link } from "react-router-dom";
@@ -46,6 +46,10 @@ const data = [
 function ToolsMenuMobile({ setActiveView }) {
   const { direction } = useContext(LanguageContext);
   const isRTL = direction === "rtl";
+
+  useEffect(() => {
+    localStorage.setItem("activeView", "home");
+  }, []);
 
   return (
     <div style={{ backgroundColor: "rgba(221, 244, 255, 1)" }}>

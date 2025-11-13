@@ -12,7 +12,7 @@ import Arabic from "../i18n/components/header/arabic.json";
 
 const translations = { English, French, Arabic };
 
-export default function Header() {
+export default function Header({ setActiveView }) {
   const { language, direction } = useContext(LanguageContext);
   const { isVisible, setIsVisible } = useOverlay();
   const location = useLocation();
@@ -58,6 +58,14 @@ export default function Header() {
       setActiveNavOrder(0);
     }
   }, [location.pathname, toolsMenuOpen]);
+
+  const handleChangeView = (label) => {
+    const view = label === t.home ? "home" : label === t.tools ? "tools" : null;
+    if (view) {
+      localStorage.setItem("activeView", view);
+      setActiveView(view);
+    }
+  };
 
   return (
     <header
@@ -169,19 +177,21 @@ export default function Header() {
             } rounded-b-[10px]`}
           >
             {[
-              { img: "home", label: t.home },
+              { img: "home", label: t.home, to: "/" },
               {
                 img: "extra-features",
                 label: t.tools,
-                icon: <FiChevronDown />,
+                to: "/",
               },
-              { img: "tags", label: t.pricing },
-            ].map(({ img, label }) => (
+              /* img: "tags", label: t.pricing */
+            ].map(({ img, label, to }) => (
               <Link
+                to={to}
                 key={label}
                 className={`flex items-center gap-1.5 ${
                   isRTL ? "flex-row-reverse" : ""
                 } cursor-pointer`}
+                onClick={() => handleChangeView(label)}
               >
                 <img src={`/images/${img}.png`} alt={label} />
                 <span>{label}</span>

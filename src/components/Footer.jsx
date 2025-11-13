@@ -103,16 +103,16 @@ function Footer() {
               isRTL ? "flex-row-reverse" : ""
             }`}
           >
-            <a>
+            <a style={{ cursor: "pointer" }}>
               <img src="/images/facebook.png" alt="facebook" />
             </a>
-            <a>
+            <a style={{ cursor: "pointer" }}>
               <img src="/images/instagram.png" alt="instagram" />
             </a>
-            <a>
+            <a style={{ cursor: "pointer" }}>
               <img src="/images/x.png" alt="x" />
             </a>
-            <a>
+            <a style={{ cursor: "pointer" }}>
               <img src="/images/social-media.png" alt="social-media" />
             </a>
           </div>

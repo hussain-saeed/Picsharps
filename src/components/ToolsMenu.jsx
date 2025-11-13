@@ -7,19 +7,19 @@ const data1 = [
     title: "Background Tools",
     image: "/images/background-99.png",
     links: [
-      { name: "Remove Background", to: "" },
-      { name: "Change Background", to: "" },
-      { name: "Remove Object from Photo", to: "" },
+      { name: "Remove Background", to: "/remove-background" },
+      { name: "Change Background", to: "/change-background" },
+      { name: "Remove Object from Photo", to: "/remove-object-from-photo" },
     ],
   },
   {
     title: "Enhance & Cleanup",
     image: "/images/magic-1.png",
     links: [
-      { name: "AI Image Enhancer", to: "" },
-      { name: "Sharpen Image", to: "" },
-      { name: "Cleanup Pictures", to: "" },
-      { name: "Photo Filters", to: "" },
+      { name: "AI Image Enhancer", to: "/ai-image-enhancer" },
+      { name: "Sharpen Image", to: "/sharpen-image" },
+      { name: "Cleanup Pictures", to: "/cleanup-pictures" },
+      { name: "Photo Filters", to: "/photo-filters" },
     ],
   },
 ];
@@ -28,18 +28,18 @@ const data2 = [
     title: "Creative & Fun",
     image: "/images/idea-1.png",
     links: [
-      { name: "Photo to Cartoon", to: "" },
-      { name: "Sticker Maker", to: "" },
-      { name: "Collage Maker", to: "" },
+      { name: "Photo to Cartoon", to: "/photo-to-cartoon" },
+      { name: "Sticker Maker", to: "/sticker-maker" },
+      { name: "Collage Maker", to: "/collage-maker" },
     ],
   },
   {
     title: "Basic Edits",
     image: "/images/edit-1.png",
     links: [
-      { name: "Resize Image", to: "" },
-      { name: "Crop Image", to: "" },
-      { name: "Flip Image", to: "" },
+      { name: "Resize Image", to: "/resize-image" },
+      { name: "Crop Image", to: "/crop-image" },
+      { name: "Flip Image", to: "/flip-image" },
     ],
   },
 ];

@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { LanguageContext } from "/src/context/LanguageContext";
 import Container from "/src/components/Container";
+import { Link } from "react-router-dom";
 
 function Hero() {
   const { direction } = useContext(LanguageContext);
@@ -52,7 +53,8 @@ function Hero() {
             />
           </div>
 
-          <div
+          <Link
+            to="ai-image-enhancer"
             style={{
               border: "2px dashed rgba(0, 0, 0, 0.31)",
               padding: "70px",
@@ -108,7 +110,7 @@ function Hero() {
                 Upload Image
               </span>
             </div>
-          </div>
+          </Link>
         </div>
       </Container>
     </div>

@@ -44,7 +44,7 @@ function Hero() {
         >
           <div
             style={{ boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.25)" }}
-            className=" overflow-hidden rounded-[30px] w-[90%] lg:w-[48.5%]"
+            className=" overflow-hidden rounded-[30px] w-[92%] lg:w-[48.5%]"
           >
             <img
               src="/images/hero.gif"
@@ -57,12 +57,11 @@ function Hero() {
             to="ai-image-enhancer"
             style={{
               border: "2px dashed rgba(0, 0, 0, 0.31)",
-              padding: "70px",
               textAlign: "center",
               cursor: "pointer",
               borderRadius: "20px",
             }}
-            className="lg:w-[48.5%] w-[90%]"
+            className="lg:w-[48.5%] w-[92%] lg:p-17 p-6"
           >
             <div>
               <div
@@ -94,21 +93,28 @@ function Hero() {
               >
                 PNG, JPG, JPEG --- Max size 10MB
               </span>
-              <span
+              <div
                 style={{
-                  display: "block",
-                  background: "var(--gradient-color)",
-                  margin: "auto",
-                  marginTop: "30px",
-                  width: "250px",
-                  textAlign: "center",
-                  padding: "10px 55px",
-                  color: "white",
-                  borderRadius: "20px",
+                  display: "flex",
+                  justifyContent: "center",
+                  marginTop: "25px",
+                  width: "100%",
                 }}
               >
-                Upload Image
-              </span>
+                <span
+                  style={{
+                    display: "block",
+                    background: "var(--gradient-color)",
+                    width: "250px",
+                    textAlign: "center",
+                    padding: "10px 55px",
+                    color: "white",
+                    borderRadius: "20px",
+                  }}
+                >
+                  Upload Image
+                </span>
+              </div>
             </div>
           </Link>
         </div>

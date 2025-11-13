@@ -6,7 +6,7 @@ import Container from "../../components/Container";
 import Footer from "../../components/Footer";
 import DropZone from "./components/DropZone";
 
-const data = [
+const toolsData = [
   {
     path: "remove-background",
     title: "Remove Background",
@@ -87,6 +87,33 @@ const data = [
   },
 ];
 
+const staticBoxesData = [
+  {
+    id: 1,
+    img: "/images/group-263.png",
+    title: "Fast AI Processing",
+    span: "Get results in seconds with our advanced AI technology",
+  },
+  {
+    id: 2,
+    img: "/images/group-262.png",
+    title: "High Quality Cutouts",
+    span: "Precise edge detection for professional results",
+  },
+  {
+    id: 3,
+    img: "/images/group-261.png",
+    title: "Automatic Edge Detection",
+    span: "Smart algorithms handle complex images effortlessly",
+  },
+  {
+    id: 4,
+    img: "/images/group-260.png",
+    title: "Supports Large Images",
+    span: "Process high-resolution images up to 10MB",
+  },
+];
+
 function UploadPhoto() {
   const location = useLocation();
   const [title, setTitle] = useState(null);
@@ -95,8 +122,8 @@ function UploadPhoto() {
   const isRTL = direction === "rtl";
 
   useEffect(() => {
-    const currentPath = location.pathname.replace("/", ""); // يشيل الـ "/"
-    const matchedService = data.find((s) => currentPath.includes(s.path));
+    const currentPath = location.pathname.replace("/", "");
+    const matchedService = toolsData.find((s) => currentPath.includes(s.path));
 
     if (matchedService) {
       setTitle(matchedService.title);
@@ -134,6 +161,35 @@ function UploadPhoto() {
             {description}
           </p>
           <DropZone />
+
+          <div
+            className={`w-full flex flex-wrap justify-between gap-4 mt-36 ${
+              isRTL ? "flex-row-reverse" : ""
+            }`}
+          >
+            {staticBoxesData.map((box) => (
+              <div
+                key={box.id}
+                className="
+                  flex flex-col items-center justify-center text-center
+                bg-white rounded-xl p-8 shadow
+                  w-full sm:w-[48%] lg:w-[23%]
+                "
+              >
+                <img src={box.img} alt={box.title} className="mb-2" />
+                <h3 className="font-medium mb-2.5">{box.title}</h3>
+                <span
+                  style={{
+                    color: "rgba(133, 133, 133, 1)",
+                    fontSize: "13px",
+                    fontWeight: "300",
+                  }}
+                >
+                  {box.span}
+                </span>
+              </div>
+            ))}
+          </div>
         </Container>
       </div>
       <Footer />

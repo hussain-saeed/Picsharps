@@ -160,7 +160,7 @@ export default function Header({ setActiveView }) {
         <ToolsMenu toolsMenuOpen={toolsMenuOpen} />
 
         <div
-          className={`flex gap-6 lg:hidden ${
+          className={`flex gap-3 lg:hidden ${
             isRTL ? "flex-row-reverse" : "flex-row"
           }`}
         >

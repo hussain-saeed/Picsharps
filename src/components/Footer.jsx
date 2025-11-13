@@ -79,12 +79,12 @@ function Footer() {
                 key={index}
                 className="flex flex-col gap-2 min-w-[140px] sm:mb-0 mb-[35px]"
               >
-                <h3 className="text-[16px] font-semibold">{section.title}</h3>
+                <h3 className="text-[16px] font-semibold pt-1.5">{section.title}</h3>
                 <div className="flex flex-col gap-1.5">
                   {section.links.map((link, i) => (
                     <Link
                       key={i}
-                      className="text-[15px] text-[rgba(0, 0, 0, 0.52)] hover:text-blue-600 transition-colors"
+                      className="text-[15px] text-[rgba(0, 0, 0, 0.52)] hover:text-blue-600 transition-colors w-fit"
                       dir={direction}
                     >
                       {link}

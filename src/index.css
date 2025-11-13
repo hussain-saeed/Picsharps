@@ -6,6 +6,10 @@
   --secondary-section-color: rgb(245, 245, 245);
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   font-family: "Montserrat", sans-serif;
 }

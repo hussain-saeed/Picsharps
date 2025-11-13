@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { LanguageProvider } from "./context/LanguageContext";
 import { OverlayProvider } from "./context/OverlayContext";
+import ScrollToTop from "./components/ScrollToTop";
 import Landing from "./features/static/landing/Landing";
 import UploadPhoto from "./features/upload_photo/UploadPhoto";
 import AllTools from "./features/static/AllTools";
@@ -26,6 +27,7 @@ export default function AppRoutes() {
     <LanguageProvider>
       <OverlayProvider>
         <BrowserRouter>
+          <ScrollToTop />
           <Routes>
             <Route path="/" element={<Landing />} />
 

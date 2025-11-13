@@ -45,6 +45,12 @@ function Footer() {
               className={`flex items-center gap-2.5 ${
                 isRTL ? "flex-row-reverse text-right" : "text-left"
               }`}
+              onClick={() =>
+                window.scrollTo({
+                  top: 0,
+                  behavior: "smooth",
+                })
+              }
             >
               <img src="/images/logo.png" alt="Logo" />
               <span

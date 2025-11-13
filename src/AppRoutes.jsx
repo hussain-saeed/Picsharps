@@ -5,6 +5,7 @@ import ScrollToTop from "./components/ScrollToTop";
 import Landing from "./features/static/landing/Landing";
 import UploadPhoto from "./features/upload_photo/UploadPhoto";
 import AllTools from "./features/static/AllTools";
+import NotFound from "./features/static/NotFound";
 
 const data = [
   "remove-background",
@@ -37,7 +38,7 @@ export default function AppRoutes() {
 
             <Route path="/all-tools" element={<AllTools />} />
 
-            <Route path="*" element={<p>not found</p>} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
       </OverlayProvider>

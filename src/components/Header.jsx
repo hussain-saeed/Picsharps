@@ -140,7 +140,7 @@ export default function Header({ setActiveView }) {
             isRTL ? "flex-row-reverse" : ""
           }`}
         >
-          <ChangeLanguage />
+          <ChangeLanguage openFrom={"down"} />
           <button
             style={{
               padding: "5px 20px",
@@ -164,7 +164,7 @@ export default function Header({ setActiveView }) {
             isRTL ? "flex-row-reverse" : "flex-row"
           }`}
         >
-          <ChangeLanguage />
+          <ChangeLanguage openFrom={"down"} />
           <button
             className="cursor-pointer"
             onClick={() => {

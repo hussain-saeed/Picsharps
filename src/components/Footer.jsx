@@ -104,7 +104,7 @@ function Footer() {
           style={{ color: "rgba(0, 0, 0, 0.52)", fontSize: "15px" }}
         >
           <span>© 2025 picsharps. All rights reserved</span>
-          <ChangeLanguage />
+          <ChangeLanguage openFrom={"top"} />
           <div
             className={`flex items-center gap-8 ${
               isRTL ? "flex-row-reverse" : ""

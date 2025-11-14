@@ -123,7 +123,9 @@ function UploadPhoto() {
 
   useEffect(() => {
     const currentPath = location.pathname.replace("/", "");
-    const matchedService = toolsData.find((s) => currentPath.includes(s.path));
+    const matchedService = toolsData.find((toolData) =>
+      currentPath.includes(toolData.path)
+    );
 
     if (matchedService) {
       setTitle(matchedService.title);
@@ -147,9 +149,15 @@ function UploadPhoto() {
           <h2
             style={{
               fontWeight: "900",
-              fontSize: "48px",
-              marginBottom: "28px",
+              marginBottom: "15px",
             }}
+            className={`${
+              ["/remove-background", "/change-background"].includes(
+                location.pathname
+              )
+                ? "text-[39px] sm:text-[48px]"
+                : "text-[48px]"
+            }`}
           >
             {title}
           </h2>

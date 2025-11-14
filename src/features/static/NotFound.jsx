@@ -14,7 +14,7 @@ function NotFound() {
         }}
       >
         <Container className="pt-40 pb-40 flex flex-col justify-center items-center">
-          <img src="/images/not-found.png" alt="not found" className="mb-5" />
+          <img src="/images/not-found2.png" alt="not found" className="mb-5" />
           <Link
             to="/"
             className="text-[20px] sm:text-[24px] underline"

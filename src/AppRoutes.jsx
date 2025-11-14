@@ -33,7 +33,11 @@ export default function AppRoutes() {
             <Route path="/" element={<Landing />} />
 
             {data.map((path) => (
-              <Route key={path} path={`/${path}`} element={<UploadPhoto />} />
+              <Route
+                key={path}
+                path={`/${path}`}
+                element={<UploadPhoto key={path} />}
+              />
             ))}
 
             <Route path="/all-tools" element={<AllTools />} />

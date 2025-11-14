@@ -1,4 +1,8 @@
 @import "tailwindcss";
+@theme {
+  --breakpoint-xs: 450px;
+  --breakpoint-2xs: 370px;
+}
 
 :root {
   --gradient-color: linear-gradient(141deg, #00c853 0%, #00b0ff 62.41%);

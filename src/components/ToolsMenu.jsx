@@ -23,6 +23,7 @@ const data1 = [
     ],
   },
 ];
+
 const data2 = [
   {
     title: "Creative & Fun",
@@ -46,11 +47,12 @@ const data2 = [
 
 function ToolsMenu({ toolsMenuOpen }) {
   const { direction } = useContext(LanguageContext);
+
   const isRTL = direction === "rtl";
 
   return (
     <div
-      className={`bg-white absolute top-20 px-12 py-6 shadow-md gap-16 z-200 ${
+      className={`bg-white absolute top-21 px-20 py-10 shadow-md gap-22 z-200 ${
         isRTL ? "flex-row-reverse" : ""
       }`}
       style={{
@@ -61,14 +63,14 @@ function ToolsMenu({ toolsMenuOpen }) {
         display: toolsMenuOpen ? "flex" : "none",
       }}
     >
-      <div className="flex flex-col gap-8">
+      <div className="flex flex-col gap-12">
         {data1.map((tool, i) => (
           <div
             key={i}
-            className={`flex gap-1 ${isRTL ? "flex-row-reverse" : ""}`}
+            className={`flex gap-2 ${isRTL ? "flex-row-reverse" : ""}`}
           >
             <div
-              className="w-5 h-5 flex justify-center items-center"
+              className="w-6 h-6 flex justify-center items-center"
               style={{
                 borderRadius: "50%",
                 backgroundColor: "rgba(195, 231, 249, 1)",
@@ -82,20 +84,21 @@ function ToolsMenu({ toolsMenuOpen }) {
                 className="mb-1"
                 style={{
                   fontWeight: "500",
-                  fontSize: "11px",
-                  marginTop: "3px",
+                  fontSize: "13px",
+                  marginTop: "4px",
                 }}
                 dir={isRTL ? "rtl" : "ltr"}
               >
                 {tool.title}
               </h3>
+
               <ul>
                 {tool.links.map((link, j) => (
                   <li key={j} dir={isRTL ? "rtl" : "ltr"}>
                     <Link
                       to={link.to}
                       className="hover:text-blue-600 transition"
-                      style={{ fontWeight: "300", fontSize: "10px" }}
+                      style={{ fontWeight: "300", fontSize: "11.5px" }}
                     >
                       {link.name}
                     </Link>
@@ -107,14 +110,14 @@ function ToolsMenu({ toolsMenuOpen }) {
         ))}
       </div>
 
-      <div className="flex flex-col gap-8">
+      <div className="flex flex-col gap-12">
         {data2.map((tool, i) => (
           <div
             key={i}
-            className={`flex gap-1 ${isRTL ? "flex-row-reverse" : ""}`}
+            className={`flex gap-2 ${isRTL ? "flex-row-reverse" : ""}`}
           >
             <div
-              className="w-5 h-5 flex justify-center items-center"
+              className="w-6 h-6 flex justify-center items-center"
               style={{
                 borderRadius: "50%",
                 backgroundColor: "rgba(195, 231, 249, 1)",
@@ -128,20 +131,21 @@ function ToolsMenu({ toolsMenuOpen }) {
                 className="mb-1"
                 style={{
                   fontWeight: "500",
-                  fontSize: "11px",
-                  marginTop: "3px",
+                  fontSize: "13px",
+                  marginTop: "4px",
                 }}
                 dir={isRTL ? "rtl" : "ltr"}
               >
                 {tool.title}
               </h3>
+
               <ul>
                 {tool.links.map((link, j) => (
                   <li key={j} dir={isRTL ? "rtl" : "ltr"}>
                     <Link
                       to={link.to}
                       className="hover:text-blue-600 transition"
-                      style={{ fontWeight: "300", fontSize: "10px" }}
+                      style={{ fontWeight: "300", fontSize: "11.5px" }}
                     >
                       {link.name}
                     </Link>

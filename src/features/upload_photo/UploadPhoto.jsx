@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from "react";
-import { LanguageContext } from "../../context/LanguageContext";
 import { useLocation } from "react-router-dom";
+import { LanguageContext } from "../../context/LanguageContext";
 import Header from "../../components/Header";
 import Container from "../../components/Container";
 import Footer from "../../components/Footer";
@@ -116,10 +116,11 @@ const staticBoxesData = [
 
 function UploadPhoto() {
   const location = useLocation();
-  const [title, setTitle] = useState(null);
-  const [description, setDescription] = useState(null);
   const { direction } = useContext(LanguageContext);
   const isRTL = direction === "rtl";
+
+  const [title, setTitle] = useState(null);
+  const [description, setDescription] = useState(null);
 
   useEffect(() => {
     const currentPath = location.pathname.replace("/", "");

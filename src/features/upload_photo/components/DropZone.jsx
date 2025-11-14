@@ -5,11 +5,11 @@ import { useLocation } from "react-router-dom";
 const Dropzone = () => {
   const location = useLocation();
   const currentPath = location.pathname;
+  const isCollage = currentPath === "/collage-maker";
 
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [status, setStatus] = useState(""); // "success" | "error"
   const [message, setMessage] = useState("");
-  const isCollage = currentPath === "/collage-maker";
 
   const onDrop = useCallback(
     (acceptedFiles, fileRejections) => {
@@ -26,16 +26,13 @@ const Dropzone = () => {
           case "too-many-files":
             customMessage = "Not Allowed to Upload More Than 1 Image";
             break;
-
           case "file-invalid-type":
             customMessage = "Only PNG, JPG, JPEG Formats Are Allowed";
             break;
-
           case "file-too-large":
             customMessage =
               "Not Allowed to Upload Image That Is Larger Than 10MB";
             break;
-
           default:
             customMessage = error.message;
             break;
@@ -75,7 +72,6 @@ const Dropzone = () => {
       "image/png": [".png"],
     },
     maxSize: 10 * 1024 * 1024,
-
     multiple: isCollage,
   });
 
@@ -135,9 +131,7 @@ const Dropzone = () => {
         )}
       </div>
 
-      {isDragActive ? (
-        ""
-      ) : (
+      {!isDragActive && (
         <>
           {status === "success" && (
             <p style={{ color: "green", marginTop: "8px" }}>{message}</p>
@@ -148,46 +142,39 @@ const Dropzone = () => {
         </>
       )}
 
-      {/* Preview للصور المرفوعة */}
-      {isDragActive ? (
-        ""
-      ) : (
-        <>
-          {uploadedFiles.length > 0 && (
+      {!isDragActive && uploadedFiles.length > 0 && (
+        <div
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            gap: "10px",
+            marginTop: "15px",
+            justifyContent: "center",
+          }}
+        >
+          {uploadedFiles.map((file, index) => (
             <div
+              key={index}
               style={{
-                display: "flex",
-                flexWrap: "wrap",
-                gap: "10px",
-                marginTop: "15px",
-                justifyContent: "center",
+                width: "100px",
+                height: "100px",
+                border: "1px solid #ccc",
+                borderRadius: "8px",
+                overflow: "hidden",
               }}
             >
-              {uploadedFiles.map((file, index) => (
-                <div
-                  key={index}
-                  style={{
-                    width: "100px",
-                    height: "100px",
-                    border: "1px solid #ccc",
-                    borderRadius: "8px",
-                    overflow: "hidden",
-                  }}
-                >
-                  <img
-                    src={URL.createObjectURL(file)}
-                    alt={file.name}
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      objectFit: "cover",
-                    }}
-                  />
-                </div>
-              ))}
+              <img
+                src={URL.createObjectURL(file)}
+                alt={file.name}
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                }}
+              />
             </div>
-          )}
-        </>
+          ))}
+        </div>
       )}
     </div>
   );

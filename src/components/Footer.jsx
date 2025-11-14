@@ -1,8 +1,8 @@
 import { useContext } from "react";
 import { Link } from "react-router-dom";
-import { LanguageContext } from "../context/LanguageContext";
 import Container from "../components/Container";
 import ChangeLanguage from "./ChangeLanguage";
+import { LanguageContext } from "../context/LanguageContext";
 
 const data = [
   {
@@ -19,7 +19,7 @@ const data = [
   },
 ];
 
-function Footer() {
+function Footer({ setActiveView }) {
   const { direction } = useContext(LanguageContext);
   const isRTL = direction === "rtl";
 
@@ -45,12 +45,14 @@ function Footer() {
               className={`flex items-center gap-2.5 ${
                 isRTL ? "flex-row-reverse text-right" : "text-left"
               }`}
-              onClick={() =>
+              onClick={() => {
+                localStorage.setItem("activeView", "home");
+                setActiveView("home");
                 window.scrollTo({
                   top: 0,
                   behavior: "smooth",
-                })
-              }
+                });
+              }}
             >
               <img src="/images/logo.png" alt="Logo" />
               <span

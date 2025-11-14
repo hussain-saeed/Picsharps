@@ -1,7 +1,7 @@
-import { useContext, useEffect } from "react";
-import { LanguageContext } from "../context/LanguageContext";
-import Container from "./Container";
+import { useContext } from "react";
 import { Link } from "react-router-dom";
+import Container from "./Container";
+import { LanguageContext } from "../context/LanguageContext";
 
 const data = [
   {
@@ -46,10 +46,6 @@ const data = [
 function ToolsMenuMobile({ setActiveView }) {
   const { direction } = useContext(LanguageContext);
   const isRTL = direction === "rtl";
-
-  useEffect(() => {
-    localStorage.setItem("activeView", "home");
-  }, []);
 
   return (
     <div style={{ backgroundColor: "rgba(221, 244, 255, 1)" }}>
@@ -103,6 +99,7 @@ function ToolsMenuMobile({ setActiveView }) {
           </div>
         ))}
       </Container>
+
       <Link
         to="/"
         className="text-[18px] mb-14 text-center underline"

@@ -21,6 +21,9 @@ function NotFound() {
             style={{
               fontWeight: "900",
             }}
+            onClick={() => {
+              localStorage.setItem("activeView", "home");
+            }}
           >
             Back to Home
           </Link>

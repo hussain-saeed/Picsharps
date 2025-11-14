@@ -1,11 +1,14 @@
 import { useContext, useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { FiChevronDown, FiMenu, FiX } from "react-icons/fi";
+
 import Container from "./Container";
 import ChangeLanguage from "./ChangeLanguage";
 import ToolsMenu from "./ToolsMenu";
+
 import { LanguageContext } from "../context/LanguageContext";
 import { useOverlay } from "../context/OverlayContext";
+
 import English from "../i18n/components/header/english.json";
 import French from "../i18n/components/header/french.json";
 import Arabic from "../i18n/components/header/arabic.json";
@@ -15,10 +18,13 @@ const translations = { English, French, Arabic };
 export default function Header({ setActiveView }) {
   const { language, direction } = useContext(LanguageContext);
   const { isVisible, setIsVisible } = useOverlay();
+
   const location = useLocation();
+
   const [menuOpen, setMenuOpen] = useState(false);
   const [toolsMenuOpen, setToolsMenuOpen] = useState(false);
   const [activeNavOrder, setActiveNavOrder] = useState(0);
+
   const t = translations[language] || translations["English"];
   const isRTL = direction === "rtl";
 
@@ -37,6 +43,14 @@ export default function Header({ setActiveView }) {
     if (label === t.tools) {
       setToolsMenuOpen(!toolsMenuOpen);
       setIsVisible(!isVisible);
+    }
+  };
+
+  const handleChangeView = (label) => {
+    const view = label === t.home ? "home" : label === t.tools ? "tools" : null;
+    if (view) {
+      localStorage.setItem("activeView", view);
+      setActiveView(view);
     }
   };
 
@@ -59,14 +73,6 @@ export default function Header({ setActiveView }) {
     }
   }, [location.pathname, toolsMenuOpen]);
 
-  const handleChangeView = (label) => {
-    const view = label === t.home ? "home" : label === t.tools ? "tools" : null;
-    if (view) {
-      localStorage.setItem("activeView", view);
-      setActiveView(view);
-    }
-  };
-
   return (
     <header
       onClick={handleHeaderClick}
@@ -82,16 +88,18 @@ export default function Header({ setActiveView }) {
           className={`flex items-center gap-2.5 ${
             isRTL ? "flex-row-reverse" : ""
           }`}
-          onClick={() =>
+          onClick={() => {
+            localStorage.setItem("activeView", "home");
+            setActiveView("home");
             window.scrollTo({
               top: 0,
               behavior: "smooth",
-            })
-          }
+            });
+          }}
         >
           <img src="/images/logo.png" alt="Logo" />
           <span
-            className="text-[20px] font-semibold"
+            className="text-[20px] font-semibold hidden 2xs:block"
             style={{ color: "rgba(2, 38, 108, 1)" }}
           >
             Picsharps
@@ -122,7 +130,7 @@ export default function Header({ setActiveView }) {
               <span
                 style={{
                   position: "absolute",
-                  bottom: "-27.5px",
+                  bottom: "-30px",
                   width: "105%",
                   height: "4px",
                   borderTopLeftRadius: "5px",
@@ -184,12 +192,7 @@ export default function Header({ setActiveView }) {
           >
             {[
               { img: "home", label: t.home, to: "/" },
-              {
-                img: "extra-features",
-                label: t.tools,
-                to: "/",
-              },
-              /* img: "tags", label: t.pricing */
+              { img: "extra-features", label: t.tools, to: "/" },
             ].map(({ img, label, to }) => (
               <Link
                 to={to}

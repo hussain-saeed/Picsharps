@@ -14,7 +14,7 @@ function Landing() {
   const [activeView, setActiveView] = useState(
     localStorage.getItem("activeView") || "home"
   );
-  
+
   return (
     <>
       <Header setActiveView={setActiveView} />
@@ -108,7 +108,7 @@ function Landing() {
         <ToolsMenuMobile setActiveView={setActiveView} />
       )}
 
-      <Footer />
+      <Footer setActiveView={setActiveView} />
     </>
   );
 }

@@ -17,7 +17,7 @@ function Landing() {
 
   return (
     <>
-      {/*<Header setActiveView={setActiveView} />*/}
+      <Header setActiveView={setActiveView} />
 
       {activeView === "home" && (
         <>

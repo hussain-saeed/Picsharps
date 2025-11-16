@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { LanguageContext } from "/src/context/LanguageContext";
 import Container from "/src/components/Container";
+import ImageCompare from "../../../../components/ImageCompare";
 import { Link } from "react-router-dom";
 
 function Hero() {
@@ -38,18 +39,16 @@ function Hero() {
         </p>
 
         <div
-          className={`flex justify-center lg:justify-between flex-wrap gap-6 mb-[100px] ${
+          className={`flex justify-center items-center lg:justify-between flex-wrap gap-6 mb-[100px] ${
             isRTL ? "flex-row-reverse" : ""
           }`}
         >
-          <div
-            style={{ boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.25)" }}
-            className=" overflow-hidden rounded-[30px] w-[92%] lg:w-[48.5%]"
-          >
-            <img
-              src="/images/hero.gif"
-              alt="Hero"
-              className="w-full h-full object-cover"
+          <div className=" overflow-hidden rounded-[30px] w-[92%] lg:w-[48.5%]">
+            <ImageCompare
+              before="/images/IMG_20251116_024929.jpg"
+              after="/images/540493.jpeg"
+              aspectRatio="12/8"
+              fit="fill"
             />
           </div>
 

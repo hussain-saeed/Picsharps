@@ -84,6 +84,7 @@ const PresentService = ({
               {innerLinkText}
             </Link>
           </div>
+
           <div
             style={{
               position: "relative",
@@ -92,6 +93,7 @@ const PresentService = ({
               boxShadow:
                 isCropped === true ? "0px 4px 4px 0px rgba(0, 0, 0, 0.25)" : "",
             }}
+            // className="w-[92%] lg:w-[48.5%]"
           >
             <img src={imageSrc} alt={title} />
             {isNeedArrow === true ? (
@@ -119,8 +121,8 @@ const PresentService = ({
               overflow: "hidden",
               boxShadow:
                 isCropped === true ? "0px 4px 4px 0px rgba(0, 0, 0, 0.25)" : "",
-              
             }}
+            // className="w-[92%] lg:w-[48.5%]"
           >
             <img src={imageSrc} alt={title} />
             {isNeedArrow === true ? (

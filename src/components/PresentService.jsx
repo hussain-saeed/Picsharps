@@ -1,17 +1,22 @@
 import { useContext, useEffect, useState } from "react";
 import { LanguageContext } from "../context/LanguageContext";
 import { Link } from "react-router-dom";
+import ImageCompare from "./ImageCompare";
 
 const PresentService = ({
   isTextFirst,
-  imageSrc,
-  isCropped,
+  isStatic,
+  staticImgSrc,
+  before,
+  after,
+  background,
+  aspectRatio,
+  fit,
   category,
   title,
   description,
   linkTo,
   innerLinkText,
-  isNeedArrow,
 }) => {
   const { direction } = useContext(LanguageContext);
   const isRTL = direction === "rtl";
@@ -26,10 +31,8 @@ const PresentService = ({
   return (
     <div
       className={`
-        flex flex-col lg:flex-row justify-center gap-12
-        ${isRTL ? "lg:flex-row-reverse" : "lg:flex-row"} ${
-        isCropped === true ? "items-center lg:items-start" : "items-center"
-      }
+        flex flex-col items-center lg:flex-row justify-center gap-12
+        ${isRTL ? "lg:flex-row-reverse" : "lg:flex-row"}
       `}
     >
       {isTextFirst && isLg ? (
@@ -70,7 +73,9 @@ const PresentService = ({
               {description}
             </p>
             <Link
-              className={`mx-auto ${isRTL ? "lg:mr-0" : "lg:ml-0"} mb-8`}
+              className={`mx-auto ${
+                isRTL ? "lg:mr-0" : "lg:ml-0"
+              } mb-8 lg:mb-0`}
               style={{
                 background: "var(--gradient-color)",
                 width: "250px",
@@ -85,59 +90,46 @@ const PresentService = ({
             </Link>
           </div>
 
-          <div
-            style={{
-              position: "relative",
-              borderRadius: "15px",
-              overflow: "hidden",
-              boxShadow:
-                isCropped === true ? "0px 4px 4px 0px rgba(0, 0, 0, 0.25)" : "",
-            }}
-            // className="w-[92%] lg:w-[48.5%]"
-          >
-            <img src={imageSrc} alt={title} />
-            {isNeedArrow === true ? (
-              <img
-                src="/images/vector-2.png"
-                alt="arrow"
-                style={{
-                  position: "absolute",
-                  bottom: "50%",
-                  left: "50%",
-                  transform: "translate(-50%, 50%)",
-                }}
-              />
+          <div className="w-[92%] lg:w-[48.5%]">
+            {isStatic === true ? (
+              <div>
+                <img src={staticImgSrc} />
+              </div>
             ) : (
-              ""
+              <ImageCompare
+                hasBorder={true}
+                before={before}
+                after={after}
+                background={background}
+                aspectRatio={aspectRatio}
+                fit={fit}
+              />
             )}
           </div>
         </>
       ) : (
         <>
-          <div
-            style={{
-              position: "relative",
-              borderRadius: "15px",
-              overflow: "hidden",
-              boxShadow:
-                isCropped === true ? "0px 4px 4px 0px rgba(0, 0, 0, 0.25)" : "",
-            }}
-            // className="w-[92%] lg:w-[48.5%]"
-          >
-            <img src={imageSrc} alt={title} />
-            {isNeedArrow === true ? (
-              <img
-                src="/images/vector-2.png"
-                alt="arrow"
+          <div className="w-[92%] lg:w-[48.5%]">
+            {isStatic === true ? (
+              <div
                 style={{
-                  position: "absolute",
-                  bottom: "50%",
-                  left: "50%",
-                  transform: "translate(-50%, 50%)",
+                  border: "5px solid white",
+                  borderRadius: "25px",
+                  boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.25)",
+                  overflow: "hidden",
                 }}
-              />
+              >
+                <img src={staticImgSrc} />
+              </div>
             ) : (
-              ""
+              <ImageCompare
+                hasBorder={true}
+                before={before}
+                after={after}
+                background={background}
+                aspectRatio={aspectRatio}
+                fit={fit}
+              />
             )}
           </div>
 
@@ -177,7 +169,9 @@ const PresentService = ({
               {description}
             </p>
             <Link
-              className={`mx-auto ${isRTL ? "lg:mr-0" : "lg:ml-0"} mb-8`}
+              className={`mx-auto ${
+                isRTL ? "lg:mr-0" : "lg:ml-0"
+              } mb-8 lg:mb-0`}
               style={{
                 background: "var(--gradient-color)",
                 width: "250px",

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 
 export default function ImageCompare({
+  hasBorder,
   before,
   after,
   autoAnimate = true,
@@ -80,16 +81,20 @@ export default function ImageCompare({
   return (
     <div
       ref={containerRef}
-      className={`relative w-full overflow-hidden select-none rounded-[25px] shadow-lg ${containerClassName}`}
+      className={`relative overflow-hidden select-none rounded-[25px] ${containerClassName}`}
       onMouseEnter={handleHoverStart}
       onMouseLeave={handleHoverEnd}
       onTouchStart={handleHoverStart}
       onTouchEnd={handleHoverEnd}
-      style={{ aspectRatio: aspectRatio }}
+      style={{
+        aspectRatio: aspectRatio,
+        border: hasBorder === true ? "5px solid white" : "",
+        boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.25)",
+      }}
     >
       <img
         src={before}
-        className={`w-full h-full bg-black object-${fit} ${beforeClassName}`}
+        className={`w-full h-full bg-gray object-${fit} ${beforeClassName}`}
       />
 
       <div
@@ -98,7 +103,7 @@ export default function ImageCompare({
       >
         <img
           src={after}
-          className={`absolute inset-0 w-full h-full bg-black object-${fit} ${afterClassName}`}
+          className={`absolute inset-0 w-full h-full bg-white object-${fit} ${afterClassName}`}
         />
       </div>
 

@@ -43,10 +43,11 @@ function Hero() {
             isRTL ? "flex-row-reverse" : ""
           }`}
         >
-          <div className=" overflow-hidden rounded-[30px] w-[92%] lg:w-[48.5%]">
+          <div className="w-[92%] lg:w-[48.5%]">
             <ImageCompare
               before="/images/IMG_20251116_173437.jpg"
               after="/images/pexels-christian-heitz-285904-842711.jpg"
+              background="rgb(245, 245, 245)"
               aspectRatio="12/8"
               fit="fill"
             />

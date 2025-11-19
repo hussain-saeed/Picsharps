@@ -194,6 +194,10 @@ function AllTools() {
           <div className="mt-20">
             <PresentService
               isTextFirst={false}
+              before="/images/sticker-1.png"
+              after="/images/sticker-2.png"
+              aspectRatio="12/8"
+              fit="fill"
               category="CREATIVE & FUN"
               title="Sticker Maker"
               description="Turn any edited image or subject into a clean sticker with transparent cutout, optional outline, and export presets for messaging apps or social stories. You can add borders, drop shadows, and simple text labels before exporting sticker sheets or single PNGs. The tool creates balanced padding and snap guides to ensure stickers look good on different backgrounds. Batch mode allows producing multiple stickers from an album automatically. Perfect for creators who want custom assets for reels, stories, or brand kits."
@@ -233,6 +237,10 @@ function AllTools() {
           <div className="mt-10">
             <PresentService
               isTextFirst={true}
+              before="/images/resize.jpg"
+              after="/images/resize-2.jpg"
+              aspectRatio="12/8"
+              fit="fill"
               category="BASIC EDITS"
               title="Resize Image"
               description="Change image dimensions and resolution with smart resampling that minimizes quality loss and preserves important details. Preset aspect ratios and device-targeted sizes (Instagram, TikTok, banners) streamline exports for common use cases. You can choose resample algorithms (bicubic, lanczos) or an AI upscaling option for enlargements. The interface previews final pixel dimensions and file size so you can optimize for web or print. Handy for batch resizing large galleries or preparing single images for specific platforms."
@@ -244,6 +252,10 @@ function AllTools() {
           <div className="mt-20">
             <PresentService
               isTextFirst={false}
+              before="/images/crop.jpg"
+              after="/images/crop-2.jpg"
+              aspectRatio="12/8"
+              fit="fill"
               category="BASIC EDITS"
               title="Crop Image"
               description="Recompose photos with precision using freeform crop, preset ratios, and rule-of-thirds guides to improve framing instantly. Auto-suggestions highlight better crops based on subject positioning and visual balance. Edge-aware cropping keeps important areas visible and allows non-destructive crops saved as versions. Quick keyboard shortcuts and snap-to guides speed up iterative adjustments during editing sessions. Ideal for tightening composition for thumbnails, profile pictures, and layout-ready assets."

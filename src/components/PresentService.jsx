@@ -92,7 +92,14 @@ const PresentService = ({
 
           <div className="w-[92%] lg:w-[48.5%]">
             {isStatic === true ? (
-              <div>
+              <div
+                style={{
+                  border: "5px solid white",
+                  borderRadius: "25px",
+                  boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.25)",
+                  overflow: "hidden",
+                }}
+              >
                 <img src={staticImgSrc} />
               </div>
             ) : (

@@ -44,28 +44,40 @@ function AllTools() {
           <div className="mt-10">
             <PresentService
               isTextFirst={true}
+              before="/images/remove-bg-3.png"
+              after="/images/remove-bg-4.png"
+              aspectRatio="12/8"
+              fit="fill"
               category="BACKGROUND TOOLS"
-              title="Remove Background"
-              description="Instantly separate the subject from its background using advanced edge detection that preserves hair and fine details. The algorithm analyzes foreground contours and generates clean alpha masks with minimal artifacts. Users can preview a transparency checkerboard and download a PNG with preserved edges. Includes manual refine brushes for touch-ups around difficult regions like hair or glass. Fast processing makes it ideal for single images or light batch jobs."
+              title="Remove Backgrounds Instantly"
+              description="Upload your image and let our smart tool do the work. Whether you're editing product photos or creating social media content, our background remover helps you isolate your subject with precision and speed. No manual cropping—just fast, clean results."
               linkTo="/remove-background"
-              innerLinkText="Try it Now"
+              innerLinkText="Try it now for free"
             />
           </div>
 
           <div className="mt-20">
             <PresentService
               isTextFirst={false}
+              before="/images/remove-object-2.png"
+              after="/images/remove-object-3.png"
+              aspectRatio="12/8"
+              fit="fill"
               category="BACKGROUND TOOLS"
               title="Remove Unwanted Objects"
               description="Clean up your photos in seconds with our smart AI object remover. Whether it's a stray person, a distracting item, or background clutter—just highlight it and let the magic happen. Your image stays flawless, your focus stays sharp."
               linkTo="/remove-object-from-photo"
-              innerLinkText="Try it Now"
+              innerLinkText="Try it now for free"
             />
           </div>
 
           <div className="mt-20">
             <PresentService
               isTextFirst={true}
+              before="/images/change-bg-5.jpg"
+              after="/images/change-bg-6.png"
+              aspectRatio="12/8"
+              fit="fill"
               category="BACKGROUND TOOLS"
               title="Change Background"
               description="Replace the original backdrop with preset scenes, gradients, or a custom upload while keeping lighting and perspective coherent. The tool offers match-color and shadow adjustments so the new background integrates naturally with the subject. You can choose stylized backdrops (blurred studio, solid color, scenic) or upload a brand image for consistent product shots. Auto-alignment and scale help place the subject correctly, and quick previews let you cycle through options instantly. Great for ecommerce product photos, profile images, and marketing visuals."
@@ -92,6 +104,10 @@ function AllTools() {
           <div className="mt-10">
             <PresentService
               isTextFirst={true}
+              before="/images/ai-image-enhancer-3.png"
+              after="/images/ai-image-enhancer-4.jpg"
+              aspectRatio="12/8"
+              fit="fill"
               category="ENHANCE & CLEANUP"
               title="AI Image Enhancer"
               description="Instantly improve overall image quality using AI-driven adjustments for exposure, color balance, contrast, and detail. The tool analyzes the photo and applies context-aware corrections that preserve natural skin tones and textures. It reduces noise, refines highlights and shadows, and brings out subtle details without over-processing. Users can toggle strength levels (Auto / Mild / Intense) and preview changes in real time. Ideal for quick polishing of portraits, product shots, and social assets."
@@ -103,6 +119,10 @@ function AllTools() {
           <div className="mt-20">
             <PresentService
               isTextFirst={false}
+              before="/images/sharp.png"
+              after="/images/sharp-2.jpg"
+              aspectRatio="12/8"
+              fit="fill"
               category="ENHANCE & CLEANUP"
               title="Sharpen Image"
               description="Boost perceived clarity by enhancing edge definition and micro-contrast while avoiding unwanted halos. The algorithm selectively targets soft areas like eyes, hair, and textures to create crisp, camera-ready results. Adjustable sliders let users control Amount, Radius, and Threshold for precise tuning. Works well in combination with the Enhancer for final refinement and is safe to apply in small increments to avoid noise amplification. Perfect for rescuing slightly soft or slightly out-of-focus photos."
@@ -114,6 +134,10 @@ function AllTools() {
           <div className="mt-20">
             <PresentService
               isTextFirst={true}
+              before="/images/clean.jpg"
+              after="/images/clean-2.png"
+              aspectRatio="12/8"
+              fit="fill"
               category="ENHANCE & CLEANUP"
               title="Cleanup Pictures"
               description="Remove dust, spots, sensor noise, and small blemishes automatically with intelligent spot-healing and noise reduction. The tool scans the image for common imperfections and offers both auto-fix and brush-based manual corrections for fine control. It also includes a smart clone/patch option that reconstructs complex textures so repairs look seamless. Users can zoom into areas, apply fixes, and rollback individual edits from history. Best for restoring scanned photos, product images, or any shot with distracting artifacts."
@@ -125,6 +149,10 @@ function AllTools() {
           <div className="mt-20">
             <PresentService
               isTextFirst={false}
+              before="/images/filter.png"
+              after="/images/filter-2.png"
+              aspectRatio="12/8"
+              fit="fill"
               category="ENHANCE & CLEANUP"
               title="Photo Filters"
               description="Apply professionally crafted color presets and creative looks to change mood and style instantly. Filters range from subtle cinematic corrections to punchy social-media-ready looks, each preserving skin tones and dynamic range. Each preset includes adjustable intensity so you can blend the filter with the original image for natural results. Save custom combinations as user presets for consistent branding across batches. Great for quick styling, A/B testing looks, and keeping a cohesive aesthetic across your content."
@@ -151,6 +179,10 @@ function AllTools() {
           <div className="mt-10">
             <PresentService
               isTextFirst={true}
+              before="/images/to-cartoon-1.png"
+              after="/images/to-cartoon-2.jpg"
+              aspectRatio="12/8"
+              fit="fill"
               category="CREATIVE & FUN"
               title="Photo to Cartoon"
               description="Convert portraits or photos into polished cartoon or illustration styles using neural style transfer tuned for faces and textures. Outputs include multiple style presets (line-art, flat-color, painterly) and adjustable strength for subtle to bold transformations. The tool preserves facial proportions and key details while translating shading and edges into an illustrated look. Users can tweak color palettes and line thickness, then export at high resolution for avatars or social posts. Great for playful branding, profile pics, and viral content."
@@ -173,6 +205,8 @@ function AllTools() {
           <div className="mt-20">
             <PresentService
               isTextFirst={true}
+              isStatic={true}
+              staticImgSrc="/images/college-6.jpg"
               category="CREATIVE & FUN"
               title="Collage Maker"
               description="Combine multiple photos into cohesive, well-composed collages using modern templates and flexible grid controls. Drag-and-drop placement, rounded corners, and consistent spacing keep the layout neat while smart cropping preserves important subject areas. Templates include thematic choices (travel, portfolio, product grid) and adjustable aspect ratios for Instagram posts or story formats. Users can add optional frames, subtle shadows, and color-coordinated backgrounds for polish. Excellent for moodboards, social campaigns, and multi-photo storytelling."
@@ -221,6 +255,10 @@ function AllTools() {
           <div className="mt-20">
             <PresentService
               isTextFirst={true}
+              before="/images/flip.png"
+              after="/images/flip-2.png"
+              aspectRatio="12/8"
+              fit="fill"
               category="BASIC EDITS"
               title="Flip Image"
               description="Flip images horizontally or vertically to correct orientation or create mirrored variations quickly. Useful for product shots, portraits, or compositional tweaks when symmetry or direction matters. The tool preserves metadata and works nondestructively so original images remain intact. Combine flip with crop or resize steps for rapid asset variations. Lightweight and instant — a simple but indispensable utility in everyday editing."

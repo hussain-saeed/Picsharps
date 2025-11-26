@@ -5,6 +5,7 @@ import ScrollToTop from "./components/ScrollToTop";
 import Landing from "./features/static/landing/Landing";
 import UploadPhoto from "./features/upload_photo/UploadPhoto";
 import AllTools from "./features/static/AllTools";
+import About from "./features/static/about/about";
 import NotFound from "./features/static/NotFound";
 
 const data = [
@@ -41,6 +42,7 @@ export default function AppRoutes() {
             ))}
 
             <Route path="/all-tools" element={<AllTools />} />
+            <Route path="/about" element={<About />} />
 
             <Route path="*" element={<NotFound />} />
           </Routes>

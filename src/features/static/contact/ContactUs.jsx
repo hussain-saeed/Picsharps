@@ -172,7 +172,11 @@ function ContactUs() {
             </div>
           </section>
 
-          <div className="w-full flex flex-wrap gap-6 justify-between items-start lg:items-center pb-[120px]">
+          <div
+            className={`w-full flex flex-wrap gap-6 justify-between items-start lg:items-center pb-[120px] ${
+              isRTL ? "flex-row-reverse" : ""
+            }`}
+          >
             <form
               onSubmit={handleSubmit}
               className="
@@ -181,6 +185,7 @@ function ContactUs() {
                bg-white p-8 md:p-18 
                 flex flex-col gap-8
               "
+              dir={isRTL ? "rtl" : "ltr"}
               style={{
                 borderRadius: "50px",
                 boxShadow: "0px 0px 4px 1px rgba(0, 140, 255, 0.25)",
@@ -298,7 +303,11 @@ function ContactUs() {
                         fontSize: "14px",
                       }}
                     >
-                      <img src="/images/attach.png" />
+                      {isRTL ? (
+                        <img src="/images/attach-2.png" />
+                      ) : (
+                        <img src="/images/attach.png" />
+                      )}
                       <p>Click or drag to upload</p>
                     </div>
                   )}
@@ -329,17 +338,21 @@ function ContactUs() {
                 className="text-white py-3 rounded-lg flex items-center justify-center gap-4 text-[20px] font-semibold cursor-pointer"
                 style={{ background: "var(--gradient-color-2)" }}
               >
-                <img src="/images/send-2.png" alt="Send" />
+                {isRTL ? (
+                  <img src="/images/send-3.png" alt="Send" />
+                ) : (
+                  <img src="/images/send-2.png" alt="Send" />
+                )}
                 Send message
               </button>
             </form>
 
             <div
-              className="
-                w-full 
+              className={`w-full 
                 lg:w-[30%] 
                 flex flex-wrap gap-8 items-start lg:items-center
-              "
+                ${isRTL ? "flex-row-reverse" : ""}
+              `}
             >
               <div
                 className="w-full sm:w-[47%] lg:w-full bg-white p-10 text-center h-[350px] flex justify-center items-center flex-col"
@@ -406,12 +419,13 @@ function ContactUs() {
                 </p>
               </div>
               <div
-                className="w-full sm:w-[47%] lg:w-full bg-white py-10 px-9 text-center"
+                className="w-full sm:w-[47%] lg:w-full bg-white py-10 px-9"
                 style={{
                   backgroundColor: "rgba(240, 253, 244, 1)",
                   borderRadius: "50px",
                   border: "1px solid rgba(169, 255, 196, 1)",
                 }}
+                dir={isRTL ? "rtl" : "ltr"}
               >
                 <div
                   style={{
@@ -431,20 +445,25 @@ function ContactUs() {
                     style={{
                       fontSize: "20px",
                       fontWeight: "600",
-                      textAlign: "left",
+                      textAlign: isRTL ? "right" : "left",
                     }}
                   >
                     ⏱️ We respond within 24-48 hours
                   </p>
                 </div>
-                <p style={{ textAlign: "left", color: "rgba(75, 85, 99, 1)" }}>
+                <p
+                  style={{
+                    textAlign: isRTL ? "right" : "left",
+                    color: "rgba(75, 85, 99, 1)",
+                  }}
+                >
                   Our team reviews every message and gets back to you promptly
                 </p>
               </div>
             </div>
           </div>
 
-          <section style={{ paddingBottom: "120px" }}>
+          <section style={{ paddingBottom: "140px" }}>
             <div style={{ marginBottom: "60px", textAlign: "center" }}>
               <h2
                 className="text-[32px] sm:text-[40px]"

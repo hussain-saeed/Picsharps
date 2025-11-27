@@ -7,15 +7,25 @@ import { LanguageContext } from "../context/LanguageContext";
 const data = [
   {
     title: "Product",
-    links: ["Features", "Pricing", "Demo"],
+    links: [
+      { to: "", text: "Features" },
+      { to: "", text: "Pricing" },
+      { to: "", text: "Demo" },
+    ],
   },
   {
     title: "Company",
-    links: ["About", "Contact"],
+    links: [
+      { to: "/about", text: "About" },
+      { to: "/contact-us", text: "Contact" },
+    ],
   },
   {
     title: "Legal",
-    links: ["Privacy Policy", "Terms of Service"],
+    links: [
+      { to: "", text: "Privacy Policy" },
+      { to: "", text: "Terms of Service" },
+    ],
   },
 ];
 
@@ -87,10 +97,11 @@ function Footer({ setActiveView }) {
                 <div dir={direction} className="flex flex-col gap-1.5">
                   {section.links.map((link, i) => (
                     <Link
+                      to={link.to}
                       key={i}
                       className="text-[15px] text-[rgba(0, 0, 0, 0.52)] hover:text-blue-600 transition-colors w-fit"
                     >
-                      {link}
+                      {link.text}
                     </Link>
                   ))}
                 </div>

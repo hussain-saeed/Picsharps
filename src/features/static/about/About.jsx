@@ -72,7 +72,7 @@ function About() {
       <div
         style={{
           background:
-            "linear-gradient(180deg, rgba(223, 242, 255, 0.44) 0%, #F5F5F5 100%)",
+            "linear-gradient(180deg, rgba(223, 242, 255, 0.5) 0%,  rgb(235, 235, 235) 100%)",
         }}
       >
         <Container>
@@ -374,7 +374,7 @@ function About() {
           </Container>
         </section>
       </div>
-      
+
       <Footer />
     </>
   );

@@ -114,7 +114,7 @@ export default function Header({ setActiveView }) {
           {[
             { img: "home", label: t.home, to: "/" },
             { img: "extra-features", label: t.tools, icon: <FiChevronDown /> },
-            { img: "tags", label: t.pricing },
+            { img: "tags", label: t.pricing, to: "/pricing" },
           ].map(({ img, label, icon, to }, index) => (
             <Link
               to={to}
@@ -193,6 +193,7 @@ export default function Header({ setActiveView }) {
             {[
               { img: "home", label: t.home, to: "/" },
               { img: "extra-features", label: t.tools, to: "/" },
+              { img: "tags", label: t.pricing, to: "/pricing" },
             ].map(({ img, label, to }) => (
               <Link
                 to={to}

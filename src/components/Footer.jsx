@@ -9,7 +9,7 @@ const data = [
     title: "Product",
     links: [
       { to: "", text: "Features" },
-      { to: "", text: "Pricing" },
+      { to: "/pricing", text: "Pricing" },
       { to: "", text: "Demo" },
     ],
   },

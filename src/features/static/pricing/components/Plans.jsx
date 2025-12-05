@@ -134,44 +134,46 @@ export default function Pricing() {
 
   return (
     <div className="w-full">
-      <div className="flex items-center justify-center gap-4 mb-16">
-        <span
-          style={{
-            fontWeight: "500",
-            color: isYearly ? "rgba(150, 150, 150, 1)" : "black",
-          }}
-        >
-          Monthly
-        </span>
+      <div className="flex items-center justify-center gap-4 mb-16 flex-col md:flex-row">
+        <div className="flex items-center justify-center gap-4 ">
+          <span
+            style={{
+              fontWeight: "500",
+              color: isYearly ? "rgba(150, 150, 150, 1)" : "black",
+            }}
+          >
+            Monthly
+          </span>
 
-        <button
-          className={`w-15 h-8 rounded-full flex items-center px-1 transition cursor-pointer`}
-          style={{
-            backgroundColor: isYearly
-              ? "rgba(0, 176, 255, 1)"
-              : "rgba(225, 225, 225, 1)",
-          }}
-          onClick={() => setIsYearly(!isYearly)}
-        >
-          <div
-            className={`w-6 h-6 bg-white rounded-full shadow transform duration-300 ${
-              isYearly && isRTL
-                ? "-translate-x-7"
-                : isYearly && !isRTL
-                ? "translate-x-7"
-                : ""
-            }`}
-          />
-        </button>
+          <button
+            className={`w-15 h-8 rounded-full flex items-center px-1 transition cursor-pointer`}
+            style={{
+              backgroundColor: isYearly
+                ? "rgba(0, 176, 255, 1)"
+                : "rgba(225, 225, 225, 1)",
+            }}
+            onClick={() => setIsYearly(!isYearly)}
+          >
+            <div
+              className={`w-6 h-6 bg-white rounded-full shadow transform duration-300 ${
+                isYearly && isRTL
+                  ? "-translate-x-7"
+                  : isYearly && !isRTL
+                  ? "translate-x-7"
+                  : ""
+              }`}
+            />
+          </button>
 
-        <span
-          style={{
-            fontWeight: "500",
-            color: isYearly ? "black" : "rgba(150, 150, 150, 1)",
-          }}
-        >
-          Yearly
-        </span>
+          <span
+            style={{
+              fontWeight: "500",
+              color: isYearly ? "black" : "rgba(150, 150, 150, 1)",
+            }}
+          >
+            Yearly
+          </span>
+        </div>
 
         {isYearly && (
           <span

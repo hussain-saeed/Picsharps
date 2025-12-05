@@ -5,7 +5,6 @@ import ContentSection from "../../../components/ContentSection";
 import ParagraphHasBold from "../../../components/ParagraphHasBold";
 import BulletListHasBold from "./Components/BulletListHasBold";
 import BorderedBox from "./Components/BorderedBox";
-import { Check, CheckCircle } from "lucide-react";
 import ReusableButton from "../../../components/ReusableButton";
 import { useContext } from "react";
 import { LanguageContext } from "../../../context/LanguageContext";

@@ -23,6 +23,7 @@ const plans = [
 
     smallText: "Forever free",
     smallTextYearly: "Forever free",
+    smallTextYearlyPlus: "",
     desc: "Perfect for trying out our tools",
 
     features: [
@@ -61,7 +62,8 @@ const plans = [
     priceLabel: "/ month",
 
     smallText: "Billed monthly",
-    smallTextYearly: "Billed monthly (save 20%)",
+    smallTextYearly: "$95.88 /year",
+    smallTextYearlyPlus: "(save 20%)",
     desc: "Best for creators and professionals",
 
     features: [
@@ -100,8 +102,8 @@ const plans = [
     priceColor: "black",
     priceLabel: "/ month",
 
-    smallText: "Billed monthly",
-    smallTextYearly: "Billed monthly (save 25%)",
+    smallTextYearly: "$179.88 /year",
+    smallTextYearlyPlus: "(save 20%)",
     desc: "For power users and businesses",
 
     features: [
@@ -132,7 +134,6 @@ export default function Pricing() {
 
   return (
     <div className="w-full">
-      {/* Toggle */}
       <div className="flex items-center justify-center gap-4 mb-16">
         <span
           style={{
@@ -186,7 +187,6 @@ export default function Pricing() {
         )}
       </div>
 
-      {/* Grid */}
       <div className="grid gap-12 lg:gap-6 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1">
         {plans.map((plan) => (
           <div
@@ -199,7 +199,6 @@ export default function Pricing() {
               borderRadius: "20px",
             }}
           >
-            {/* Badge */}
             <div
               className={`py-1 font-medium absolute`}
               style={{
@@ -217,9 +216,7 @@ export default function Pricing() {
               {plan.badgeText}
             </div>
 
-            {/* Top Content */}
             <div style={{ marginBottom: "40px" }}>
-              {/* Image + Label */}
               <div className="flex items-center gap-3 mb-4">
                 <div
                   className="w-[50px] h-[50px] flex items-center justify-center"
@@ -235,7 +232,6 @@ export default function Pricing() {
                 </span>
               </div>
 
-              {/* Price */}
               <div className="flex items-center gap-2">
                 <span
                   style={{
@@ -260,7 +256,6 @@ export default function Pricing() {
                 </span>
               </div>
 
-              {/* Small Text */}
               <p
                 style={{
                   color: "rgba(154, 154, 154, 1)",
@@ -268,10 +263,18 @@ export default function Pricing() {
                   marginBottom: "16px",
                 }}
               >
-                {isYearly ? plan.smallTextYearly : plan.smallText}
+                {isYearly ? (
+                  <div className="flex  gap-1.5">
+                    <span>{plan.smallTextYearly}</span>
+                    <span style={{ color: "rgba(0, 200, 83, 1)" }}>
+                      {plan.smallTextYearlyPlus}
+                    </span>
+                  </div>
+                ) : (
+                  plan.smallText
+                )}
               </p>
 
-              {/* Description */}
               <p
                 style={{
                   fontSize: "14px",
@@ -282,7 +285,6 @@ export default function Pricing() {
                 {plan.desc}
               </p>
 
-              {/* Features */}
               <div className="space-y-1.5">
                 {plan.features.map((f, i) => (
                   <div key={i} className="flex items-center gap-3">
@@ -316,7 +318,6 @@ export default function Pricing() {
               </div>
             </div>
 
-            {/* Button */}
             <button
               style={{
                 background: plan.buttonBg,

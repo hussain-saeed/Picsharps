@@ -8,7 +8,7 @@ const data = [
   {
     title: "Product",
     links: [
-      { to: "", text: "Features" },
+      { to: "/all-tools", text: "Features" },
       { to: "/pricing", text: "Pricing" },
       { to: "", text: "Demo" },
     ],
@@ -23,8 +23,8 @@ const data = [
   {
     title: "Legal",
     links: [
-      { to: "", text: "Privacy Policy" },
-      { to: "", text: "Terms of Service" },
+      { to: "/privacy-policy", text: "Privacy Policy" },
+      { to: "/terms-of-service", text: "Terms of Service" },
     ],
   },
 ];

@@ -8,7 +8,7 @@ export default function ImageCompare({
   allowDragOnHover = true,
   containerClassName = "",
   aspectRatio = "16/9",
-  fit = "contain", // contain | cover | fill
+  fit = "contain",
   beforeClassName = "",
   afterClassName = "",
 }) {

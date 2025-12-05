@@ -10,21 +10,20 @@ export default function ComparisonTableDesktop({ data }) {
     <div
       style={{
         borderRadius: "30px",
-        border: "1px solid rgba(210, 210, 210)", // Gray A
+        border: "1px solid rgba(210, 210, 210)", 
         overflow: "hidden",
         letterSpacing: "2px",
       }}
       className="w-full"
     >
-      {/* Header */}
       <div
-        style={{ borderBottom: "1px solid rgba(210, 210, 210)" }} // Gray A
+        style={{ borderBottom: "1px solid rgba(210, 210, 210)" }}
         className="grid grid-cols-4 text-center"
       >
         <div
           className="p-6 text-left"
           style={{
-            borderRight: "1px solid rgba(210, 210, 210)", // Gray A
+            borderRight: "1px solid rgba(210, 210, 210)", 
             backgroundColor: "rgba(230, 230, 230)",
             color: "black",
             fontSize: "22px",
@@ -40,9 +39,9 @@ export default function ComparisonTableDesktop({ data }) {
             key={col}
             className="p-6 last:border-r-0"
             style={{
-              backgroundColor: index === 1 ? "#DFE8F3" : "rgba(230, 230, 230)", // Pro uses Gray D, others Gray B
+              backgroundColor: index === 1 ? "#DFE8F3" : "rgba(230, 230, 230)", 
               color: index === 1 ? "#00BCA9" : "black",
-              borderRight: index === 2 ? "" : "1px solid rgba(210, 210, 210)", // Gray A
+              borderRight: index === 2 ? "" : "1px solid rgba(210, 210, 210)", 
               fontSize: "22px",
               fontWeight: "600",
             }}
@@ -52,21 +51,20 @@ export default function ComparisonTableDesktop({ data }) {
         ))}
       </div>
 
-      {/* Sections */}
       {data.features.map((section, idx) => (
         <div key={idx}>
           <div
             style={{
-              backgroundColor: "rgb(240 240 240)", // Gray C
-              borderBottom: "1px solid rgba(210, 210, 210)", // Gray A
+              backgroundColor: "rgb(240 240 240)", 
+              borderBottom: "1px solid rgba(210, 210, 210)", 
             }}
             className="grid grid-cols-4 font-semibold text-gray-600"
           >
             <div
               className="w-full p-6"
               style={{
-                backgroundColor: "rgb(240 240 240)", // Gray C
-                borderRight: "1px solid rgba(210, 210, 210)", // Gray A
+                backgroundColor: "rgb(240 240 240)", 
+                borderRight: "1px solid rgba(210, 210, 210)",
                 color: "rgba(0, 176, 255, 1)",
                 fontSize: "21px",
                 fontWeight: "600",
@@ -82,15 +80,14 @@ export default function ComparisonTableDesktop({ data }) {
               className="grid grid-cols-4"
               style={{
                 borderBottom:
-                  idx === 3 && i === 1 ? "" : "1px solid rgba(210, 210, 210)", // Gray A
+                  idx === 3 && i === 1 ? "" : "1px solid rgba(210, 210, 210)", 
               }}
             >
-              {/* Feature name */}
               <div
                 className="p-6 border-r font-medium text-gray-700"
                 style={{
-                  borderRight: "1px solid rgba(210, 210, 210)", // Gray A
-                  backgroundColor: "rgba(230, 230, 230)", // Gray B
+                  borderRight: "1px solid rgba(210, 210, 210)",
+                  backgroundColor: "rgba(230, 230, 230)", 
                   color: "black",
                   fontSize: "20px",
                 }}
@@ -98,7 +95,6 @@ export default function ComparisonTableDesktop({ data }) {
                 {row.feature}
               </div>
 
-              {/* Values */}
               {data.columns.map((col, cIdx) => {
                 const val = row.values[col];
                 return (
@@ -107,9 +103,9 @@ export default function ComparisonTableDesktop({ data }) {
                     className="flex items-center justify-center"
                     style={{
                       backgroundColor:
-                        col === "Pro" ? "#DFE8F3" : "rgba(230, 230, 230)", // Pro uses Gray D, others Gray B
+                        col === "Pro" ? "#DFE8F3" : "rgba(230, 230, 230)", 
                       borderRight:
-                        cIdx === 2 ? "" : "1px solid rgba(210, 210, 210)", // Gray A
+                        cIdx === 2 ? "" : "1px solid rgba(210, 210, 210)", 
                       color: "black",
                       fontSize: "20px",
                       fontWeight: "600",

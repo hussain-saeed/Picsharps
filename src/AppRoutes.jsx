@@ -8,6 +8,8 @@ import AllTools from "./features/static/AllTools";
 import About from "./features/static/about/About";
 import ContactUs from "./features/static/contact/ContactUs";
 import Pricing from "./features/static/pricing/Pricing";
+import PrivacyPolicy from "./features/static/privacy/PrivacyPolicy";
+import TermsOfService from "./features/static/terms/TermsOfService";
 import NotFound from "./features/static/NotFound";
 
 const data = [
@@ -47,6 +49,8 @@ export default function AppRoutes() {
             <Route path="/about" element={<About />} />
             <Route path="/contact-us" element={<ContactUs />} />
             <Route path="/pricing" element={<Pricing />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/terms-of-service" element={<TermsOfService />} />
 
             <Route path="*" element={<NotFound />} />
           </Routes>

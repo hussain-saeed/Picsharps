@@ -103,7 +103,6 @@ function TermsOfService() {
         <DynamicSidebar items={sidebarItems} />
 
         <div className="flex-1 space-y-7">
-
           <ContentSection
             id="terms-1"
             background="white"
@@ -147,11 +146,20 @@ function TermsOfService() {
                   Prohibited Content Includes:
                 </h2>
                 {data.map((point, index) => (
-                  <div key={index} className="flex items-center pl-4">
-                    <div className="h-7 flex items-center justify-center mr-2">
+                  <div key={index} className="flex pl-4">
+                    <div
+                      className={`h-7 flex items-center justify-center ${
+                        isRTL ? "ml-2" : "mr-2"
+                      }`}
+                    >
                       <XCircle className="w-[15px] text-red-600" />
                     </div>
-                    <span style={{ color: "rgba(102, 102, 102, 1)" }}>
+                    <span
+                      style={{
+                        color: "rgba(102, 102, 102, 1)",
+                        marginTop: "2px",
+                      }}
+                    >
                       {point}
                     </span>
                   </div>
@@ -309,6 +317,7 @@ function TermsOfService() {
                   fontWeight: "700",
                   fontSize: "24px",
                   marginBottom: "5px",
+                  textAlign: "center",
                 }}
               >
                 YOU OWN YOUR CONTENT

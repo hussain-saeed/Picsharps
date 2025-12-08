@@ -12,13 +12,13 @@ import { useOverlay } from "../context/OverlayContext";
 import English from "../i18n/components/header/english.json";
 import French from "../i18n/components/header/french.json";
 import Arabic from "../i18n/components/header/arabic.json";
+import { useAuth } from "../features/auth/AuthProvider";
 
 const translations = { English, French, Arabic };
 
 export default function Header({ setActiveView }) {
   const { language, direction } = useContext(LanguageContext);
   const { isVisible, setIsVisible } = useOverlay();
-
   const location = useLocation();
 
   const [menuOpen, setMenuOpen] = useState(false);
@@ -27,6 +27,8 @@ export default function Header({ setActiveView }) {
 
   const t = translations[language] || translations["English"];
   const isRTL = direction === "rtl";
+
+  const { user, openLoginPopup } = useAuth();
 
   const handleHeaderClick = () => {
     if (toolsMenuOpen === true) {
@@ -149,20 +151,25 @@ export default function Header({ setActiveView }) {
           }`}
         >
           <ChangeLanguage openFrom={"down"} />
-          <button
-            style={{
-              padding: "5px 20px",
-              background: "var(--gradient-color)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              border: "1px solid #00d0ff",
-              borderRadius: "30px",
-              fontWeight: "600",
-              cursor: "pointer",
-            }}
-          >
-            {t.login}
-          </button>
+          {user ? (
+            <Link to="/profile">profile</Link>
+          ) : (
+            <button
+              style={{
+                padding: "5px 20px",
+                background: "var(--gradient-color)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                border: "1px solid #00d0ff",
+                borderRadius: "30px",
+                fontWeight: "600",
+                cursor: "pointer",
+              }}
+              onClick={() => openLoginPopup()}
+            >
+              {t.login}
+            </button>
+          )}
         </div>
 
         <ToolsMenu toolsMenuOpen={toolsMenuOpen} />

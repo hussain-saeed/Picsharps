@@ -11,6 +11,9 @@ import Pricing from "./features/static/pricing/Pricing";
 import PrivacyPolicy from "./features/static/privacy/PrivacyPolicy";
 import TermsOfService from "./features/static/terms/TermsOfService";
 import NotFound from "./features/static/NotFound";
+import Callback from "./features/auth/Callback";
+import Profile from "./features/profile/Profile";
+import VerifyEmailPage from "./features/auth/VerifyEmailPage";
 
 const data = [
   "remove-background",
@@ -51,6 +54,9 @@ export default function AppRoutes() {
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="/terms-of-service" element={<TermsOfService />} />
+            <Route path="/auth/callback" element={<Callback />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/verify-email" element={<VerifyEmailPage />} />
 
             <Route path="*" element={<NotFound />} />
           </Routes>

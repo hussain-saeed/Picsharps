@@ -1,10 +1,12 @@
 import { createRoot } from "react-dom/client";
-import { StrictMode } from "react";
 import AppRoutes from "./AppRoutes";
+import { AuthProvider } from "./features/auth/AuthProvider";
+import LoginPopup from "./features/auth/LoginPopup";
 import "./index.css";
 
 createRoot(document.getElementById("root")).render(
-  <StrictMode>
+  <AuthProvider>
+    <LoginPopup />
     <AppRoutes />
-  </StrictMode>
+  </AuthProvider>
 );

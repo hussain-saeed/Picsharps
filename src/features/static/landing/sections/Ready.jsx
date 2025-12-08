@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { LanguageContext } from "../../../../context/LanguageContext";
 import { Link } from "react-router-dom";
 import Container from "../../../../components/Container";
+
 function Ready() {
   const { direction } = useContext(LanguageContext);
   const isRTL = direction === "rtl";

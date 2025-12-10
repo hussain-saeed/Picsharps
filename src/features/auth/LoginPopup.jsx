@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useAuth } from "./AuthProvider";
+import { LanguageContext } from "../../context/LanguageContext";
 
 const LoginPopup = () => {
   const {
@@ -20,8 +21,12 @@ const LoginPopup = () => {
     verifyResetCode,
     resetPassword,
   } = useAuth();
+  const { direction } = useContext(LanguageContext);
+  const isRTL = direction === "rtl";
 
-  // Local states
+  // Local states1
+  const [renderLogWithGoogle, setRenderLogWithGoogle] = useState(true);
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -102,50 +107,131 @@ const LoginPopup = () => {
     if (forgotPassScreen === 1) {
       return (
         <>
-          <h2>Please log in</h2>
+          {renderLogWithGoogle ? (
+            <div className="h-full flex items-end">
+              <div className="h-[70%] flex flex-col justify-between w-full">
+                <div className="flex flex-col items-center">
+                  <div
+                    onClick={loginWithGoogle}
+                    style={{
+                      padding: "12px",
+                      width: "80%",
+                      border: "1px solid rgba(215, 215, 215, 1)",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      gap: "20px",
+                      borderRadius: "10px",
+                      fontSize: "14px",
+                      fontWeight: "500",
+                      marginBottom: "15px",
+                      cursor: "pointer",
+                    }}
+                  >
+                    <img src="/images/google-1.png" alt="google" />
+                    <span> Continue with Google</span>
+                  </div>
+                  <p
+                    onClick={() => setRenderLogWithGoogle(false)}
+                    style={{
+                      color: "rgba(0, 176, 255, 1)",
+                      fontSize: "14px",
+                      fontWeight: "500",
+                      cursor: "pointer",
+                    }}
+                  >
+                    Or use email
+                  </p>
+                </div>
 
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            style={{ width: "100%", padding: "0.5rem", marginTop: "1rem" }}
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            style={{ width: "100%", padding: "0.5rem", marginTop: "0.5rem" }}
-          />
-
-          <button
-            onClick={handleEmailLogin}
-            style={{ marginTop: "1rem", padding: "0.5rem", width: "100%" }}
-          >
-            Login
-          </button>
-
-          <button
-            onClick={() => setForgotPassScreen(2)}
-            style={{
-              marginTop: "1rem",
-              padding: "0.5rem",
-              width: "100%",
-              background: "#eee",
-            }}
-          >
-            Forgot Password?
-          </button>
-
-          <hr style={{ margin: "1rem 0" }} />
-
-          <button
-            onClick={loginWithGoogle}
-            style={{ padding: "0.5rem", width: "100%" }}
-          >
-            Login with Google
-          </button>
+                <p
+                  style={{
+                    textAlign: "center",
+                    fontSize: "14px",
+                    fontWeight: "500",
+                  }}
+                >
+                  By continuing, you agree to our{" "}
+                  <span
+                    style={{ color: "rgba(0, 176, 255, 1)", cursor: "pointer" }}
+                  >
+                    Terms Of Service
+                  </span>{" "}
+                  and{" "}
+                  <span
+                    style={{ color: "rgba(0, 176, 255, 1)", cursor: "pointer" }}
+                  >
+                    Privacy Policy
+                  </span>
+                  .
+                </p>
+              </div>
+            </div>
+          ) : (
+            <div>
+              <label>Email</label>
+              <input
+                type="email"
+                placeholder="your.example@gmail.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                style={{
+                  width: "100%",
+                  padding: "10px 20px",
+                  backgroundColor: "rgba(245, 245, 245, 1)",
+                  marginTop: "5px",
+                  marginBottom: "12px",
+                  borderRadius: "10px",
+                }}
+              />
+              <label>Password</label>
+              <input
+                type="password"
+                placeholder="Enter password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                style={{
+                  width: "100%",
+                  padding: "10px 20px",
+                  backgroundColor: "rgba(245, 245, 245, 1)",
+                  marginTop: "5px",
+                  marginBottom: "24px",
+                  borderRadius: "10px",
+                }}
+              />
+              <button
+                onClick={handleEmailLogin}
+                style={{
+                  padding: "10px",
+                  width: "100%",
+                  background: "var(--gradient-color-2)",
+                  color: "white",
+                  fontWeight: "600",
+                  fontSize: "20px",
+                  borderRadius: "10px",
+                  marginBottom: "18px",
+                }}
+              >
+                Login
+              </button>
+              <button
+                onClick={() => setForgotPassScreen(2)}
+                style={{
+                  color: "rgba(0, 176, 255, 1)",
+                  marginBottom: "4px",
+                  cursor: "pointer",
+                }}
+              >
+                Forgot Password?
+              </button>
+              <p
+                onClick={() => setRenderLogWithGoogle(true)}
+                style={{ color: "rgba(0, 176, 255, 1)", cursor: "pointer" }}
+              >
+                Back to Login with Google
+              </p>
+            </div>
+          )}
         </>
       );
     }
@@ -153,114 +239,222 @@ const LoginPopup = () => {
     // SCREEN 2 — ENTER EMAIL
     if (forgotPassScreen === 2) {
       return (
-        <>
-          <h2>Reset Password</h2>
-          <p>Enter your email</p>
-
+        <div>
+          <h2
+            style={{
+              fontWeight: "500",
+              fontSize: "20px",
+              marginBottom: "24px",
+            }}
+          >
+            Forgot Password ?
+          </h2>
+          <p style={{ fontWeight: "600" }}>Email</p>
           <input
             type="email"
-            placeholder="Email"
+            placeholder="your.example@gmail.com"
             value={forgotEmail}
             onChange={(e) => setForgotEmail(e.target.value)}
-            style={{ width: "100%", padding: "0.5rem", marginTop: "1rem" }}
+            style={{
+              width: "100%",
+              padding: "10px 20px",
+              backgroundColor: "rgba(245, 245, 245, 1)",
+              marginTop: "5px",
+              marginBottom: "32px",
+              borderRadius: "10px",
+            }}
           />
 
           <button
             onClick={handleForgotEmail}
-            style={{ marginTop: "1rem", width: "100%", padding: "0.5rem" }}
+            style={{
+              padding: "10px",
+              width: "100%",
+              background: "var(--gradient-color-2)",
+              color: "white",
+              fontWeight: "600",
+              fontSize: "20px",
+              borderRadius: "10px",
+              marginBottom: "65px",
+              cursor: "pointer",
+            }}
           >
-            Send Code
+            Request code{" "}
           </button>
-        </>
+        </div>
       );
     }
 
     // SCREEN 3 — ENTER CODE
     if (forgotPassScreen === 3) {
       return (
-        <>
-          <h2>Enter Verification Code</h2>
-
+        <div>
+          <p style={{ fontWeight: "600" }}>Code</p>
           <input
             type="text"
             placeholder="6-digit code"
             value={code}
             onChange={(e) => setCode(e.target.value)}
-            style={{ width: "100%", padding: "0.5rem", marginTop: "1rem" }}
+            style={{
+              width: "100%",
+              padding: "10px 20px",
+              backgroundColor: "rgba(245, 245, 245, 1)",
+              marginTop: "5px",
+              marginBottom: "38px",
+              borderRadius: "10px",
+            }}
           />
 
           <button
             onClick={handleVerifyCode}
-            style={{ marginTop: "1rem", width: "100%", padding: "0.5rem" }}
+            style={{
+              padding: "10px",
+              width: "100%",
+              background: "var(--gradient-color-2)",
+              color: "white",
+              fontWeight: "600",
+              fontSize: "20px",
+              borderRadius: "10px",
+              marginBottom: "85px",
+              cursor: "pointer",
+            }}
           >
             Verify Code
           </button>
-        </>
+        </div>
       );
     }
 
     // SCREEN 4 — ENTER NEW PASSWORD
     if (forgotPassScreen === 4) {
       return (
-        <>
-          <h2>Set New Password</h2>
-
+        <div>
+          <h2
+            style={{
+              fontWeight: "500",
+              fontSize: "20px",
+              marginBottom: "24px",
+            }}
+          >
+            Set New Password
+          </h2>
+          <p style={{ fontWeight: "600" }}>New Password</p>
           <input
             type="password"
             placeholder="New password"
             value={newPass}
             onChange={(e) => setNewPass(e.target.value)}
-            style={{ width: "100%", padding: "0.5rem", marginTop: "1rem" }}
+            style={{
+              width: "100%",
+              padding: "10px 20px",
+              backgroundColor: "rgba(245, 245, 245, 1)",
+              marginTop: "5px",
+              marginBottom: "32px",
+              borderRadius: "10px",
+            }}
           />
 
           <button
             onClick={handleResetPassword}
-            style={{ marginTop: "1rem", width: "100%", padding: "0.5rem" }}
+            style={{
+              padding: "10px",
+              width: "100%",
+              background: "var(--gradient-color-2)",
+              color: "white",
+              fontWeight: "600",
+              fontSize: "20px",
+              borderRadius: "10px",
+              marginBottom: "70px",
+              cursor: "pointer",
+            }}
           >
             Reset Password
           </button>
-        </>
+        </div>
       );
     }
   };
 
   return (
-    <div
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        width: "100vw",
-        height: "100vh",
-        backdropFilter: "blur(5px)",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        zIndex: 999,
-      }}
-    >
+    <div style={{ position: "relative" }} dir={isRTL ? "rtl" : "ltr"}>
+      {/* overlay */}
       <div
         style={{
-          background: "white",
-          padding: "2rem",
-          borderRadius: "10px",
-          textAlign: "center",
-          width: "320px",
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100vw",
+          height: "100vh",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          zIndex: 999,
         }}
-      >
-        {renderScreen()}
+        className="bg-black/50 backdrop-blur-xs"
+      />
 
-        <button
-          onClick={closeLoginPopup}
-          style={{
-            marginTop: "1.5rem",
-            padding: "0.5rem",
-            width: "100%",
-            backgroundColor: "#eee",
+      {/* OUTER WRAPPER — مفيهوش overflow */}
+      <div
+        style={{
+          position: "fixed",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          zIndex: 1000,
+        }}
+        className="lg:w-[75%] w-[80%] relative"
+      >
+        {/* زرار الـ close */}
+        <img
+          src="/images/close.png"
+          onClick={() => {
+            setRenderLogWithGoogle(true);
+            closeLoginPopup();
           }}
+          style={{
+            position: "absolute",
+            top: "-25px",
+            cursor: "pointer",
+            zIndex: 2000,
+            width: "65px",
+          }}
+          className={`${isRTL ? "-left-5" : "-right-5"}`}
+        />
+
+        {/* INNER BOX — هنا بس نحط overflow hidden */}
+        <div
+          style={{
+            borderRadius: "40px",
+            height: "500px",
+            overflow: "hidden", // هنا بس
+          }}
+          className="flex bg-white"
         >
-          Close
-        </button>
+          <div
+            style={{
+              backgroundImage: "url('/images/login.png')",
+              backgroundSize: "cover",
+              backgroundRepeat: "no-repeat",
+              backgroundPosition: "center",
+              width: "50%",
+              height: "100%",
+            }}
+            className="w-[50%] lg:block hidden"
+          ></div>
+
+          <div className="lg:w-[50%] w-full py-10 px-8 md:px-17 flex flex-col justify-between">
+            <div className="text-center">
+              <h2 style={{ fontSize: "40px", fontWeight: "700" }}>
+                Hi there !
+              </h2>
+              <p style={{ fontWeight: "500", lineHeight: "1.2" }}>
+                Welcome to picsharps, so happy to see you
+              </p>
+            </div>
+
+            {renderScreen()}
+          </div>
+        </div>
       </div>
     </div>
   );

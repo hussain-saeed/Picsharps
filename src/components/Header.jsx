@@ -13,6 +13,7 @@ import English from "../i18n/components/header/english.json";
 import French from "../i18n/components/header/french.json";
 import Arabic from "../i18n/components/header/arabic.json";
 import { useAuth } from "../features/auth/AuthProvider";
+import { RxAvatar } from "react-icons/rx";
 
 const translations = { English, French, Arabic };
 
@@ -152,7 +153,12 @@ export default function Header({ setActiveView }) {
         >
           <ChangeLanguage openFrom={"down"} />
           {user ? (
-            <Link to="/profile">profile</Link>
+            <Link
+              to="/profile"
+              style={{ fontSize: "40px", color: "rgb(60, 60, 60)" }}
+            >
+              <RxAvatar />
+            </Link>
           ) : (
             <button
               style={{

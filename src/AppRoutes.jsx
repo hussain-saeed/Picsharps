@@ -14,6 +14,7 @@ import NotFound from "./features/static/NotFound";
 import Callback from "./features/auth/Callback";
 import Profile from "./features/profile/Profile";
 import VerifyEmailPage from "./features/auth/VerifyEmailPage";
+import LoginPopup from "./features/auth/LoginPopup";
 
 const data = [
   "remove-background",
@@ -34,6 +35,7 @@ const data = [
 export default function AppRoutes() {
   return (
     <LanguageProvider>
+      <LoginPopup />
       <OverlayProvider>
         <BrowserRouter>
           <ScrollToTop />

@@ -29,7 +29,7 @@ export default function Header({ setActiveView }) {
   const t = translations[language] || translations["English"];
   const isRTL = direction === "rtl";
 
-  const { user, openLoginPopup } = useAuth();
+  const { userData, openLoginPopup } = useAuth();
 
   const handleHeaderClick = () => {
     if (toolsMenuOpen === true) {
@@ -152,7 +152,7 @@ export default function Header({ setActiveView }) {
           }`}
         >
           <ChangeLanguage openFrom={"down"} />
-          {user ? (
+          {userData ? (
             <Link
               to="/profile"
               style={{ fontSize: "40px", color: "rgb(60, 60, 60)" }}

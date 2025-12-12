@@ -8,16 +8,13 @@ export const AuthProvider = ({ children }) => {
   // ============================================
   // 1) Basic Auth State
   // ============================================
-  const [user, setUser] = useState(null); // لو عايز تلغي دا لاحقًا قولّي
   const [userData, setUserData] = useState(null); // 👈 الجديد
   const [accessToken, setAccessToken] = useState(null);
-  const [isLoadingLoggedIn, setIsLoadingLoggedIn] = useState(true);
 
   // ============================================
   // 2) Token Management (refresh token)
   // ============================================
   const refreshToken = async () => {
-    setIsLoadingLoggedIn(true);
 
     try {
       const res = await fetch(`${API_URL}/api/v1/auth/refresh`, {
@@ -34,22 +31,17 @@ export const AuthProvider = ({ children }) => {
         setAccessToken(data.accessToken);
 
         // القديم
-        setUser(data.data?.user || user);
 
         // الجديد
         setUserData(data.data?.user || null);
       } else {
-        setUser(null);
         setUserData(null);
         setAccessToken(null);
       }
     } catch (err) {
       console.error("Refresh token error:", err);
-      setUser(null);
       setUserData(null);
       setAccessToken(null);
-    } finally {
-      setIsLoadingLoggedIn(false);
     }
   };
 
@@ -98,7 +90,6 @@ export const AuthProvider = ({ children }) => {
   // 5) Email & Password Login
   // ============================================
   const login = async (email, password) => {
-    setIsLoadingLoggedIn(true);
 
     try {
       const res = await fetch(`${API_URL}/api/v1/auth/login`, {
@@ -114,9 +105,6 @@ export const AuthProvider = ({ children }) => {
       if (data.status === "success") {
         setAccessToken(data.accessToken);
 
-        // القديم
-        setUser(data.data.user);
-
         // الجديد
         setUserData(data.data.user);
       }
@@ -124,9 +112,8 @@ export const AuthProvider = ({ children }) => {
       return data;
     } catch (err) {
       console.error("Login error:", err);
-    } finally {
-      setIsLoadingLoggedIn(false);
     }
+    
   };
 
   const [forgotPassScreen, setForgotPassScreen] = useState(1);
@@ -253,7 +240,6 @@ export const AuthProvider = ({ children }) => {
     } catch (err) {
       console.error("Logout error:", err);
     } finally {
-      setUser(null);
       setUserData(null);
       setAccessToken(null);
       window.location.href = "/";
@@ -266,10 +252,8 @@ export const AuthProvider = ({ children }) => {
   return (
     <AuthContext.Provider
       value={{
-        user, // القديم
         userData, // 👈 الجديد
         accessToken,
-        isLoadingLoggedIn,
 
         // Token
         refreshToken,

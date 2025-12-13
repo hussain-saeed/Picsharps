@@ -1,18 +1,26 @@
-export const flipImage = async ({
+export const resizeImage = async ({
   sourceImageId,
   imageUrl,
-  direction = "horizontal",
+  width,
+  height,
+  mode = "fill",
 }) => {
   try {
+    if (!width && !height) {
+      throw new Error("At least one of width or height must be provided");
+    }
+
     const res = await fetch(
-      "https://picsharps-api.onrender.com/api/v1/image/flip",
+      "https://picsharps-api.onrender.com/api/v1/image/resize",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           sourceImageId,
           imageUrl,
-          direction,
+          width: width ? parseInt(width) : null,
+          height: height ? parseInt(height) : null,
+          mode,
         }),
       }
     );
@@ -25,10 +33,10 @@ export const flipImage = async ({
         providerImageId: data.data.providerImageId,
       };
     } else {
-      throw new Error(data.message || "Flip failed");
+      throw new Error(data.message || "Resize failed");
     }
   } catch (err) {
-    console.error("[Flip Tool] Error:", err);
+    console.error("[Resize Tool] Error:", err);
     throw err;
   }
 };

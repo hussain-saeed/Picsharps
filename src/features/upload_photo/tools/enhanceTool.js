@@ -1,4 +1,3 @@
-// src/tools/enhanceTool.js
 export const enhanceImage = async ({
   sourceImageId,
   imageUrl,
@@ -14,7 +13,6 @@ export const enhanceImage = async ({
           sourceImageId,
           imageUrl,
           upscaleFactor: Number(upscaleFactor),
-          // تم إزالة format
         }),
       }
     );

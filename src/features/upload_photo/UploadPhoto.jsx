@@ -164,7 +164,7 @@ function UploadPhoto() {
           </h2>
           <p
             style={{ fontSize: "20px", color: "rgba(0, 0, 0, 1)" }}
-            className="max-w-[700px] mx-auto mb-10"
+            className="max-w-[700px] mx-auto mb-25"
             dir={isRTL ? "rtl" : "ltr"}
           >
             {description}

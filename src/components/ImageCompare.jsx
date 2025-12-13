@@ -94,7 +94,7 @@ export default function ImageCompare({
     >
       <img
         src={before}
-        className={`w-full h-full bg-gray object-${fit} ${beforeClassName}`}
+        className={`w-full h-full bg-[#f9f9f9] object-${fit} ${beforeClassName}`}
       />
 
       <div
@@ -103,12 +103,12 @@ export default function ImageCompare({
       >
         <img
           src={after}
-          className={`absolute inset-0 w-full h-full bg-white object-${fit} ${afterClassName}`}
+          className={`absolute inset-0 w-full h-full bg-[#f9f9f9] object-${fit} ${afterClassName}`}
         />
       </div>
 
       <div
-        className="absolute top-0 bottom-0 left-0 w-1 bg-white border border-gray-300 cursor-col-resize"
+        className="absolute top-0 bottom-0 left-0 w-1 bg-[#f9f9f9] border border-gray-300 cursor-col-resize"
         style={{ left: `${pos}%`, transform: "translateX(-50%)" }}
         onMouseDown={startDrag}
         onTouchStart={startDrag}

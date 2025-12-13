@@ -1,4 +1,3 @@
-// src/tools/cartoonTool.js
 export const cartoonPhoto = async ({ sourceImageId, imageUrl }) => {
   try {
     const res = await fetch(

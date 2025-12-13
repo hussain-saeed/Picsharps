@@ -3,71 +3,90 @@ import { useDropzone } from "react-dropzone";
 import { useNavigate, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 
-// Tools
+// Tool imports
 import { enhanceImage } from "../tools/enhanceTool";
 import { cartoonPhoto } from "../tools/cartoonTool";
-import { flipImage } from "../tools/flipTool"; // ⚠️ إضافة هذا الاستيراد
+import { flipImage } from "../tools/flipTool";
+import { resizeImage } from "../tools/resizeTool";
 import { TOOL_CONFIG } from "../config/toolConfig";
+import ImageCompare from "../../../components/ImageCompare";
+import { Download, RefreshCw, Rocket } from "lucide-react";
+import {
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Radio,
+  Select,
+  TextField,
+} from "@mui/material";
+
+// Tool type identifiers
+const TOOL_TYPES = {
+  ENHANCE: "ai-image-enhancer",
+  CARTOON: "photo-to-cartoon",
+  FLIP: "flip-image",
+  RESIZE: "resize-image",
+};
+
+// Component lifecycle states
+const COMPONENT_STATES = {
+  IDLE: "idle",
+  UPLOADING: "uploading",
+  PROCESSING: "processing",
+  DONE: "done",
+  ERROR: "error",
+};
 
 const DropZone = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // الحصول على اسم الأداة الحالية من المسار
+  // Identify current tool from URL path
   const currentTool =
     location.pathname.split("/").filter(Boolean)[0] ||
     location.pathname.replace("/", "");
   const toolConfig = TOOL_CONFIG[currentTool];
 
-  // ================================
-  // State
-  // ================================
+  // Component state
   const [uploadedFile, setUploadedFile] = useState(null);
   const [uploadedImageUrl, setUploadedImageUrl] = useState(null);
   const [sourceImageId, setSourceImageId] = useState(null);
   const [processedImage, setProcessedImage] = useState(null);
-  const [status, setStatus] = useState(""); // "idle" | "uploading" | "processing" | "done" | "error"
+  const [status, setStatus] = useState(COMPONENT_STATES.IDLE);
   const [message, setMessage] = useState("");
   const [showDropZone, setShowDropZone] = useState(true);
   const [showOptions, setShowOptions] = useState(false);
   const [options, setOptions] = useState({});
+  const [renderedResultBefore, setRenderedResultBefore] = useState(false);
 
-  // ================================
-  // Initialize من localStorage
-  // ================================
+  // Initialize component from localStorage or reset to default state
   useEffect(() => {
     const LS_KEY = `dropzone_last_result`;
     const FROM_TOOL_KEY = `came_from_tool`;
 
-    // تنظيف أي بيانات قديمة للأداة الحالية
+    // Clean up previous tool data
     localStorage.removeItem(`dropzone_last_result_${currentTool}`);
 
     const storedResult = localStorage.getItem(LS_KEY);
     const cameFromTool = localStorage.getItem(FROM_TOOL_KEY);
 
-    console.log("Initialization:", { storedResult, cameFromTool, currentTool });
-
     if (cameFromTool && storedResult) {
       try {
         const parsedResult = JSON.parse(storedResult);
 
-        // تأكد أننا جئنا من أداة مختلفة
+        // Only load if coming from a different tool
         if (parsedResult.tool !== currentTool) {
-          console.log("Loading from other tool:", parsedResult);
-
-          // تعيين حالة كما لو تم رفع الصورة بنجاح
           setUploadedImageUrl(parsedResult.previewUrl);
           setSourceImageId(parsedResult.sourceImageId);
           setShowDropZone(false);
           setShowOptions(true);
-          setStatus("done");
+          setStatus(COMPONENT_STATES.DONE);
           setMessage("Loaded from previous tool ✅");
         } else {
-          // إذا كنا في نفس الأداة، أعد التعيين العادي
           resetToInitialState();
         }
 
-        // تنظيف المفاتيح بعد استخدامها
+        // Clean up transition flags
         localStorage.removeItem(FROM_TOOL_KEY);
         localStorage.removeItem(LS_KEY);
       } catch (err) {
@@ -75,11 +94,10 @@ const DropZone = () => {
         resetToInitialState();
       }
     } else {
-      // حالة عادية - إعادة الضبط
       resetToInitialState();
     }
 
-    // تهيئة الأوبشنز بالأعدادات الافتراضية
+    // Initialize tool options with defaults
     if (toolConfig?.hasOptions) {
       const defaultOptions = {};
       Object.keys(toolConfig.options).forEach((key) => {
@@ -89,32 +107,27 @@ const DropZone = () => {
     }
   }, [currentTool]);
 
+  // Auto-process for TYPE_2 tools when options are selected
   useEffect(() => {
-    // ممنوع يشتغل لو مفيش صورة مرفوعة
     if (!uploadedImageUrl || !sourceImageId) return;
-
-    // لو الأداة مفيهاش أوبشنز، يبقا مالناش دعوة
     if (!toolConfig?.hasOptions) return;
-
-    // لو لسه مختارش قيمة
+    if (currentTool === TOOL_TYPES.RESIZE) return;
     if (Object.values(options).includes(null)) return;
 
-    // ابدأ البروسيسنج بعد اختيار أوبشن
     processImage();
   }, [options]);
 
-  // ================================
-  // Reset functions
-  // ================================
+  // Reset component to initial state
   const resetToInitialState = () => {
     setUploadedFile(null);
     setUploadedImageUrl(null);
     setSourceImageId(null);
     setProcessedImage(null);
-    setStatus("");
+    setStatus(COMPONENT_STATES.IDLE);
     setMessage("");
     setShowDropZone(true);
     setShowOptions(false);
+    setRenderedResultBefore(false);
 
     if (toolConfig?.hasOptions) {
       const defaultOptions = {};
@@ -127,14 +140,11 @@ const DropZone = () => {
 
   const resetComponent = () => {
     resetToInitialState();
-    // تنظيف localStorage لهذه الأداة
     localStorage.removeItem(`dropzone_last_result`);
     localStorage.removeItem(`came_from_tool`);
   };
 
-  // ================================
-  // Handle dropped files - الرفع فقط
-  // ================================
+  // Handle file upload to server
   const onDrop = useCallback(
     async (acceptedFiles) => {
       if (acceptedFiles.length === 0) return;
@@ -148,7 +158,7 @@ const DropZone = () => {
       formData.append("image", file);
 
       try {
-        setStatus("uploading");
+        setStatus(COMPONENT_STATES.UPLOADING);
         setMessage("Uploading image... ⏳");
 
         const uploadRes = await fetch(
@@ -159,7 +169,7 @@ const DropZone = () => {
         const uploadData = await uploadRes.json();
 
         if (uploadData.status !== "success") {
-          setStatus("error");
+          setStatus(COMPONENT_STATES.ERROR);
           setMessage(uploadData.message || "Upload failed ❌");
           toast.error(uploadData.message || "Upload failed");
           resetComponent();
@@ -170,19 +180,16 @@ const DropZone = () => {
 
         setSourceImageId(sourceImageId);
         setUploadedImageUrl(sourceUrl);
-        setStatus("done");
+        setStatus(COMPONENT_STATES.DONE);
         setMessage("Image uploaded successfully! ✅");
 
-        // إظهار الأوبشنز إذا كانت الأداة تحتوي عليها
+        // Show options panel if tool supports them
         if (toolConfig?.hasOptions) {
           setShowOptions(true);
         }
-
-        // إذا كانت الأداة بدون أوبشنز، لا تظهر زر START هنا
-        // سنعتمد على الزر اليدوي
       } catch (err) {
         console.error("[DropZone] Upload Error:", err);
-        setStatus("error");
+        setStatus(COMPONENT_STATES.ERROR);
         setMessage("Network error occurred ❌");
         toast.error("Network error occurred");
         resetComponent();
@@ -191,9 +198,7 @@ const DropZone = () => {
     [toolConfig]
   );
 
-  // ================================
-  // Process Image - المعالجة بعد الرفع
-  // ================================
+  // Main image processing function - routes to appropriate tool
   const processImage = useCallback(async () => {
     if (!sourceImageId || !uploadedImageUrl) {
       toast.error("No image to process");
@@ -201,40 +206,57 @@ const DropZone = () => {
     }
 
     try {
-      setStatus("processing");
+      setStatus(COMPONENT_STATES.PROCESSING);
       setMessage("Processing image... ⏳");
       setShowOptions(false);
 
       let toolResult = null;
 
-      if (currentTool === "ai-image-enhancer") {
-        // إرسال بدون format
+      // Route to specific tool based on currentTool
+      if (currentTool === TOOL_TYPES.ENHANCE) {
         toolResult = await enhanceImage({
           sourceImageId,
           imageUrl: uploadedImageUrl,
           upscaleFactor: options.upscaleFactor,
         });
-      } else if (currentTool === "photo-to-cartoon") {
+      } else if (currentTool === TOOL_TYPES.CARTOON) {
         toolResult = await cartoonPhoto({
           sourceImageId,
           imageUrl: uploadedImageUrl,
         });
-      } else if (currentTool === "flip-image") {
-        // ⚠️ إضافة هذا الشرط
+      } else if (currentTool === TOOL_TYPES.FLIP) {
         toolResult = await flipImage({
           sourceImageId,
           imageUrl: uploadedImageUrl,
           direction: options.direction,
         });
+      } else if (currentTool === TOOL_TYPES.RESIZE) {
+        // Validate inputs for resize tool
+        if (!options.width && !options.height) {
+          toast.error("Please enter at least width or height");
+          setStatus(COMPONENT_STATES.ERROR);
+          setMessage("Please enter at least width or height ❌");
+          return;
+        }
+
+        toolResult = await resizeImage({
+          sourceImageId,
+          imageUrl: uploadedImageUrl,
+          width: options.width,
+          height: options.height,
+          mode: options.mode,
+        });
       }
 
+      // Handle successful processing
       if (toolResult) {
         setProcessedImage(toolResult.previewUrl);
-        setStatus("done");
+        setStatus(COMPONENT_STATES.DONE);
         setMessage("Image processed successfully! 🎉");
         setShowOptions(true);
+        setRenderedResultBefore(true);
 
-        // حفظ النتيجة للانتقال لأدوات أخرى
+        // Save result for tool-to-tool navigation
         const resultData = {
           sourceImageId,
           previewUrl: toolResult.previewUrl,
@@ -250,40 +272,34 @@ const DropZone = () => {
       }
     } catch (err) {
       console.error("[DropZone] Processing Error:", err);
-      setStatus("error");
+      setStatus(COMPONENT_STATES.ERROR);
       setMessage("Processing failed ❌");
       toast.error("Processing failed");
 
-      // إعادة إظهار الأوبشنز في حالة الخطأ
+      // Restore options panel on error
       if (toolConfig?.hasOptions) {
         setShowOptions(true);
       }
     }
   }, [sourceImageId, uploadedImageUrl, currentTool, options, toolConfig]);
 
-  // ================================
-  // Handle option change
-  // ================================
+  // Handle option changes in tool settings
   const handleOptionChange = (optionKey, value) => {
     const newOptions = { ...options, [optionKey]: value };
     setOptions(newOptions);
   };
 
-  // ================================
-  // Go to another tool
-  // ================================
+  // Navigate to another tool with current processed image
   const goToTool = (toolPath) => {
     if (!processedImage) {
       toast.error("No processed image to use");
       return;
     }
 
-    console.log("Going to tool:", toolPath, "from:", currentTool);
-
-    // حفظ flag للدخول التالي
+    // Set flag for next component initialization
     localStorage.setItem("came_from_tool", "true");
 
-    // حفظ النتيجة للاستخدام في الأداة التالية
+    // Save current result for next tool
     const resultData = {
       sourceImageId,
       previewUrl: processedImage,
@@ -292,13 +308,11 @@ const DropZone = () => {
     };
     localStorage.setItem(`dropzone_last_result`, JSON.stringify(resultData));
 
-    // الانتقال للأداة الجديدة
+    // Navigate to new tool
     navigate(`/${toolPath}`);
   };
 
-  // ================================
-  // Dropzone setup
-  // ================================
+  // Dropzone configuration
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept: {
@@ -308,25 +322,22 @@ const DropZone = () => {
     },
     maxSize: 10 * 1024 * 1024,
     multiple: false,
-    disabled: status === "uploading" || status === "processing",
+    disabled:
+      status === COMPONENT_STATES.UPLOADING ||
+      status === COMPONENT_STATES.PROCESSING,
   });
 
-  // ================================
-  // Available Tools للانتقال
-  // ================================
+  // Prepare available tools for navigation dropdown
   const availableTools = Object.keys(TOOL_CONFIG)
-    .filter((tool) => tool !== currentTool)
+    .filter((tool) => tool !== currentTool && tool !== "resize-image")
     .map((tool) => ({
       path: tool,
       label: TOOL_CONFIG[tool].name,
     }));
 
-  // ================================
-  // Render
-  // ================================
   return (
-    <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "20px" }}>
-      {/* DropZone - تظهر فقط في الحالة الأولى */}
+    <div>
+      {/* Dropzone for file upload */}
       {showDropZone && (
         <div
           {...getRootProps()}
@@ -375,110 +386,109 @@ const DropZone = () => {
         </div>
       )}
 
-      {/* Uploading/Processing Status */}
-      {(status === "uploading" || status === "processing") && (
-        <div style={{ textAlign: "center", margin: "30px 0" }}>
-          <div
-            style={{
-              width: "300px",
-              height: "300px",
-              margin: "0 auto",
-              border: "2px dashed #ccc",
-              borderRadius: "10px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              backgroundColor: "#f9f9f9",
-            }}
-          >
-            {status === "uploading" && uploadedFile && (
-              <img
-                src={URL.createObjectURL(uploadedFile)}
-                alt="Uploading"
-                style={{
-                  maxWidth: "100%",
-                  maxHeight: "100%",
-                  objectFit: "contain",
-                }}
-              />
-            )}
-            {status === "processing" && uploadedImageUrl && (
-              <img
-                src={uploadedImageUrl}
-                alt="Processing"
-                style={{
-                  maxWidth: "100%",
-                  maxHeight: "100%",
-                  objectFit: "contain",
-                  filter: "blur(2px)",
-                }}
-              />
-            )}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          flexWrap: "wrap",
+          gap: "20px",
+          backgroundColor: "yellow",
+        }}
+      >
+        {/* Uploading/Processing states */}
+        {(status === COMPONENT_STATES.UPLOADING ||
+          status === COMPONENT_STATES.PROCESSING) && (
+          <div>
             <div
               style={{
-                position: "absolute",
-                background: "rgba(0,0,0,0.7)",
-                color: "white",
-                padding: "10px 20px",
-                borderRadius: "20px",
+                border: "3px solid #ccc",
+                borderRadius: "10px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                backgroundColor: "#f9f9f9",
+                overflow: "hidden",
               }}
+              className="w-[200px] h-[200px] sm:w-[300px] sm:h-[300px] md:w-[400px] md:h-[400px] lg:w-[500px] lg:h-[500px]"
             >
-              {status === "uploading" ? "Uploading..." : "Processing..."}
+              {status === COMPONENT_STATES.UPLOADING && uploadedFile && (
+                <img
+                  src={URL.createObjectURL(uploadedFile)}
+                  alt="Uploading"
+                  style={{
+                    maxWidth: "100%",
+                    maxHeight: "100%",
+                    objectFit: "contain",
+                    filter: "opacity(0.7)",
+                  }}
+                />
+              )}
+              {status === COMPONENT_STATES.PROCESSING && uploadedImageUrl && (
+                <img
+                  src={uploadedImageUrl}
+                  alt="Processing"
+                  style={{
+                    maxWidth: "100%",
+                    maxHeight: "100%",
+                    objectFit: "contain",
+                    filter: "opacity(0.7)",
+                  }}
+                />
+              )}
               <div
                 style={{
-                  marginTop: "10px",
-                  width: "100%",
-                  height: "3px",
-                  background: "#ccc",
-                  borderRadius: "2px",
-                  overflow: "hidden",
+                  position: "absolute",
+                  background: "rgba(0,0,0,0.7)",
+                  color: "white",
+                  padding: "10px 20px",
+                  borderRadius: "20px",
                 }}
               >
+                {status === COMPONENT_STATES.UPLOADING
+                  ? "Uploading ..."
+                  : "Processing ..."}
                 <div
                   style={{
-                    width: "70%",
-                    height: "100%",
-                    background: "#4CAF50",
-                    animation: "loading 1.5s infinite",
+                    marginTop: "10px",
+                    width: "100%",
+                    height: "3px",
+                    background: "#ccc",
+                    borderRadius: "2px",
+                    overflow: "hidden",
                   }}
-                ></div>
+                >
+                  <div
+                    style={{
+                      width: "70%",
+                      height: "100%",
+                      background: "#4CAF50",
+                      animation: "loading 1.5s infinite",
+                    }}
+                  ></div>
+                </div>
               </div>
             </div>
           </div>
-          <p style={{ marginTop: "15px", color: "#666" }}>{message}</p>
-        </div>
-      )}
+        )}
 
-      {/* Image Preview بعد الرفع */}
-      {uploadedImageUrl &&
-        status !== "uploading" &&
-        status !== "processing" && (
-          <div style={{ margin: "30px 0" }}>
-            <div
-              style={{
-                display: "flex",
-                gap: "30px",
-                justifyContent: "center",
-                flexWrap: "wrap",
-                alignItems: "flex-start",
-              }}
-            >
-              {/* الصورة الأصلية */}
-              <div style={{ textAlign: "center" }}>
-                <h4 style={{ marginBottom: "10px", color: "#333" }}>
-                  Original 🖼️
-                </h4>
+        {/* After successful upload */}
+        {uploadedImageUrl &&
+          status !== COMPONENT_STATES.UPLOADING &&
+          status !== COMPONENT_STATES.PROCESSING && (
+            <>
+              {/* Original image display */}
+              <div>
                 <div
                   style={{
-                    width: "300px",
-                    height: "300px",
-                    border: "1px solid #ddd",
+                    border: "3px solid #ccc",
                     borderRadius: "10px",
-                    overflow: "hidden",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
+                    backgroundColor: "#f9f9f9",
+                    overflow: "hidden",
                   }}
+                  className="w-[200px] h-[200px] sm:w-[300px] sm:h-[300px] md:w-[400px] md:h-[400px] lg:w-[500px] lg:h-[500px] relative"
                 >
                   <img
                     src={uploadedImageUrl}
@@ -489,207 +499,568 @@ const DropZone = () => {
                       objectFit: "contain",
                     }}
                   />
+                  <h3
+                    style={{
+                      fontWeight: "600",
+                      backgroundColor: "red",
+                      marginTop: "8px",
+                      letterSpacing: "2px",
+                      position: "absolute",
+                      opacity: "0.5",
+                      bottom: "10px",
+                      left: "10px",
+                      borderRadius: "10px",
+                      padding: "2px 8px",
+                    }}
+                  >
+                    ORIGINAL
+                  </h3>
                 </div>
               </div>
 
-              {/* الصورة المعالجة */}
-              {processedImage && (
-                <div style={{ textAlign: "center" }}>
-                  <h4 style={{ marginBottom: "10px", color: "#333" }}>
-                    Processed ✅
-                  </h4>
-                  <div
-                    style={{
-                      width: "300px",
-                      height: "300px",
-                      border: "1px solid #ddd",
-                      borderRadius: "10px",
-                      overflow: "hidden",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                    }}
-                  >
-                    <img
-                      src={processedImage}
-                      alt="Processed"
+              {/* Tool-specific options panel */}
+              {((showOptions && toolConfig?.hasOptions) ||
+                (uploadedImageUrl &&
+                  toolConfig &&
+                  !toolConfig.hasOptions &&
+                  !processedImage &&
+                  status !== COMPONENT_STATES.PROCESSING) ||
+                renderedResultBefore === false) && (
+                <div className="flex flex-col gap-4 bg-amber-300">
+                  {/* Options for tools with settings */}
+                  {showOptions && toolConfig?.hasOptions && (
+                    <div
                       style={{
-                        maxWidth: "100%",
-                        maxHeight: "100%",
-                        objectFit: "contain",
+                        background: "#f8f9fa",
+                        padding: "9px 12px 12px 12px",
+                        borderRadius: "10px",
+                        border: "1px solid #e9ecef",
                       }}
-                    />
-                  </div>
+                    >
+                      <h4
+                        style={{
+                          marginBottom: "12px",
+                          color: "#333",
+                          textAlign: "start",
+                        }}
+                      >
+                        {currentTool === TOOL_TYPES.ENHANCE
+                          ? "Level"
+                          : currentTool === TOOL_TYPES.FLIP
+                          ? "Direction"
+                          : currentTool === TOOL_TYPES.RESIZE
+                          ? "Settings"
+                          : ""}
+                      </h4>
+
+                      <div
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: "15px",
+                        }}
+                      >
+                        {/* Enhance tool options */}
+                        {currentTool === TOOL_TYPES.ENHANCE && (
+                          <div
+                            style={{
+                              display: "flex",
+                              flexDirection: "column",
+                              gap: "10px",
+                            }}
+                          >
+                            {toolConfig.options.upscaleFactor.values.map(
+                              (option) => {
+                                const isSelected =
+                                  options.upscaleFactor === option.value;
+
+                                return (
+                                  <label
+                                    key={option.value}
+                                    style={{
+                                      display: "flex",
+                                      alignItems: "center",
+                                      gap: "10px",
+                                      padding: "10px 14px",
+                                      borderRadius: "8px",
+                                      border: isSelected
+                                        ? "2px solid #00c853"
+                                        : "1px solid #ccc",
+                                      cursor: "pointer",
+                                      userSelect: "none",
+                                    }}
+                                  >
+                                    <input
+                                      type="radio"
+                                      name="upscaleFactor"
+                                      value={option.value}
+                                      checked={isSelected}
+                                      onChange={(e) =>
+                                        handleOptionChange(
+                                          "upscaleFactor",
+                                          parseInt(e.target.value)
+                                        )
+                                      }
+                                      disabled={
+                                        status === COMPONENT_STATES.PROCESSING
+                                      }
+                                      style={{
+                                        width: "16px",
+                                        height: "16px",
+                                        cursor: "pointer",
+                                      }}
+                                    />
+
+                                    <span
+                                      style={{ fontWeight: 500, color: "#333" }}
+                                    >
+                                      {option.label}
+                                    </span>
+                                  </label>
+                                );
+                              }
+                            )}
+                          </div>
+                        )}
+
+                        {/* Flip tool options */}
+                        {currentTool === TOOL_TYPES.FLIP && (
+                          <div
+                            style={{
+                              display: "flex",
+                              flexDirection: "column",
+                              gap: "10px",
+                            }}
+                          >
+                            {toolConfig.options.direction.values.map(
+                              (option) => {
+                                const isSelected =
+                                  options.direction === option.value;
+
+                                return (
+                                  <label
+                                    key={option.value}
+                                    style={{
+                                      display: "flex",
+                                      alignItems: "center",
+                                      gap: "10px",
+                                      padding: "10px 14px",
+                                      borderRadius: "8px",
+                                      border: isSelected
+                                        ? "2px solid #00c853"
+                                        : "1px solid #ccc",
+                                      cursor: "pointer",
+                                      userSelect: "none",
+                                    }}
+                                  >
+                                    <input
+                                      type="radio"
+                                      name="direction"
+                                      value={option.value}
+                                      checked={isSelected}
+                                      onChange={(e) =>
+                                        handleOptionChange(
+                                          "direction",
+                                          e.target.value
+                                        )
+                                      }
+                                      disabled={
+                                        status === COMPONENT_STATES.PROCESSING
+                                      }
+                                      style={{
+                                        width: "16px",
+                                        height: "16px",
+                                        cursor: "pointer",
+                                      }}
+                                    />
+
+                                    <span
+                                      style={{ fontWeight: 500, color: "#333" }}
+                                    >
+                                      {option.label}
+                                    </span>
+                                  </label>
+                                );
+                              }
+                            )}
+                          </div>
+                        )}
+
+                        {/* Resize tool options */}
+                        {currentTool === TOOL_TYPES.RESIZE && (
+                          <>
+                            <div style={{ textAlign: "left" }}>
+                              <TextField
+                                label="Width (px)"
+                                type="number"
+                                size="small"
+                                fullWidth
+                                placeholder="e.g. 800"
+                                value={options.width}
+                                onChange={(e) =>
+                                  handleOptionChange(
+                                    "width",
+                                    parseInt(e.target.value) || 0
+                                  )
+                                }
+                                disabled={
+                                  status === COMPONENT_STATES.PROCESSING
+                                }
+                                InputProps={{ inputProps: { min: 0 } }}
+                                sx={{ marginTop: "5px" }}
+                              />
+                            </div>
+
+                            <div
+                              style={{ textAlign: "left", marginTop: "10px" }}
+                            >
+                              <TextField
+                                label="Height (px)"
+                                type="number"
+                                size="small"
+                                fullWidth
+                                placeholder="e.g. 600"
+                                value={options.height}
+                                onChange={(e) =>
+                                  handleOptionChange(
+                                    "height",
+                                    parseInt(e.target.value) || 0
+                                  )
+                                }
+                                disabled={
+                                  status === COMPONENT_STATES.PROCESSING
+                                }
+                                InputProps={{ inputProps: { min: 0 } }}
+                              />
+                            </div>
+
+                            <div
+                              style={{
+                                display: "flex",
+                                gap: "10px",
+                              }}
+                            >
+                              {toolConfig.options.mode.values.map((option) => {
+                                const isSelected =
+                                  options.mode === option.value;
+
+                                return (
+                                  <label
+                                    key={option.value}
+                                    style={{
+                                      display: "flex",
+                                      alignItems: "center",
+                                      gap: "10px",
+                                      padding: "10px 14px",
+                                      borderRadius: "8px",
+                                      border: isSelected
+                                        ? "2px solid #00c853"
+                                        : "1px solid #ccc",
+                                      cursor: "pointer",
+                                      userSelect: "none",
+                                    }}
+                                  >
+                                    <Radio
+                                      name="mode"
+                                      value={option.value}
+                                      checked={isSelected}
+                                      onChange={(e) =>
+                                        handleOptionChange(
+                                          "mode",
+                                          e.target.value
+                                        )
+                                      }
+                                      disabled={
+                                        status === COMPONENT_STATES.PROCESSING
+                                      }
+                                      sx={{
+                                        padding: 0,
+                                        "& .MuiSvgIcon-root": { fontSize: 16 },
+                                      }}
+                                    />
+                                    <span
+                                      style={{ fontWeight: 500, color: "#333" }}
+                                    >
+                                      {option.label}
+                                    </span>
+                                  </label>
+                                );
+                              })}
+                            </div>
+
+                            <button
+                              onClick={processImage}
+                              disabled={status === COMPONENT_STATES.PROCESSING}
+                              style={{
+                                padding: "10px 18px",
+                                background: "var(--gradient-color)",
+                                color: "white",
+                                border: "none",
+                                borderRadius: "5px",
+                                cursor: "pointer",
+                                display: "flex",
+                                alignItems: "center",
+                                gap: "8px",
+                                fontSize: "15px",
+                                fontWeight: 500,
+                                width: "fit-content",
+                              }}
+                            >
+                              <Rocket size={18} />
+                              Start Processing
+                            </button>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  {(uploadedImageUrl &&
+                    toolConfig &&
+                    !toolConfig.hasOptions &&
+                    !processedImage &&
+                    status !== COMPONENT_STATES.PROCESSING) ||
+                  renderedResultBefore === false ? (
+                    <div>
+                      {/* Start button for tools without options */}
+                      {uploadedImageUrl &&
+                        toolConfig &&
+                        !toolConfig.hasOptions &&
+                        !processedImage &&
+                        status !== COMPONENT_STATES.PROCESSING && (
+                          <button
+                            onClick={processImage}
+                            disabled={status === COMPONENT_STATES.PROCESSING}
+                            style={{
+                              padding: "10px 18px",
+                              background: "var(--gradient-color)",
+                              color: "white",
+                              border: "none",
+                              borderRadius: "5px",
+                              cursor: "pointer",
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "8px",
+                              fontSize: "15px",
+                              fontWeight: 500,
+                              marginBottom: "10px",
+                            }}
+                          >
+                            <Rocket size={18} />
+                            Start Processing
+                          </button>
+                        )}
+
+                      {/* Reset button before processing */}
+                      {renderedResultBefore === false && (
+                        <button
+                          onClick={resetComponent}
+                          style={{
+                            padding: "10px 18px",
+                            background: "var(--gradient-color-2)",
+                            color: "white",
+                            border: "none",
+                            borderRadius: "5px",
+                            cursor: "pointer",
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "8px",
+                            fontSize: "15px",
+                            fontWeight: 500,
+                          }}
+                        >
+                          <RefreshCw size={18} />
+                          Change Photo
+                        </button>
+                      )}
+                    </div>
+                  ) : null}
                 </div>
               )}
-            </div>
-          </div>
-        )}
 
-      {/* Options للأدوات التي تحتويها */}
-      {/* Options للأدوات التي تحتويها */}
+              {/* Processed image result */}
+              {processedImage && (
+                <>
+                  <div
+                    className={`${
+                      toolConfig.hasOptions ? "xl:w-full" : ""
+                    }  2xl:w-[500px] 2xl:h-[500px] flex justify-center`}
+                  >
+                    <div>
+                      <div
+                        style={{
+                          border: "3px solid #ccc",
+                          borderRadius: "10px",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          backgroundColor: "#f9f9f9",
+                          overflow: "hidden",
+                        }}
+                        className="w-[200px] h-[200px] sm:w-[300px] sm:h-[300px] md:w-[400px] md:h-[400px] lg:w-[500px] lg:h-[500px] relative"
+                      >
+                        <img
+                          src={processedImage}
+                          alt="Processed"
+                          style={{
+                            maxWidth: "100%",
+                            maxHeight: "100%",
+                            objectFit: "contain",
+                          }}
+                        />
+                        <h3
+                          style={{
+                            fontSize: "18px",
+                            fontWeight: "600",
+                            backgroundColor: "green",
+                            marginTop: "8px",
+                            letterSpacing: "2px",
+                            position: "absolute",
+                            opacity: "0.5",
+                            bottom: "10px",
+                            left: "10px",
+                            borderRadius: "10px",
+                            padding: "2px 8px",
+                          }}
+                        >
+                          PROCESSED
+                        </h3>
+                      </div>
+                    </div>
+                  </div>
 
-      {/* Options للأدوات التي تحتويها - Radio Buttons */}
-      {showOptions && toolConfig?.hasOptions && (
-        <div
-          style={{
-            background: "#f8f9fa",
-            padding: "30px",
-            borderRadius: "10px",
-            margin: "20px 0",
-            border: "1px solid #e9ecef",
-            textAlign: "center",
-          }}
-        >
-          <h4 style={{ marginBottom: "20px", color: "#333" }}>
-            {currentTool === "ai-image-enhancer"
-              ? "Choose enhancement level"
-              : "Choose flip direction"}
-          </h4>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "10px",
-              maxWidth: "400px",
-              margin: "0 auto",
-            }}
-          >
-            {currentTool === "ai-image-enhancer"
-              ? /* Options for Enhance */
-                toolConfig.options.upscaleFactor.values.map((option) => (
-                  <label key={option.value}>
-                    <input
-                      type="radio"
-                      name="upscaleFactor"
-                      value={option.value}
-                      checked={options.upscaleFactor === option.value}
-                      onChange={(e) =>
-                        handleOptionChange(
-                          "upscaleFactor",
-                          parseInt(e.target.value)
-                        )
-                      }
-                      disabled={status === "processing"}
-                      style={{ marginRight: "10px", cursor: "pointer" }}
+                  <div className="w-[92%] lg:w-[48.5%]">
+                    <ImageCompare
+                      hasBorder={true}
+                      before={uploadedImageUrl}
+                      after={processedImage}
+                      background={uploadedImageUrl}
+                      aspectRatio={12 / 8}
+                      fit={"contain"}
                     />
-                    <span style={{ fontWeight: "500", color: "#333" }}>
-                      {option.label}
-                    </span>
-                  </label>
-                ))
-              : /* Options for Flip */
-                toolConfig.options.direction.values.map((option) => (
-                  <label key={option.value}>
-                    <input
-                      type="radio"
-                      name="direction"
-                      value={option.value}
-                      checked={options.direction === option.value}
-                      onChange={(e) =>
-                        handleOptionChange("direction", e.target.value)
-                      }
-                      disabled={status === "processing"}
-                      style={{ marginRight: "10px", cursor: "pointer" }}
-                    />
-                    <span style={{ fontWeight: "500", color: "#333" }}>
-                      {option.label}
-                    </span>
-                  </label>
-                ))}
-          </div>
-          <p style={{ marginTop: "15px", color: "#666", fontSize: "14px" }}>
-            Select an option to start processing
-          </p>
-        </div>
-      )}
-
-      {/* زر Start للأدوات بدون أوبشنز - يظهر فقط بعد الرفع وقبل المعالجة */}
-      {uploadedImageUrl &&
-        toolConfig &&
-        !toolConfig.hasOptions &&
-        !processedImage &&
-        status !== "processing" && (
-          <div style={{ textAlign: "center", margin: "30px 0" }}>
-            <button
-              onClick={processImage}
-              disabled={status === "processing"}
-              style={{
-                padding: "12px 30px",
-                fontSize: "16px",
-                backgroundColor: "#4CAF50",
-                color: "white",
-                border: "none",
-                borderRadius: "25px",
-                cursor: "pointer",
-                transition: "all 0.3s ease",
-              }}
-              onMouseOver={(e) => (e.target.style.backgroundColor = "#45a049")}
-              onMouseOut={(e) => (e.target.style.backgroundColor = "#4CAF50")}
-            >
-              Start Processing
-            </button>
-          </div>
-        )}
-
-      {/* Status Message */}
-      {status && status !== "uploading" && status !== "processing" && (
-        <div
-          style={{
-            textAlign: "center",
-            margin: "20px 0",
-            padding: "10px",
-            borderRadius: "5px",
-            backgroundColor: status === "error" ? "#f8d7da" : "#d4edda",
-            color: status === "error" ? "#721c24" : "#155724",
-            border: `1px solid ${status === "error" ? "#f5c6cb" : "#c3e6cb"}`,
-          }}
-        >
-          {message}
-        </div>
-      )}
-
-      {/* Actions بعد المعالجة فقط - المشكلة 1 */}
-      {status === "done" && processedImage && (
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "15px",
-            alignItems: "center",
-            marginTop: "30px",
-          }}
-        >
-          {/* Dropdown للانتقال لأدوات أخرى */}
-          {availableTools.length > 0 && (
-            <div style={{ textAlign: "center" }}>
-              <p style={{ marginBottom: "10px", color: "#666" }}>
-                Process this result with another tool:
-              </p>
-              <select
-                onChange={(e) => goToTool(e.target.value)}
-                defaultValue=""
-                style={{
-                  padding: "8px 15px",
-                  borderRadius: "5px",
-                  border: "1px solid #ced4da",
-                  minWidth: "250px",
-                }}
-              >
-                <option value="" disabled>
-                  Select tool...
-                </option>
-                {availableTools.map((tool) => (
-                  <option key={tool.path} value={tool.path}>
-                    {tool.label}
-                  </option>
-                ))}
-              </select>
-            </div>
+                  </div>
+                </>
+              )}
+            </>
           )}
 
-          {/* زر إعادة الاستخدام - يظهر في كل الحالات */}
-          <div>
+        {/* Post-processing actions */}
+        {status === COMPONENT_STATES.DONE && processedImage && (
+          <div
+            style={{
+              width: "100%",
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "12px",
+              }}
+              className="items-center md:items-start"
+            >
+              <div
+                style={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  gap: "15px",
+                  justifyContent: "center",
+                  width: "100%",
+                  alignItems: "center",
+                }}
+              >
+                <button
+                  style={{
+                    padding: "10px 18px",
+                    background: "var(--gradient-color)",
+                    color: "white",
+                    border: "none",
+                    borderRadius: "5px",
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "8px",
+                    fontSize: "15px",
+                    fontWeight: 500,
+                  }}
+                >
+                  <Download size={18} />
+                  Download Result
+                </button>
+
+                {/* Tool navigation dropdown */}
+                {availableTools.length > 0 && (
+                  <FormControl
+                    size="medium"
+                    sx={{
+                      width: {
+                        xs: "100%",
+                        sm: "400px",
+                      },
+                    }}
+                  >
+                    <InputLabel id="tool-select-label">
+                      Select tool to process the result with ...
+                    </InputLabel>
+
+                    <Select
+                      labelId="tool-select-label"
+                      defaultValue=""
+                      label="Select tool to process the result with ..."
+                      onChange={(e) => goToTool(e.target.value)}
+                      sx={{
+                        borderRadius: "8px",
+                        background: "transparent",
+                        ".MuiOutlinedInput-notchedOutline": {
+                          borderColor: "#ccc",
+                        },
+                        "&:hover .MuiOutlinedInput-notchedOutline": {
+                          borderColor: "#aaa",
+                        },
+                        "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                          borderColor: "#1976d2",
+                        },
+                      }}
+                    >
+                      {availableTools.map((tool) => (
+                        <MenuItem key={tool.path} value={tool.path}>
+                          {tool.label}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                )}
+              </div>
+
+              <button
+                onClick={resetComponent}
+                style={{
+                  padding: "10px 18px",
+                  background: "var(--gradient-color-2)",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "5px",
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "8px",
+                  fontSize: "15px",
+                  fontWeight: 500,
+                  marginLeft: "0",
+                }}
+              >
+                <RefreshCw size={18} />
+                Change Photo
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Error state */}
+        {status === COMPONENT_STATES.ERROR && (
+          <div style={{ textAlign: "center", marginTop: "20px" }}>
             <button
               onClick={resetComponent}
               style={{
@@ -704,38 +1075,19 @@ const DropZone = () => {
               Use another photo with this tool 🔄
             </button>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* زر Use another photo يظهر في حالة الخطأ */}
-      {status === "error" && (
-        <div style={{ textAlign: "center", marginTop: "20px" }}>
-          <button
-            onClick={resetComponent}
-            style={{
-              padding: "10px 20px",
-              backgroundColor: "#6c757d",
-              color: "white",
-              border: "none",
-              borderRadius: "5px",
-              cursor: "pointer",
-            }}
-          >
-            Use another photo with this tool 🔄
-          </button>
-        </div>
-      )}
-
-      <style jsx>{`
-        @keyframes loading {
-          0% {
-            transform: translateX(-100%);
+        <style jsx>{`
+          @keyframes loading {
+            0% {
+              transform: translateX(-100%);
+            }
+            100% {
+              transform: translateX(300%);
+            }
           }
-          100% {
-            transform: translateX(300%);
-          }
-        }
-      `}</style>
+        `}</style>
+      </div>
     </div>
   );
 };

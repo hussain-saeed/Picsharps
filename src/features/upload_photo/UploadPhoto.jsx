@@ -14,16 +14,10 @@ const toolsData = [
       "Upload your image and let AI automatically detect and remove the background in seconds.",
   },
   {
-    path: "change-background",
-    title: "Change Background",
+    path: "blur-image",
+    title: "Blur Image",
     description:
-      "Replace your photo background instantly with any color or image using smart AI precision.",
-  },
-  {
-    path: "remove-object",
-    title: "Remove Object from Photo",
-    description:
-      "Easily erase unwanted objects or people from your photos in seconds — clean, smooth results every time.",
+      "Upload your image and apply a blur effect in just a few seconds.",
   },
   {
     path: "ai-image-enhancer",
@@ -38,34 +32,10 @@ const toolsData = [
       "Make blurry photos crystal clear by enhancing edges and restoring lost details instantly.",
   },
   {
-    path: "cleanup-pictures",
-    title: "Cleanup Pictures",
-    description:
-      "Remove dust, scratches, and imperfections to give your old or messy photos a fresh new look.",
-  },
-  {
-    path: "photo-filters",
-    title: "Photo Filters",
-    description:
-      "Apply professional-grade filters to give your images the perfect mood or style in one click.",
-  },
-  {
     path: "photo-to-cartoon",
     title: "Photo to Cartoon",
     description:
       "Turn your photo into a fun, high-quality cartoon or illustration with AI magic.",
-  },
-  {
-    path: "sticker-maker",
-    title: "Sticker Maker",
-    description:
-      "Create custom stickers from your images — perfect for chats, memes, or fun edits.",
-  },
-  {
-    path: "collage-maker",
-    title: "Collage Maker",
-    description:
-      "Combine multiple photos into beautiful layouts with customizable grids and styles.",
   },
   {
     path: "resize-image",
@@ -74,16 +44,22 @@ const toolsData = [
       "Quickly adjust your photo dimensions without losing quality — fit any platform or use.",
   },
   {
-    path: "crop-image",
-    title: "Crop Image",
-    description:
-      "Cut your images precisely the way you want — focus on what really matters.",
-  },
-  {
     path: "flip-image",
     title: "Flip Image",
     description:
       "Flip or mirror your photos horizontally or vertically in just one click.",
+  },
+  {
+    path: "rotate-image",
+    title: "Rotate Image",
+    description:
+      "Rotate your images clockwise or counterclockwise in just one click.",
+  },
+   {
+    path: "grayscale-image",
+    title: "Grayscale Image",
+    description:
+      "Upload your image and convert it to grayscale instantly.",
   },
 ];
 

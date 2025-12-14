@@ -6,7 +6,7 @@ export const TOOL_CONFIG = {
     options: {
       upscaleFactor: {
         type: "radio",
-        label: "Choose how much to enhance",
+        label: "Level",
         default: null,
         values: [
           { label: "Basic (2x)", value: 2 },
@@ -78,5 +78,70 @@ export const TOOL_CONFIG = {
         ],
       },
     },
+  },
+  "rotate-image": {
+    name: "Rotate Image",
+    apiPath: "rotate",
+    hasOptions: true,
+    options: {
+      angle: {
+        type: "radio",
+        label: "Angle",
+        default: null,
+        values: [
+          { label: "90 degree", value: 90 },
+          { label: "-90 degree", value: -90 },
+          { label: "180 degree", value: 180 },
+        ],
+      },
+    },
+  },
+  "sharpen-image": {
+    name: "Sharpen Image",
+    apiPath: "sharpen",
+    hasOptions: true,
+    options: {
+      strength: {
+        type: "radio",
+        label: "Strength",
+        default: null,
+        values: [
+          { label: "Basic (2x)", value: 500 },
+          { label: "High (4x)", value: 1000 },
+          { label: "Ultra (6x)", value: 1500 },
+          { label: "Max (8x)", value: 2000 },
+        ],
+      },
+    },
+  },
+  "remove-background": {
+    name: "Remove Background",
+    apiPath: "remove-background",
+    hasOptions: true,
+    options: {},
+  },
+  "blur-image": {
+    name: "Blur Image",
+    apiPath: "blur",
+    hasOptions: true,
+    options: {
+      amount: {
+        type: "radio",
+        label: "Amount",
+        default: null,
+        values: [
+          { label: "Basic (2x)", value: 250 },
+          { label: "High (4x)", value: 500 },
+          { label: "Ultra (6x)", value: 750 },
+          { label: "Max (8x)", value: 1000 },
+        ],
+      },
+    },
+  },
+  "grayscale-image": {
+    name: "Grayscale Image",
+    apiPath: "grayscale",
+    hasOptions: false,
+    options: {},
   },
 };

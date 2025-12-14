@@ -1,18 +1,14 @@
-export const enhanceImage = async ({
-  sourceImageId,
-  imageUrl,
-  upscaleFactor,
-}) => {
+export const rotateImage = async ({ sourceImageId, imageUrl, angle }) => {
   try {
     const res = await fetch(
-      "https://picsharps-api.onrender.com/api/v1/image/enhance",
+      "https://picsharps-api.onrender.com/api/v1/image/rotate",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           sourceImageId,
           imageUrl,
-          upscaleFactor: Number(upscaleFactor),
+          angle: Number(angle),
         }),
       }
     );
@@ -25,10 +21,10 @@ export const enhanceImage = async ({
         providerImageId: data.data.providerImageId,
       };
     } else {
-      throw new Error(data.message || "Enhancement failed");
+      throw new Error(data.message || "Rotate failed");
     }
   } catch (err) {
-    console.error("[Enhance Tool] Error:", err);
+    console.error("[Rotate Tool] Error:", err);
     throw err;
   }
 };

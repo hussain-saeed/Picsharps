@@ -4,43 +4,39 @@ import { Link } from "react-router-dom";
 
 const data1 = [
   {
-    title: "Background Tools",
+    title: "Collection 1",
     image: "/images/background-99.png",
     links: [
       { name: "Remove Background", to: "/remove-background" },
-      { name: "Change Background", to: "/change-background" },
-      { name: "Remove Object from Photo", to: "/remove-object-from-photo" },
+      { name: "Blur Image", to: "/blur-image" },
     ],
   },
   {
-    title: "Enhance & Cleanup",
+    title: "Collection 2",
     image: "/images/magic-1.png",
     links: [
       { name: "AI Image Enhancer", to: "/ai-image-enhancer" },
       { name: "Sharpen Image", to: "/sharpen-image" },
-      { name: "Cleanup Pictures", to: "/cleanup-pictures" },
-      { name: "Photo Filters", to: "/photo-filters" },
     ],
   },
 ];
 
 const data2 = [
   {
-    title: "Creative & Fun",
+    title: "Collection 3",
     image: "/images/idea-1.png",
     links: [
       { name: "Photo to Cartoon", to: "/photo-to-cartoon" },
-      { name: "Sticker Maker", to: "/sticker-maker" },
-      { name: "Collage Maker", to: "/collage-maker" },
+      { name: "Grayscale Image", to: "/grayscale-image" },
     ],
   },
   {
-    title: "Basic Edits",
+    title: "Collection 4",
     image: "/images/edit-1.png",
     links: [
       { name: "Resize Image", to: "/resize-image" },
-      { name: "Crop Image", to: "/crop-image" },
       { name: "Flip Image", to: "/flip-image" },
+      { name: "Rotate Image", to: "/rotate-image" },
     ],
   },
 ];

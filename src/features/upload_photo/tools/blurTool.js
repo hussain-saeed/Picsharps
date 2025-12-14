@@ -1,18 +1,18 @@
-export const enhanceImage = async ({
+export const blurImage = async ({
   sourceImageId,
   imageUrl,
-  upscaleFactor,
+  amount,
 }) => {
   try {
     const res = await fetch(
-      "https://picsharps-api.onrender.com/api/v1/image/enhance",
+      "https://picsharps-api.onrender.com/api/v1/image/blur",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           sourceImageId,
           imageUrl,
-          upscaleFactor: Number(upscaleFactor),
+          amount: Number(amount),
         }),
       }
     );

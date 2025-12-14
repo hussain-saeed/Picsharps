@@ -18,18 +18,14 @@ import LoginPopup from "./features/auth/LoginPopup";
 
 const data = [
   "remove-background",
-  "change-background",
-  "remove-object-from-photo",
   "ai-image-enhancer",
   "sharpen-image",
-  "cleanup-pictures",
-  "photo-filters",
   "photo-to-cartoon",
-  "sticker-maker",
-  "collage-maker",
   "resize-image",
-  "crop-image",
   "flip-image",
+  "rotate-image",
+  "blur-image",
+  "grayscale-image",
 ];
 
 export default function AppRoutes() {

@@ -9,6 +9,8 @@ const data1 = [
     links: [
       { name: "Remove Background", to: "/remove-background" },
       { name: "Blur Image", to: "/blur-image" },
+      { name: "Oil Paint Effect", to: "/oil-paint-effect" },
+      { name: "Object removal", to: "/object-removal" },
     ],
   },
   {
@@ -17,6 +19,7 @@ const data1 = [
     links: [
       { name: "AI Image Enhancer", to: "/ai-image-enhancer" },
       { name: "Sharpen Image", to: "/sharpen-image" },
+      { name: "Rounded Corner Image", to: "/rounded-corner-image" },
     ],
   },
 ];
@@ -28,6 +31,8 @@ const data2 = [
     links: [
       { name: "Photo to Cartoon", to: "/photo-to-cartoon" },
       { name: "Grayscale Image", to: "/grayscale-image" },
+      { name: "Adjust Image", to: "/adjust-image" },
+      { name: "Crop Image", to: "/crop-image" },
     ],
   },
   {

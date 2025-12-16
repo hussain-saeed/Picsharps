@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useAuth } from "../auth/AuthProvider";
 import ProtectedRoute from "../auth/ProtectedRoute";
 import Header from "../../components/Header";
@@ -11,6 +11,8 @@ import { MdOutlineLogout } from "react-icons/md";
 import { CiLogout } from "react-icons/ci";
 import Edit from "./sections/Edit";
 import { LanguageContext } from "../../context/LanguageContext";
+import { Download } from "lucide-react";
+import Downloads from "./sections/Downloads";
 
 const tabsData = [
   { id: 0, label: "Profile", key: "profile", icon: <CiUser /> },
@@ -24,14 +26,43 @@ const tabsData = [
 ];
 
 function Profile() {
-  const { logout } = useAuth();
+  const { accessToken, logout } = useAuth();
   const { direction } = useContext(LanguageContext);
   const isRTL = direction === "rtl";
+  const [data, setData] = useState(null);
 
   const [renderedSection, setRenderedSection] = useState(0);
   const handleTabClick = (id) => {
     setRenderedSection(id);
   };
+
+  const getImages = async () => {
+    try {
+      const res = await fetch(
+        `https://picsharps-api.onrender.com/api/v1/users/me`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+          credentials: "include",
+        }
+      );
+
+      const data = await res.json();
+      setData(data);
+      console.log(data);
+
+      return data;
+    } catch (err) {
+      console.error("Set password error:", err);
+    }
+  };
+
+  useEffect(() => {
+    getImages();
+  }, []);
 
   return (
     <ProtectedRoute>
@@ -51,6 +82,7 @@ function Profile() {
             style={{
               borderBottomLeftRadius: "30px",
               borderBottomRightRadius: "30px",
+              zIndex: 50, // ← اضف السطر ده
             }}
           >
             {tabsData.map((tab) => (
@@ -183,8 +215,8 @@ function Profile() {
 
               {renderedSection === 0 ? (
                 <Edit />
-              ) : renderedSection === 1 ? (
-                <div></div>
+              ) : renderedSection === 2 ? (
+                <Downloads data={data} />
               ) : (
                 <div></div>
               )}

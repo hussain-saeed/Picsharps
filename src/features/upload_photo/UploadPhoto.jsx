@@ -5,6 +5,8 @@ import Header from "../../components/Header";
 import Container from "../../components/Container";
 import Footer from "../../components/Footer";
 import DropZone from "./components/DropZone";
+import CropDropZone from "./components/CropDropZone";
+import ObjectRemovalDropZone from "./components/ObjectRemovalDropZone";
 
 const toolsData = [
   {
@@ -55,11 +57,37 @@ const toolsData = [
     description:
       "Rotate your images clockwise or counterclockwise in just one click.",
   },
-   {
+  {
     path: "grayscale-image",
     title: "Grayscale Image",
+    description: "Upload your image and convert it to grayscale instantly.",
+  },
+  {
+    path: "rounded-corner-image",
+    title: "Rounded Corner Image",
+    description: "Upload your image and apply rounded corners with ease.",
+  },
+  {
+    path: "oil-paint-effect",
+    title: "Oil Paint Effect",
+    description: "Transform your image into an oil painting style artwork.",
+  },
+  {
+    path: "adjust-image",
+    title: "Adjust Image",
     description:
-      "Upload your image and convert it to grayscale instantly.",
+      "Allows fine-tuning image colors by adjusting brightness, contrast, saturation, and gamma — only the provided values are applied.",
+  },
+  {
+    path: "crop-image",
+    title: "Crop Image",
+    description: "Crop an image to remove unwanted areas.",
+  },
+  {
+    path: "object-removal",
+    title: "Object-Removal",
+    description:
+      "Remove any unwanted objects from your photos and make them stay crystal clear.",
   },
 ];
 
@@ -145,7 +173,14 @@ function UploadPhoto() {
           >
             {description}
           </p>
-          <DropZone />
+
+          {["/crop-image"].includes(location.pathname) ? (
+            <CropDropZone />
+          ) : ["/object-removal"].includes(location.pathname) ? (
+            <ObjectRemovalDropZone />
+          ) : (
+            <DropZone />
+          )}
 
           <div
             className={`w-full flex flex-wrap justify-between gap-4 mt-36 ${

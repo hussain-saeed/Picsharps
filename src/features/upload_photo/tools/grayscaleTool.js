@@ -15,6 +15,7 @@ export const grayscalePhoto = async ({ sourceImageId, imageUrl }) => {
       return {
         previewUrl: data.data.previewUrl,
         providerImageId: data.data.providerImageId,
+        toolKey: data.data.toolKey,
       };
     } else {
       throw new Error(data.message || "Cartoonify failed");

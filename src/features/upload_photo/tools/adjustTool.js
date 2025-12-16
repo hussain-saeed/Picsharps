@@ -1,26 +1,24 @@
-export const resizeImage = async ({
+export const adjustImage = async ({
   sourceImageId,
   imageUrl,
-  width,
-  height,
-  mode = "fill",
+  brightness = 0,
+  contrast = 0,
+  saturation = 0,
+  gamma = 0,
 }) => {
   try {
-    if (!width && !height) {
-      throw new Error("At least one of width or height must be provided");
-    }
-
     const res = await fetch(
-      "https://picsharps-api.onrender.com/api/v1/image/resize",
+      "https://picsharps-api.onrender.com/api/v1/image/adjust-colors",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           sourceImageId,
           imageUrl,
-          width: width ? parseInt(width) : null,
-          height: height ? parseInt(height) : null,
-          mode,
+          brightness,
+          contrast,
+          saturation,
+          gamma,
         }),
       }
     );
@@ -34,10 +32,10 @@ export const resizeImage = async ({
         toolKey: data.data.toolKey,
       };
     } else {
-      throw new Error(data.message || "Resize failed");
+      throw new Error(data.message || "Adjust failed");
     }
   } catch (err) {
-    console.error("[Resize Tool] Error:", err);
+    console.error("[Adjust Tool] Error:", err);
     throw err;
   }
 };

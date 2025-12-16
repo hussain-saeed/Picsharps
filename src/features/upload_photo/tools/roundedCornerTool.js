@@ -1,26 +1,18 @@
-export const resizeImage = async ({
+export const roundedCornerImage = async ({
   sourceImageId,
   imageUrl,
-  width,
-  height,
-  mode = "fill",
+  radius,
 }) => {
   try {
-    if (!width && !height) {
-      throw new Error("At least one of width or height must be provided");
-    }
-
     const res = await fetch(
-      "https://picsharps-api.onrender.com/api/v1/image/resize",
+      "https://picsharps-api.onrender.com/api/v1/image/rounded-corners",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           sourceImageId,
           imageUrl,
-          width: width ? parseInt(width) : null,
-          height: height ? parseInt(height) : null,
-          mode,
+          radius: Number(radius),
         }),
       }
     );
@@ -34,10 +26,10 @@ export const resizeImage = async ({
         toolKey: data.data.toolKey,
       };
     } else {
-      throw new Error(data.message || "Resize failed");
+      throw new Error(data.message || "Rounding corner failed");
     }
   } catch (err) {
-    console.error("[Resize Tool] Error:", err);
+    console.error("[Rounded Corner Tool] Error:", err);
     throw err;
   }
 };

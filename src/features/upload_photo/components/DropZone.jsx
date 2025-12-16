@@ -13,12 +13,16 @@ import { sharpenImage } from "../tools/sharpenTool";
 import { removeBackground } from "../tools/removeBackgroundTool";
 import { blurImage } from "../tools/blurTool";
 import { grayscalePhoto } from "../tools/grayscaleTool";
+import { roundedCornerImage } from "../tools/roundedCornerTool";
+import { oilPaintEffect } from "../tools/oilPaintEffectTool";
+import { adjustImage } from "../tools/adjustTool";
 
 // Import configuration and components
 import { TOOL_CONFIG } from "../config/toolConfig";
 import ImageCompare from "../../../components/ImageCompare";
 import { Download, RefreshCw, Rocket } from "lucide-react";
 import {
+  Box,
   FormControl,
   InputLabel,
   MenuItem,
@@ -27,9 +31,11 @@ import {
   TextField,
 } from "@mui/material";
 import { SketchPicker } from "react-color";
+import { useAuth } from "../../auth/AuthProvider";
+import { OptionSlider } from "./OptionSlider";
 
 // Constants for tool type identifiers
-// These values should match the tool paths in the routing configuration
+// These values should match the tool paths in the routing
 const TOOL_TYPES = {
   ENHANCE: "ai-image-enhancer", // Image enhancement tool
   CARTOON: "photo-to-cartoon", // Cartoon effect tool
@@ -40,6 +46,9 @@ const TOOL_TYPES = {
   REMOVE: "remove-background", // Background removal tool
   BLUR: "blur-image",
   GRAYSCALE: "grayscale-image",
+  ROUNDED: "rounded-corner-image",
+  OILING: "oil-paint-effect",
+  ADJUST: "adjust-image",
 };
 
 // Component lifecycle state constants
@@ -71,12 +80,14 @@ const DropZone = () => {
   const [uploadedImageUrl, setUploadedImageUrl] = useState(null); // URL of uploaded image
   const [sourceImageId, setSourceImageId] = useState(null); // Server-assigned image ID
   const [processedImage, setProcessedImage] = useState(null); // URL of processed image
+  const [toolKey, setToolKey] = useState(null);
   const [status, setStatus] = useState(COMPONENT_STATES.IDLE); // Current component state
   const [message, setMessage] = useState(""); // Status message for user
   const [showDropZone, setShowDropZone] = useState(true); // Toggle dropzone visibility
   const [showOptions, setShowOptions] = useState(false); // Toggle tool options panel
   const [options, setOptions] = useState({}); // Tool-specific options
   const [renderedResultBefore, setRenderedResultBefore] = useState(false); // Track if result was shown before
+  const { accessToken } = useAuth();
 
   // Effect hook for component initialization and state restoration
   // Handles loading data from localStorage when navigating between tools
@@ -167,6 +178,7 @@ const DropZone = () => {
     setUploadedImageUrl(null);
     setSourceImageId(null);
     setProcessedImage(null);
+    setToolKey(null);
 
     // Reset component state and UI
     setStatus(COMPONENT_STATES.IDLE);
@@ -364,7 +376,6 @@ const DropZone = () => {
           payload.bgColor = options.bgColor; // Hex color value
         }
 
-        console.log("Background removal payload:", payload);
         toolResult = await removeBackground(payload);
       }
 
@@ -385,10 +396,41 @@ const DropZone = () => {
         });
       }
 
+      // rounded
+      else if (currentTool === TOOL_TYPES.ROUNDED) {
+        toolResult = await roundedCornerImage({
+          sourceImageId,
+          imageUrl: uploadedImageUrl,
+          radius: options.radius,
+        });
+      }
+
+      // oiling
+      else if (currentTool === TOOL_TYPES.OILING) {
+        toolResult = await oilPaintEffect({
+          sourceImageId,
+          imageUrl: uploadedImageUrl,
+          amount: options.amount,
+        });
+      }
+
+      // adjust
+      else if (currentTool === TOOL_TYPES.ADJUST) {
+        toolResult = await adjustImage({
+          sourceImageId,
+          imageUrl: uploadedImageUrl,
+          brightness: options.brightness,
+          contrast: options.contrast,
+          saturation: options.saturation,
+          gamma: options.gamma,
+        });
+      }
+
       // Handle successful processing result
       if (toolResult) {
         // Update state with processed image
         setProcessedImage(toolResult.previewUrl);
+        setToolKey(toolResult.toolKey);
         setStatus(COMPONENT_STATES.DONE);
         setMessage("Image processing completed successfully");
         setShowOptions(true); // Show options panel again
@@ -429,6 +471,51 @@ const DropZone = () => {
   const handleOptionChange = (optionKey, value) => {
     const newOptions = { ...options, [optionKey]: value };
     setOptions(newOptions);
+  };
+
+  const downloadImage = async (url, filename = "processed-image.png") => {
+    const response = await fetch(url);
+    const blob = await response.blob();
+
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = filename;
+
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    URL.revokeObjectURL(link.href);
+  };
+
+  const saveResult = async () => {
+    try {
+      // Download locally FIRST
+      await downloadImage(processedImage, `${currentTool}-result.png`);
+
+      // Then save on backend
+      const res = await fetch(
+        "https://picsharps-api.onrender.com/api/v1/image/save-result",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+          credentials: "include",
+          body: JSON.stringify({
+            sourceImageId,
+            resultUrl: processedImage,
+            toolKey,
+          }),
+        }
+      );
+
+      const data = await res.json();
+      console.log(data);
+    } catch (err) {
+      console.error("Download or saving error:", err);
+    }
   };
 
   // Navigation function for tool chaining
@@ -710,6 +797,10 @@ const DropZone = () => {
                           : currentTool === TOOL_TYPES.REMOVE
                           ? "Bg Color"
                           : currentTool === TOOL_TYPES.BLUR
+                          ? "Amount"
+                          : currentTool === TOOL_TYPES.ROUNDED
+                          ? "Radius"
+                          : currentTool === TOOL_TYPES.OILING
                           ? "Amount"
                           : ""}
                       </h4>
@@ -1261,6 +1352,153 @@ const DropZone = () => {
                             })}
                           </div>
                         )}
+
+                        {currentTool === TOOL_TYPES.ROUNDED && (
+                          <div
+                            style={{
+                              display: "flex",
+                              flexDirection: "column",
+                              gap: "10px",
+                            }}
+                          >
+                            {toolConfig.options.radius.values.map((option) => {
+                              const isSelected =
+                                options.radius === option.value;
+
+                              return (
+                                <label
+                                  key={option.value}
+                                  style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: "10px",
+                                    padding: "10px 14px",
+                                    borderRadius: "8px",
+                                    border: isSelected
+                                      ? "2px solid #00c853"
+                                      : "1px solid #ccc",
+                                    cursor: "pointer",
+                                    userSelect: "none",
+                                  }}
+                                >
+                                  <input
+                                    type="radio"
+                                    name="radius"
+                                    value={option.value}
+                                    checked={isSelected}
+                                    onChange={(e) =>
+                                      handleOptionChange(
+                                        "radius",
+                                        parseInt(e.target.value)
+                                      )
+                                    }
+                                    disabled={
+                                      status === COMPONENT_STATES.PROCESSING
+                                    }
+                                    style={{
+                                      width: "16px",
+                                      height: "16px",
+                                      cursor: "pointer",
+                                    }}
+                                  />
+
+                                  <span
+                                    style={{ fontWeight: 500, color: "#333" }}
+                                  >
+                                    {option.label}
+                                  </span>
+                                </label>
+                              );
+                            })}
+                          </div>
+                        )}
+
+                        {currentTool === TOOL_TYPES.OILING && (
+                          <div
+                            style={{
+                              display: "flex",
+                              flexDirection: "column",
+                              gap: "10px",
+                            }}
+                          >
+                            {toolConfig.options.amount.values.map((option) => {
+                              const isSelected =
+                                options.amount === option.value;
+
+                              return (
+                                <label
+                                  key={option.value}
+                                  style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: "10px",
+                                    padding: "10px 14px",
+                                    borderRadius: "8px",
+                                    border: isSelected
+                                      ? "2px solid #00c853"
+                                      : "1px solid #ccc",
+                                    cursor: "pointer",
+                                    userSelect: "none",
+                                  }}
+                                >
+                                  <input
+                                    type="radio"
+                                    name="amount"
+                                    value={option.value}
+                                    checked={isSelected}
+                                    onChange={(e) =>
+                                      handleOptionChange(
+                                        "amount",
+                                        parseInt(e.target.value)
+                                      )
+                                    }
+                                    disabled={
+                                      status === COMPONENT_STATES.PROCESSING
+                                    }
+                                    style={{
+                                      width: "16px",
+                                      height: "16px",
+                                      cursor: "pointer",
+                                    }}
+                                  />
+
+                                  <span
+                                    style={{ fontWeight: 500, color: "#333" }}
+                                  >
+                                    {option.label}
+                                  </span>
+                                </label>
+                              );
+                            })}
+                          </div>
+                        )}
+
+                        {currentTool === TOOL_TYPES.ADJUST && (
+                          <>
+                            {Object.entries(toolConfig.options).map(
+                              ([key, config]) => (
+                                <OptionSlider
+                                  key={key}
+                                  label={config.label}
+                                  value={options[key]}
+                                  min={config.min}
+                                  max={config.max}
+                                  step={config.step}
+                                  disabled={
+                                    status === COMPONENT_STATES.PROCESSING
+                                  }
+                                  onPreviewChange={(val) =>
+                                    handleOptionChange(key, val)
+                                  }
+                                  onCommitChange={(val) => {
+                                    console.log(key, val);
+                                    handleOptionChange(key, val);
+                                  }}
+                                />
+                              )
+                            )}
+                          </>
+                        )}
                       </div>
                     </div>
                   )}
@@ -1426,6 +1664,7 @@ const DropZone = () => {
               >
                 {/* Download button for processed image */}
                 <button
+                  onClick={() => saveResult()}
                   style={{
                     padding: "10px 18px",
                     background: "var(--gradient-color)",

@@ -26,6 +26,11 @@ const data = [
   "rotate-image",
   "blur-image",
   "grayscale-image",
+  "rounded-corner-image",
+  "oil-paint-effect",
+  "adjust-image",
+  "crop-image",
+  "object-removal",
 ];
 
 export default function AppRoutes() {

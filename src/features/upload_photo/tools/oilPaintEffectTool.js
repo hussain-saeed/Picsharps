@@ -1,26 +1,14 @@
-export const resizeImage = async ({
-  sourceImageId,
-  imageUrl,
-  width,
-  height,
-  mode = "fill",
-}) => {
+export const oilPaintEffect = async ({ sourceImageId, imageUrl, amount }) => {
   try {
-    if (!width && !height) {
-      throw new Error("At least one of width or height must be provided");
-    }
-
     const res = await fetch(
-      "https://picsharps-api.onrender.com/api/v1/image/resize",
+      "https://picsharps-api.onrender.com/api/v1/image/oil-paint",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           sourceImageId,
           imageUrl,
-          width: width ? parseInt(width) : null,
-          height: height ? parseInt(height) : null,
-          mode,
+          amount: Number(amount),
         }),
       }
     );
@@ -34,10 +22,10 @@ export const resizeImage = async ({
         toolKey: data.data.toolKey,
       };
     } else {
-      throw new Error(data.message || "Resize failed");
+      throw new Error(data.message || "Oiling failed");
     }
   } catch (err) {
-    console.error("[Resize Tool] Error:", err);
+    console.error("[Oiling Tool] Error:", err);
     throw err;
   }
 };

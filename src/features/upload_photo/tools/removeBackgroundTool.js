@@ -15,8 +15,6 @@ export const removeBackground = async ({
       payload.bgColor = bgColor;
     }
 
-    console.log("[Remove Background] Final API Payload:", payload);
-
     const res = await fetch(
       "https://picsharps-api.onrender.com/api/v1/image/remove-background",
       {
@@ -27,12 +25,12 @@ export const removeBackground = async ({
     );
 
     const data = await res.json();
-    console.log("[Remove Background] API Response:", data);
 
     if (data.status === "success") {
       return {
         previewUrl: data.data.previewUrl,
         providerImageId: data.data.providerImageId,
+        toolKey: data.data.toolKey,
       };
     } else {
       throw new Error(data.message || "Background removal failed");

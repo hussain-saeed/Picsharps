@@ -19,6 +19,7 @@ export const sharpenImage = async ({ sourceImageId, imageUrl, strength }) => {
       return {
         previewUrl: data.data.previewUrl,
         providerImageId: data.data.providerImageId,
+        toolKey: data.data.toolKey,
       };
     } else {
       throw new Error(data.message || "Sharpen failed");

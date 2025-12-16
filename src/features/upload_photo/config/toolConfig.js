@@ -144,4 +144,80 @@ export const TOOL_CONFIG = {
     hasOptions: false,
     options: {},
   },
+  "rounded-corner-image": {
+    name: "Rounded Corner Image",
+    apiPath: "rounded-corners",
+    hasOptions: true,
+    options: {
+      radius: {
+        type: "radio",
+        label: "Radius",
+        default: null,
+        values: [
+          { label: "Small", value: 250 },
+          { label: "Medium", value: 500 },
+          { label: "Large", value: 750 },
+          { label: "Max", value: 999 },
+        ],
+      },
+    },
+  },
+  "oil-paint-effect": {
+    name: "Oil Paint Effect",
+    apiPath: "oil-paint",
+    hasOptions: true,
+    options: {
+      amount: {
+        type: "radio",
+        label: "Amount",
+        default: null,
+        values: [
+          { label: "Basic", value: 25 },
+          { label: "High", value: 50 },
+          { label: "Ultra", value: 75 },
+          { label: "Max", value: 100 },
+        ],
+      },
+    },
+  },
+  "adjust-image": {
+    name: "Image Adjust",
+    apiPath: "adjust",
+    hasOptions: true,
+    hasStartButton: true,
+    options: {
+      brightness: {
+        type: "slider",
+        label: "Brightness",
+        default: 0,
+        min: -100,
+        max: 100,
+        step: 1,
+      },
+      contrast: {
+        type: "slider",
+        label: "Contrast",
+        default: 0,
+        min: -100,
+        max: 100,
+        step: 1,
+      },
+      saturation: {
+        type: "slider",
+        label: "Saturation",
+        default: 0,
+        min: -100,
+        max: 100,
+        step: 1,
+      },
+      gamma: {
+        type: "slider",
+        label: "Gamma",
+        default: 0,
+        min: 0,
+        max: 200,
+        step: 1,
+      },
+    },
+  },
 };

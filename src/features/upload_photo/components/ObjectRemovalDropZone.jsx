@@ -215,14 +215,10 @@ const ObjectRemovalTool = () => {
         scaledCanvas.toBlob(resolve, "image/png");
       });
 
-      // === التصحيح الرئيسي هنا ===
-      // نضع count, format, mode في query parameters فقط
-      // ونترك فقط mask و sourceImageId و imageUrl و prompt في الـ body
       const formData = new FormData();
       formData.append("mask", scaledMaskBlob, "mask.png");
       formData.append("sourceImageId", sourceImageId);
       formData.append("imageUrl", uploadedImageUrl);
-      // لا نضيف count و format و mode هنا أبدًا
 
       const res = await fetch(
         `https://picsharps-api.onrender.com/api/v1/image/object-removal`,

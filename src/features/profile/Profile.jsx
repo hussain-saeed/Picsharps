@@ -82,7 +82,7 @@ function Profile() {
             style={{
               borderBottomLeftRadius: "30px",
               borderBottomRightRadius: "30px",
-              zIndex: 50, // ← اضف السطر ده
+              zIndex: 50,
             }}
           >
             {tabsData.map((tab) => (

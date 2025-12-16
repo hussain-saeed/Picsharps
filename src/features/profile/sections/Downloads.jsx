@@ -5,7 +5,6 @@ const Downloads = ({ data }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 4;
 
-  // Loading state - لو الداتا لسة مجتش
   if (!data) {
     return (
       <div className="flex items-center justify-center py-20">
@@ -14,10 +13,8 @@ const Downloads = ({ data }) => {
     );
   }
 
-  // استخراج الصور بأمان
   const images = data?.data?.profile?.processedImages || [];
 
-  // لو مفيش صور خالص
   if (images.length === 0) {
     return (
       <div className="flex items-center justify-center py-20">

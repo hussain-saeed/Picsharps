@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { TOOL_CONFIG } from "../config/toolConfig";
 import ImageCompare from "../../../components/ImageCompare";
-import { Download, RefreshCw } from "lucide-react";
+import { Download, Play, RefreshCw } from "lucide-react";
 import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import { useAuth } from "../../auth/AuthProvider";
 
@@ -551,115 +551,163 @@ const CropDropZone = () => {
   };
 
   return (
-    <div style={{ padding: "20px", maxWidth: "1400px", margin: "0 auto" }}>
+    <div>
       {showDropZone && (
         <div
           {...getRootProps()}
           style={{
-            border: "2px dashed #ccc",
-            borderRadius: "10px",
-            padding: "60px 20px",
+            border: "2px dashed rgba(0,0,0,0.3)",
+            margin: "20px auto",
+            padding: "60px",
+            borderRadius: "20px",
             textAlign: "center",
             cursor: "pointer",
-            background: isDragActive ? "#f0f8ff" : "#fafafa",
+            backgroundColor: isDragActive ? "rgba(0,0,0,0.05)" : "transparent",
             transition: "all 0.3s ease",
           }}
+          className="flex flex-col items-center w-full md:w-[90%] lg:w-[80%]"
         >
           <input {...getInputProps()} />
           {isDragActive ? (
-            <p style={{ fontSize: "18px", color: "#1976d2" }}>
-              Drop the image here...
+            <p style={{ fontSize: "18px", color: "#666" }}>
+              Drop the image here ...
             </p>
           ) : (
             <>
-              <div style={{ fontSize: "48px", marginBottom: "20px" }}>📁</div>
-              <p
+              <div
                 style={{
-                  fontSize: "18px",
-                  fontWeight: "500",
-                  marginBottom: "10px",
+                  backgroundColor: "rgba(195, 231, 249, 1)",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  marginBottom: "15px",
+                  padding: "15px",
+                  borderRadius: "50%",
                 }}
               >
+                <img src="/images/upload.png" alt="Upload icon" />
+              </div>
+              <h3 style={{ marginBottom: "10px", color: "#333" }}>
                 Drag & Drop or Click to Upload
-              </p>
-              <p style={{ fontSize: "14px", color: "#666" }}>
+              </h3>
+              <p style={{ color: "#666" }}>
                 Supported formats: PNG, JPG, JPEG, WEBP
               </p>
-              <p style={{ fontSize: "14px", color: "#666" }}>Max size: 10MB</p>
+              <p style={{ color: "#999" }}>Max size: 10MB</p>
             </>
           )}
         </div>
       )}
 
-      <div style={{ marginTop: "30px" }}>
+      <div
+        style={{
+          marginTop: "30px",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
         {status === COMPONENT_STATES.UPLOADING && (
-          <div style={{ textAlign: "center", position: "relative" }}>
-            {uploadedFile && (
-              <img
-                src={URL.createObjectURL(uploadedFile)}
-                alt="Uploading"
+          <>
+            <div>
+              <div
                 style={{
-                  maxWidth: "100%",
-                  maxHeight: "500px",
+                  border: "3px solid #ccc",
                   borderRadius: "10px",
-                  opacity: 0.5,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  backgroundColor: "#f9f9f9",
+                  overflow: "hidden",
                 }}
-              />
-            )}
-            <div
-              style={{
-                position: "absolute",
-                top: "50%",
-                left: "50%",
-                transform: "translate(-50%, -50%)",
-                background: "rgba(255,255,255,0.95)",
-                padding: "30px 50px",
-                borderRadius: "10px",
-                boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
-              }}
-            >
-              <div className="spinner"></div>
-              <p
-                style={{
-                  marginTop: "15px",
-                  fontSize: "16px",
-                  fontWeight: "500",
-                }}
+                className="w-[300px] h-[300px] md:w-[400px] md:h-[400px] lg:w-[500px] lg:h-[500px]"
               >
-                Uploading ...
-              </p>
+                {/* Show uploaded file preview during upload */}
+                {status === COMPONENT_STATES.UPLOADING && uploadedFile && (
+                  <img
+                    src={URL.createObjectURL(uploadedFile)}
+                    alt="Uploading"
+                    style={{
+                      maxWidth: "100%",
+                      maxHeight: "100%",
+                      objectFit: "contain",
+                      filter: "opacity(0.7)",
+                    }}
+                  />
+                )}
+                {/* Show uploaded image during processing */}
+                {status === COMPONENT_STATES.PROCESSING && uploadedImageUrl && (
+                  <img
+                    src={uploadedImageUrl}
+                    alt="Processing"
+                    style={{
+                      maxWidth: "100%",
+                      maxHeight: "100%",
+                      objectFit: "contain",
+                      filter: "opacity(0.7)",
+                    }}
+                  />
+                )}
+                {/* Loading overlay with progress indicator */}
+                <div
+                  style={{
+                    position: "absolute",
+                    background: "rgba(0,0,0,0.7)",
+                    color: "white",
+                    padding: "10px 20px",
+                    borderRadius: "20px",
+                  }}
+                >
+                  {status === COMPONENT_STATES.UPLOADING
+                    ? "Uploading ..."
+                    : "Processing ..."}
+                  <div
+                    style={{
+                      marginTop: "10px",
+                      width: "100%",
+                      height: "3px",
+                      background: "#ccc",
+                      borderRadius: "2px",
+                      overflow: "hidden",
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: "70%",
+                        height: "100%",
+                        background: "#4CAF50",
+                        animation: "loading 1.5s infinite",
+                      }}
+                    ></div>
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
+          </>
         )}
 
         {uploadedImageUrl &&
           status !== COMPONENT_STATES.UPLOADING &&
           status !== COMPONENT_STATES.PROCESSING && (
-            <>
-              <div style={{ marginBottom: "30px" }}>
-                <h3
-                  style={{
-                    fontSize: "14px",
-                    fontWeight: "600",
-                    color: "#666",
-                    marginBottom: "15px",
-                    textTransform: "uppercase",
-                    letterSpacing: "1px",
-                  }}
-                >
-                  ORIGINAL
-                </h3>
-
+            <div
+              style={{
+                display: "flex",
+                flexWrap: "wrap",
+                gap: "40px",
+                alignItems: "start",
+                justifyContent: "center",
+              }}
+            >
+              <div>
                 <div
                   style={{
                     position: "relative",
-                    width: "100%",
                     display: "inline-block",
                     background: "#000",
-                    borderRadius: "10px",
                     overflow: "hidden",
                     userSelect: "none",
                   }}
+                  className="w-[300px] h-[300px] md:w-[400px] md:h-[400px] lg:w-[500px] lg:h-[500px]"
                 >
                   <img
                     id="crop-image"
@@ -667,12 +715,9 @@ const CropDropZone = () => {
                     alt="Original"
                     onLoad={handleImageLoad}
                     style={{
-                      maxWidth: "100%", // ← التعديل هنا
-                      maxHeight: "600px", // ← التعديل هنا
-                      width: "auto", // ← التعديل هنا
-                      height: "auto", // ← التعديل هنا
-                      display: "block",
-                      pointerEvents: "none",
+                      maxWidth: "100%",
+                      maxHeight: "100%",
+                      objectFit: "contain",
                     }}
                   />
 
@@ -701,8 +746,8 @@ const CropDropZone = () => {
                             background: "#1976d2",
                             ...(handle.length === 2
                               ? {
-                                  width: "10px",
-                                  height: "10px",
+                                  width: "8px",
+                                  height: "8px",
                                   [handle.includes("t") ? "top" : "bottom"]:
                                     "-5px",
                                   [handle.includes("l") ? "left" : "right"]:
@@ -791,96 +836,93 @@ const CropDropZone = () => {
                 </div>
               </div>
 
-              {showOptions && (
-                <div
-                  style={{
-                    background: "#f9f9f9",
-                    padding: "25px",
-                    borderRadius: "10px",
-                    marginBottom: "20px",
-                  }}
-                >
-                  <h3
+              <div className="flex flex-col items-start">
+                {showOptions && (
+                  <div
                     style={{
-                      fontSize: "16px",
-                      fontWeight: "600",
+                      background: "#f9f9f9",
+                      padding: "25px",
+                      borderRadius: "10px",
                       marginBottom: "20px",
                     }}
                   >
-                    Settings
-                  </h3>
+                    <Box>
+                      <FormControl fullWidth>
+                        <InputLabel>Aspect Ratio</InputLabel>
+                        <Select
+                          value={aspectRatio}
+                          label="Aspect Ratio"
+                          onChange={(e) => setAspectRatio(e.target.value)}
+                        >
+                          <MenuItem value="free">Free (Any Size)</MenuItem>
+                          <MenuItem value="1:1">Square (1:1)</MenuItem>
+                          <MenuItem value="16:9">Widescreen (16:9)</MenuItem>
+                          <MenuItem value="9:16">Portrait (9:16)</MenuItem>
+                          <MenuItem value="4:3">Standard (4:3)</MenuItem>
+                          <MenuItem value="3:4">Portrait (3:4)</MenuItem>
+                          <MenuItem value="21:9">Ultrawide (21:9)</MenuItem>
+                          <MenuItem value="3:2">Classic (3:2)</MenuItem>
+                          <MenuItem value="2:3">Portrait (2:3)</MenuItem>
+                          <MenuItem value="5:4">Monitor (5:4)</MenuItem>
+                          <MenuItem value="4:5">Portrait (4:5)</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </Box>
 
-                  <Box>
-                    <FormControl fullWidth>
-                      <InputLabel>Aspect Ratio</InputLabel>
-                      <Select
-                        value={aspectRatio}
-                        label="Aspect Ratio"
-                        onChange={(e) => setAspectRatio(e.target.value)}
-                      >
-                        <MenuItem value="free">Free (Any Size)</MenuItem>
-                        <MenuItem value="1:1">Square (1:1)</MenuItem>
-                        <MenuItem value="16:9">Widescreen (16:9)</MenuItem>
-                        <MenuItem value="9:16">Portrait (9:16)</MenuItem>
-                        <MenuItem value="4:3">Standard (4:3)</MenuItem>
-                        <MenuItem value="3:4">Portrait (3:4)</MenuItem>
-                        <MenuItem value="21:9">Ultrawide (21:9)</MenuItem>
-                        <MenuItem value="3:2">Classic (3:2)</MenuItem>
-                        <MenuItem value="2:3">Portrait (2:3)</MenuItem>
-                        <MenuItem value="5:4">Monitor (5:4)</MenuItem>
-                        <MenuItem value="4:5">Portrait (4:5)</MenuItem>
-                      </Select>
-                    </FormControl>
-                  </Box>
+                    <button
+                      onClick={processImage}
+                      style={{
+                        marginTop: "20px",
+                        width: "100%",
+                        padding: "12px",
+                        background: "var(--gradient-color)",
+                        color: "white",
+                        border: "none",
+                        borderRadius: "8px",
+                        fontSize: "16px",
+                        fontWeight: "600",
+                        cursor: "pointer",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        gap: "8px",
+                      }}
+                    >
+                      <Play size={18} />
+                      Start Processing
+                    </button>
+                  </div>
+                )}
 
-                  <button
-                    onClick={processImage}
+                {!processedImage && (
+                  <div
                     style={{
-                      marginTop: "20px",
-                      width: "100%",
-                      padding: "12px",
-                      background: "var(--gradient-color)",
-                      color: "white",
-                      border: "none",
-                      borderRadius: "8px",
-                      fontSize: "16px",
-                      fontWeight: "600",
-                      cursor: "pointer",
-                    }}
-                  >
-                    Start Processing
-                  </button>
-                </div>
-              )}
-
-              {!processedImage && (
-                <div
-                  style={{
-                    display: "flex",
-                    gap: "10px",
-                    justifyContent: "center",
-                  }}
-                >
-                  <button
-                    onClick={resetComponent}
-                    style={{
-                      padding: "10px 20px",
-                      background: "#f44336",
-                      color: "white",
-                      border: "none",
-                      borderRadius: "5px",
-                      cursor: "pointer",
                       display: "flex",
-                      alignItems: "center",
-                      gap: "8px",
+                      gap: "10px",
+                      justifyContent: "center",
                     }}
                   >
-                    <RefreshCw size={18} />
-                    Change Photo
-                  </button>
-                </div>
-              )}
-            </>
+                    <button
+                      onClick={resetComponent}
+                      style={{
+                        padding: "10px 20px",
+                        background: "var(--gradient-color-2)",
+                        color: "white",
+                        border: "none",
+                        borderRadius: "5px",
+                        cursor: "pointer",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "8px",
+                      }}
+                    >
+                      <RefreshCw size={18} />
+                      Change Photo
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
           )}
 
         {status === COMPONENT_STATES.PROCESSING && (
@@ -897,67 +939,42 @@ const CropDropZone = () => {
                 }}
               />
             )}
+
             <div
               style={{
                 position: "absolute",
-                top: "50%",
-                left: "50%",
-                transform: "translate(-50%, -50%)",
-                background: "rgba(255,255,255,0.95)",
-                padding: "30px 50px",
-                borderRadius: "10px",
-                boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
+                background: "rgba(0,0,0,0.7)",
+                color: "white",
+                padding: "10px 20px",
+                borderRadius: "20px",
+                bottom: "10%",
+                right: "10%",
               }}
             >
-              <div className="spinner"></div>
-              <p
+              {status === COMPONENT_STATES.UPLOADING
+                ? "Uploading ..."
+                : "Processing ..."}
+              <div
                 style={{
-                  marginTop: "15px",
-                  fontSize: "16px",
-                  fontWeight: "500",
+                  marginTop: "10px",
+                  width: "100%",
+                  height: "3px",
+                  background: "#ccc",
+                  borderRadius: "2px",
+                  overflow: "hidden",
                 }}
               >
-                Processing ...
-              </p>
+                <div
+                  style={{
+                    width: "70%",
+                    height: "100%",
+                    background: "#4CAF50",
+                    animation: "loading 1.5s infinite",
+                  }}
+                ></div>
+              </div>
             </div>
           </div>
-        )}
-
-        {processedImage && (
-          <>
-            <div style={{ marginBottom: "30px" }}>
-              <h3
-                style={{
-                  fontSize: "14px",
-                  fontWeight: "600",
-                  color: "#666",
-                  marginBottom: "15px",
-                  textTransform: "uppercase",
-                  letterSpacing: "1px",
-                }}
-              >
-                PROCESSED
-              </h3>
-              <img
-                src={processedImage}
-                alt="Processed"
-                style={{
-                  width: "100%",
-                  maxHeight: "500px",
-                  objectFit: "contain",
-                  borderRadius: "10px",
-                  boxShadow: "0 4px 15px rgba(0,0,0,0.1)",
-                }}
-              />
-            </div>
-
-            <div style={{ marginTop: "30px" }}>
-              <ImageCompare
-                beforeImage={uploadedImageUrl}
-                afterImage={processedImage}
-              />
-            </div>
-          </>
         )}
       </div>
 
@@ -967,10 +984,71 @@ const CropDropZone = () => {
             marginTop: "30px",
             display: "flex",
             gap: "15px",
-            flexWrap: "wrap",
             justifyContent: "center",
+            flexDirection: "column",
+            alignItems: "center",
           }}
         >
+          {processedImage && (
+            <>
+              <div>
+                <div>
+                  <div
+                    style={{
+                      border: "3px solid #ccc",
+                      borderRadius: "10px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      backgroundColor: "#f9f9f9",
+                      overflow: "hidden",
+                    }}
+                    className="w-[300px] h-[300px] md:w-[400px] md:h-[400px] lg:w-[500px] lg:h-[500px] relative"
+                  >
+                    <img
+                      src={processedImage}
+                      alt="Processed"
+                      style={{
+                        maxWidth: "100%",
+                        maxHeight: "100%",
+                        objectFit: "contain",
+                      }}
+                    />
+                    <h3
+                      style={{
+                        fontSize: "18px",
+                        fontWeight: "600",
+                        backgroundColor: "green",
+                        marginTop: "8px",
+                        letterSpacing: "2px",
+                        position: "absolute",
+                        opacity: "0.5",
+                        bottom: "10px",
+                        left: "10px",
+                        borderRadius: "10px",
+                        padding: "2px 8px",
+                      }}
+                    >
+                      PROCESSED
+                    </h3>
+                  </div>
+                </div>
+              </div>
+
+              {/* Image comparison component for before/after visualization */}
+              <div className="w-[92%] lg:w-[48.5%] mb-8">
+                <ImageCompare
+                  hasBorder={true}
+                  before={uploadedImageUrl}
+                  after={processedImage}
+                  background={uploadedImageUrl}
+                  aspectRatio={12 / 8}
+                  fit={"contain"}
+                />
+              </div>
+            </>
+          )}
+
           <button
             onClick={saveResult}
             style={{
@@ -992,7 +1070,7 @@ const CropDropZone = () => {
           </button>
 
           {availableTools.length > 0 && (
-            <Box sx={{ minWidth: 200 }}>
+            <Box sx={{ minWidth: "300px" }}>
               <FormControl fullWidth>
                 <InputLabel>Continue with another tool</InputLabel>
                 <Select
@@ -1025,7 +1103,7 @@ const CropDropZone = () => {
             onClick={resetComponent}
             style={{
               padding: "10px 18px",
-              background: "#f44336",
+              background: "var(--gradient-color-2)",
               color: "white",
               border: "none",
               borderRadius: "5px",
@@ -1063,19 +1141,15 @@ const CropDropZone = () => {
         </div>
       )}
 
-      <style>{`
-        .spinner {
-          border: 4px solid #f3f3f3;
-          border-top: 4px solid #1976d2;
-          border-radius: 50%;
-          width: 40px;
-          height: 40px;
-          animation: spin 1s linear infinite;
-          margin: 0 auto;
-        }
-        @keyframes spin {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
+      {/* CSS animation for loading indicator */}
+      <style jsx>{`
+        @keyframes loading {
+          0% {
+            transform: translateX(-100%);
+          }
+          100% {
+            transform: translateX(300%);
+          }
         }
       `}</style>
     </div>

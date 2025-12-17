@@ -7,6 +7,7 @@ import Footer from "../../components/Footer";
 import DropZone from "./components/DropZone";
 import CropDropZone from "./components/CropDropZone";
 import ObjectRemovalDropZone from "./components/ObjectRemovalDropZone";
+import CreateCollegeDropZone from "./components/CreateCollegeDropZone";
 
 const toolsData = [
   {
@@ -85,9 +86,15 @@ const toolsData = [
   },
   {
     path: "object-removal",
-    title: "Object-Removal",
+    title: "Object Removal",
     description:
       "Remove any unwanted objects from your photos and make them stay crystal clear.",
+  },
+  {
+    path: "create-collage",
+    title: "Create Collage",
+    description:
+      "Create beautiful photo collages by combining multiple images into one layout.",
   },
 ];
 
@@ -178,6 +185,8 @@ function UploadPhoto() {
             <CropDropZone />
           ) : ["/object-removal"].includes(location.pathname) ? (
             <ObjectRemovalDropZone />
+          ) : ["/create-collage"].includes(location.pathname) ? (
+            <CreateCollegeDropZone />
           ) : (
             <DropZone />
           )}

@@ -20,7 +20,7 @@ import { adjustImage } from "../tools/adjustTool";
 // Import configuration and components
 import { TOOL_CONFIG } from "../config/toolConfig";
 import ImageCompare from "../../../components/ImageCompare";
-import { Download, RefreshCw, Rocket } from "lucide-react";
+import { Download, Play, RefreshCw, Rocket } from "lucide-react";
 import {
   Box,
   FormControl,
@@ -590,7 +590,7 @@ const DropZone = () => {
           <input {...getInputProps()} />
           {isDragActive ? (
             <p style={{ fontSize: "18px", color: "#666" }}>
-              Drop the image here...
+              Drop the image here ...
             </p>
           ) : (
             <>
@@ -627,7 +627,6 @@ const DropZone = () => {
           justifyContent: "center",
           flexWrap: "wrap",
           gap: "20px",
-          backgroundColor: "yellow",
         }}
       >
         {/* Loading states: Uploading or Processing */}
@@ -644,7 +643,7 @@ const DropZone = () => {
                 backgroundColor: "#f9f9f9",
                 overflow: "hidden",
               }}
-              className="w-[200px] h-[200px] sm:w-[300px] sm:h-[300px] md:w-[400px] md:h-[400px] lg:w-[500px] lg:h-[500px]"
+              className="w-[300px] h-[300px] md:w-[400px] md:h-[400px] lg:w-[500px] lg:h-[500px]"
             >
               {/* Show uploaded file preview during upload */}
               {status === COMPONENT_STATES.UPLOADING && uploadedFile && (
@@ -726,7 +725,7 @@ const DropZone = () => {
                     backgroundColor: "#f9f9f9",
                     overflow: "hidden",
                   }}
-                  className="w-[200px] h-[200px] sm:w-[300px] sm:h-[300px] md:w-[400px] md:h-[400px] lg:w-[500px] lg:h-[500px] relative"
+                  className="w-[300px] h-[300px] md:w-[400px] md:h-[400px] lg:w-[500px] lg:h-[500px] relative"
                 >
                   <img
                     src={uploadedImageUrl}
@@ -765,7 +764,7 @@ const DropZone = () => {
                   !processedImage &&
                   status !== COMPONENT_STATES.PROCESSING) ||
                 renderedResultBefore === false) && (
-                <div className="flex flex-col gap-4 bg-amber-300">
+                <div className="flex flex-col gap-4">
                   {/* Options panel for tools with configurable settings */}
                   {showOptions && toolConfig?.hasOptions && (
                     <div
@@ -1058,7 +1057,7 @@ const DropZone = () => {
                                 width: "fit-content",
                               }}
                             >
-                              <Rocket size={18} />
+                              <Play size={18} />
                               Start Processing
                             </button>
                           </>
@@ -1287,7 +1286,7 @@ const DropZone = () => {
                                 marginTop: "10px",
                               }}
                             >
-                              <Rocket size={18} />
+                              <Play size={18} />
                               Start Processing
                             </button>
                           </div>
@@ -1535,7 +1534,7 @@ const DropZone = () => {
                               marginBottom: "10px",
                             }}
                           >
-                            <Rocket size={18} />
+                            <Play size={18} />
                             Start Processing
                           </button>
                         )}
@@ -1586,7 +1585,7 @@ const DropZone = () => {
                           backgroundColor: "#f9f9f9",
                           overflow: "hidden",
                         }}
-                        className="w-[200px] h-[200px] sm:w-[300px] sm:h-[300px] md:w-[400px] md:h-[400px] lg:w-[500px] lg:h-[500px] relative"
+                        className="w-[300px] h-[300px] md:w-[400px] md:h-[400px] lg:w-[500px] lg:h-[500px] relative"
                       >
                         <img
                           src={processedImage}
@@ -1648,7 +1647,6 @@ const DropZone = () => {
                 display: "flex",
                 flexDirection: "column",
                 gap: "12px",
-                backgroundColor: "red",
               }}
               className={`items-center ${"md:items-start"}`}
             >

@@ -31,6 +31,7 @@ const data = [
   "adjust-image",
   "crop-image",
   "object-removal",
+  "create-collage",
 ];
 
 export default function AppRoutes() {

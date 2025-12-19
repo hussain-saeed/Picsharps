@@ -6,8 +6,8 @@ const Spinner = ({ borderWidth = "4px", size = 35, className = "" }) => {
     height: typeof size === "number" ? `${size}px` : size,
     borderWidth: borderWidth,
     borderStyle: "solid",
-    borderColor: "rgba(0, 0, 0, 0.1)" /* الخلفية الشفافة */,
-    borderTopColor: "#00b0ff" /* الجزء المتحرك */,
+    borderColor: "rgba(0, 0, 0, 0.1)",
+    borderTopColor: "#00b0ff",
     borderRadius: "50%",
   };
 

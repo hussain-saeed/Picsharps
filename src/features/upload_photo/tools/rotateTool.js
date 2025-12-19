@@ -1,7 +1,9 @@
+import { BACKEND_URL } from "../../../api";
+
 export const rotateImage = async ({ sourceImageId, imageUrl, angle }) => {
   try {
     const res = await fetch(
-      "https://picsharps-api.onrender.com/api/v1/image/rotate",
+      `${BACKEND_URL}/image/rotate`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },

@@ -79,7 +79,6 @@ function ContactUs() {
       }
     }
 
-    console.log("📤 Final Payload Sent to Backend:", obj);
   };
 
   const handleSubmit = (e) => {

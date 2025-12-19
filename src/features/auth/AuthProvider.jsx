@@ -1,23 +1,17 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-
-const API_URL = "https://picsharps-api.onrender.com";
+import { BACKEND_URL } from "../../api";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  // ============================================
   // 1) Basic Auth State
-  // ============================================
-  const [userData, setUserData] = useState(null); // 👈 الجديد
+  const [userData, setUserData] = useState(null);
   const [accessToken, setAccessToken] = useState(null);
 
-  // ============================================
   // 2) Token Management (refresh token)
-  // ============================================
   const refreshToken = async () => {
-
     try {
-      const res = await fetch(`${API_URL}/api/v1/auth/refresh`, {
+      const res = await fetch(`${BACKEND_URL}/auth/refresh`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -25,14 +19,9 @@ export const AuthProvider = ({ children }) => {
       });
 
       const data = await res.json();
-      console.log(data);
 
       if (data.status === "success") {
         setAccessToken(data.accessToken);
-
-        // القديم
-
-        // الجديد
         setUserData(data.data?.user || null);
       } else {
         setUserData(null);
@@ -59,9 +48,7 @@ export const AuthProvider = ({ children }) => {
     return () => clearInterval(interval);
   }, []);
 
-  // ============================================
   // 3) Login Required + Popup Controls
-  // ============================================
   const [isLoginPopupOpen, setIsLoginPopupOpen] = useState(false);
 
   const openLoginPopup = () => setIsLoginPopupOpen(true);
@@ -69,30 +56,24 @@ export const AuthProvider = ({ children }) => {
     setIsLoginPopupOpen(false);
     setForgotPassScreen(1);
 
-    // نفرّغ كل البيانات
     setForgotEmail("");
     setResetToken(null);
   };
 
   const requireLogin = (actionIfLoggedIn) => {
-    if (userData) actionIfLoggedIn?.(); // نستعمل userData بدل user
+    if (userData) actionIfLoggedIn?.();
     else openLoginPopup();
   };
 
-  // ============================================
   // 4) Google Login
-  // ============================================
   const loginWithGoogle = () => {
-    window.location.href = `${API_URL}/api/v1/auth/google`;
+    window.location.href = `${BACKEND_URL}/auth/google`;
   };
 
-  // ============================================
   // 5) Email & Password Login
-  // ============================================
   const login = async (email, password) => {
-
     try {
-      const res = await fetch(`${API_URL}/api/v1/auth/login`, {
+      const res = await fetch(`${BACKEND_URL}/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -100,12 +81,10 @@ export const AuthProvider = ({ children }) => {
       });
 
       const data = await res.json();
-      console.log(data);
 
       if (data.status === "success") {
         setAccessToken(data.accessToken);
 
-        // الجديد
         setUserData(data.data.user);
       }
 
@@ -113,7 +92,6 @@ export const AuthProvider = ({ children }) => {
     } catch (err) {
       console.error("Login error:", err);
     }
-    
   };
 
   const [forgotPassScreen, setForgotPassScreen] = useState(1);
@@ -122,7 +100,7 @@ export const AuthProvider = ({ children }) => {
 
   const forgotPassword = async (email) => {
     try {
-      const res = await fetch(`${API_URL}/api/v1/auth/forgot-password`, {
+      const res = await fetch(`${BACKEND_URL}/auth/forgot-password`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
@@ -137,7 +115,7 @@ export const AuthProvider = ({ children }) => {
 
   const verifyResetCode = async (email, code) => {
     try {
-      const res = await fetch(`${API_URL}/api/v1/auth/verify-reset-code`, {
+      const res = await fetch(`${BACKEND_URL}/auth/verify-reset-code`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, code }),
@@ -152,7 +130,7 @@ export const AuthProvider = ({ children }) => {
 
   const resetPassword = async (token, newPassword) => {
     try {
-      const res = await fetch(`${API_URL}/api/v1/auth/reset-password`, {
+      const res = await fetch(`${BACKEND_URL}/auth/reset-password`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ resetToken: token, newPassword }),
@@ -167,7 +145,7 @@ export const AuthProvider = ({ children }) => {
 
   const changeEmail = async (newEmail) => {
     try {
-      const res = await fetch(`${API_URL}/api/v1/auth/change-email`, {
+      const res = await fetch(`${BACKEND_URL}/auth/change-email`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -178,7 +156,6 @@ export const AuthProvider = ({ children }) => {
       });
 
       const data = await res.json();
-      console.log(data);
 
       return data;
     } catch (err) {
@@ -191,14 +168,13 @@ export const AuthProvider = ({ children }) => {
       return { status: "fail", message: "Invalid verification link" };
 
     try {
-      const res = await fetch(`${API_URL}/api/v1/auth/verify-email`, {
+      const res = await fetch(`${BACKEND_URL}/auth/verify-email`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ token, id }),
       });
 
       const data = await res.json();
-      console.log("Verify email response:", data);
       return data;
     } catch (err) {
       console.error("Verify email error:", err);
@@ -208,7 +184,7 @@ export const AuthProvider = ({ children }) => {
 
   const setPassword = async (newPassword) => {
     try {
-      const res = await fetch(`${API_URL}/api/v1/auth/set-password`, {
+      const res = await fetch(`${BACKEND_URL}/auth/set-password`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -219,7 +195,6 @@ export const AuthProvider = ({ children }) => {
       });
 
       const data = await res.json();
-      console.log(data);
 
       return data;
     } catch (err) {
@@ -227,12 +202,10 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // ============================================
   // 6) Logout
-  // ============================================
   const logout = async () => {
     try {
-      await fetch(`${API_URL}/api/v1/auth/logout`, {
+      await fetch(`${BACKEND_URL}/auth/logout`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -246,13 +219,11 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // ============================================
   // Provider
-  // ============================================
   return (
     <AuthContext.Provider
       value={{
-        userData, // 👈 الجديد
+        userData,
         accessToken,
 
         // Token
@@ -293,7 +264,5 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
-// ============================================
 // Hook
-// ============================================
 export const useAuth = () => useContext(AuthContext);

@@ -7,6 +7,7 @@ import ImageCompare from "../../../components/ImageCompare";
 import { Download, Play, RefreshCw } from "lucide-react";
 import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import { useAuth } from "../../auth/AuthProvider";
+import { BACKEND_URL } from "../../../api";
 
 const COMPONENT_STATES = {
   IDLE: "idle",
@@ -19,7 +20,6 @@ const COMPONENT_STATES = {
 const CropDropZone = () => {
   const navigate = useNavigate();
   const currentTool = "crop-image";
-  const toolConfig = TOOL_CONFIG[currentTool];
   const { accessToken } = useAuth();
 
   // State declarations
@@ -159,7 +159,7 @@ const CropDropZone = () => {
       setStatus(COMPONENT_STATES.UPLOADING);
 
       const uploadRes = await fetch(
-        "https://picsharps-api.onrender.com/api/v1/image/upload",
+        `${BACKEND_URL}/image/upload`,
         {
           method: "POST",
           body: formData,
@@ -385,25 +385,8 @@ const CropDropZone = () => {
         crop: "crop",
       };
 
-      console.log("🔍 Crop Debug Info:", {
-        "Displayed Crop": cropArea,
-        "Image Displayed Size": { width: img.width, height: img.height },
-        "Image Natural Size": {
-          width: img.naturalWidth,
-          height: img.naturalHeight,
-        },
-        "Scale Factors": { scaleX, scaleY },
-        "Natural Crop (sent to API)": naturalCrop,
-        Percentages: {
-          x: ((cropArea.x / img.width) * 100).toFixed(1) + "%",
-          y: ((cropArea.y / img.height) * 100).toFixed(1) + "%",
-          width: ((cropArea.width / img.width) * 100).toFixed(1) + "%",
-          height: ((cropArea.height / img.height) * 100).toFixed(1) + "%",
-        },
-      });
-
       const res = await fetch(
-        "https://picsharps-api.onrender.com/api/v1/image/crop",
+        `${BACKEND_URL}/image/crop`,
         {
           method: "POST",
           headers: {
@@ -458,8 +441,8 @@ const CropDropZone = () => {
     try {
       await downloadImage(processedImage, `${currentTool}-result.png`);
 
-      const res = await fetch(
-        "https://picsharps-api.onrender.com/api/v1/image/save-result",
+      await fetch(
+        `${BACKEND_URL}/image/save-result`,
         {
           method: "POST",
           headers: {
@@ -475,8 +458,6 @@ const CropDropZone = () => {
         }
       );
 
-      const data = await res.json();
-      console.log(data);
     } catch (err) {
       console.error("Download or saving error:", err);
     }
@@ -1117,26 +1098,6 @@ const CropDropZone = () => {
           >
             <RefreshCw size={18} />
             Change Photo
-          </button>
-        </div>
-      )}
-
-      {status === COMPONENT_STATES.ERROR && (
-        <div style={{ textAlign: "center", marginTop: "30px" }}>
-          <button
-            onClick={resetComponent}
-            style={{
-              padding: "12px 24px",
-              background: "#f44336",
-              color: "white",
-              border: "none",
-              borderRadius: "8px",
-              cursor: "pointer",
-              fontSize: "16px",
-              fontWeight: "600",
-            }}
-          >
-            Use another photo with this tool
           </button>
         </div>
       )}

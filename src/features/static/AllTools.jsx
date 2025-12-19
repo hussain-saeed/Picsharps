@@ -66,12 +66,12 @@ function AllTools() {
               category="BACKGROUND TOOLS"
               title="Remove Unwanted Objects"
               description="Clean up your photos in seconds with our smart AI object remover. Whether it's a stray person, a distracting item, or background clutter—just highlight it and let the magic happen. Your image stays flawless, your focus stays sharp."
-              linkTo="/remove-object-from-photo"
+              linkTo="/object-removal"
               innerLinkText="Try it now for free"
             />
           </div>
 
-          <div className="mt-20">
+          {/* <div className="mt-20">
             <PresentService
               isTextFirst={true}
               before="/images/change-bg-5.jpg"
@@ -84,7 +84,7 @@ function AllTools() {
               linkTo="/change-background"
               innerLinkText="Try it Now"
             />
-          </div>
+          </div>} */}
         </Container>
       </div>
 
@@ -131,7 +131,7 @@ function AllTools() {
             />
           </div>
 
-          <div className="mt-20">
+          {/* <div className="mt-20">
             <PresentService
               isTextFirst={true}
               before="/images/clean.jpg"
@@ -144,11 +144,11 @@ function AllTools() {
               linkTo="/cleanup-pictures"
               innerLinkText="Try it Now"
             />
-          </div>
+          </div> */}
 
           <div className="mt-20">
             <PresentService
-              isTextFirst={false}
+              isTextFirst={true}
               before="/images/filter.png"
               after="/images/filter-2.png"
               aspectRatio="12/8"
@@ -156,7 +156,7 @@ function AllTools() {
               category="ENHANCE & CLEANUP"
               title="Photo Filters"
               description="Apply professionally crafted color presets and creative looks to change mood and style instantly. Filters range from subtle cinematic corrections to punchy social-media-ready looks, each preserving skin tones and dynamic range. Each preset includes adjustable intensity so you can blend the filter with the original image for natural results. Save custom combinations as user presets for consistent branding across batches. Great for quick styling, A/B testing looks, and keeping a cohesive aesthetic across your content."
-              linkTo="/photo-filters"
+              linkTo="/grayscale-image"
               innerLinkText="Try it Now"
             />
           </div>
@@ -178,7 +178,7 @@ function AllTools() {
 
           <div className="mt-10">
             <PresentService
-              isTextFirst={true}
+              isTextFirst={false}
               before="/images/to-cartoon-1.png"
               after="/images/to-cartoon-2.jpg"
               aspectRatio="12/8"
@@ -191,7 +191,7 @@ function AllTools() {
             />
           </div>
 
-          <div className="mt-20">
+          {/* <div className="mt-20">
             <PresentService
               isTextFirst={false}
               before="/images/sticker-1.png"
@@ -204,7 +204,7 @@ function AllTools() {
               linkTo="/sticker-maker"
               innerLinkText="Try it Now"
             />
-          </div>
+          </div> */}
 
           <div className="mt-20">
             <PresentService
@@ -214,7 +214,7 @@ function AllTools() {
               category="CREATIVE & FUN"
               title="Collage Maker"
               description="Combine multiple photos into cohesive, well-composed collages using modern templates and flexible grid controls. Drag-and-drop placement, rounded corners, and consistent spacing keep the layout neat while smart cropping preserves important subject areas. Templates include thematic choices (travel, portfolio, product grid) and adjustable aspect ratios for Instagram posts or story formats. Users can add optional frames, subtle shadows, and color-coordinated backgrounds for polish. Excellent for moodboards, social campaigns, and multi-photo storytelling."
-              linkTo="/collage-maker"
+              linkTo="/create-collage"
               innerLinkText="Try it Now"
             />
           </div>

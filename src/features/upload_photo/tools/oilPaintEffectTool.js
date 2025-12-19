@@ -1,7 +1,9 @@
+import { BACKEND_URL } from "../../../api";
+
 export const oilPaintEffect = async ({ sourceImageId, imageUrl, amount }) => {
   try {
     const res = await fetch(
-      "https://picsharps-api.onrender.com/api/v1/image/oil-paint",
+      `${BACKEND_URL}/image/oil-paint`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },

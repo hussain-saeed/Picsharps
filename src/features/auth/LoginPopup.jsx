@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useAuth } from "./AuthProvider";
 import { LanguageContext } from "../../context/LanguageContext";
+import { toast } from "react-toastify";
 
 const LoginPopup = () => {
   const {
@@ -24,7 +25,7 @@ const LoginPopup = () => {
   const { direction } = useContext(LanguageContext);
   const isRTL = direction === "rtl";
 
-  // Local states1
+  // Local states
   const [renderLogWithGoogle, setRenderLogWithGoogle] = useState(true);
 
   const [email, setEmail] = useState("");
@@ -45,17 +46,15 @@ const LoginPopup = () => {
 
   if (!isLoginPopupOpen) return null;
 
-  // HANDLERS -----------------------------------------------------
-
+  // HANDLERS
   const handleEmailLogin = async () => {
     if (!email || !password) return alert("Please enter email and password");
 
     const data = await login(email, password);
     if (data?.status === "success") {
-      alert("Login successful!");
       closeLoginPopup();
     } else {
-      alert(data?.message || "Login failed");
+      toast.error(data?.message || "Login failed");
     }
   };
 
@@ -65,10 +64,10 @@ const LoginPopup = () => {
     const res = await forgotPassword(forgotEmail);
 
     if (res?.status === "success") {
-      alert("Code sent to your email");
+      toast.success("Code sent to your email");
       setForgotPassScreen(3);
     } else {
-      alert(res?.message || "Something went wrong");
+      toast.error(res?.message || "Something went wrong");
     }
   };
 
@@ -81,27 +80,26 @@ const LoginPopup = () => {
       setResetToken(res.data.resetToken);
       setForgotPassScreen(4);
     } else {
-      alert(res?.message || "Invalid or expired code");
+      toast.error(res?.message || "Invalid or expired code");
     }
   };
 
   const handleResetPassword = async () => {
-    if (!newPass) return alert("Enter a new password");
+    if (!newPass) return toast.error("Enter a new password");
 
     const res = await resetPassword(resetToken, newPass);
 
     if (res?.status === "success") {
-      alert("Password reset successfully!");
+      toast.success("Password reset successfully!");
 
       // Back to first screen
       setForgotPassScreen(1);
     } else {
-      alert(res?.message || "Failed to reset password");
+      toast.error(res?.message || "Failed to reset password");
     }
   };
 
-  // RENDER SCREENS -----------------------------------------------------
-
+  // RENDER SCREENS
   const renderScreen = () => {
     // SCREEN 1 — LOGIN
     if (forgotPassScreen === 1) {
@@ -393,7 +391,6 @@ const LoginPopup = () => {
         className="bg-black/50 backdrop-blur-xs"
       />
 
-      {/* OUTER WRAPPER — مفيهوش overflow */}
       <div
         style={{
           position: "fixed",
@@ -404,7 +401,6 @@ const LoginPopup = () => {
         }}
         className="lg:w-[75%] w-[80%] relative"
       >
-        {/* زرار الـ close */}
         <img
           src="/images/close.png"
           onClick={() => {
@@ -421,12 +417,11 @@ const LoginPopup = () => {
           className={`${isRTL ? "-left-5" : "-right-5"}`}
         />
 
-        {/* INNER BOX — هنا بس نحط overflow hidden */}
         <div
           style={{
             borderRadius: "40px",
             height: "500px",
-            overflow: "hidden", // هنا بس
+            overflow: "hidden",
           }}
           className="flex bg-white"
         >

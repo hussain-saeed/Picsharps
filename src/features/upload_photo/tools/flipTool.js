@@ -1,3 +1,5 @@
+import { BACKEND_URL } from "../../../api";
+
 export const flipImage = async ({
   sourceImageId,
   imageUrl,
@@ -5,7 +7,7 @@ export const flipImage = async ({
 }) => {
   try {
     const res = await fetch(
-      "https://picsharps-api.onrender.com/api/v1/image/flip",
+      `${BACKEND_URL}/image/flip`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },

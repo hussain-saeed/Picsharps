@@ -1,3 +1,5 @@
+import { BACKEND_URL } from "../../../api";
+
 export const enhanceImage = async ({
   sourceImageId,
   imageUrl,
@@ -5,7 +7,7 @@ export const enhanceImage = async ({
 }) => {
   try {
     const res = await fetch(
-      "https://picsharps-api.onrender.com/api/v1/image/enhance",
+      `${BACKEND_URL}/image/enhance`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },

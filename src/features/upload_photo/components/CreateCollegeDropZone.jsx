@@ -3,6 +3,7 @@ import { useDropzone } from "react-dropzone";
 import { FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 import { Play } from "lucide-react";
 import Spinner from "../../../components/Spinner";
+import { BACKEND_URL } from "../../../api";
 
 const templates = [
   {
@@ -37,7 +38,6 @@ const CollageMaker = () => {
   const [uploadedImages, setUploadedImages] = useState([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [resultImage, setResultImage] = useState(null);
-  const [toast, setToast] = useState({ show: false, message: "", type: "" });
 
   const currentTemplates = templates.find(
     (t) => t.slotCount === selectedSlotCount
@@ -117,7 +117,7 @@ const CollageMaker = () => {
       });
 
       const response = await fetch(
-        `https://picsharps-api.onrender.com/api/v1/image/collage/${selectedTemplate}`,
+        `${BACKEND_URL}/image/collage/${selectedTemplate}`,
         {
           method: "POST",
           body: formData,
@@ -125,7 +125,6 @@ const CollageMaker = () => {
       );
 
       const data = await response.json();
-      console.log("API Response:", data); // للتأكد من الاستجابة
 
       if (response.ok && data.data && data.data.result) {
         setResultImage(data.data.result.collageUrl);
@@ -133,7 +132,7 @@ const CollageMaker = () => {
         throw new Error("failed");
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     } finally {
       setIsProcessing(false);
     }
@@ -188,12 +187,11 @@ const CollageMaker = () => {
       `}
               style={{
                 aspectRatio: "1240 / 940",
-                width: "calc(100% / 1 - 20px)", // موبايل: 1 عمود
-                maxWidth: "420px", // أقصى عرض للكارت
-                flex: "1 1 300px", // يسمح للكارت بالتقلص والتوسع حسب الشاشة
+                width: "calc(100% / 1 - 20px)",
+                maxWidth: "420px",
+                flex: "1 1 300px",
               }}
             >
-              {/* الصورة */}
               <img
                 src={entity.preview}
                 alt={`template-${entity.id}`}
@@ -201,7 +199,6 @@ const CollageMaker = () => {
                 draggable={false}
               />
 
-              {/* Overlay اختياري */}
               <div className="absolute inset-0 bg-black/10 opacity-0 hover:opacity-100 transition-opacity" />
 
               {selectedTemplate === entity.id ? (
@@ -310,7 +307,7 @@ const CollageMaker = () => {
             disabled={!canProcess}
             className={`w-full md:w-auto px-8 py-3 rounded-lg font-medium text-white transition-all flex gap-2 ${
               canProcess
-                ? "bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 cursor-pointer"
+                ? "bg-linear-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 cursor-pointer"
                 : "bg-gray-400 cursor-not-allowed"
             }`}
           >

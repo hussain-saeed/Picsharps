@@ -33,9 +33,8 @@ import {
 import { SketchPicker } from "react-color";
 import { useAuth } from "../../auth/AuthProvider";
 import { OptionSlider } from "./OptionSlider";
+import { BACKEND_URL } from "../../../api";
 
-// Constants for tool type identifiers
-// These values should match the tool paths in the routing
 const TOOL_TYPES = {
   ENHANCE: "ai-image-enhancer", // Image enhancement tool
   CARTOON: "photo-to-cartoon", // Cartoon effect tool
@@ -51,8 +50,6 @@ const TOOL_TYPES = {
   ADJUST: "adjust-image",
 };
 
-// Component lifecycle state constants
-// Used to track the current state of the component for UI rendering and logic control
 const COMPONENT_STATES = {
   IDLE: "idle", // Initial state, waiting for user action
   UPLOADING: "uploading", // Uploading image to server
@@ -66,8 +63,6 @@ const DropZone = () => {
   const navigate = useNavigate(); // For programmatic navigation between tools
   const location = useLocation(); // To access current URL path
 
-  // Extract current tool from URL path
-  // The tool identifier is derived from the first non-empty segment of the path
   const currentTool =
     location.pathname.split("/").filter(Boolean)[0] ||
     location.pathname.replace("/", "");
@@ -82,15 +77,12 @@ const DropZone = () => {
   const [processedImage, setProcessedImage] = useState(null); // URL of processed image
   const [toolKey, setToolKey] = useState(null);
   const [status, setStatus] = useState(COMPONENT_STATES.IDLE); // Current component state
-  const [message, setMessage] = useState(""); // Status message for user
   const [showDropZone, setShowDropZone] = useState(true); // Toggle dropzone visibility
   const [showOptions, setShowOptions] = useState(false); // Toggle tool options panel
   const [options, setOptions] = useState({}); // Tool-specific options
   const [renderedResultBefore, setRenderedResultBefore] = useState(false); // Track if result was shown before
   const { accessToken } = useAuth();
 
-  // Effect hook for component initialization and state restoration
-  // Handles loading data from localStorage when navigating between tools
   useEffect(() => {
     // LocalStorage keys for state persistence
     const LS_KEY = `dropzone_last_result`; // Stores the last processing result
@@ -108,8 +100,6 @@ const DropZone = () => {
       try {
         const parsedResult = JSON.parse(storedResult);
 
-        // Only load the stored result if coming from a different tool
-        // This prevents reloading the same result when refreshing the page
         if (parsedResult.tool !== currentTool) {
           // Restore state from stored result
           setUploadedImageUrl(parsedResult.previewUrl);
@@ -117,7 +107,6 @@ const DropZone = () => {
           setShowDropZone(false); // Hide dropzone since we have an image
           setShowOptions(true); // Show options panel for processing
           setStatus(COMPONENT_STATES.DONE); // Set status to done
-          setMessage("Loaded from previous tool"); // Inform user
 
           // Clean up transition flags after successful restoration
           localStorage.removeItem(FROM_TOOL_KEY);
@@ -135,8 +124,6 @@ const DropZone = () => {
       resetToInitialState();
     }
 
-    // Initialize tool-specific options with default values
-    // This ensures options are properly set based on tool configuration
     if (toolConfig && toolConfig.hasOptions) {
       const defaultOptions = {};
       // Iterate through each option defined in toolConfig
@@ -147,8 +134,6 @@ const DropZone = () => {
     }
   }, [currentTool]); // Only run when currentTool changes
 
-  // Effect hook for automatic processing of TYPE_2 tools
-  // Automatically triggers processing when options change for certain tools
   useEffect(() => {
     // Early return conditions:
     // 1. No uploaded image or source image ID
@@ -170,8 +155,6 @@ const DropZone = () => {
     processImage();
   }, [options]); // Run whenever options state changes
 
-  // Function to reset component to initial state
-  // Clears all state and reinitializes with defaults
   const resetToInitialState = () => {
     // Clear all image-related state
     setUploadedFile(null);
@@ -182,7 +165,6 @@ const DropZone = () => {
 
     // Reset component state and UI
     setStatus(COMPONENT_STATES.IDLE);
-    setMessage("");
     setShowDropZone(true); // Show dropzone for new uploads
     setShowOptions(false); // Hide options panel
     setRenderedResultBefore(false); // Reset result rendering flag
@@ -197,8 +179,6 @@ const DropZone = () => {
     }
   };
 
-  // Public reset function for component
-  // Also cleans up localStorage to prevent stale data
   const resetComponent = () => {
     resetToInitialState(); // Reset state
     // Clean up localStorage entries
@@ -206,8 +186,6 @@ const DropZone = () => {
     localStorage.removeItem(`came_from_tool`);
   };
 
-  // File drop handler for dropzone component
-  // Handles file uploads to the server and initial state setup
   const onDrop = useCallback(
     async (acceptedFiles) => {
       // Return early if no files were dropped
@@ -226,11 +204,10 @@ const DropZone = () => {
       try {
         // Set uploading state
         setStatus(COMPONENT_STATES.UPLOADING);
-        setMessage("Uploading image to server");
 
         // Make upload request to image processing API
         const uploadRes = await fetch(
-          "https://picsharps-api.onrender.com/api/v1/image/upload",
+          `${BACKEND_URL}/image/upload`,
           {
             method: "POST",
             body: formData, // Send FormData with file
@@ -244,7 +221,6 @@ const DropZone = () => {
         if (uploadData.status !== "success") {
           // Handle upload failure
           setStatus(COMPONENT_STATES.ERROR);
-          setMessage(uploadData.message || "Image upload failed");
           toast.error(uploadData.message || "Upload failed");
           resetComponent(); // Reset on error
           return;
@@ -257,7 +233,6 @@ const DropZone = () => {
         setSourceImageId(sourceImageId); // Server-generated image ID
         setUploadedImageUrl(sourceUrl); // URL of uploaded image
         setStatus(COMPONENT_STATES.DONE); // Set status to done
-        setMessage("Image uploaded successfully");
 
         // Show options panel if tool supports configurable options
         if (toolConfig && toolConfig.hasOptions) {
@@ -267,7 +242,6 @@ const DropZone = () => {
         // Handle network or unexpected errors
         console.error("DropZone upload error:", error);
         setStatus(COMPONENT_STATES.ERROR);
-        setMessage("Network error occurred during upload");
         toast.error("Network error occurred");
         resetComponent(); // Reset on error
       }
@@ -275,8 +249,6 @@ const DropZone = () => {
     [toolConfig] // Dependency: toolConfig for option handling
   );
 
-  // Main image processing function
-  // Routes to appropriate tool function based on currentTool
   const processImage = useCallback(async () => {
     // Validation: ensure we have required data
     if (!sourceImageId || !uploadedImageUrl) {
@@ -287,14 +259,10 @@ const DropZone = () => {
     try {
       // Set processing state
       setStatus(COMPONENT_STATES.PROCESSING);
-      setMessage("Processing image with selected tool");
       setShowOptions(false); // Hide options during processing
 
       // Variable to store tool processing result
       let toolResult = null;
-
-      // Route processing based on current tool type
-      // Each tool has its own specific parameters and processing logic
 
       // Image enhancement tool
       if (currentTool === TOOL_TYPES.ENHANCE) {
@@ -328,7 +296,6 @@ const DropZone = () => {
         if (!options.width && !options.height) {
           toast.error("Please specify width or height for resizing");
           setStatus(COMPONENT_STATES.ERROR);
-          setMessage("Please enter at least width or height");
           return;
         }
 
@@ -361,8 +328,6 @@ const DropZone = () => {
 
       // Background removal tool
       else if (currentTool === TOOL_TYPES.REMOVE) {
-        // Construct payload for background removal
-        // Background removal has specific output requirements
         const payload = {
           sourceImageId,
           imageUrl: uploadedImageUrl,
@@ -370,8 +335,6 @@ const DropZone = () => {
           format: "png", // Output format (PNG for transparency)
         };
 
-        // Add background color only if not transparent
-        // Transparent background is the default option
         if (options.bgColor && options.bgColor !== "transparent") {
           payload.bgColor = options.bgColor; // Hex color value
         }
@@ -432,12 +395,9 @@ const DropZone = () => {
         setProcessedImage(toolResult.previewUrl);
         setToolKey(toolResult.toolKey);
         setStatus(COMPONENT_STATES.DONE);
-        setMessage("Image processing completed successfully");
         setShowOptions(true); // Show options panel again
         setRenderedResultBefore(true); // Mark that result has been rendered
 
-        // Save result to localStorage for tool-to-tool navigation
-        // This enables users to chain multiple tools
         const resultData = {
           sourceImageId,
           previewUrl: toolResult.previewUrl,
@@ -456,7 +416,6 @@ const DropZone = () => {
       // Handle processing errors
       console.error("DropZone processing error:", error);
       setStatus(COMPONENT_STATES.ERROR);
-      setMessage("Image processing failed");
       toast.error("Processing failed");
 
       // Restore options panel on error for user to retry
@@ -466,8 +425,6 @@ const DropZone = () => {
     }
   }, [sourceImageId, uploadedImageUrl, currentTool, options, toolConfig]);
 
-  // Handler for tool option changes
-  // Updates options state and may trigger auto-processing for certain tools
   const handleOptionChange = (optionKey, value) => {
     const newOptions = { ...options, [optionKey]: value };
     setOptions(newOptions);
@@ -494,8 +451,8 @@ const DropZone = () => {
       await downloadImage(processedImage, `${currentTool}-result.png`);
 
       // Then save on backend
-      const res = await fetch(
-        "https://picsharps-api.onrender.com/api/v1/image/save-result",
+      await fetch(
+        `${BACKEND_URL}/image/save-result`,
         {
           method: "POST",
           headers: {
@@ -511,15 +468,11 @@ const DropZone = () => {
         }
       );
 
-      const data = await res.json();
-      console.log(data);
     } catch (err) {
       console.error("Download or saving error:", err);
     }
   };
 
-  // Navigation function for tool chaining
-  // Allows user to take processed image to another tool
   const goToTool = (toolPath) => {
     // Validate that we have a processed image
     if (!processedImage) {
@@ -527,8 +480,6 @@ const DropZone = () => {
       return;
     }
 
-    // Set flag to indicate navigation from another tool
-    // This will be read by the target tool's initialization
     localStorage.setItem("came_from_tool", "true");
 
     // Save current result for the next tool
@@ -559,8 +510,6 @@ const DropZone = () => {
       status === COMPONENT_STATES.PROCESSING, // Disable during operations
   });
 
-  // Prepare list of available tools for navigation dropdown
-  // Filters out current tool to prevent self-navigation
   const availableTools = Object.keys(TOOL_CONFIG)
     .filter((tool) => tool !== currentTool) // استبعاد الأداة الحالية
     .map((tool) => ({
@@ -755,8 +704,6 @@ const DropZone = () => {
                 </div>
               </div>
 
-              {/* Tool-specific options panel */}
-              {/* Conditional rendering based on tool configuration and state */}
               {((showOptions && toolConfig?.hasOptions) ||
                 (uploadedImageUrl &&
                   toolConfig &&
@@ -1490,7 +1437,6 @@ const DropZone = () => {
                                     handleOptionChange(key, val)
                                   }
                                   onCommitChange={(val) => {
-                                    console.log(key, val);
                                     handleOptionChange(key, val);
                                   }}
                                 />
@@ -1749,25 +1695,6 @@ const DropZone = () => {
                 Change Photo
               </button>
             </div>
-          </div>
-        )}
-
-        {/* Error state display */}
-        {status === COMPONENT_STATES.ERROR && (
-          <div style={{ textAlign: "center", marginTop: "20px" }}>
-            <button
-              onClick={resetComponent}
-              style={{
-                padding: "10px 20px",
-                backgroundColor: "#6c757d",
-                color: "white",
-                border: "none",
-                borderRadius: "5px",
-                cursor: "pointer",
-              }}
-            >
-              Use another photo with this tool
-            </button>
           </div>
         )}
 

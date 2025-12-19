@@ -28,9 +28,9 @@ export const OptionSlider = ({
     timerRef.current = setTimeout(() => {
       if (lastValueRef.current !== newValue) {
         lastValueRef.current = newValue;
-        onCommitChange(newValue); // 🔥 هنا request مرة واحدة فقط
+        onCommitChange(newValue); 
       }
-    }, 1000); // 300ms بعد آخر تغيير
+    }, 1000);
   };
 
   return (

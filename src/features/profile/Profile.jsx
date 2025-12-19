@@ -13,6 +13,7 @@ import Edit from "./sections/Edit";
 import { LanguageContext } from "../../context/LanguageContext";
 import { Download } from "lucide-react";
 import Downloads from "./sections/Downloads";
+import { BACKEND_URL } from "../../api";
 
 const tabsData = [
   { id: 0, label: "Profile", key: "profile", icon: <CiUser /> },
@@ -39,7 +40,7 @@ function Profile() {
   const getImages = async () => {
     try {
       const res = await fetch(
-        `https://picsharps-api.onrender.com/api/v1/users/me`,
+        `${BACKEND_URL}/users/me`,
         {
           method: "GET",
           headers: {
@@ -52,7 +53,6 @@ function Profile() {
 
       const data = await res.json();
       setData(data);
-      console.log(data);
 
       return data;
     } catch (err) {

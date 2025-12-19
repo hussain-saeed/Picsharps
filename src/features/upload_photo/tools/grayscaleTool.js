@@ -1,7 +1,9 @@
+import { BACKEND_URL } from "../../../api";
+
 export const grayscalePhoto = async ({ sourceImageId, imageUrl }) => {
   try {
     const res = await fetch(
-      "https://picsharps-api.onrender.com/api/v1/image/grayscale",
+      `${BACKEND_URL}/image/grayscale`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },

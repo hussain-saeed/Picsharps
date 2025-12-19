@@ -9,7 +9,6 @@ import ReusableButton from "../../../components/ReusableButton";
 import { useContext } from "react";
 import { LanguageContext } from "../../../context/LanguageContext";
 
-// محتوى الهيرو الخاص بصفحة الشروط
 const heroContent = {
   id: "terms-hero",
   title: "Terms of Service",
@@ -20,7 +19,6 @@ const heroContent = {
   imageUrl: "/images/terms-60.png",
 };
 
-// عناصر السايدبار الخاصة بصفحة الشروط
 const sidebarItems = [
   { id: "terms-1", label: "1. Acceptance of Terms", targetId: "terms-1" },
   { id: "terms-2", label: "2. Usage Restrictions", targetId: "terms-2" },

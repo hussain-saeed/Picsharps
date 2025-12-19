@@ -1,3 +1,5 @@
+import { BACKEND_URL } from "../../../api";
+
 export const resizeImage = async ({
   sourceImageId,
   imageUrl,
@@ -11,7 +13,7 @@ export const resizeImage = async ({
     }
 
     const res = await fetch(
-      "https://picsharps-api.onrender.com/api/v1/image/resize",
+      `${BACKEND_URL}/image/resize`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },

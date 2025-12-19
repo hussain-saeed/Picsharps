@@ -1,5 +1,6 @@
-import {  useState } from "react";
+import { useState } from "react";
 import { useAuth } from "../../auth/AuthProvider";
+import { toast } from "react-toastify";
 
 function Edit() {
   const { setPassword, userData } = useAuth();
@@ -7,15 +8,15 @@ function Edit() {
   const [password, setPasswordInput] = useState("");
 
   const handleSetPassword = async () => {
-    if (!password) return alert("Enter a password");
+    if (!password) return toast.error("Enter a password");
 
     const res = await setPassword(password);
 
     if (res?.status === "success") {
-      alert("Password set successfully!");
+      toast.success("Password set successfully!");
       setPasswordInput("");
     } else {
-      alert(res?.message || "Failed to set password");
+      toast.error(res?.message || "Failed to set password");
     }
   };
 

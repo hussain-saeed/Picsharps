@@ -1,3 +1,5 @@
+import { BACKEND_URL } from "../../../api";
+
 export const adjustImage = async ({
   sourceImageId,
   imageUrl,
@@ -8,7 +10,7 @@ export const adjustImage = async ({
 }) => {
   try {
     const res = await fetch(
-      "https://picsharps-api.onrender.com/api/v1/image/adjust-colors",
+      `${BACKEND_URL}/image/adjust-colors`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },

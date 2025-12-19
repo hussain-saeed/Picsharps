@@ -2,7 +2,7 @@ import { createRoot } from "react-dom/client";
 import AppRoutes from "./AppRoutes";
 import { AuthProvider } from "./features/auth/AuthProvider";
 import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css"; // ⚠️ مهم: إضافة الـ CSS
+import "react-toastify/dist/ReactToastify.css";
 import "./index.css";
 
 createRoot(document.getElementById("root")).render(

@@ -14,6 +14,7 @@ import French from "../i18n/components/header/french.json";
 import Arabic from "../i18n/components/header/arabic.json";
 import { useAuth } from "../features/auth/AuthProvider";
 import { RxAvatar } from "react-icons/rx";
+import { FaUser } from "react-icons/fa";
 
 const translations = { English, French, Arabic };
 
@@ -221,20 +222,33 @@ export default function Header({ setActiveView }) {
               </Link>
             ))}
 
-            <button
-              style={{
-                padding: "5px 20px",
-                background: "var(--gradient-color)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                border: "1px solid #00d0ff",
-                borderRadius: "30px",
-                fontWeight: "600",
-                cursor: "pointer",
-              }}
-            >
-              {t.login}
-            </button>
+            {userData ? (
+              <Link
+                to="/profile"
+                style={{
+                }}
+                className="mt-2.5 flex gap-1"
+              >
+                <FaUser style={{ fontSize: "22px" }} />
+                <span  style={{ fontSize: "17px" }} >Profile</span>
+              </Link>
+            ) : (
+              <button
+                style={{
+                  padding: "5px 20px",
+                  background: "var(--gradient-color)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  border: "1px solid #00d0ff",
+                  borderRadius: "30px",
+                  fontWeight: "600",
+                  cursor: "pointer",
+                }}
+                onClick={() => openLoginPopup()}
+              >
+                {t.login}
+              </button>
+            )}
           </div>
         )}
       </Container>

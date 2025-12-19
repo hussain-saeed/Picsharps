@@ -10,7 +10,7 @@ const data1 = [
       { name: "Remove Background", to: "/remove-background" },
       { name: "Blur Image", to: "/blur-image" },
       { name: "Oil Paint Effect", to: "/oil-paint-effect" },
-      { name: "Object removal", to: "/object-removal" },
+      { name: "Object Removal", to: "/object-removal" },
     ],
   },
   {

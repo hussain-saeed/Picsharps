@@ -1,7 +1,9 @@
+import { BACKEND_URL } from "../../../api";
+
 export const blurImage = async ({ sourceImageId, imageUrl, amount }) => {
   try {
     const res = await fetch(
-      "https://picsharps-api.onrender.com/api/v1/image/blur",
+      `${BACKEND_URL}/image/blur`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },

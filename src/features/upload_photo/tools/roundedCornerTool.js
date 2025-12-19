@@ -1,3 +1,5 @@
+import { BACKEND_URL } from "../../../api";
+
 export const roundedCornerImage = async ({
   sourceImageId,
   imageUrl,
@@ -5,7 +7,7 @@ export const roundedCornerImage = async ({
 }) => {
   try {
     const res = await fetch(
-      "https://picsharps-api.onrender.com/api/v1/image/rounded-corners",
+      `${BACKEND_URL}/image/rounded-corners`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },

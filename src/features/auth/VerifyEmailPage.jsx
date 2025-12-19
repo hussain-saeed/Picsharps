@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "./AuthProvider";
+import { toast } from "react-toastify";
 
 const VerifyEmailPage = () => {
   const { verifyEmail } = useAuth();
@@ -14,9 +15,9 @@ const VerifyEmailPage = () => {
       const res = await verifyEmail(token, id);
 
       if (res?.status === "success") {
-        alert(res.message || "Email verified successfully!");
+        toast.success(res.message || "Email verified successfully!");
       } else {
-        alert(res?.message || "Verification failed");
+        toast.error(res?.message || "Verification failed");
       }
 
       window.location.href = "/";

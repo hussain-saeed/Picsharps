@@ -1,12 +1,11 @@
 import React from "react";
 import { useAuth } from "./AuthProvider";
-import { Navigate } from "react-router-dom"; // لو بتستخدم react-router
+import { Navigate } from "react-router-dom";
 
-// رابر لأي كومبوننت محتاج حماية
 const ProtectedRoute = ({ children }) => {
   const { userData } = useAuth();
 
-  if (!userData) return <Navigate to="/" />; // لو مش لوجين يرجع للهوم
+  if (!userData) return <Navigate to="/" />;
 
   return children;
 };

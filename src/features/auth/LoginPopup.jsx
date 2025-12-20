@@ -112,15 +112,15 @@ const LoginPopup = () => {
                   <div
                     onClick={loginWithGoogle}
                     style={{
-                      padding: "12px",
-                      width: "80%",
+                      padding: "10px",
+                      width: "85%",
                       border: "1px solid rgba(215, 215, 215, 1)",
                       display: "flex",
                       justifyContent: "center",
                       alignItems: "center",
-                      gap: "20px",
+                      gap: "14px",
                       borderRadius: "10px",
-                      fontSize: "14px",
+                      fontSize: "13px",
                       fontWeight: "500",
                       marginBottom: "15px",
                       cursor: "pointer",

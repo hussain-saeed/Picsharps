@@ -451,7 +451,7 @@ const ObjectRemovalTool = () => {
                       alignItems: "center",
                       justifyContent: "center",
                     }}
-                    className="w-[300px] h-[300px] md:w-[400px] md:h-[400px] lg:w-[500px] lg:h-[500px]"
+                    className="w-[300px] h-[300px] md:w-[400px] md:h-[400px] lg:w-[500px] lg:h-[500px] excluded"
                   >
                     <img
                       ref={imageRef}

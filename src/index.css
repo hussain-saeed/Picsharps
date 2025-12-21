@@ -40,3 +40,13 @@ body {
 .scroll-mt-24 {
   scroll-margin-top: 6rem;
 }
+
+@media (min-width: 1024px) {
+  body {
+    zoom: 85%;
+  }
+
+  .excluded {
+    zoom: 117.65%;
+  }
+}

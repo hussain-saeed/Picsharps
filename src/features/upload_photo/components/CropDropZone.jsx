@@ -680,12 +680,14 @@ const CropDropZone = () => {
                 <div
                   style={{
                     position: "relative",
-                    display: "inline-block",
-                    background: "#000",
-                    overflow: "hidden",
-                    userSelect: "none",
+                      overflow: "hidden",
+                      userSelect: "none",
+                      backgroundColor: "black",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
                   }}
-                  className="w-[300px] h-[300px] md:w-[400px] md:h-[400px] lg:w-[500px] lg:h-[500px]"
+                  className="w-[300px] h-[300px] md:w-[400px] md:h-[400px] lg:w-[500px] lg:h-[500px] excluded"
                 >
                   <img
                     id="crop-image"
@@ -704,11 +706,11 @@ const CropDropZone = () => {
                     onMouseDown={handleMouseDown}
                     style={{
                       position: "absolute",
-                      left: `${cropArea.x}px`,
-                      top: `${cropArea.y}px`,
+                      left: `${imageSize.offsetLeft + cropArea.x}px`,
+                      top: `${imageSize.offsetTop + cropArea.y}px`,
                       width: `${cropArea.width}px`,
                       height: `${cropArea.height}px`,
-                      border: "2px solid #1976d2",
+                      border: "5.5px solid #1976d2",
                       cursor: "move",
                       boxShadow: "0 0 0 9999px rgba(0,0,0,0.5)",
                     }}

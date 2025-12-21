@@ -537,6 +537,7 @@ function Pricing() {
                 borderRadius: "50px",
                 fontWeight: 600,
               }}
+              to={"/all-tools"}
             >
               <span>Get Started Free</span>
               {isRTL ? <FaLongArrowAltLeft /> : <FaLongArrowAltRight />}

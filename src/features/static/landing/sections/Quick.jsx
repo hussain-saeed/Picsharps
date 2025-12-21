@@ -12,7 +12,7 @@ const data = [
     description: "Remove backgrounds instantly with powerful AI",
   },
   {
-    link: "/remove-object-from-photo",
+    link: "/object-removal",
     image: "/images/remove-object.png",
     title: "Remove Object from Photo",
     description: "Erase unwanted objects seamlessly in seconds",
@@ -30,7 +30,7 @@ const data = [
     description: "Turn your photos into fun cartoon-style art",
   },
   {
-    link: "/collage-maker",
+    link: "/create-collage",
     image: "/images/collage-maker.png",
     title: "Collage Maker",
     description: "Combine multiple photos into beautiful layouts",

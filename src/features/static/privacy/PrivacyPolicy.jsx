@@ -379,6 +379,7 @@ function PrivacyPolicy() {
               <ReusableButton
                 text="Contact us"
                 position={isRTL ? "right" : "left"}
+                onClick={() => (window.location.href = "/contact-us")}
               />
             </div>
           </ContentSection>

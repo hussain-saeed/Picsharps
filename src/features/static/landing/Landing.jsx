@@ -96,12 +96,12 @@ function Landing() {
                 staticImgSrc="/images/college-6.jpg"
                 title="Build Custom Collages with Ease"
                 description="Mix, match, and tell your story with our easy-to-use collage maker. Choose your layout, drag in your favorite images, and let your creativity shine. Perfect for social media, scrapbooks, or sharing memories with style!"
-                linkTo="collage-maker"
+                linkTo="create-collage"
                 innerLinkText="Try it now for free"
               />
             </Container>
           </div>
-          
+
           <div className="pb-20 bg-(--secondary-section-color) text-center">
             <Link
               to="/all-tools"

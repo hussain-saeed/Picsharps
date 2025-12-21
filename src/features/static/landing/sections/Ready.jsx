@@ -45,6 +45,7 @@ function Ready() {
               isRTL ? "flex-row-reverse" : ""
             }`}
             style={{ borderRadius: "50px" }}
+            to={"/all-tools"}
           >
             <img src="/images/sparkles.png" />
             <span style={{ color: "rgba(0, 0, 0, 1)", fontWeight: "600" }}>

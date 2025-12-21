@@ -476,7 +476,11 @@ function TermsOfService() {
                 If you have any questions about these Terms of Service, please
                 contact us.
               </ParagraphHasBold>
-              <ReusableButton text="Contact us" position="left" />
+              <ReusableButton
+                text="Contact us"
+                position="left"
+                onClick={() => (window.location.href = "/contact-us")}
+              />
             </div>
           </ContentSection>
         </div>

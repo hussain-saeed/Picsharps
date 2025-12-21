@@ -1421,7 +1421,7 @@ const DropZone = () => {
                         )}
 
                         {currentTool === TOOL_TYPES.ADJUST && (
-                          <>
+                          <div className="w-[200px]">
                             {Object.entries(toolConfig.options).map(
                               ([key, config]) => (
                                 <OptionSlider
@@ -1443,7 +1443,7 @@ const DropZone = () => {
                                 />
                               )
                             )}
-                          </>
+                          </div>
                         )}
                       </div>
                     </div>

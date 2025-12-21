@@ -28,9 +28,9 @@ export const OptionSlider = ({
     timerRef.current = setTimeout(() => {
       if (lastValueRef.current !== newValue) {
         lastValueRef.current = newValue;
-        onCommitChange(newValue); 
+        onCommitChange(newValue);
       }
-    }, 1000);
+    }, 1200);
   };
 
   return (

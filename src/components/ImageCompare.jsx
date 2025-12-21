@@ -21,7 +21,7 @@ export default function ImageCompare({
 
   const animate = () => {
     setPos((prev) => {
-      let next = prev + 0.7 * directionRef.current;
+      let next = prev + 0.4 * directionRef.current;
       if (next >= 100) directionRef.current = -1;
       if (next <= 0) directionRef.current = 1;
       return next;

@@ -5,6 +5,10 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./index.css";
 
+if ("scrollRestoration" in window.history) {
+  window.history.scrollRestoration = "manual";
+}
+
 createRoot(document.getElementById("root")).render(
   <AuthProvider>
     <AppRoutes />

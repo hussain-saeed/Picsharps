@@ -5,6 +5,7 @@ import ImageCompare from "../../../components/ImageCompare";
 import { useAuth } from "../../auth/AuthProvider";
 import { TOOL_CONFIG } from "../config/toolConfig";
 import { BACKEND_URL } from "../../../api";
+import { useScrollToVH } from "../../../hooks/useScrollToVH";
 
 const COMPONENT_STATES = {
   IDLE: "idle",
@@ -27,6 +28,7 @@ const ObjectRemovalTool = () => {
   const [processedImage, setProcessedImage] = useState(null);
   const [toolKey, setToolKey] = useState(null);
   const [status, setStatus] = useState(COMPONENT_STATES.IDLE);
+  const scrollToVH = useScrollToVH();
 
   // Drawing states
   const [isDrawing, setIsDrawing] = useState(false);
@@ -39,6 +41,8 @@ const ObjectRemovalTool = () => {
   });
 
   const resetToInitialState = () => {
+    scrollToVH(5);
+
     setUploadedFile(null);
     setUploadedImageUrl(null);
     setSourceImageId(null);
@@ -74,6 +78,7 @@ const ObjectRemovalTool = () => {
 
     const formData = new FormData();
     formData.append("image", file);
+    scrollToVH(30);
 
     try {
       setStatus(COMPONENT_STATES.UPLOADING);
@@ -201,6 +206,8 @@ const ObjectRemovalTool = () => {
   };
 
   const processImage = async () => {
+    scrollToVH(30);
+
     if (!sourceImageId || !uploadedImageUrl) {
       return;
     }

@@ -8,6 +8,7 @@ import { Download, Play, RefreshCw } from "lucide-react";
 import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import { useAuth } from "../../auth/AuthProvider";
 import { BACKEND_URL } from "../../../api";
+import { useScrollToVH } from "../../../hooks/useScrollToVH";
 
 const COMPONENT_STATES = {
   IDLE: "idle",
@@ -45,6 +46,7 @@ const CropDropZone = () => {
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const [imageSize, setImageSize] = useState({ width: 0, height: 0 });
   const [aspectRatio, setAspectRatio] = useState("free");
+  const scrollToVH = useScrollToVH();
 
   useEffect(() => {
     const LS_KEY = `dropzone_last_result`;
@@ -126,6 +128,8 @@ const CropDropZone = () => {
   }, [aspectRatio, imageSize.width]);
 
   const resetToInitialState = () => {
+    scrollToVH(5);
+
     setUploadedFile(null);
     setUploadedImageUrl(null);
     setSourceImageId(null);
@@ -154,17 +158,15 @@ const CropDropZone = () => {
 
     const formData = new FormData();
     formData.append("image", file);
+    scrollToVH(30);
 
     try {
       setStatus(COMPONENT_STATES.UPLOADING);
 
-      const uploadRes = await fetch(
-        `${BACKEND_URL}/image/upload`,
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
+      const uploadRes = await fetch(`${BACKEND_URL}/image/upload`, {
+        method: "POST",
+        body: formData,
+      });
 
       const uploadData = await uploadRes.json();
 
@@ -351,6 +353,8 @@ const CropDropZone = () => {
   }, [isDragging, isResizing, cropArea, dragStart, imageSize]);
 
   const processImage = async () => {
+    scrollToVH(30);
+
     if (!sourceImageId || !uploadedImageUrl || !cropArea) {
       toast.error("Please select a crop area");
       return;
@@ -385,16 +389,13 @@ const CropDropZone = () => {
         crop: "crop",
       };
 
-      const res = await fetch(
-        `${BACKEND_URL}/image/crop`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(requestBody),
-        }
-      );
+      const res = await fetch(`${BACKEND_URL}/image/crop`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestBody),
+      });
 
       const data = await res.json();
 
@@ -441,23 +442,19 @@ const CropDropZone = () => {
     try {
       await downloadImage(processedImage, `${currentTool}-result.png`);
 
-      await fetch(
-        `${BACKEND_URL}/image/save-result`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${accessToken}`,
-          },
-          credentials: "include",
-          body: JSON.stringify({
-            sourceImageId,
-            resultUrl: processedImage,
-            toolKey,
-          }),
-        }
-      );
-
+      await fetch(`${BACKEND_URL}/image/save-result`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          sourceImageId,
+          resultUrl: processedImage,
+          toolKey,
+        }),
+      });
     } catch (err) {
       console.error("Download or saving error:", err);
     }

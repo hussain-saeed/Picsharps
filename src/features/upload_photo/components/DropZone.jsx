@@ -34,6 +34,7 @@ import { SketchPicker } from "react-color";
 import { useAuth } from "../../auth/AuthProvider";
 import { OptionSlider } from "./OptionSlider";
 import { BACKEND_URL } from "../../../api";
+import { useScrollToVH } from "../../../hooks/useScrollToVH";
 
 const TOOL_TYPES = {
   ENHANCE: "ai-image-enhancer", // Image enhancement tool
@@ -82,6 +83,7 @@ const DropZone = () => {
   const [options, setOptions] = useState({}); // Tool-specific options
   const [renderedResultBefore, setRenderedResultBefore] = useState(false); // Track if result was shown before
   const { accessToken } = useAuth();
+  const scrollToVH = useScrollToVH();
 
   useEffect(() => {
     // LocalStorage keys for state persistence
@@ -181,6 +183,8 @@ const DropZone = () => {
   };
 
   const resetComponent = () => {
+    scrollToVH(5);
+
     resetToInitialState(); // Reset state
     // Clean up localStorage entries
     localStorage.removeItem(`dropzone_last_result`);
@@ -201,6 +205,7 @@ const DropZone = () => {
       // Prepare FormData for file upload
       const formData = new FormData();
       formData.append("image", file); // Append file with key "image"
+      scrollToVH(30);
 
       try {
         // Set uploading state
@@ -248,6 +253,8 @@ const DropZone = () => {
   );
 
   const processImage = useCallback(async () => {
+    scrollToVH(30);
+
     // Validation: ensure we have required data
     if (!sourceImageId || !uploadedImageUrl) {
       toast.error("No image available for processing");

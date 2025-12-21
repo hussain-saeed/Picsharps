@@ -436,7 +436,7 @@ const ObjectRemovalTool = () => {
           status !== COMPONENT_STATES.PROCESSING && (
             <>
               <div style={{ marginBottom: "30px" }}>
-                <h3 className="mb-12 text-lg font-semibold">
+                <h3 className="mb-6 text-lg font-semibold">
                   Select the object to remove!
                 </h3>
 

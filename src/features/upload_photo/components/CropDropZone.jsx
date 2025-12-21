@@ -128,7 +128,7 @@ const CropDropZone = () => {
   }, [aspectRatio, imageSize.width]);
 
   const resetToInitialState = () => {
-    scrollToVH(5);
+    scrollToVH(0);
 
     setUploadedFile(null);
     setUploadedImageUrl(null);
@@ -823,80 +823,83 @@ const CropDropZone = () => {
                       borderRadius: "10px",
                       marginBottom: "20px",
                     }}
+                    className="space-y-6"
                   >
-                    <Box>
-                      <FormControl fullWidth>
-                        <InputLabel>Aspect Ratio</InputLabel>
-                        <Select
-                          value={aspectRatio}
-                          label="Aspect Ratio"
-                          onChange={(e) => setAspectRatio(e.target.value)}
+                    <>
+                      <Box>
+                        <FormControl fullWidth>
+                          <InputLabel>Aspect Ratio</InputLabel>
+                          <Select
+                            value={aspectRatio}
+                            label="Aspect Ratio"
+                            onChange={(e) => setAspectRatio(e.target.value)}
+                          >
+                            <MenuItem value="free">Free (Any Size)</MenuItem>
+                            <MenuItem value="1:1">Square (1:1)</MenuItem>
+                            <MenuItem value="16:9">Widescreen (16:9)</MenuItem>
+                            <MenuItem value="9:16">Portrait (9:16)</MenuItem>
+                            <MenuItem value="4:3">Standard (4:3)</MenuItem>
+                            <MenuItem value="3:4">Portrait (3:4)</MenuItem>
+                            <MenuItem value="21:9">Ultrawide (21:9)</MenuItem>
+                            <MenuItem value="3:2">Classic (3:2)</MenuItem>
+                            <MenuItem value="2:3">Portrait (2:3)</MenuItem>
+                            <MenuItem value="5:4">Monitor (5:4)</MenuItem>
+                            <MenuItem value="4:5">Portrait (4:5)</MenuItem>
+                          </Select>
+                        </FormControl>
+                      </Box>
+
+                      <button
+                        onClick={processImage}
+                        style={{
+                          marginTop: "20px",
+                          width: "100%",
+                          padding: "12px",
+                          background: "var(--gradient-color)",
+                          color: "white",
+                          border: "none",
+                          borderRadius: "8px",
+                          fontSize: "16px",
+                          fontWeight: "600",
+                          cursor: "pointer",
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          gap: "8px",
+                        }}
+                      >
+                        <Play size={18} />
+                        Start Processing
+                      </button>
+                    </>
+
+                    {!processedImage && (
+                      <div
+                        style={{
+                          display: "flex",
+                          gap: "10px",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <button
+                          onClick={resetComponent}
+                          style={{
+                            padding: "10px 20px",
+                            background: "var(--gradient-color-2)",
+                            color: "white",
+                            border: "none",
+                            borderRadius: "5px",
+                            cursor: "pointer",
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "8px",
+                          }}
                         >
-                          <MenuItem value="free">Free (Any Size)</MenuItem>
-                          <MenuItem value="1:1">Square (1:1)</MenuItem>
-                          <MenuItem value="16:9">Widescreen (16:9)</MenuItem>
-                          <MenuItem value="9:16">Portrait (9:16)</MenuItem>
-                          <MenuItem value="4:3">Standard (4:3)</MenuItem>
-                          <MenuItem value="3:4">Portrait (3:4)</MenuItem>
-                          <MenuItem value="21:9">Ultrawide (21:9)</MenuItem>
-                          <MenuItem value="3:2">Classic (3:2)</MenuItem>
-                          <MenuItem value="2:3">Portrait (2:3)</MenuItem>
-                          <MenuItem value="5:4">Monitor (5:4)</MenuItem>
-                          <MenuItem value="4:5">Portrait (4:5)</MenuItem>
-                        </Select>
-                      </FormControl>
-                    </Box>
-
-                    <button
-                      onClick={processImage}
-                      style={{
-                        marginTop: "20px",
-                        width: "100%",
-                        padding: "12px",
-                        background: "var(--gradient-color)",
-                        color: "white",
-                        border: "none",
-                        borderRadius: "8px",
-                        fontSize: "16px",
-                        fontWeight: "600",
-                        cursor: "pointer",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        gap: "8px",
-                      }}
-                    >
-                      <Play size={18} />
-                      Start Processing
-                    </button>
-                  </div>
-                )}
-
-                {!processedImage && (
-                  <div
-                    style={{
-                      display: "flex",
-                      gap: "10px",
-                      justifyContent: "center",
-                    }}
-                  >
-                    <button
-                      onClick={resetComponent}
-                      style={{
-                        padding: "10px 20px",
-                        background: "var(--gradient-color-2)",
-                        color: "white",
-                        border: "none",
-                        borderRadius: "5px",
-                        cursor: "pointer",
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "8px",
-                      }}
-                    >
-                      <RefreshCw size={18} />
-                      Change Photo
-                    </button>
+                          <RefreshCw size={18} />
+                          Change Photo
+                        </button>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>

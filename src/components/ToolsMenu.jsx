@@ -40,8 +40,8 @@ const data2 = [
     image: "/images/edit-1.png",
     links: [
       { name: "Resize Image", to: "/resize-image" },
-      { name: "Flip Image", to: "/flip-image" },
-      { name: "Rotate Image", to: "/rotate-image" },
+      // { name: "Flip Image", to: "/flip-image" },
+      // { name: "Rotate Image", to: "/rotate-image" },
       { name: "Create Collage", to: "/create-collage" },
     ],
   },

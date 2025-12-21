@@ -264,7 +264,7 @@ function AllTools() {
             />
           </div>
 
-          <div className="mt-20">
+          {/*<div className="mt-20">
             <PresentService
               isTextFirst={true}
               before="/images/flip.png"
@@ -277,7 +277,7 @@ function AllTools() {
               linkTo="/flip-image"
               innerLinkText="Try it Now"
             />
-          </div>
+          </div>*/}
         </Container>
       </div>
 

@@ -10,7 +10,6 @@ const data = [
     links: [
       { to: "/all-tools", text: "Features" },
       { to: "/pricing", text: "Pricing" },
-      { to: "", text: "Demo" },
     ],
   },
   {

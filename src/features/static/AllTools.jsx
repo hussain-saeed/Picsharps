@@ -145,21 +145,6 @@ function AllTools() {
               innerLinkText="Try it Now"
             />
           </div> */}
-
-          <div className="mt-20">
-            <PresentService
-              isTextFirst={true}
-              before="/images/filter.png"
-              after="/images/filter-2.png"
-              aspectRatio="12/8"
-              fit="fill"
-              category="ENHANCE & CLEANUP"
-              title="Photo Filters"
-              description="Apply professionally crafted color presets and creative looks to change mood and style instantly. Filters range from subtle cinematic corrections to punchy social-media-ready looks, each preserving skin tones and dynamic range. Each preset includes adjustable intensity so you can blend the filter with the original image for natural results. Save custom combinations as user presets for consistent branding across batches. Great for quick styling, A/B testing looks, and keeping a cohesive aesthetic across your content."
-              linkTo="/grayscale-image"
-              innerLinkText="Try it Now"
-            />
-          </div>
         </Container>
       </div>
 
@@ -172,7 +157,7 @@ function AllTools() {
         <Container>
           <TitleBlock
             subtitle={"CREATIVE TRANSFORMS"}
-            title="CREATIVE & FUN"
+            title="Artistic Effects & Filters"
             description="Unlock playful and artistic options to reimagine photos with stylized filters, cartoon conversions, and creative layouts. These tools make it easy to generate shareable content, unique assets, and eye-catching visuals for social media or campaigns"
           />
 
@@ -183,13 +168,30 @@ function AllTools() {
               after="/images/to-cartoon-2.jpg"
               aspectRatio="12/8"
               fit="fill"
-              category="CREATIVE & FUN"
+              category="ARTISTIC EFFECTS & FILTERS"
               title="Photo to Cartoon"
               description="Convert portraits or photos into polished cartoon or illustration styles using neural style transfer tuned for faces and textures. Outputs include multiple style presets (line-art, flat-color, painterly) and adjustable strength for subtle to bold transformations. The tool preserves facial proportions and key details while translating shading and edges into an illustrated look. Users can tweak color palettes and line thickness, then export at high resolution for avatars or social posts. Great for playful branding, profile pics, and viral content."
               linkTo="/photo-to-cartoon"
               innerLinkText="Try it Now"
             />
           </div>
+
+          {
+            <div className="mt-20">
+              <PresentService
+                isTextFirst={true}
+                before="/images/filter.png"
+                after="/images/filter-2.png"
+                aspectRatio="12/8"
+                fit="fill"
+                category="ARTISTIC EFFECTS & FILTERS"
+                title="Photo Filters"
+                description="Apply professionally crafted color presets and creative looks to change mood and style instantly. Filters range from subtle cinematic corrections to punchy social-media-ready looks, each preserving skin tones and dynamic range. Each preset includes adjustable intensity so you can blend the filter with the original image for natural results. Save custom combinations as user presets for consistent branding across batches. Great for quick styling, A/B testing looks, and keeping a cohesive aesthetic across your content."
+                linkTo="/grayscale-image"
+                innerLinkText="Try it Now"
+              />
+            </div>
+          }
 
           {/* <div className="mt-20">
             <PresentService
@@ -205,19 +207,6 @@ function AllTools() {
               innerLinkText="Try it Now"
             />
           </div> */}
-
-          <div className="mt-20">
-            <PresentService
-              isTextFirst={true}
-              isStatic={true}
-              staticImgSrc="/images/college-6.jpg"
-              category="CREATIVE & FUN"
-              title="Collage Maker"
-              description="Combine multiple photos into cohesive, well-composed collages using modern templates and flexible grid controls. Drag-and-drop placement, rounded corners, and consistent spacing keep the layout neat while smart cropping preserves important subject areas. Templates include thematic choices (travel, portfolio, product grid) and adjustable aspect ratios for Instagram posts or story formats. Users can add optional frames, subtle shadows, and color-coordinated backgrounds for polish. Excellent for moodboards, social campaigns, and multi-photo storytelling."
-              linkTo="/create-collage"
-              innerLinkText="Try it Now"
-            />
-          </div>
         </Container>
       </div>
 
@@ -236,7 +225,7 @@ function AllTools() {
 
           <div className="mt-10">
             <PresentService
-              isTextFirst={true}
+              isTextFirst={false}
               before="/images/resize.jpg"
               after="/images/resize-2.jpg"
               aspectRatio="12/8"
@@ -251,7 +240,7 @@ function AllTools() {
 
           <div className="mt-20">
             <PresentService
-              isTextFirst={false}
+              isTextFirst={true}
               before="/images/crop.jpg"
               after="/images/crop-2.jpg"
               aspectRatio="12/8"
@@ -260,6 +249,19 @@ function AllTools() {
               title="Crop Image"
               description="Recompose photos with precision using freeform crop, preset ratios, and rule-of-thirds guides to improve framing instantly. Auto-suggestions highlight better crops based on subject positioning and visual balance. Edge-aware cropping keeps important areas visible and allows non-destructive crops saved as versions. Quick keyboard shortcuts and snap-to guides speed up iterative adjustments during editing sessions. Ideal for tightening composition for thumbnails, profile pictures, and layout-ready assets."
               linkTo="/crop-image"
+              innerLinkText="Try it Now"
+            />
+          </div>
+
+          <div className="mt-20">
+            <PresentService
+              isTextFirst={false}
+              isStatic={true}
+              staticImgSrc="/images/college-6.jpg"
+              category="BASIC EDITS"
+              title="Collage Maker"
+              description="Combine multiple photos into cohesive, well-composed collages using modern templates and flexible grid controls. Drag-and-drop placement, rounded corners, and consistent spacing keep the layout neat while smart cropping preserves important subject areas. Templates include thematic choices (travel, portfolio, product grid) and adjustable aspect ratios for Instagram posts or story formats. Users can add optional frames, subtle shadows, and color-coordinated backgrounds for polish. Excellent for moodboards, social campaigns, and multi-photo storytelling."
+              linkTo="/create-collage"
               innerLinkText="Try it Now"
             />
           </div>

@@ -512,7 +512,10 @@ const DropZone = () => {
   });
 
   const availableTools = Object.keys(TOOL_CONFIG)
-    .filter((tool) => tool !== currentTool) // استبعاد الأداة الحالية
+    .filter(
+      (tool) =>
+        tool !== currentTool && tool !== "flip-image" && tool !== "rotate-image"
+    )
     .map((tool) => ({
       path: tool,
       label: TOOL_CONFIG[tool].name,

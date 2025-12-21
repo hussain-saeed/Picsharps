@@ -145,8 +145,9 @@ const DropZone = () => {
     if (!toolConfig || !toolConfig.hasOptions) return;
     if (status === COMPONENT_STATES.PROCESSING) return;
 
-    // Background removal tool requires manual processing due to complexity
+    // Background removal and resize tool requires manual processing due to complexity
     if (currentTool === TOOL_TYPES.REMOVE) return;
+    if (currentTool === TOOL_TYPES.RESIZE) return;
 
     // Check if all options have valid values (not null)
     if (Object.values(options).includes(null)) return;
@@ -206,13 +207,10 @@ const DropZone = () => {
         setStatus(COMPONENT_STATES.UPLOADING);
 
         // Make upload request to image processing API
-        const uploadRes = await fetch(
-          `${BACKEND_URL}/image/upload`,
-          {
-            method: "POST",
-            body: formData, // Send FormData with file
-          }
-        );
+        const uploadRes = await fetch(`${BACKEND_URL}/image/upload`, {
+          method: "POST",
+          body: formData, // Send FormData with file
+        });
 
         // Parse response JSON
         const uploadData = await uploadRes.json();
@@ -451,23 +449,19 @@ const DropZone = () => {
       await downloadImage(processedImage, `${currentTool}-result.png`);
 
       // Then save on backend
-      await fetch(
-        `${BACKEND_URL}/image/save-result`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${accessToken}`,
-          },
-          credentials: "include",
-          body: JSON.stringify({
-            sourceImageId,
-            resultUrl: processedImage,
-            toolKey,
-          }),
-        }
-      );
-
+      await fetch(`${BACKEND_URL}/image/save-result`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          sourceImageId,
+          resultUrl: processedImage,
+          toolKey,
+        }),
+      });
     } catch (err) {
       console.error("Download or saving error:", err);
     }

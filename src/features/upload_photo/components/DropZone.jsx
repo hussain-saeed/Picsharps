@@ -708,7 +708,7 @@ const DropZone = () => {
                 </div>
               </div>
 
-              {(showOptions ||
+              {((showOptions && toolConfig.hasOptions) ||
                 (uploadedImageUrl &&
                   toolConfig &&
                   !processedImage &&
@@ -726,7 +726,7 @@ const DropZone = () => {
                       }}
                       className="space-y-12"
                     >
-                      {showOptions && (
+                      {showOptions && toolConfig.hasOptions && (
                         <>
                           <h4
                             style={{

@@ -66,7 +66,7 @@ function Landing() {
                 fit="fill"
                 title="Remove Unwanted Objects"
                 description="Clean up your photos in seconds with our smart AI object remover. Whether it's a stray person, a distracting item, or background clutter—just highlight it and let the magic happen. Your image stays flawless, your focus stays sharp."
-                linkTo="/remove-object-from-photo"
+                linkTo="/object-removal"
                 innerLinkText="Try it now for free"
               />
             </Container>

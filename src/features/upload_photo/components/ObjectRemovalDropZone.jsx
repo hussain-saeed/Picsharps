@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Download, RefreshCw, Eraser, Play, Box } from "lucide-react";
 import { OptionSlider } from "./OptionSlider";
 import ImageCompare from "../../../components/ImageCompare";
@@ -78,13 +78,10 @@ const ObjectRemovalTool = () => {
     try {
       setStatus(COMPONENT_STATES.UPLOADING);
 
-      const uploadRes = await fetch(
-        `${BACKEND_URL}/image/upload`,
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
+      const uploadRes = await fetch(`${BACKEND_URL}/image/upload`, {
+        method: "POST",
+        body: formData,
+      });
 
       const uploadData = await uploadRes.json();
 
@@ -104,24 +101,62 @@ const ObjectRemovalTool = () => {
     }
   };
 
+  const updateBrushCursor = () => {
+    if (!canvasRef.current) return;
+
+    const size = brushSize;
+
+    const cursorSvg = `
+    <svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}">
+      <circle
+        cx="${size / 2}"
+        cy="${size / 2}"
+        r="${size / 2 - 1}"
+        fill="rgba(0, 136, 255, 0.25)"
+        stroke="white"
+        stroke-width="2"
+      />
+    </svg>
+  `;
+
+    const encoded = encodeURIComponent(cursorSvg);
+
+    canvasRef.current.style.cursor = `url("data:image/svg+xml,${encoded}") ${
+      size / 2
+    } ${size / 2}, crosshair`;
+  };
+
   const handleImageLoad = (e) => {
     const img = e.target;
+    const canvas = canvasRef.current;
+
+    if (!canvas) return;
+
+    const imgRect = img.getBoundingClientRect();
+    const parentRect = img.parentElement.getBoundingClientRect();
+
+    canvas.width = imgRect.width;
+    canvas.height = imgRect.height;
+
+    canvas.style.left = `${imgRect.left - parentRect.left}px`;
+    canvas.style.top = `${imgRect.top - parentRect.top}px`;
+
+    const ctx = canvas.getContext("2d");
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     setImageSize({
-      width: img.width,
-      height: img.height,
+      width: imgRect.width,
+      height: imgRect.height,
       naturalWidth: img.naturalWidth,
       naturalHeight: img.naturalHeight,
     });
 
-    if (canvasRef.current) {
-      canvasRef.current.width = img.width;
-      canvasRef.current.height = img.height;
-
-      const ctx = canvasRef.current.getContext("2d");
-      ctx.clearRect(0, 0, img.width, img.height);
-    }
+    updateBrushCursor();
   };
+
+  useEffect(() => {
+    updateBrushCursor();
+  }, [brushSize]);
 
   const getMousePos = (e) => {
     const canvas = canvasRef.current;
@@ -205,13 +240,10 @@ const ObjectRemovalTool = () => {
       formData.append("sourceImageId", sourceImageId);
       formData.append("imageUrl", uploadedImageUrl);
 
-      const res = await fetch(
-        `${BACKEND_URL}/image/object-removal`,
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
+      const res = await fetch(`${BACKEND_URL}/image/object-removal`, {
+        method: "POST",
+        body: formData,
+      });
 
       const data = await res.json();
 
@@ -244,23 +276,19 @@ const ObjectRemovalTool = () => {
     try {
       await downloadImage(processedImage, `object-removal-result.png`);
 
-      await fetch(
-        `${BACKEND_URL}/image/save-result`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${accessToken}`,
-          },
-          credentials: "include",
-          body: JSON.stringify({
-            sourceImageId,
-            resultUrl: processedImage,
-            toolKey,
-          }),
-        }
-      );
-
+      await fetch(`${BACKEND_URL}/image/save-result`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          sourceImageId,
+          resultUrl: processedImage,
+          toolKey,
+        }),
+      });
     } catch (err) {
       console.error("Download or saving error:", err);
     }
@@ -396,7 +424,6 @@ const ObjectRemovalTool = () => {
       )}
 
       <div style={{ marginTop: "30px" }}>
-
         {uploadedImageUrl &&
           status !== COMPONENT_STATES.UPLOADING &&
           status !== COMPONENT_STATES.PROCESSING && (
@@ -410,10 +437,12 @@ const ObjectRemovalTool = () => {
                   <div
                     style={{
                       position: "relative",
-                      display: "inline-block",
                       overflow: "hidden",
                       userSelect: "none",
                       backgroundColor: "black",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
                     }}
                     className="w-[300px] h-[300px] md:w-[400px] md:h-[400px] lg:w-[500px] lg:h-[500px]"
                   >
@@ -426,20 +455,20 @@ const ObjectRemovalTool = () => {
                         maxWidth: "100%",
                         maxHeight: "100%",
                         objectFit: "contain",
+                        display: "block",
                       }}
                     />
 
                     <canvas
                       ref={canvasRef}
+                      onMouseEnter={updateBrushCursor}
                       onMouseDown={handleMouseDown}
                       onMouseMove={handleMouseMove}
                       onMouseUp={handleMouseUp}
                       onMouseLeave={handleMouseUp}
                       style={{
                         position: "absolute",
-                        top: 0,
-                        left: 0,
-                        cursor: "crosshair",
+                        pointerEvents: "auto",
                       }}
                     />
                   </div>

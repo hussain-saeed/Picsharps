@@ -25,8 +25,7 @@ function Hero() {
         >
           DESIGN EASILY
         </h1>
-        <p
-          className="w-[85%] lg:w-[60%]"
+        <div
           style={{
             marginBottom: "62px",
             color: "rgba(0, 0, 0, 1)",
@@ -34,9 +33,12 @@ function Hero() {
             textAlign: "center",
           }}
         >
-          Enhance, retouch, remove backgrounds, and create stunning visuals in
-          seconds — no design skills needed.
-        </p>
+          <p>
+            Enhance, retouch, remove backgrounds, and create stunning visuals in
+            seconds.
+          </p>
+          <p>No design skills needed.</p>
+        </div>
 
         <div
           className={`flex justify-center items-center lg:justify-between flex-wrap gap-6 mb-[100px] ${
@@ -61,7 +63,7 @@ function Hero() {
               cursor: "pointer",
               borderRadius: "20px",
             }}
-            className="lg:w-[48.5%] w-[92%] lg:p-17 p-6"
+            className="lg:w-[48.5%] w-[92%] lg:p-10 xl:p-20 2xl:p-31 p-12"
           >
             <div>
               <div

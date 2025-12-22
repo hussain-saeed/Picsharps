@@ -388,7 +388,7 @@ const LoginPopup = () => {
           alignItems: "center",
           zIndex: 999,
         }}
-        className="bg-black/50 backdrop-blur-xs"
+        className="bg-black/65 backdrop-blur-xs excluded"
       />
 
       <div
@@ -399,7 +399,7 @@ const LoginPopup = () => {
           transform: "translate(-50%, -50%)",
           zIndex: 1000,
         }}
-        className="lg:w-[75%] w-[80%] relative"
+        className="max-w-[1200px] lg:w-[75%] w-[80%] relative"
       >
         <img
           src="/images/close.png"

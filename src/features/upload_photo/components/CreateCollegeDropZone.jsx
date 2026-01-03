@@ -4,6 +4,8 @@ import { FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 import { Play } from "lucide-react";
 import Spinner from "../../../components/Spinner";
 import { BACKEND_URL } from "../../../api";
+import { useAuth } from "../../auth/AuthProvider";
+import { Download } from "lucide-react";
 
 const templates = [
   {
@@ -38,6 +40,7 @@ const CollageMaker = () => {
   const [uploadedImages, setUploadedImages] = useState([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [resultImage, setResultImage] = useState(null);
+  const { accessToken } = useAuth();
 
   const currentTemplates = templates.find(
     (t) => t.slotCount === selectedSlotCount
@@ -142,6 +145,30 @@ const CollageMaker = () => {
     selectedTemplate && uploadedImages.length < selectedSlotCount;
   const canProcess =
     uploadedImages.length === selectedSlotCount && !isProcessing;
+
+  const downloadImage = async (url, filename = "processed-image.png") => {
+    const response = await fetch(url);
+    const blob = await response.blob();
+
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = filename;
+
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    URL.revokeObjectURL(link.href);
+  };
+
+  const saveResult = async () => {
+    try {
+      // Download locally
+      await downloadImage(resultImage, `create-collage-result.png`);
+    } catch (err) {
+      console.error("Download or saving error:", err);
+    }
+  };
 
   return (
     <div className="">
@@ -301,7 +328,7 @@ const CollageMaker = () => {
 
       {/* Start Process Button */}
       {selectedTemplate && (
-        <div className="mb-10 flex justify-center items-center gap-3">
+        <div className="mb-14 flex justify-center items-center gap-3">
           <button
             onClick={handleStartProcess}
             disabled={!canProcess}
@@ -329,6 +356,30 @@ const CollageMaker = () => {
               style={{ maxHeight: "500px" }}
             />
           </div>
+          {accessToken ? (
+            <button
+              onClick={() => saveResult()}
+              style={{
+                padding: "10px 18px",
+                background: "var(--gradient-color)",
+                color: "white",
+                border: "none",
+                borderRadius: "5px",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                gap: "8px",
+                fontSize: "15px",
+                fontWeight: 500,
+              }}
+              className="mt-8 mx-auto"
+            >
+              <Download size={18} />
+              Download Result
+            </button>
+          ) : (
+            ""
+          )}
         </div>
       )}
     </div>

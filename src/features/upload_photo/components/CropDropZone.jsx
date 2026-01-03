@@ -680,12 +680,12 @@ const CropDropZone = () => {
                 <div
                   style={{
                     position: "relative",
-                      overflow: "hidden",
-                      userSelect: "none",
-                      backgroundColor: "black",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
+                    overflow: "hidden",
+                    userSelect: "none",
+                    backgroundColor: "black",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
                   }}
                   className="w-[300px] h-[300px] md:w-[400px] md:h-[400px] lg:w-[500px] lg:h-[500px] excluded"
                 >
@@ -1032,32 +1032,36 @@ const CropDropZone = () => {
             </>
           )}
 
-          <button
-            onClick={saveResult}
-            style={{
-              padding: "10px 18px",
-              background: "var(--gradient-color)",
-              color: "white",
-              border: "none",
-              borderRadius: "5px",
-              cursor: "pointer",
-              display: "flex",
-              alignItems: "center",
-              gap: "8px",
-              fontSize: "15px",
-              fontWeight: 500,
-            }}
-          >
-            <Download size={18} />
-            Download Result
-          </button>
+          {accessToken ? (
+            <button
+              onClick={saveResult}
+              style={{
+                padding: "10px 18px",
+                background: "var(--gradient-color)",
+                color: "white",
+                border: "none",
+                borderRadius: "5px",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                gap: "8px",
+                fontSize: "15px",
+                fontWeight: 500,
+              }}
+            >
+              <Download size={18} />
+              Download Result
+            </button>
+          ) : (
+            ""
+          )}
 
           {availableTools.length > 0 && (
             <Box sx={{ minWidth: "300px" }}>
               <FormControl fullWidth>
-                <InputLabel>Continue with another tool</InputLabel>
+                <InputLabel>Select a tool to process the result with ...</InputLabel>
                 <Select
-                  label="Continue with another tool"
+                  label="Select a tool to process the result with ..."
                   defaultValue=""
                   onChange={(e) => goToTool(e.target.value)}
                   sx={{

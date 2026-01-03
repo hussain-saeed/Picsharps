@@ -625,25 +625,29 @@ const ObjectRemovalTool = () => {
               </>
             )}
 
-            <button
-              onClick={saveResult}
-              style={{
-                padding: "10px 18px",
-                background: "var(--gradient-color)",
-                color: "white",
-                border: "none",
-                borderRadius: "5px",
-                cursor: "pointer",
-                display: "flex",
-                alignItems: "center",
-                gap: "8px",
-                fontSize: "15px",
-                fontWeight: 500,
-              }}
-            >
-              <Download size={18} />
-              Download Result
-            </button>
+            {accessToken ? (
+              <button
+                onClick={saveResult}
+                style={{
+                  padding: "10px 18px",
+                  background: "var(--gradient-color)",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "5px",
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "8px",
+                  fontSize: "15px",
+                  fontWeight: 500,
+                }}
+              >
+                <Download size={18} />
+                Download Result
+              </button>
+            ) : (
+              ""
+            )}
 
             <button
               onClick={resetToInitialState}

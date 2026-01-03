@@ -23,22 +23,6 @@ export const TOOL_CONFIG = {
     hasOptions: false,
     options: {},
   },
-  "flip-image": {
-    name: "Flip Image",
-    apiPath: "flip",
-    hasOptions: true,
-    options: {
-      direction: {
-        type: "radio",
-        label: "Flip direction",
-        default: null,
-        values: [
-          { label: "Horizontal", value: "horizontal" },
-          { label: "Vertical", value: "vertical" },
-        ],
-      },
-    },
-  },
   "resize-image": {
     name: "Resize Image",
     apiPath: "resize",
@@ -75,23 +59,6 @@ export const TOOL_CONFIG = {
             value: "scale",
             description: "Scales the image ignoring aspect ratio",
           },
-        ],
-      },
-    },
-  },
-  "rotate-image": {
-    name: "Rotate Image",
-    apiPath: "rotate",
-    hasOptions: true,
-    options: {
-      angle: {
-        type: "radio",
-        label: "Angle",
-        default: null,
-        values: [
-          { label: "90 degree", value: 90 },
-          { label: "-90 degree", value: -90 },
-          { label: "180 degree", value: 180 },
         ],
       },
     },

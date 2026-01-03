@@ -1665,8 +1665,9 @@ const DropZone = () => {
                 display: "flex",
                 flexDirection: "column",
                 gap: "12px",
+                width: "100%",
               }}
-              className={`items-center ${"md:items-start"}`}
+              className={`items-center`}
             >
               <div
                 style={{
@@ -1679,25 +1680,29 @@ const DropZone = () => {
                 }}
               >
                 {/* Download button for processed image */}
-                <button
-                  onClick={() => saveResult()}
-                  style={{
-                    padding: "10px 18px",
-                    background: "var(--gradient-color)",
-                    color: "white",
-                    border: "none",
-                    borderRadius: "5px",
-                    cursor: "pointer",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "8px",
-                    fontSize: "15px",
-                    fontWeight: 500,
-                  }}
-                >
-                  <Download size={18} />
-                  Download Result
-                </button>
+                {accessToken ? (
+                  <button
+                    onClick={() => saveResult()}
+                    style={{
+                      padding: "10px 18px",
+                      background: "var(--gradient-color)",
+                      color: "white",
+                      border: "none",
+                      borderRadius: "5px",
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "8px",
+                      fontSize: "15px",
+                      fontWeight: 500,
+                    }}
+                  >
+                    <Download size={18} />
+                    Download Result
+                  </button>
+                ) : (
+                  ""
+                )}
 
                 {/* Tool selection dropdown for chaining operations */}
                 {availableTools.length > 0 ? (
@@ -1706,18 +1711,18 @@ const DropZone = () => {
                     sx={{
                       width: {
                         xs: "100%",
-                        sm: "400px",
+                        sm: "440px",
                       },
                     }}
                   >
                     <InputLabel id="tool-select-label">
-                      Select tool to process the result with ...
+                      Select a tool to process the result with ...
                     </InputLabel>
 
                     <Select
                       labelId="tool-select-label"
                       defaultValue=""
-                      label="Select tool to process the result with ..."
+                      label="Select a tool to process the result with ..."
                       onChange={(e) => goToTool(e.target.value)}
                       sx={{
                         borderRadius: "8px",

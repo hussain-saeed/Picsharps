@@ -8,127 +8,138 @@ import DropZone from "./components/DropZone";
 import CropDropZone from "./components/CropDropZone";
 import ObjectRemovalDropZone from "./components/ObjectRemovalDropZone";
 import CreateCollegeDropZone from "./components/CreateCollegeDropZone";
+import English from "/src/i18n/english.json";
+import Arabic from "/src/i18n/arabic.json";
 
-const toolsData = [
-  {
-    path: "remove-background",
-    title: "Remove Background",
-    description:
-      "Upload your image and let AI automatically detect and remove the background in seconds.",
-  },
-  {
-    path: "blur-image",
-    title: "Blur Image",
-    description:
-      "Upload your image and apply a blur effect in just a few seconds.",
-  },
-  {
-    path: "ai-image-enhancer",
-    title: "AI Image Enhancer",
-    description:
-      "Automatically improve image quality, lighting, and details with powerful AI enhancement tools.",
-  },
-  {
-    path: "sharpen-image",
-    title: "Sharpen Image",
-    description:
-      "Make blurry photos crystal clear by enhancing edges and restoring lost details instantly.",
-  },
-  {
-    path: "photo-to-cartoon",
-    title: "Photo to Cartoon",
-    description:
-      "Turn your photo into a fun, high-quality cartoon or illustration with AI magic.",
-  },
-  {
-    path: "resize-image",
-    title: "Resize Image",
-    description:
-      "Quickly adjust your photo dimensions without losing quality — fit any platform or use.",
-  },
-  {
-    path: "flip-image",
-    title: "Flip Image",
-    description:
-      "Flip or mirror your photos horizontally or vertically in just one click.",
-  },
-  {
-    path: "rotate-image",
-    title: "Rotate Image",
-    description:
-      "Rotate your images clockwise or counterclockwise in just one click.",
-  },
-  {
-    path: "grayscale-image",
-    title: "Grayscale Image",
-    description: "Upload your image and convert it to grayscale instantly.",
-  },
-  {
-    path: "rounded-corner-image",
-    title: "Rounded Corner Image",
-    description: "Upload your image and apply rounded corners with ease.",
-  },
-  {
-    path: "oil-paint-effect",
-    title: "Oil Paint Effect",
-    description: "Transform your image into an oil painting style artwork.",
-  },
-  {
-    path: "adjust-image",
-    title: "Adjust Image",
-    description:
-      "Allows fine-tuning image colors by adjusting brightness, contrast, saturation, and gamma — only the provided values are applied.",
-  },
-  {
-    path: "crop-image",
-    title: "Crop Image",
-    description: "Crop an image to remove unwanted areas.",
-  },
-  {
-    path: "object-removal",
-    title: "Object Removal",
-    description:
-      "Remove any unwanted objects from your photos and make them stay crystal clear.",
-  },
-  {
-    path: "create-collage",
-    title: "Create Collage",
-    description:
-      "Create beautiful photo collages by combining multiple images into one layout.",
-  },
-];
-
-const staticBoxesData = [
-  {
-    id: 1,
-    img: "/images/group-263.png",
-    title: "Fast AI Processing",
-    span: "Get results in seconds with our advanced AI technology",
-  },
-  {
-    id: 2,
-    img: "/images/group-262.png",
-    title: "High Quality Cutouts",
-    span: "Precise edge detection for professional results",
-  },
-  {
-    id: 3,
-    img: "/images/group-261.png",
-    title: "Automatic Edge Detection",
-    span: "Smart algorithms handle complex images effortlessly",
-  },
-  {
-    id: 4,
-    img: "/images/group-260.png",
-    title: "Supports Large Images",
-    span: "Process high-resolution images up to 10MB",
-  },
-];
+const translations = { English, Arabic };
 
 function UploadPhoto() {
   const location = useLocation();
-  const { direction } = useContext(LanguageContext);
+  const { language, direction } = useContext(LanguageContext);
   const isRTL = direction === "rtl";
+  const t = translations[language] || translations["English"];
+
+  const toolsData = [
+    {
+      path: "remove-background",
+      title: t["Remove Background"],
+      description:
+        t[
+          "Upload your image and let AI automatically detect and remove the background in seconds."
+        ],
+    },
+    {
+      path: "blur-image",
+      title: t["Blur Image"],
+      description:
+        t["Upload your image and apply a blur effect in just a few seconds."],
+    },
+    {
+      path: "ai-image-enhancer",
+      title: t["AI Image Enhancer"],
+      description:
+        t[
+          "Automatically improve image quality, lighting, and details with powerful AI enhancement tools."
+        ],
+    },
+    {
+      path: "sharpen-image",
+      title: t["Sharpen Image"],
+      description:
+        t[
+          "Make blurry photos crystal clear by enhancing edges and restoring lost details instantly."
+        ],
+    },
+    {
+      path: "photo-to-cartoon",
+      title: t["Photo to Cartoon"],
+      description:
+        t[
+          "Turn your photo into a fun, high-quality cartoon or illustration with AI magic."
+        ],
+    },
+    {
+      path: "resize-image",
+      title: t["Resize Image"],
+      description:
+        t[
+          "Quickly adjust your photo dimensions without losing quality — fit any platform or use."
+        ],
+    },
+    {
+      path: "grayscale-image",
+      title: t["Grayscale Image"],
+      description:
+        t["Upload your image and convert it to grayscale instantly."],
+    },
+    {
+      path: "rounded-corner-image",
+      title: t["Rounded Corner Image"],
+      description: t["Upload your image and apply rounded corners with ease."],
+    },
+    {
+      path: "oil-paint-effect",
+      title: t["Oil Paint Effect"],
+      description:
+        t["Transform your image into an oil painting style artwork."],
+    },
+    {
+      path: "adjust-image",
+      title: t["Adjust Image"],
+      description:
+        t[
+          "Allows fine-tuning image colors by adjusting brightness, contrast, saturation, and gamma — only the provided values are applied."
+        ],
+    },
+    {
+      path: "crop-image",
+      title: t["Crop Image"],
+      description: t["Crop an image to remove unwanted areas."],
+    },
+    {
+      path: "object-removal",
+      title: t["Object Removal"],
+      description:
+        t[
+          "Remove any unwanted objects from your photos and make them stay crystal clear."
+        ],
+    },
+    {
+      path: "create-collage",
+      title: t["Create Collage"],
+      description:
+        t[
+          "Create beautiful photo collages by combining multiple images into one layout."
+        ],
+    },
+  ];
+
+  const staticBoxesData = [
+    {
+      id: 1,
+      img: "/images/group-263.png",
+      title: t["Fast AI Processing"],
+      span: t["Get results in seconds with our advanced AI technology"],
+    },
+    {
+      id: 2,
+      img: "/images/group-262.png",
+      title: t["High Quality Cutouts"],
+      span: t["Precise edge detection for professional results"],
+    },
+    {
+      id: 3,
+      img: "/images/group-261.png",
+      title: t["Automatic Edge Detection"],
+      span: t["Smart algorithms handle complex images effortlessly"],
+    },
+    {
+      id: 4,
+      img: "/images/group-260.png",
+      title: t["Supports Large Images"],
+      span: t["Process high-resolution images up to 10MB"],
+    },
+  ];
 
   const [title, setTitle] = useState(null);
   const [description, setDescription] = useState(null);
@@ -146,7 +157,7 @@ function UploadPhoto() {
       setTitle(null);
       setDescription(null);
     }
-  }, [location.pathname]);
+  }, [location.pathname, isRTL]);
 
   return (
     <>
@@ -200,7 +211,7 @@ function UploadPhoto() {
               <div
                 key={box.id}
                 className="
-                  flex flex-col items-center justify-center text-center
+                  flex flex-col items-center justify-start text-center
                 bg-white rounded-xl p-8 shadow
                   w-full sm:w-[48%] lg:w-[23%]
                 "

@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useContext } from "react";
 import { useDropzone } from "react-dropzone";
 import { FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 import { Play } from "lucide-react";
@@ -6,6 +6,11 @@ import Spinner from "../../../components/Spinner";
 import { BACKEND_URL } from "../../../api";
 import { useAuth } from "../../auth/AuthProvider";
 import { Download } from "lucide-react";
+import { LanguageContext } from "/src/context/LanguageContext";
+
+import English from "/src/i18n/english.json";
+import Arabic from "/src/i18n/arabic.json";
+const translations = { English, Arabic };
 
 const templates = [
   {
@@ -33,6 +38,10 @@ const templates = [
 ];
 
 const CollageMaker = () => {
+  const { language, direction } = useContext(LanguageContext);
+  const isRTL = direction === "rtl";
+  const t = translations[language] || translations["English"];
+
   const [selectedSlotCount, setSelectedSlotCount] = useState(
     templates[0].slotCount
   );
@@ -176,19 +185,46 @@ const CollageMaker = () => {
       <FormControl
         size="small"
         disabled={isProcessing}
-        sx={{ minWidth: 260, marginBottom: "50px" }}
+        sx={{
+          minWidth: 260,
+          marginBottom: "50px",
+          direction: isRTL ? "rtl" : "ltr", // ضبط الاتجاه هنا
+          "& *": {
+            fontFamily: "inherit !important", // يضمن أن كل العناصر الداخلية تأخذ نفس الخط
+          },
+          "& .MuiInputLabel-root": {
+            right: isRTL ? -65 : "auto", // تعديل مكان الليبل عند التحول لـ RTL
+            transformOrigin: isRTL ? "right" : "left",
+          },
+          "& .MuiOutlinedInput-notchedOutline": {
+            textAlign: isRTL ? "right" : "left",
+          },
+          "& .MuiSelect-icon": {
+            right: isRTL ? "unset" : "7px", // إلغاء مكانه من اليمين في RTL
+            left: isRTL ? "7px" : "unset", // وضعه على اليسار في RTL
+          },
+        }}
       >
-        <InputLabel id="slot-count-label">Number of Photos</InputLabel>
-
+        <InputLabel id="slot-count-label">{t["Number of Photos"]}</InputLabel>
         <Select
           labelId="slot-count-label"
           value={selectedSlotCount}
-          label="number of photos"
+          label={t["Number of Photos"]} // تأكد أن الليبل هنا يطابق النص المترجم
           onChange={handleSlotCountChange}
+          MenuProps={{
+            dir: isRTL ? "rtl" : "ltr",
+            PaperProps: {
+              sx: {
+                "& .MuiMenuItem-root": {
+                  fontFamily: "inherit",
+                },
+              },
+            },
+          }}
         >
-          {templates.map((t) => (
-            <MenuItem key={t.slotCount} value={t.slotCount}>
-              {t.slotCount} Photos
+          {templates.map((temp) => (
+            <MenuItem key={temp.slotCount} value={temp.slotCount}>
+              {temp.slotCount} {t["Photos"]}
             </MenuItem>
           ))}
         </Select>
@@ -196,8 +232,11 @@ const CollageMaker = () => {
 
       {/* Template Previews */}
       <div className="mb-12">
-        <h2 className="text-lg font-semibold mb-6 text-gray-700">
-          Choose the template you want!
+        <h2
+          className="text-lg font-semibold mb-6 text-gray-700"
+          dir={isRTL ? "rtl" : "ltr"}
+        >
+          {t["Choose the template you want!"]}
         </h2>
         <div className="flex flex-wrap justify-center gap-6">
           {currentTemplates?.entities.map((entity) => (
@@ -205,13 +244,12 @@ const CollageMaker = () => {
               key={entity.id}
               onClick={() => !isProcessing && handleTemplateSelect(entity.id)}
               className={`relative overflow-hidden rounded-xl border transition-all cursor-pointer
-        ${
-          selectedTemplate === entity.id
-            ? "border-blue-400 ring-4 ring-blue-200"
-            : "border-gray-200 hover:shadow-md"
-        }
-        ${isProcessing ? "opacity-50 cursor-not-allowed" : ""}
-      `}
+                ${
+                  selectedTemplate === entity.id
+                    ? "border-blue-400 ring-4 ring-blue-200"
+                    : "border-gray-200 hover:shadow-md"
+                }
+              `}
               style={{
                 aspectRatio: "1240 / 940",
                 width: "calc(100% / 1 - 20px)",
@@ -226,7 +264,10 @@ const CollageMaker = () => {
                 draggable={false}
               />
 
-              <div className="absolute inset-0 bg-black/10 opacity-0 hover:opacity-100 transition-opacity" />
+              <div
+                className={`${isProcessing ? "cursor-not-allowed" : ""}
+                  absolute inset-0 bg-black/10 opacity-0 hover:opacity-100 transition-opacity`}
+              />
 
               {selectedTemplate === entity.id ? (
                 <div
@@ -272,20 +313,21 @@ const CollageMaker = () => {
               </div>
               <div className="text-gray-600">
                 {uploadedImages.length >= selectedSlotCount ? (
-                  <p>All Required Images Have Been Uploaded</p>
+                  <p>{t["All Required Images Have Been Uploaded"]}</p>
                 ) : (
                   <>
                     <h3 style={{ marginBottom: "10px", color: "#333" }}>
-                      Drag & Drop or Click to Upload
+                      {t["Drag & Drop or Click to Upload"]}
                     </h3>
-                    <p style={{ color: "#666" }}>
-                      Supported formats: PNG, JPG, JPEG, WEBP
+                    <p style={{ color: "#666" }} dir={isRTL ? "rtl" : "ltr"}>
+                      {t["Supported formats: PNG, JPG, JPEG, WEBP"]}
                     </p>
                     <p style={{ color: "#999", marginBottom: "20px" }}>
-                      Max size: 10MB
+                      {t["Max size: 10MB"]}
                     </p>
                     <p style={{ color: "#666" }}>
-                      Uploaded {uploadedImages.length} Photo {selectedSlotCount}
+                      {t["Uploaded"]} {uploadedImages.length} {t["Photos of"]}{" "}
+                      {selectedSlotCount}
                     </p>
                   </>
                 )}
@@ -298,7 +340,10 @@ const CollageMaker = () => {
       {/* Uploaded Images */}
       {uploadedImages.length > 0 && (
         <div className="mb-10">
-          <div className="flex flex-wrap gap-4 justify-center">
+          <div
+            className="flex flex-wrap gap-4 justify-center"
+            dir={isRTL ? "rtl" : "ltr"}
+          >
             {uploadedImages.map((img) => (
               <div
                 key={img.id}
@@ -311,10 +356,17 @@ const CollageMaker = () => {
                     className="w-full h-full object-cover"
                   />
                 </div>
-                {!isProcessing && (
+                {!isProcessing ? (
                   <button
                     onClick={() => removeImage(img.id)}
-                    className="absolute -top-2 -right-2 w-8 h-8 text-white rounded-full flex items-center justify-center shadow-lg text-sm"
+                    className="cursor-pointer absolute -top-2 -right-2 w-8 h-8 text-white rounded-full flex items-center justify-center shadow-lg text-sm"
+                    style={{ backgroundColor: "#ff2828", opacity: "0.9" }}
+                  >
+                    X
+                  </button>
+                ) : (
+                  <button
+                    className="cursor-not-allowed absolute -top-2 -right-2 w-8 h-8 text-white rounded-full flex items-center justify-center shadow-lg text-sm"
                     style={{ backgroundColor: "#ff2828", opacity: "0.9" }}
                   >
                     X
@@ -328,7 +380,10 @@ const CollageMaker = () => {
 
       {/* Start Process Button */}
       {selectedTemplate && (
-        <div className="mb-14 flex justify-center items-center gap-3">
+        <div
+          className="mb-14 flex justify-center items-center gap-3"
+          dir={isRTL ? "rtl" : "ltr"}
+        >
           <button
             onClick={handleStartProcess}
             disabled={!canProcess}
@@ -337,9 +392,16 @@ const CollageMaker = () => {
                 ? "bg-linear-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 cursor-pointer"
                 : "bg-gray-400 cursor-not-allowed"
             }`}
+            dir={isRTL ? "rtl" : "ltr"}
           >
-            <Play />
-            {isProcessing ? "Processing ..." : "Start"}
+            {!isProcessing && isRTL ? (
+              <Play style={{ transform: "rotate(180deg)" }} />
+            ) : !isProcessing && !isRTL ? (
+              <Play />
+            ) : (
+              ""
+            )}
+            {isProcessing ? t["Processing ..."] : t["Start"]}
           </button>
           {isProcessing && <Spinner />}
         </div>

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useContext } from "react";
 import { useDropzone } from "react-dropzone";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -9,16 +9,25 @@ import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import { useAuth } from "../../auth/AuthProvider";
 import { BACKEND_URL } from "../../../api";
 import { useScrollToVH } from "../../../hooks/useScrollToVH";
+import { LanguageContext } from "/src/context/LanguageContext";
 
-const COMPONENT_STATES = {
-  IDLE: "idle",
-  UPLOADING: "uploading",
-  PROCESSING: "processing",
-  DONE: "done",
-  ERROR: "error",
-};
+import English from "/src/i18n/english.json";
+import Arabic from "/src/i18n/arabic.json";
+const translations = { English, Arabic };
 
 const CropDropZone = () => {
+  const { language, direction } = useContext(LanguageContext);
+  const isRTL = direction === "rtl";
+  const t = translations[language] || translations["English"];
+
+  const COMPONENT_STATES = {
+    IDLE: "idle",
+    UPLOADING: "uploading",
+    PROCESSING: "processing",
+    DONE: "done",
+    ERROR: "error",
+  };
+
   const navigate = useNavigate();
   const currentTool = "crop-image";
   const { accessToken } = useAuth();
@@ -566,12 +575,12 @@ const CropDropZone = () => {
                 <img src="/images/upload.png" alt="Upload icon" />
               </div>
               <h3 style={{ marginBottom: "10px", color: "#333" }}>
-                Drag & Drop or Click to Upload
+                {t["Drag & Drop or Click to Upload"]}
               </h3>
-              <p style={{ color: "#666" }}>
-                Supported formats: PNG, JPG, JPEG, WEBP
+              <p style={{ color: "#666" }} dir={isRTL ? "rtl" : "ltr"}>
+                {t["Supported formats: PNG, JPG, JPEG, WEBP"]}
               </p>
-              <p style={{ color: "#999" }}>Max size: 10MB</p>
+              <p style={{ color: "#999" }}> {t["Max size: 10MB"]}</p>
             </>
           )}
         </div>
@@ -1059,7 +1068,9 @@ const CropDropZone = () => {
           {availableTools.length > 0 && (
             <Box sx={{ minWidth: "300px" }}>
               <FormControl fullWidth>
-                <InputLabel>Select a tool to process the result with ...</InputLabel>
+                <InputLabel>
+                  Select a tool to process the result with ...
+                </InputLabel>
                 <Select
                   label="Select a tool to process the result with ..."
                   defaultValue=""

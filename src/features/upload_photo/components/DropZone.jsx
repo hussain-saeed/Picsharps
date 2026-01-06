@@ -1,7 +1,8 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useContext } from "react";
 import { useDropzone } from "react-dropzone";
 import { useNavigate, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
+import { LanguageContext } from "/src/context/LanguageContext";
 
 // Import tool functions for image processing
 import { enhanceImage } from "../tools/enhanceTool";
@@ -36,30 +37,38 @@ import { OptionSlider } from "./OptionSlider";
 import { BACKEND_URL } from "../../../api";
 import { useScrollToVH } from "../../../hooks/useScrollToVH";
 
-const TOOL_TYPES = {
-  ENHANCE: "ai-image-enhancer", // Image enhancement tool
-  CARTOON: "photo-to-cartoon", // Cartoon effect tool
-  FLIP: "flip-image", // Image flipping tool
-  RESIZE: "resize-image", // Image resizing tool
-  ROTATE: "rotate-image", // Image rotation tool
-  SHARPEN: "sharpen-image", // Image sharpening tool
-  REMOVE: "remove-background", // Background removal tool
-  BLUR: "blur-image",
-  GRAYSCALE: "grayscale-image",
-  ROUNDED: "rounded-corner-image",
-  OILING: "oil-paint-effect",
-  ADJUST: "adjust-image",
-};
-
-const COMPONENT_STATES = {
-  IDLE: "idle", // Initial state, waiting for user action
-  UPLOADING: "uploading", // Uploading image to server
-  PROCESSING: "processing", // Processing image with selected tool
-  DONE: "done", // Processing completed successfully
-  ERROR: "error", // An error occurred during upload or processing
-};
+import English from "/src/i18n/english.json";
+import Arabic from "/src/i18n/arabic.json";
+const translations = { English, Arabic };
 
 const DropZone = () => {
+  const { language, direction } = useContext(LanguageContext);
+  const isRTL = direction === "rtl";
+  const t = translations[language] || translations["English"];
+
+  const TOOL_TYPES = {
+    ENHANCE: "ai-image-enhancer", // Image enhancement tool
+    CARTOON: "photo-to-cartoon", // Cartoon effect tool
+    FLIP: "flip-image", // Image flipping tool
+    RESIZE: "resize-image", // Image resizing tool
+    ROTATE: "rotate-image", // Image rotation tool
+    SHARPEN: "sharpen-image", // Image sharpening tool
+    REMOVE: "remove-background", // Background removal tool
+    BLUR: "blur-image",
+    GRAYSCALE: "grayscale-image",
+    ROUNDED: "rounded-corner-image",
+    OILING: "oil-paint-effect",
+    ADJUST: "adjust-image",
+  };
+
+  const COMPONENT_STATES = {
+    IDLE: "idle", // Initial state, waiting for user action
+    UPLOADING: "uploading", // Uploading image to server
+    PROCESSING: "processing", // Processing image with selected tool
+    DONE: "done", // Processing completed successfully
+    ERROR: "error", // An error occurred during upload or processing
+  };
+
   // Navigation and routing hooks
   const navigate = useNavigate(); // For programmatic navigation between tools
   const location = useLocation(); // To access current URL path
@@ -562,12 +571,12 @@ const DropZone = () => {
               </div>
 
               <h3 style={{ marginBottom: "10px", color: "#333" }}>
-                Drag & Drop or Click to Upload
+                {t["Drag & Drop or Click to Upload"]}
               </h3>
-              <p style={{ color: "#666" }}>
-                Supported formats: PNG, JPG, JPEG, WEBP
+              <p style={{ color: "#666" }} dir={isRTL ? "rtl" : "ltr"}>
+                {t["Supported formats: PNG, JPG, JPEG, WEBP"]}
               </p>
-              <p style={{ color: "#999" }}>Max size: 10MB</p>
+              <p style={{ color: "#999" }}>{t["Max size: 10MB"]}</p>
             </>
           )}
         </div>

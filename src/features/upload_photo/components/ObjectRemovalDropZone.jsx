@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useContext } from "react";
 import { Download, RefreshCw, Eraser, Play, Box } from "lucide-react";
 import { OptionSlider } from "./OptionSlider";
 import ImageCompare from "../../../components/ImageCompare";
@@ -6,16 +6,25 @@ import { useAuth } from "../../auth/AuthProvider";
 import { TOOL_CONFIG } from "../config/toolConfig";
 import { BACKEND_URL } from "../../../api";
 import { useScrollToVH } from "../../../hooks/useScrollToVH";
+import { LanguageContext } from "/src/context/LanguageContext";
 
-const COMPONENT_STATES = {
-  IDLE: "idle",
-  UPLOADING: "uploading",
-  PROCESSING: "processing",
-  DONE: "done",
-  ERROR: "error",
-};
+import English from "/src/i18n/english.json";
+import Arabic from "/src/i18n/arabic.json";
+const translations = { English, Arabic };
 
 const ObjectRemovalTool = () => {
+  const { language, direction } = useContext(LanguageContext);
+  const isRTL = direction === "rtl";
+  const t = translations[language] || translations["English"];
+
+  const COMPONENT_STATES = {
+    IDLE: "idle",
+    UPLOADING: "uploading",
+    PROCESSING: "processing",
+    DONE: "done",
+    ERROR: "error",
+  };
+
   const canvasRef = useRef(null);
   const imageRef = useRef(null);
   const fileInputRef = useRef(null);
@@ -341,12 +350,12 @@ const ObjectRemovalTool = () => {
             </div>
 
             <h3 style={{ marginBottom: "10px", color: "#333" }}>
-              Drag & Drop or Click to Upload
+              {t["Drag & Drop or Click to Upload"]}
             </h3>
-            <p style={{ color: "#666" }}>
-              Supported formats: PNG, JPG, JPEG, WEBP
+            <p style={{ color: "#666" }} dir={isRTL ? "rtl" : "ltr"}>
+              {t["Supported formats: PNG, JPG, JPEG, WEBP"]}
             </p>
-            <p style={{ color: "#999" }}>Max size: 10MB</p>
+            <p style={{ color: "#999" }}>{t["Max size: 10MB"]}</p>
           </div>
         </div>
       )}

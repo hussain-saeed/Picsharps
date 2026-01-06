@@ -11,6 +11,7 @@ export default function ImageCompare({
   fit = "contain",
   beforeClassName = "",
   afterClassName = "",
+  loading,
 }) {
   const containerRef = useRef(null);
   const [pos, setPos] = useState(20);
@@ -108,8 +109,12 @@ export default function ImageCompare({
       </div>
 
       <div
-        className="absolute top-0 bottom-0 left-0 w-1 bg-[#f9f9f9] border border-gray-300 cursor-col-resize"
-        style={{ left: `${pos}%`, transform: "translateX(-50%)" }}
+        className="absolute top-0 bottom-0 left-0 w-1 bg-[#f9f9f9] border border-gray-300"
+        style={{
+          left: `${pos}%`,
+          transform: "translateX(-50%)",
+          cursor: loading ? "default" : "col-resize",
+        }}
         onMouseDown={startDrag}
         onTouchStart={startDrag}
       >

@@ -2,135 +2,140 @@ import { useContext, useState } from "react";
 import { LanguageContext } from "../../../../context/LanguageContext";
 import { GiCheckMark } from "react-icons/gi";
 import { RxCross2 } from "react-icons/rx";
+import English from "/src/i18n/english.json";
+import Arabic from "/src/i18n/arabic.json";
 
-const plans = [
-  {
-    id: 1,
-    hasBorder: false,
-    border: "",
-    shadow: "0px 1px 4px 3px rgba(221, 235, 246, 1)",
-    badgeBg: "rgba(210, 220, 255, 1)",
-    badgeText: "Free Forever",
-    badgeColor: "rgba(0, 176, 255, 1)",
-
-    image: "images/star-8.png",
-    imageLabel: "Free",
-
-    priceMonthly: 0,
-    priceYearly: 0,
-    priceColor: "black",
-    priceLabel: "",
-
-    smallText: "Forever free",
-    smallTextYearly: "Forever free",
-    smallTextYearlyPlus: "",
-    desc: "Perfect for trying out our tools",
-
-    features: [
-      { text: "10 images per month", active: true },
-      { text: "Standard quality output", active: true },
-      { text: "All tools access", active: true },
-      { text: "Watermark on downloads", active: true },
-      { text: "HD/4K quality", active: false },
-      { text: "Priority processing", active: false },
-      { text: "Commercial use", active: false },
-      { text: "Download history (7 days only)", active: false },
-      { text: "No watermark", active: false },
-    ],
-
-    buttonBg: "",
-    buttonColor: "rgba(0, 176, 255, 1)",
-    buttonText: "Get Started Free",
-    buttonBorder: "1.5px solid rgba(0, 176, 255, 1)",
-  },
-
-  {
-    id: 2,
-    hasBorder: true,
-    border: "rgba(0, 176, 255, 1)",
-    shadow: "",
-    badgeBg: "var(--gradient-color-2)",
-    badgeText: "Most Popular",
-    badgeColor: "white",
-
-    image: "images/star-9.png",
-    imageLabel: "Pro",
-
-    priceMonthly: 9.99,
-    priceYearly: 7.99,
-    priceColor: "var(--gradient-color-2)",
-    priceLabel: "/ month",
-
-    smallText: "Billed monthly",
-    smallTextYearly: "$95.88 /year",
-    smallTextYearlyPlus: "(save 20%)",
-    desc: "Best for creators and professionals",
-
-    features: [
-      { text: "100 images per month", active: true },
-      { text: "HD quality output", active: true },
-      { text: "All tools access", active: true },
-      { text: "No watermark", active: true },
-      { text: "Priority processing", active: true },
-      { text: "30-day download history", active: true },
-      { text: "Commercial use allowed", active: true },
-      { text: "Email support", active: true },
-      { text: "4K quality", active: false },
-      { text: "API access", active: false },
-    ],
-
-    buttonBg: "var(--gradient-color-2)",
-    buttonColor: "white",
-    buttonText: "Start Pro Plan",
-    buttonBorder: "",
-  },
-
-  {
-    id: 3,
-    hasBorder: false,
-    border: "",
-    shadow: "0px 1px 4px 3px rgba(221, 235, 246, 1)",
-    badgeBg: "rgba(0, 200, 83, 1)",
-    badgeText: "Best Value",
-    badgeColor: "white",
-
-    image: "images/star-10.png",
-    imageLabel: "Premium",
-
-    priceMonthly: 19.99,
-    priceYearly: 14.99,
-    priceColor: "black",
-    priceLabel: "/ month",
-
-    smallTextYearly: "$179.88 /year",
-    smallTextYearlyPlus: "(save 20%)",
-    desc: "For power users and businesses",
-
-    features: [
-      { text: "Unlimited images", active: true },
-      { text: "4K quality output", active: true },
-      { text: "All tools access (including future tools)", active: true },
-      { text: "No watermark", active: true },
-      { text: "Fastest priority processing", active: true },
-      { text: "Unlimited download history", active: true },
-      { text: "Commercial use allowed", active: true },
-      { text: "Priority email support", active: true },
-      { text: "API access (coming soon)", active: true },
-      { text: "Bulk processing", active: true },
-      { text: "Team collaboration (coming soon)", active: true },
-    ],
-
-    buttonBg: "rgba(0, 200, 83, 1)",
-    buttonColor: "white",
-    buttonText: "Start Premium Plan",
-    buttonBorder: "",
-  },
-];
+const translations = { English, Arabic };
 
 export default function Pricing() {
-  const { direction } = useContext(LanguageContext);
+  const { language, direction } = useContext(LanguageContext);
   const isRTL = direction === "rtl";
+  const t = translations[language] || translations["English"];
   const [isYearly, setIsYearly] = useState(false);
+
+  const plans = [
+    {
+      id: 1,
+      hasBorder: false,
+      border: "",
+      shadow: "0px 1px 4px 3px rgba(221, 235, 246, 1)",
+      badgeBg: "rgba(210, 220, 255, 1)",
+      badgeText: "Free Forever",
+      badgeColor: "rgba(0, 176, 255, 1)",
+
+      image: "images/star-8.png",
+      imageLabel: "Free",
+
+      priceMonthly: 0,
+      priceYearly: 0,
+      priceColor: "black",
+      priceLabel: "",
+
+      smallText: "Forever free",
+      smallTextYearly: "Forever free",
+      smallTextYearlyPlus: "",
+      desc: "Perfect for trying out our tools",
+
+      features: [
+        { text: "10 images per month", active: true },
+        { text: "Standard quality output", active: true },
+        { text: "All tools access", active: true },
+        { text: "Watermark on downloads", active: true },
+        { text: "HD/4K quality", active: false },
+        { text: "Priority processing", active: false },
+        { text: "Commercial use", active: false },
+        { text: "Download history (7 days only)", active: false },
+        { text: "No watermark", active: false },
+      ],
+
+      buttonBg: "",
+      buttonColor: "rgba(0, 176, 255, 1)",
+      buttonText: "Get Started Free",
+      buttonBorder: "1.5px solid rgba(0, 176, 255, 1)",
+    },
+
+    {
+      id: 2,
+      hasBorder: true,
+      border: "rgba(0, 176, 255, 1)",
+      shadow: "",
+      badgeBg: "var(--gradient-color-2)",
+      badgeText: "Most Popular",
+      badgeColor: "white",
+
+      image: "images/star-9.png",
+      imageLabel: "Pro",
+
+      priceMonthly: 9.99,
+      priceYearly: 7.99,
+      priceColor: "var(--gradient-color-2)",
+      priceLabel: "/ month",
+
+      smallText: "Billed monthly",
+      smallTextYearly: "$95.88 /year",
+      smallTextYearlyPlus: "(save 20%)",
+      desc: "Best for creators and professionals",
+
+      features: [
+        { text: "100 images per month", active: true },
+        { text: "HD quality output", active: true },
+        { text: "All tools access", active: true },
+        { text: "No watermark", active: true },
+        { text: "Priority processing", active: true },
+        { text: "30-day download history", active: true },
+        { text: "Commercial use allowed", active: true },
+        { text: "Email support", active: true },
+        { text: "4K quality", active: false },
+        { text: "API access", active: false },
+      ],
+
+      buttonBg: "var(--gradient-color-2)",
+      buttonColor: "white",
+      buttonText: "Start Pro Plan",
+      buttonBorder: "",
+    },
+
+    {
+      id: 3,
+      hasBorder: false,
+      border: "",
+      shadow: "0px 1px 4px 3px rgba(221, 235, 246, 1)",
+      badgeBg: "rgba(0, 200, 83, 1)",
+      badgeText: "Best Value",
+      badgeColor: "white",
+
+      image: "images/star-10.png",
+      imageLabel: "Premium",
+
+      priceMonthly: 19.99,
+      priceYearly: 14.99,
+      priceColor: "black",
+      priceLabel: "/ month",
+
+      smallTextYearly: "$179.88 /year",
+      smallTextYearlyPlus: "(save 20%)",
+      desc: "For power users and businesses",
+
+      features: [
+        { text: "Unlimited images", active: true },
+        { text: "4K quality output", active: true },
+        { text: "All tools access (including future tools)", active: true },
+        { text: "No watermark", active: true },
+        { text: "Fastest priority processing", active: true },
+        { text: "Unlimited download history", active: true },
+        { text: "Commercial use allowed", active: true },
+        { text: "Priority email support", active: true },
+        { text: "API access (coming soon)", active: true },
+        { text: "Bulk processing", active: true },
+        { text: "Team collaboration (coming soon)", active: true },
+      ],
+
+      buttonBg: "rgba(0, 200, 83, 1)",
+      buttonColor: "white",
+      buttonText: "Start Premium Plan",
+      buttonBorder: "",
+    },
+  ];
 
   return (
     <div className="w-full">
@@ -142,7 +147,7 @@ export default function Pricing() {
               color: isYearly ? "rgba(150, 150, 150, 1)" : "black",
             }}
           >
-            Monthly
+            {t["Monthly"]}
           </span>
 
           <button
@@ -171,7 +176,7 @@ export default function Pricing() {
               color: isYearly ? "black" : "rgba(150, 150, 150, 1)",
             }}
           >
-            Yearly
+            {t["Yearly"]}
           </span>
         </div>
 

@@ -2,8 +2,16 @@ import React, { useState, useEffect, useContext } from "react";
 import { useAuth } from "./AuthProvider";
 import { LanguageContext } from "../../context/LanguageContext";
 import { toast } from "react-toastify";
+import English from "/src/i18n/english.json";
+import Arabic from "/src/i18n/arabic.json";
+
+const translations = { English, Arabic };
 
 const LoginPopup = () => {
+  const { language, direction } = useContext(LanguageContext);
+  const isRTL = direction === "rtl";
+  const t = translations[language] || translations["English"];
+
   const {
     isLoginPopupOpen,
     closeLoginPopup,
@@ -22,8 +30,6 @@ const LoginPopup = () => {
     verifyResetCode,
     resetPassword,
   } = useAuth();
-  const { direction } = useContext(LanguageContext);
-  const isRTL = direction === "rtl";
 
   // Local states
   const [renderLogWithGoogle, setRenderLogWithGoogle] = useState(true);
@@ -127,7 +133,7 @@ const LoginPopup = () => {
                     }}
                   >
                     <img src="/images/google-1.png" alt="google" />
-                    <span> Continue with Google</span>
+                    <span>{t["Continue with Google"]}</span>
                   </div>
                   <p
                     onClick={() => setRenderLogWithGoogle(false)}
@@ -138,36 +144,43 @@ const LoginPopup = () => {
                       cursor: "pointer",
                     }}
                   >
-                    Or use email
+                    {t["Or use email"]}
                   </p>
                 </div>
 
-                <p
+                <div
                   style={{
                     textAlign: "center",
                     fontSize: "14px",
                     fontWeight: "500",
                   }}
                 >
-                  By continuing, you agree to our{" "}
-                  <span
-                    style={{ color: "rgba(0, 176, 255, 1)", cursor: "pointer" }}
-                  >
-                    Terms Of Service
-                  </span>{" "}
-                  and{" "}
-                  <span
-                    style={{ color: "rgba(0, 176, 255, 1)", cursor: "pointer" }}
-                  >
-                    Privacy Policy
-                  </span>
-                  .
-                </p>
+                  <p>{t["By continuing, you agree to our"]}</p>
+                  <p>
+                    <span
+                      style={{
+                        color: "rgba(0, 176, 255, 1)",
+                        cursor: "pointer",
+                      }}
+                    >
+                      {t["Terms Of Service"]}
+                    </span>{" "}
+                    {t["and"]}{" "}
+                    <span
+                      style={{
+                        color: "rgba(0, 176, 255, 1)",
+                        cursor: "pointer",
+                      }}
+                    >
+                      {t["Privacy Policy"]}
+                    </span>
+                  </p>
+                </div>
               </div>
             </div>
           ) : (
             <div>
-              <label>Email</label>
+              <label> {t["Email"]}</label>
               <input
                 type="email"
                 placeholder="your.example@gmail.com"
@@ -182,10 +195,10 @@ const LoginPopup = () => {
                   borderRadius: "10px",
                 }}
               />
-              <label>Password</label>
+              <label> {t["Password"]}</label>
               <input
                 type="password"
-                placeholder="Enter password"
+                placeholder={t["Enter password"]}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 style={{
@@ -210,7 +223,7 @@ const LoginPopup = () => {
                   marginBottom: "18px",
                 }}
               >
-                Login
+                {t["Login"]}
               </button>
               <button
                 onClick={() => setForgotPassScreen(2)}
@@ -220,13 +233,13 @@ const LoginPopup = () => {
                   cursor: "pointer",
                 }}
               >
-                Forgot Password?
+                {t["Forgot Password?"]}
               </button>
               <p
                 onClick={() => setRenderLogWithGoogle(true)}
                 style={{ color: "rgba(0, 176, 255, 1)", cursor: "pointer" }}
               >
-                Back to Login with Google
+                {t["Back to Login with Google"]}
               </p>
             </div>
           )}
@@ -399,7 +412,7 @@ const LoginPopup = () => {
           transform: "translate(-50%, -50%)",
           zIndex: 1000,
         }}
-        className="max-w-[1200px] lg:w-[75%] w-[80%] relative"
+        className="max-w-[1250px] lg:w-[75%] w-[80%] relative"
       >
         <img
           src="/images/close.png"
@@ -440,10 +453,10 @@ const LoginPopup = () => {
           <div className="lg:w-[50%] w-full py-10 px-8 md:px-17 flex flex-col justify-between">
             <div className="text-center">
               <h2 style={{ fontSize: "40px", fontWeight: "700" }}>
-                Hi there !
+                {t["Hi there!"]}
               </h2>
               <p style={{ fontWeight: "500", lineHeight: "1.2" }}>
-                Welcome to picsharps, so happy to see you
+                {t["Welcome to Picsharps, so happy to see you."]}
               </p>
             </div>
 

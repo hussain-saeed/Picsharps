@@ -9,17 +9,26 @@ import { Link } from "react-router-dom";
 import How from "./sections/How";
 import Ready from "./sections/Ready";
 import Footer from "../../../components/Footer";
+import { useContext } from "react";
+import { LanguageContext } from "/src/context/LanguageContext";
+import English from "/src/i18n/english.json";
+import Arabic from "/src/i18n/arabic.json";
+
+const translations = { English, Arabic };
 
 function Landing() {
   const [activeView, setActiveView] = useState(
-    localStorage.getItem("activeView") || "home"
+    localStorage.getItem("activeView") || "Home"
   );
+
+  const { language } = useContext(LanguageContext);
+  const t = translations[language] || translations["English"];
 
   return (
     <>
       <Header setActiveView={setActiveView} />
 
-      {activeView === "home" && (
+      {activeView === "Home" && (
         <>
           <Hero />
           <Quick />
@@ -32,10 +41,14 @@ function Landing() {
                 after="/images/remove-bg-4.png"
                 aspectRatio="12/8"
                 fit="fill"
-                title="Remove Backgrounds Instantly"
-                description="Upload your image and let our smart tool do the work. Whether you're editing product photos or creating social media content, our background remover helps you isolate your subject with precision and speed. No manual cropping—just fast, clean results."
+                title={t["Remove Backgrounds Instantly"]}
+                description={
+                  t[
+                    "Upload your image and let our smart tool do the work. Whether you're editing product photos or creating social media content, our background remover helps you isolate your subject with precision and speed. No manual cropping—just fast, clean results."
+                  ]
+                }
                 linkTo="/remove-background"
-                innerLinkText="Try it now for free"
+                innerLinkText={t["Try it now for free"]}
               />
             </Container>
           </div>
@@ -48,10 +61,14 @@ function Landing() {
                 after="/images/ai-image-enhancer-4.jpg"
                 aspectRatio="12/8"
                 fit="fill"
-                title="AI Image Enhancer – Make Every Pixel Shine!"
-                description="Breathe new life into your photos with our intelligent image enhancer. Boost clarity, sharpen details, and enhance colors—all with a single click. Whether it’s a selfie, product shot, or landscape, your images will look stunning and professional in seconds."
+                title={t["AI Image Enhancer"]}
+                description={
+                  t[
+                    "Breathe new life into your photos with our intelligent image enhancer. Boost clarity, sharpen details, and enhance colors—all with a single click. Whether it's a selfie, product shot, or landscape, your images will look stunning and professional in seconds."
+                  ]
+                }
                 linkTo="/ai-image-enhancer"
-                innerLinkText="Try it now for free"
+                innerLinkText={t["Try it now for free"]}
               />
             </Container>
           </div>
@@ -64,10 +81,14 @@ function Landing() {
                 after="/images/remove-object-3.png"
                 aspectRatio="12/8"
                 fit="fill"
-                title="Remove Unwanted Objects"
-                description="Clean up your photos in seconds with our smart AI object remover. Whether it's a stray person, a distracting item, or background clutter—just highlight it and let the magic happen. Your image stays flawless, your focus stays sharp."
+                title={t["Remove Unwanted Objects"]}
+                description={
+                  t[
+                    "Clean up your photos in seconds with our smart AI object remover. Whether it's a stray person, a distracting item, or background clutter—just highlight it and let the magic happen. Your image stays flawless, your focus stays sharp."
+                  ]
+                }
                 linkTo="/object-removal"
-                innerLinkText="Try it now for free"
+                innerLinkText={t["Try it now for free"]}
               />
             </Container>
           </div>
@@ -80,10 +101,14 @@ function Landing() {
                 after="/images/to-cartoon-2.jpg"
                 aspectRatio="12/8"
                 fit="fill"
-                title="Turn Photos into Cartoons"
-                description="Add a playful twist to your images with our AI-powered cartoonizer. Transform selfies, portraits, or pet photos into vibrant cartoon-style artwork in seconds. Perfect for social media, avatars, or just for fun!"
+                title={t["Turn Photos into Cartoons"]}
+                description={
+                  t[
+                    "Add a playful twist to your images with our AI-powered cartoonizer. Transform selfies, portraits, or pet photos into vibrant cartoon-style artwork in seconds. Perfect for social media, avatars, or just for fun!"
+                  ]
+                }
                 linkTo="/photo-to-cartoon"
-                innerLinkText="Try it now for free"
+                innerLinkText={t["Try it now for free"]}
               />
             </Container>
           </div>
@@ -94,10 +119,14 @@ function Landing() {
                 isTextFirst={false}
                 isStatic={true}
                 staticImgSrc="/images/college-6.jpg"
-                title="Build Custom Collages with Ease"
-                description="Mix, match, and tell your story with our easy-to-use collage maker. Choose your layout, drag in your favorite images, and let your creativity shine. Perfect for social media, scrapbooks, or sharing memories with style!"
+                title={t["Build Custom Collages with Ease"]}
+                description={
+                  t[
+                    "Mix, match, and tell your story with our easy-to-use collage maker. Choose your layout, drag in your favorite images, and let your creativity shine. Perfect for social media, scrapbooks, or sharing memories with style!"
+                  ]
+                }
                 linkTo="create-collage"
-                innerLinkText="Try it now for free"
+                innerLinkText={t["Try it now for free"]}
               />
             </Container>
           </div>
@@ -112,7 +141,7 @@ function Landing() {
                 borderBottom: "2px solid rgba(0, 176, 255, 1)",
               }}
             >
-              Explore All Tools
+              {t["Explore All Tools"]}
             </Link>
           </div>
 
@@ -121,7 +150,7 @@ function Landing() {
         </>
       )}
 
-      {activeView === "tools" && (
+      {activeView === "Tools" && (
         <ToolsMenuMobile setActiveView={setActiveView} />
       )}
 

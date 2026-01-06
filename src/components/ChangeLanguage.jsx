@@ -59,7 +59,7 @@ export default function ChangeLanguage({ openFrom }) {
             bg-white rounded-xl shadow-lg
             border border-gray-200
             overflow-hidden
-            ${openFrom === "down" ? "mt-[3px]" : "top-[-315%]"}
+            ${openFrom === "down" ? "mt-[3px]" : "top-[-220%]"}
           `}
         >
           {languages.map((lang) => (

@@ -9,14 +9,13 @@ import ToolsMenu from "./ToolsMenu";
 import { LanguageContext } from "../context/LanguageContext";
 import { useOverlay } from "../context/OverlayContext";
 
-import English from "../i18n/components/header/english.json";
-import French from "../i18n/components/header/french.json";
-import Arabic from "../i18n/components/header/arabic.json";
+import English from "../i18n/english.json";
+import Arabic from "../i18n/arabic.json";
 import { useAuth } from "../features/auth/AuthProvider";
 import { RxAvatar } from "react-icons/rx";
 import { FaUser } from "react-icons/fa";
 
-const translations = { English, French, Arabic };
+const translations = { English, Arabic };
 
 export default function Header({ setActiveView }) {
   const { language, direction } = useContext(LanguageContext);
@@ -44,14 +43,14 @@ export default function Header({ setActiveView }) {
   };
 
   const handleNavClick = (label) => {
-    if (label === t.tools) {
+    if (label === t.Tools) {
       setToolsMenuOpen(!toolsMenuOpen);
       setIsVisible(!isVisible);
     }
   };
 
   const handleChangeView = (label) => {
-    const view = label === t.home ? "home" : label === t.tools ? "tools" : null;
+    const view = label === t.Home ? "Home" : label === t.Tools ? "Tools" : null;
     if (view) {
       localStorage.setItem("activeView", view);
       setActiveView(view);
@@ -93,8 +92,8 @@ export default function Header({ setActiveView }) {
             isRTL ? "flex-row-reverse" : ""
           }`}
           onClick={() => {
-            localStorage.setItem("activeView", "home");
-            setActiveView("home");
+            localStorage.setItem("activeView", "Home");
+            setActiveView("Home");
             window.scrollTo({
               top: 0,
               behavior: "smooth",
@@ -116,9 +115,9 @@ export default function Header({ setActiveView }) {
           }`}
         >
           {[
-            { img: "home", label: t.home, to: "/" },
-            { img: "extra-features", label: t.tools, icon: <FiChevronDown /> },
-            { img: "tags", label: t.pricing, to: "/pricing" },
+            { img: "home", label: t.Home, to: "/" },
+            { img: "extra-features", label: t.Tools, icon: <FiChevronDown /> },
+            { img: "tags", label: t.Pricing, to: "/pricing" },
           ].map(({ img, label, icon, to }, index) => (
             <Link
               to={to}
@@ -174,7 +173,7 @@ export default function Header({ setActiveView }) {
               }}
               onClick={() => openLoginPopup()}
             >
-              {t.login}
+              {t.LoginHeaderButton}
             </button>
           )}
         </div>
@@ -205,9 +204,9 @@ export default function Header({ setActiveView }) {
             } rounded-b-[10px]`}
           >
             {[
-              { img: "home", label: t.home, to: "/" },
-              { img: "extra-features", label: t.tools, to: "/" },
-              { img: "tags", label: t.pricing, to: "/pricing" },
+              { img: "home", label: t.Home, to: "/" },
+              { img: "extra-features", label: t.Tools, to: "/" },
+              { img: "tags", label: t.Pricing, to: "/pricing" },
             ].map(({ img, label, to }) => (
               <Link
                 to={to}
@@ -223,14 +222,9 @@ export default function Header({ setActiveView }) {
             ))}
 
             {userData ? (
-              <Link
-                to="/profile"
-                style={{
-                }}
-                className="mt-2.5 flex gap-1"
-              >
+              <Link to="/profile" style={{}} className="mt-2.5 flex gap-1">
                 <FaUser style={{ fontSize: "22px" }} />
-                <span  style={{ fontSize: "17px" }} >Profile</span>
+                <span style={{ fontSize: "17px" }}>Profile</span>
               </Link>
             ) : (
               <button
@@ -246,7 +240,7 @@ export default function Header({ setActiveView }) {
                 }}
                 onClick={() => openLoginPopup()}
               >
-                {t.login}
+                {t.LoginHeaderButton}
               </button>
             )}
           </div>

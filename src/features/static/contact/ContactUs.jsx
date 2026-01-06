@@ -4,6 +4,10 @@ import Container from "../../../components/Container";
 import Header from "../../../components/Header";
 import { useDropzone } from "react-dropzone";
 import Footer from "../../../components/Footer";
+import English from "/src/i18n/english.json";
+import Arabic from "/src/i18n/arabic.json";
+
+const translations = { English, Arabic };
 
 const data = [
   {
@@ -25,8 +29,9 @@ const data = [
 ];
 
 function ContactUs() {
-  const { direction } = useContext(LanguageContext);
+  const { language, direction } = useContext(LanguageContext);
   const isRTL = direction === "rtl";
+  const t = translations[language] || translations["English"];
 
   const [form, setForm] = useState({
     name: "",
@@ -78,7 +83,6 @@ function ContactUs() {
         obj[key] = value;
       }
     }
-
   };
 
   const handleSubmit = (e) => {
@@ -139,7 +143,7 @@ function ContactUs() {
                   WebkitTextFillColor: "transparent",
                 }}
               >
-                Get In Touch
+                {t["Get In Touch"]}
               </h2>
               <p
                 className="mb-[70px] lg:mb-0"
@@ -149,11 +153,11 @@ function ContactUs() {
                   lineHeight: "30px",
                 }}
               >
-                looking for help and support to enhance your picsharps
-                experience? Whether it’s learning how to fix a design problem
-                with our online photo editor, searching for useful photo design
-                tips via tutorials or finding inspiration from our community,
-                we’ve got all the answers to your questions.
+                {
+                  t[
+                    "looking for help and support to enhance your picsharps experience? Whether it's learning how to fix a design problem with our online photo editor, searching for useful photo design tips via tutorials or finding inspiration from our community, we've got all the answers to your questions."
+                  ]
+                }
               </p>
             </div>
 
@@ -197,7 +201,7 @@ function ContactUs() {
                   marginBottom: "-20px",
                 }}
               >
-                Send us a message
+                {t["Send us a message"]}
               </h2>
               <p
                 style={{
@@ -205,15 +209,15 @@ function ContactUs() {
                   marginBottom: "5px",
                 }}
               >
-                Fill out this form below and we'll get back to you soon
+                {t["Fill out this form below and we'll get back to you soon"]}
               </p>
 
               <div className="flex flex-col">
                 <label className="font-medium mb-1.5">
-                  Name <span className="text-red-600">*</span>
+                  {t["Name"]} <span className="text-red-600">*</span>
                 </label>
                 <input
-                  placeholder="Your full name"
+                  placeholder={t["Your full name"]}
                   type="text"
                   name="name"
                   required
@@ -228,7 +232,7 @@ function ContactUs() {
 
               <div className="flex flex-col">
                 <label className="font-medium mb-1">
-                  Email <span className="text-red-600">*</span>
+                  {t["Email"]} <span className="text-red-600">*</span>
                 </label>
                 <input
                   placeholder="your.example@gmail.com"
@@ -246,10 +250,10 @@ function ContactUs() {
 
               <div className="flex flex-col">
                 <label className="font-medium mb-1">
-                  Subject <span className="text-red-600">*</span>
+                  {t["Subject"]} <span className="text-red-600">*</span>
                 </label>
                 <input
-                  placeholder="What is this about ?"
+                  placeholder={t["What is this about ?"]}
                   type="text"
                   name="subject"
                   required
@@ -264,10 +268,10 @@ function ContactUs() {
 
               <div className="flex flex-col">
                 <label className="font-medium mb-1">
-                  Message <span className="text-red-600">*</span>
+                  {t["Message"]} <span className="text-red-600">*</span>
                 </label>
                 <textarea
-                  placeholder="How can we help you ?"
+                  placeholder={t["How can we help you ?"]}
                   name="message"
                   required
                   onChange={handleChange}
@@ -280,7 +284,7 @@ function ContactUs() {
               </div>
 
               <label className="font-medium" style={{ marginBottom: "-20px" }}>
-                Attach screenshot (optional)
+                {t["Attach screenshot (optional)"]}
               </label>
 
               {!image && (
@@ -307,7 +311,7 @@ function ContactUs() {
                       ) : (
                         <img src="/images/attach.png" />
                       )}
-                      <p>Click or drag to upload</p>
+                      <p>{t["Click or drag to upload"]}</p>
                     </div>
                   )}
                 </div>
@@ -342,7 +346,7 @@ function ContactUs() {
                 ) : (
                   <img src="/images/send-2.png" alt="Send" />
                 )}
-                Send message
+                {t["Send message"]}
               </button>
             </form>
 
@@ -371,7 +375,7 @@ function ContactUs() {
                     fontWeight: "700",
                   }}
                 >
-                  Support
+                  {t["Support"]}
                 </span>
                 <p
                   style={{
@@ -379,10 +383,10 @@ function ContactUs() {
                     marginBottom: "15px",
                   }}
                 >
-                  Submit the form and we'll get back to you
+                  {t["Submit the form and we'll get back to you"]}
                 </p>
                 <p style={{ color: "rgba(137, 137, 137, 1)" }}>
-                  Available 24/7 for your convenience
+                  {t["Available 24/7 for your convenience"]}
                 </p>
               </div>
               <div
@@ -403,7 +407,7 @@ function ContactUs() {
                     fontWeight: "700",
                   }}
                 >
-                  Company type
+                  {t["Company type"]}
                 </span>
                 <p
                   style={{
@@ -411,10 +415,10 @@ function ContactUs() {
                     marginBottom: "15px",
                   }}
                 >
-                  Online-based company
+                  {t["Online-based company"]}
                 </p>
                 <p style={{ color: "rgba(137, 137, 137, 1)" }}>
-                  No physical office location
+                  {t["No physical office location"]}
                 </p>
               </div>
               <div
@@ -447,7 +451,7 @@ function ContactUs() {
                       textAlign: isRTL ? "right" : "left",
                     }}
                   >
-                    ⏱️ We respond within 24-48 hours
+                    ⏱️ {t["We respond within 24-48 hours"]}
                   </p>
                 </div>
                 <p
@@ -456,7 +460,11 @@ function ContactUs() {
                     color: "rgba(75, 85, 99, 1)",
                   }}
                 >
-                  Our team reviews every message and gets back to you promptly
+                  {
+                    t[
+                      "Our team reviews every message and gets back to you promptly"
+                    ]
+                  }
                 </p>
               </div>
             </div>
@@ -470,10 +478,10 @@ function ContactUs() {
                   fontWeight: 700,
                 }}
               >
-                Connect With Us
+                {t["Connect With Us"]}
               </h2>
               <p style={{ color: "rgba(100, 100, 100, 1)" }}>
-                Follow us on social media for updates and tips
+                {t["Follow us on social media for updates and tips"]}
               </p>
             </div>
             <div
@@ -512,7 +520,7 @@ function ContactUs() {
                       letterSpacing: "2px",
                     }}
                   >
-                    Follow Us
+                    {t["Follow Us"]}
                   </span>
                 </div>
               ))}

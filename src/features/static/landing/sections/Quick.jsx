@@ -3,52 +3,59 @@ import { LanguageContext } from "/src/context/LanguageContext";
 import Container from "/src/components/Container";
 import TitleBlock from "/src/components/TitleBlock";
 import { Link } from "react-router-dom";
+import English from "/src/i18n/english.json";
+import Arabic from "/src/i18n/arabic.json";
 
-const data = [
-  {
-    link: "/remove-background",
-    image: "/images/remove-bg.png",
-    title: "Remove Backgrounds",
-    description: "Remove backgrounds instantly with powerful AI",
-  },
-  {
-    link: "/object-removal",
-    image: "/images/remove-object.png",
-    title: "Remove Object from Photo",
-    description: "Erase unwanted objects seamlessly in seconds",
-  },
-  {
-    link: "/ai-image-enhancer",
-    image: "/images/ai-image-enhancer.png",
-    title: "AI Image Enhancer",
-    description: "Enhance image quality and clarity automatically",
-  },
-  {
-    link: "/photo-to-cartoon",
-    image: "/images/photo-to-cartoon.png",
-    title: "Photo to Cartoon",
-    description: "Turn your photos into fun cartoon-style art",
-  },
-  {
-    link: "/create-collage",
-    image: "/images/collage-maker.png",
-    title: "Collage Maker",
-    description: "Combine multiple photos into beautiful layouts",
-  },
-];
+const translations = { English, Arabic };
 
 function Quick() {
-  const { direction } = useContext(LanguageContext);
+  const { language, direction } = useContext(LanguageContext);
   const isRTL = direction === "rtl";
+  const t = translations[language] || translations["English"];
+
+  const data = [
+    {
+      link: "/remove-background",
+      image: "/images/remove-bg.png",
+      title: t["Remove Backgrounds"],
+      description: t["Remove backgrounds instantly with powerful AI"],
+    },
+    {
+      link: "/object-removal",
+      image: "/images/remove-object.png",
+      title: t["Remove Object from Photo"],
+      description: t["Erase unwanted objects seamlessly in seconds"],
+    },
+    {
+      link: "/ai-image-enhancer",
+      image: "/images/ai-image-enhancer.png",
+      title: t["AI Image Enhancer"],
+      description: t["Enhance image quality and clarity automatically"],
+    },
+    {
+      link: "/photo-to-cartoon",
+      image: "/images/photo-to-cartoon.png",
+      title: t["Photo to Cartoon"],
+      description: t["Turn your photos into fun cartoon-style art"],
+    },
+    {
+      link: "/create-collage",
+      image: "/images/collage-maker.png",
+      title: t["Collage Maker"],
+      description: t["Combine multiple photos into beautiful layouts"],
+    },
+  ];
 
   return (
     <div className="bg-(--primary-section-color) pb-8">
       <Container>
         <TitleBlock
-          subtitle={"QUICK LINKS"}
-          title={"POPULAR TOOLS"}
+          subtitle={t["QUICK LINKS"]}
+          title={t["POPULAR TOOLS"]}
           description={
-            "Here we collected the most used Generative AI and Photo Editing tools people are looking for!"
+            t[
+              "Here we collected the most used Generative AI and Photo Editing tools people are looking for!"
+            ]
           }
         />
         <div

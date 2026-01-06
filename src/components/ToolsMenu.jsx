@@ -1,54 +1,58 @@
 import { useContext } from "react";
 import { LanguageContext } from "../context/LanguageContext";
 import { Link } from "react-router-dom";
+import English from "/src/i18n/english.json";
+import Arabic from "/src/i18n/arabic.json";
 
-const data1 = [
-  {
-    title: "Background & Object Editing",
-    image: "/images/background-99.png",
-    links: [
-      { name: "Remove Background", to: "/remove-background" },
-      { name: "Object Removal", to: "/object-removal" },
-      { name: "Blur Image", to: "/blur-image" },
-    ],
-  },
-  {
-    title: "Image Enhancement",
-    image: "/images/magic-1.png",
-    links: [
-      { name: "AI Image Enhancer", to: "/ai-image-enhancer" },
-      { name: "Sharpen Image", to: "/sharpen-image" },
-      { name: "Oil Paint Effect", to: "/oil-paint-effect" },
-    ],
-  },
-];
-
-const data2 = [
-  {
-    title: "Artistic Effects & Filters",
-    image: "/images/idea-1.png",
-    links: [
-      { name: "Photo to Cartoon", to: "/photo-to-cartoon" },
-      { name: "Grayscale Image", to: "/grayscale-image" },
-      { name: "Rounded Corner Image", to: "/rounded-corner-image" },
-    ],
-  },
-  {
-    title: "Basic Adjustments & Resize",
-    image: "/images/edit-1.png",
-    links: [
-      { name: "Adjust Image", to: "/adjust-image" },
-      { name: "Crop Image", to: "/crop-image" },
-      { name: "Resize Image", to: "/resize-image" },
-      { name: "Create Collage", to: "/create-collage" },
-    ],
-  },
-];
+const translations = { English, Arabic };
 
 function ToolsMenu({ toolsMenuOpen }) {
-  const { direction } = useContext(LanguageContext);
-
+  const { language, direction } = useContext(LanguageContext);
   const isRTL = direction === "rtl";
+  const t = translations[language] || translations["English"];
+
+  const data1 = [
+    {
+      title: t["Background & Object Editing"],
+      image: "/images/background-99.png",
+      links: [
+        { name: t["Remove Background"], to: "/remove-background" },
+        { name: t["Object Removal"], to: "/object-removal" },
+        { name: t["Blur Image"], to: "/blur-image" },
+      ],
+    },
+    {
+      title: t["Image Enhancement"],
+      image: "/images/magic-1.png",
+      links: [
+        { name: t["AI Image Enhancer"], to: "/ai-image-enhancer" },
+        { name: t["Sharpen Image"], to: "/sharpen-image" },
+        { name: t["Oil Paint Effect"], to: "/oil-paint-effect" },
+      ],
+    },
+  ];
+
+  const data2 = [
+    {
+      title: t["Artistic Effects & Filters"],
+      image: "/images/idea-1.png",
+      links: [
+        { name: t["Photo to Cartoon"], to: "/photo-to-cartoon" },
+        { name: t["Grayscale Image"], to: "/grayscale-image" },
+        { name: t["Rounded Corner Image"], to: "/rounded-corner-image" },
+      ],
+    },
+    {
+      title: t["Basic Adjustments & Resize"],
+      image: "/images/edit-1.png",
+      links: [
+        { name: t["Adjust Image"], to: "/adjust-image" },
+        { name: t["Crop Image"], to: "/crop-image" },
+        { name: t["Resize Image"], to: "/resize-image" },
+        { name: t["Create Collage"], to: "/create-collage" },
+      ],
+    },
+  ];
 
   return (
     <div

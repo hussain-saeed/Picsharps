@@ -6,64 +6,69 @@ import Our from "./components/Our";
 import { Link } from "react-router-dom";
 import Footer from "../../../components/Footer";
 import { FaLongArrowAltLeft, FaLongArrowAltRight } from "react-icons/fa";
+import English from "/src/i18n/english.json";
+import Arabic from "/src/i18n/arabic.json";
 
-const data = [
-  {
-    image: "images/simplicity.png",
-    title: "Simplicity",
-    text: "easy-to-use tools with no learning curve",
-  },
-  {
-    image: "images/speed.png",
-    title: "Speed",
-    text: "ultra-fast ai processing",
-  },
-  {
-    image: "images/professional-quality.png",
-    title: "Professional Quality",
-    text: "studio-level results every time",
-  },
-  {
-    image: "images/innovation.png",
-    title: "Innovation",
-    text: "continuously evolving with the latest ai technology",
-  },
-  {
-    image: "images/reliability.png",
-    title: "Reliability",
-    text: "secure, stable, and consistent performance",
-  },
-  {
-    image: "images/accessibility.png",
-    title: "Accessibility",
-    text: "high-quality tools available to all users",
-  },
-];
-
-const data2 = [
-  {
-    image: "images/simplicity.png",
-    header: "+10,000",
-    title: "Users",
-    text: "in the first 6 months",
-  },
-  {
-    image: "images/speed.png",
-    header: "4.8/5",
-    title: "Rating",
-    text: "by early users",
-  },
-  {
-    image: "images/professional-quality.png",
-    header: "AI Technology",
-    title: "Powered",
-    text: "built with industry-leading AI",
-  },
-];
+const translations = { English, Arabic };
 
 function About() {
-  const { direction } = useContext(LanguageContext);
+  const { language, direction } = useContext(LanguageContext);
   const isRTL = direction === "rtl";
+  const t = translations[language] || translations["English"];
+
+  const data = [
+    {
+      image: "images/simplicity.png",
+      title: t["Simplicity"],
+      text: t["easy-to-use tools with no learning curve"],
+    },
+    {
+      image: "images/speed.png",
+      title: t["Speed"],
+      text: t["ultra-fast AI processing"],
+    },
+    {
+      image: "images/professional-quality.png",
+      title: t["Professional Quality"],
+      text: t["studio-level results every time"],
+    },
+    {
+      image: "images/innovation.png",
+      title: t["Innovation"],
+      text: t["continuously evolving with the latest AI technology"],
+    },
+    {
+      image: "images/reliability.png",
+      title: t["Reliability"],
+      text: t["secure, stable, and consistent performance"],
+    },
+    {
+      image: "images/accessibility.png",
+      title: t["Accessibility"],
+      text: t["high-quality tools available to all users"],
+    },
+  ];
+
+  const data2 = [
+    {
+      image: "images/simplicity.png",
+      header: "+10,000",
+      title: t["Users"],
+      text: t["in the first 6 months"],
+    },
+    {
+      image: "images/speed.png",
+      header: t["4.8/5"],
+      title: t["Rating"],
+      text: t["by early users"],
+    },
+    {
+      image: "images/professional-quality.png",
+      header: t["AI Technology"],
+      title: t["Powered"],
+      text: t["built with industry-leading AI"],
+    },
+  ];
 
   return (
     <>
@@ -100,7 +105,7 @@ function About() {
                   marginBottom: "20px",
                 }}
               >
-                About{" "}
+                {t["About Picsharps"]}{" "}
                 <span
                   style={{
                     background: "var(--gradient-color)",
@@ -119,12 +124,11 @@ function About() {
                   lineHeight: "30px",
                 }}
               >
-                our platform was created to make advanced image enhancement
-                simple, fast, and accessible. Many users struggle with
-                complicated editing tools and low-quality images that affect
-                their work. We built this project to solve that problem by
-                offering AI-powered tools that deliver high-quality results in
-                seconds—without any technical skills.
+                {
+                  t[
+                    "our platform was created to make advanced image enhancement simple, fast, and accessible. Many users struggle with complicated editing tools and low-quality images that affect their work. We built this project to solve that problem by offering AI-powered tools that deliver high-quality results in seconds—without any technical skills."
+                  ]
+                }
               </p>
             </div>
 
@@ -147,9 +151,11 @@ function About() {
               isWhite={true}
               readyImage={true}
               image={"/images/our-mission.png"}
-              title={"Our Mission"}
+              title={t["Our Mission"]}
               paragraph={
-                "to empower individuals, creators, and businesses with intelligent AI tools that simplify image editing and deliver professional, high-quality results instantly."
+                t[
+                  "to empower individuals, creators, and businesses with intelligent AI tools that simplify image editing and deliver professional, high-quality results instantly."
+                ]
               }
             />
           </section>
@@ -159,9 +165,11 @@ function About() {
               isWhite={false}
               readyImage={false}
               icon={"/images/view.png"}
-              title={"Our Vision"}
+              title={t["Our Vision"]}
               paragraph={
-                "to become a global leader in AI-powered image solutions by building a complete ecosystem of smart tools that enhance, transform, and optimize visual content for millions of users worldwide."
+                t[
+                  "to become a global leader in AI-powered image solutions by building a complete ecosystem of smart tools that enhance, transform, and optimize visual content for millions of users worldwide."
+                ]
               }
             />
           </section>
@@ -171,7 +179,7 @@ function About() {
               className="mb-12 text-center text-[35px] sm:text-[40px]"
               style={{ fontWeight: "700" }}
             >
-              Our Values
+              {t["Our Values"]}
             </h2>
 
             <div
@@ -236,9 +244,11 @@ function About() {
               readyImage={false}
               gridain={true}
               icon={"/images/book-1.png"}
-              title={"Our Story"}
+              title={t["Our Story"]}
               paragraph={
-                "founded in 2025, our mission is to build simple, fast, ai-powered creative tools accessible to everyone."
+                t[
+                  "founded in 2025, our mission is to build simple, fast, AI-powered creative tools accessible to everyone."
+                ]
               }
             />
           </section>
@@ -248,7 +258,7 @@ function About() {
               className="mb-12 text-center text-[35px] sm:text-[40px]"
               style={{ fontWeight: "700" }}
             >
-              Our Achievements
+              {t["Our Achievements"]}
             </h2>
 
             <div
@@ -298,8 +308,9 @@ function About() {
                           "lg:text-[35px] mt-1 leading-[1.1] md:leading-normal mb-2.5 md:mb-0"
                         }
                     `}
+                    dir={isRTL ? "rtl" : "ltr"}
                   >
-                    {item.header}
+                    <span>{item.header}</span>
                   </h2>
 
                   <h3
@@ -341,7 +352,7 @@ function About() {
                 color: "white",
               }}
             >
-              Ready To Transform Your Images?
+              {t["Ready To Transform Your Images?"]}
             </h2>
             <p
               style={{
@@ -350,8 +361,9 @@ function About() {
                 fontWeight: "500",
                 color: "white",
               }}
+              dir={isRTL ? "rtl" : "ltr"}
             >
-              Join Thousands Of Users Who Trust Picsharps
+              {t["Join Thousands Of Users Who Trust Picsharps"]}
             </p>
             <Link
               className={`
@@ -369,7 +381,7 @@ function About() {
               }}
               to={"/all-tools"}
             >
-              <span>Get Started Free</span>
+              <span>{t["Get Started Free"]}</span>
               {isRTL ? <FaLongArrowAltLeft /> : <FaLongArrowAltRight />}
             </Link>
           </Container>

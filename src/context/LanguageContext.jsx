@@ -4,7 +4,6 @@ import { createContext, useState, useEffect } from "react";
 
 export const languages = [
   { name: "English", direction: "ltr" },
-  { name: "French", direction: "ltr" },
   { name: "Arabic", direction: "rtl" },
 ];
 

@@ -1,12 +1,27 @@
-import { useContext } from "react";
+import { useContext, useState, useEffect } from "react";
 import { LanguageContext } from "/src/context/LanguageContext";
 import Container from "/src/components/Container";
 import ImageCompare from "../../../../components/ImageCompare";
 import { Link } from "react-router-dom";
+import English from "/src/i18n/english.json";
+import Arabic from "/src/i18n/arabic.json";
+import Loader from "../../../../components/Loader";
+
+const translations = { English, Arabic };
 
 function Hero() {
-  const { direction } = useContext(LanguageContext);
+  const { language, direction } = useContext(LanguageContext);
   const isRTL = direction === "rtl";
+  const t = translations[language] || translations["English"];
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 1900);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <div className="bg-(--secondary-section-color) flex">
@@ -23,7 +38,7 @@ function Hero() {
             textAlign: "center",
           }}
         >
-          DESIGN EASILY
+          {t["DESIGN EASILY"]}
         </h1>
         <div
           style={{
@@ -32,36 +47,45 @@ function Hero() {
             fontSize: "20px",
             textAlign: "center",
           }}
+          dir={isRTL ? "rtl" : "ltr"}
         >
           <p>
-            Enhance, retouch, remove backgrounds, and create stunning visuals in
-            seconds.
+            {
+              t[
+                "Enhance, retouch, remove backgrounds, and create stunning visuals in seconds."
+              ]
+            }
           </p>
-          <p>No design skills needed.</p>
+          <p>{t["No design skills needed."]}</p>
         </div>
-
         <div
-          className={`flex justify-center items-center lg:justify-between flex-wrap gap-6 mb-[100px] ${
+          className={`flex justify-center items-center lg:justify-between flex-wrap gap-6 mb-[100px] relative ${
             isRTL ? "flex-row-reverse" : ""
           }`}
         >
-          <div className="w-[92%] lg:w-[48.5%]">
+          {loading ? <Loader className={`absolute mb-56`} /> : ""}
+          <div
+            className={`w-[92%] lg:w-[48.5%] ${
+              loading ? "opacity-0" : "opacity-100"
+            }`}
+          >
             <ImageCompare
               before="/images/IMG_20251116_173437.jpg"
               after="/images/pexels-christian-heitz-285904-842711.jpg"
               background="rgb(245, 245, 245)"
               aspectRatio="12/8"
               fit="fill"
+              loading={loading}
             />
           </div>
-
           <Link
-            to="ai-image-enhancer"
+            to={loading ? "" : "ai-image-enhancer"}
             style={{
               border: "2px dashed rgba(0, 0, 0, 0.31)",
               textAlign: "center",
-              cursor: "pointer",
+              cursor: loading ? "default" : "pointer",
               borderRadius: "20px",
+              opacity: loading ? "0" : "1",
             }}
             className="lg:w-[48.5%] w-[92%] lg:p-10 xl:p-20 2xl:p-31 p-12"
           >
@@ -85,15 +109,17 @@ function Hero() {
                   marginBottom: "20px",
                 }}
               >
-                Drag & Drop or Click to Upload
+                {t["Drag & Drop or Click to Upload"]}
               </h2>
               <span
                 style={{
                   fontSize: "15px",
                   fontWeight: "300",
                 }}
+                className="space-x-1"
               >
-                PNG, JPG, JPEG --- Max size 10MB
+                <span>PNG, JPG, JPEG --</span>
+                <span>{t["Max size 10MB"]}</span>
               </span>
               <div
                 style={{
@@ -114,7 +140,7 @@ function Hero() {
                     borderRadius: "20px",
                   }}
                 >
-                  Upload Image
+                  {t["Upload Image"]}
                 </span>
               </div>
             </div>

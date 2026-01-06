@@ -10,173 +10,178 @@ import FaqList from "./components/FaqList";
 import { Link } from "react-router-dom";
 import { FaLongArrowAltLeft, FaLongArrowAltRight } from "react-icons/fa";
 import Footer from "../../../components/Footer";
+import English from "/src/i18n/english.json";
+import Arabic from "/src/i18n/arabic.json";
 
-const data = {
-  columns: ["Free", "Pro", "Premium"],
-  features: [
-    {
-      section: "USAGE LIMITS",
-      rows: [
-        {
-          feature: "Max file size",
-          values: {
-            Free: "10MB",
-            Pro: "25MB",
-            Premium: "100MB",
-          },
-        },
-        {
-          feature: "Storage duration",
-          values: {
-            Free: "7 days",
-            Pro: "30 days",
-            Premium: "Unlimited",
-          },
-        },
-      ],
-    },
-
-    {
-      section: "OUTPUT QUALITY",
-      rows: [
-        {
-          feature: "HD quality",
-          values: {
-            Free: false,
-            Pro: true,
-            Premium: true,
-          },
-        },
-        {
-          feature: "4k quality",
-          values: {
-            Free: false,
-            Pro: false,
-            Premium: true,
-          },
-        },
-      ],
-    },
-
-    {
-      section: "FEATURES",
-      rows: [
-        {
-          feature: "Watermark removal",
-          values: {
-            Free: false,
-            Pro: true,
-            Premium: true,
-          },
-        },
-        {
-          feature: "Priority processing",
-          values: {
-            Free: false,
-            Pro: true,
-            Premium: true,
-          },
-        },
-        {
-          feature: "Commercial use",
-          values: {
-            Free: false,
-            Pro: true,
-            Premium: true,
-          },
-        },
-        {
-          feature: "Download history",
-          values: {
-            Free: "7 days",
-            Pro: "30 days",
-            Premium: "Unlimited",
-          },
-        },
-        {
-          feature: "API access",
-          values: {
-            Free: false,
-            Pro: false,
-            Premium: true,
-          },
-        },
-        {
-          feature: "Bulk processing",
-          values: {
-            Free: false,
-            Pro: false,
-            Premium: true,
-          },
-        },
-      ],
-    },
-
-    {
-      section: "SUPPORT",
-      rows: [
-        {
-          feature: "Email support",
-          values: {
-            Free: false,
-            Pro: true,
-            Premium: true,
-          },
-        },
-        {
-          feature: "Priority support",
-          values: {
-            Free: false,
-            Pro: false,
-            Premium: true,
-          },
-        },
-      ],
-    },
-  ],
-};
-
-const data2 = [
-  {
-    text: "The Pro plan is worth every penny. The quality is outstanding and the processing speed is incredible!",
-    name: "Sarah Johnson",
-    job: "Graphic Designer",
-  },
-  {
-    text: "I've tried many tools, but this one stands out. The Premium plan has everything I need for my business.",
-    name: "Michael Chen",
-    job: "Marketing Director",
-  },
-  {
-    text: "Great value for money! The interface is intuitive and the results are consistently high quality.",
-    name: "Emily Rodriguez",
-    job: "Content Creator",
-  },
-];
-
-const data3 = [
-  {
-    imgSrc: "/images/padlock-4.png",
-    title: "Secure Payment",
-  },
-  {
-    imgSrc: "/images/padlock-3.png",
-    title: "SSL Encrypted",
-  },
-  {
-    imgSrc: "/images/padlock-2.png",
-    title: "Money Back Guarantee",
-  },
-  {
-    imgSrc: "/images/padlock-1.png",
-    title: "10,000+ Users",
-  },
-];
+const translations = { English, Arabic };
 
 function Pricing() {
-  const { direction } = useContext(LanguageContext);
+  const { language, direction } = useContext(LanguageContext);
   const isRTL = direction === "rtl";
+  const t = translations[language] || translations["English"];
   const [selectedFeature, setSelectedFeature] = useState(null);
+
+  const data = {
+    columns: ["Free", "Pro", "Premium"],
+    features: [
+      {
+        section: "USAGE LIMITS",
+        rows: [
+          {
+            feature: "Max file size",
+            values: {
+              Free: "10MB",
+              Pro: "25MB",
+              Premium: "100MB",
+            },
+          },
+          {
+            feature: "Storage duration",
+            values: {
+              Free: "7 days",
+              Pro: "30 days",
+              Premium: "Unlimited",
+            },
+          },
+        ],
+      },
+
+      {
+        section: "OUTPUT QUALITY",
+        rows: [
+          {
+            feature: "HD quality",
+            values: {
+              Free: false,
+              Pro: true,
+              Premium: true,
+            },
+          },
+          {
+            feature: "4k quality",
+            values: {
+              Free: false,
+              Pro: false,
+              Premium: true,
+            },
+          },
+        ],
+      },
+
+      {
+        section: "FEATURES",
+        rows: [
+          {
+            feature: "Watermark removal",
+            values: {
+              Free: false,
+              Pro: true,
+              Premium: true,
+            },
+          },
+          {
+            feature: "Priority processing",
+            values: {
+              Free: false,
+              Pro: true,
+              Premium: true,
+            },
+          },
+          {
+            feature: "Commercial use",
+            values: {
+              Free: false,
+              Pro: true,
+              Premium: true,
+            },
+          },
+          {
+            feature: "Download history",
+            values: {
+              Free: "7 days",
+              Pro: "30 days",
+              Premium: "Unlimited",
+            },
+          },
+          {
+            feature: "API access",
+            values: {
+              Free: false,
+              Pro: false,
+              Premium: true,
+            },
+          },
+          {
+            feature: "Bulk processing",
+            values: {
+              Free: false,
+              Pro: false,
+              Premium: true,
+            },
+          },
+        ],
+      },
+
+      {
+        section: "SUPPORT",
+        rows: [
+          {
+            feature: "Email support",
+            values: {
+              Free: false,
+              Pro: true,
+              Premium: true,
+            },
+          },
+          {
+            feature: "Priority support",
+            values: {
+              Free: false,
+              Pro: false,
+              Premium: true,
+            },
+          },
+        ],
+      },
+    ],
+  };
+
+  const data2 = [
+    {
+      text: "The Pro plan is worth every penny. The quality is outstanding and the processing speed is incredible!",
+      name: "Sarah Johnson",
+      job: "Graphic Designer",
+    },
+    {
+      text: "I've tried many tools, but this one stands out. The Premium plan has everything I need for my business.",
+      name: "Michael Chen",
+      job: "Marketing Director",
+    },
+    {
+      text: "Great value for money! The interface is intuitive and the results are consistently high quality.",
+      name: "Emily Rodriguez",
+      job: "Content Creator",
+    },
+  ];
+
+  const data3 = [
+    {
+      imgSrc: "/images/padlock-4.png",
+      title: t["Secure Payment"],
+    },
+    {
+      imgSrc: "/images/padlock-3.png",
+      title: t["SSL Encrypted"],
+    },
+    {
+      imgSrc: "/images/padlock-2.png",
+      title: t["Money Back Guarantee"],
+    },
+    {
+      imgSrc: "/images/padlock-1.png",
+      title: "+10,000 " + t["Users Number"],
+    },
+  ];
 
   return (
     <>
@@ -201,7 +206,7 @@ function Pricing() {
                   letterSpacing: "2px",
                 }}
               >
-                Simple, Transparent Pricing
+                {t["Simple, Transparent Pricing"]}
               </h1>
               <p
                 style={{
@@ -209,8 +214,11 @@ function Pricing() {
                   letterSpacing: "2px",
                 }}
               >
-                Choose the perfect plan for your image editing needs. Upgrade,
-                downgrade, or cancel anytime
+                {
+                  t[
+                    "Choose the perfect plan for your image editing needs. Upgrade, downgrade, or cancel anytime"
+                  ]
+                }
               </p>
             </div>
 
@@ -235,7 +243,7 @@ function Pricing() {
                     marginBottom: "5px",
                   }}
                 >
-                  Compare All Features
+                  {t["Compare All Features"]}
                 </h2>
                 <p
                   style={{
@@ -245,7 +253,7 @@ function Pricing() {
                     marginBottom: "50px",
                   }}
                 >
-                  See what's included in each plan
+                  {t["See what's included in each plan"]}
                 </p>
               </div>
 
@@ -297,7 +305,7 @@ function Pricing() {
                     marginBottom: "20px",
                   }}
                 >
-                  7-Day Money Back Guarantee
+                  {t["7-Day Money Back Guarantee"]}
                 </h2>
                 <p
                   style={{
@@ -307,8 +315,11 @@ function Pricing() {
                     marginBottom: "5px",
                   }}
                 >
-                  try risk-free! refunds available within 7 days of first
-                  purchase
+                  {
+                    t[
+                      "try risk-free! refunds available within 7 days of first purchase"
+                    ]
+                  }
                 </p>
                 <p
                   style={{
@@ -317,7 +328,7 @@ function Pricing() {
                     color: "rgba(91, 91, 91, 1)",
                   }}
                 >
-                  note: renewals and old subscriptions are non-refundable
+                  {t["note: renewals and old subscriptions are non-refundable"]}
                 </p>
               </div>
             </div>
@@ -339,7 +350,7 @@ function Pricing() {
                   marginBottom: "5px",
                 }}
               >
-                Frequently Asked Questions{" "}
+                {t["Frequently Asked Questions"]}
               </h2>
               <p
                 style={{
@@ -349,7 +360,7 @@ function Pricing() {
                   marginBottom: "50px",
                 }}
               >
-                Everything you need to know about our pricing and plans{" "}
+                {t["Everything you need to know about our pricing and plans"]}
               </p>
             </div>
             <FaqList />
@@ -366,7 +377,7 @@ function Pricing() {
                   marginBottom: "5px",
                 }}
               >
-                Loved by Thousands of Users
+                {t["Loved by Thousands of Users"]}
               </h2>
               <p
                 style={{
@@ -376,14 +387,10 @@ function Pricing() {
                   marginBottom: "50px",
                 }}
               >
-                See what our customers are saying
+                {t["See what our customers are saying"]}
               </p>
             </div>
-            <div
-              className={`w-full flex flex-wrap gap-6 ${
-                isRTL ? "flex-row-reverse" : "flex-row"
-              }`}
-            >
+            <div className={`w-full flex flex-wrap gap-6`} dir="ltr">
               {data2.map((item, index) => (
                 <div
                   key={index}
@@ -511,7 +518,7 @@ function Pricing() {
                 color: "white",
               }}
             >
-              Ready To Transform Your Images?
+              {t["Ready To Transform Your Images?"]}
             </h2>
             <p
               style={{
@@ -521,12 +528,11 @@ function Pricing() {
                 color: "white",
               }}
             >
-              Join Thousands Of Users Who Trust Picsharps
+              {t["Join Thousands Of Users Who Trust Picsharps"]}
             </p>
             <Link
               className={`
                 flex items-center gap-2 mx-auto justify-center
-                ${isRTL ? "flex-row-reverse" : "flex-row"}
               `}
               style={{
                 backgroundColor: "white",
@@ -539,7 +545,7 @@ function Pricing() {
               }}
               to={"/all-tools"}
             >
-              <span>Get Started Free</span>
+              <span>{t["Get Started Free"]}</span>
               {isRTL ? <FaLongArrowAltLeft /> : <FaLongArrowAltRight />}
             </Link>
           </Container>

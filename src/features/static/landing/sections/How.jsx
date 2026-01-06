@@ -2,24 +2,37 @@ import React, { useContext } from "react";
 import { LanguageContext } from "/src/context/LanguageContext";
 import Container from "/src/components/Container";
 import TitleBlock from "/src/components/TitleBlock";
+import English from "/src/i18n/english.json";
+import Arabic from "/src/i18n/arabic.json";
 
-const data = [
-  { id: 1, img: "/images/click-1.png", text: "Choose AI tool" },
-  { id: 2, img: "/images/upload-1.png", text: "Upload your photo" },
-  { id: 3, img: "/images/light-bolt-1.png", text: "Apply changes instantly" },
-  { id: 4, img: "/images/download-1.png", text: "Download or export" },
-];
+const translations = { English, Arabic };
 
 const How = () => {
-  const { direction } = useContext(LanguageContext);
+  const { language, direction } = useContext(LanguageContext);
   const isRTL = direction === "rtl";
+  const t = translations[language] || translations["English"];
+
+  const data = [
+    { id: 1, img: "/images/click-1.png", text: t["Choose AI tool"] },
+    { id: 2, img: "/images/upload-1.png", text: t["Upload your photo"] },
+    {
+      id: 3,
+      img: "/images/light-bolt-1.png",
+      text: t["Apply changes instantly"],
+    },
+    { id: 4, img: "/images/download-1.png", text: t["Download or export"] },
+  ];
 
   return (
     <div className="pb-24" style={{ backgroundColor: "rgba(238, 238, 238)" }}>
       <Container>
         <TitleBlock
-          title="HOW IT WORKS"
-          description="Transform your photos in just 4 simple steps — no technical skills required"
+          title={t["HOW IT WORKS"]}
+          description={
+            t[
+              "Transform your photos in just 4 simple steps — no technical skills required"
+            ]
+          }
         />
         <div
           className={`flex flex-col lg:flex-row ${

@@ -3,34 +3,39 @@ import { Link } from "react-router-dom";
 import Container from "../components/Container";
 import ChangeLanguage from "./ChangeLanguage";
 import { LanguageContext } from "../context/LanguageContext";
+import English from "/src/i18n/english.json";
+import Arabic from "/src/i18n/arabic.json";
 
-const data = [
-  {
-    title: "Product",
-    links: [
-      { to: "/all-tools", text: "Features" },
-      { to: "/pricing", text: "Pricing" },
-    ],
-  },
-  {
-    title: "Company",
-    links: [
-      { to: "/about", text: "About" },
-      { to: "/contact-us", text: "Contact" },
-    ],
-  },
-  {
-    title: "Legal",
-    links: [
-      { to: "/privacy-policy", text: "Privacy Policy" },
-      { to: "/terms-of-service", text: "Terms of Service" },
-    ],
-  },
-];
+const translations = { English, Arabic };
 
 function Footer({ setActiveView }) {
-  const { direction } = useContext(LanguageContext);
+  const { language, direction } = useContext(LanguageContext);
   const isRTL = direction === "rtl";
+  const t = translations[language] || translations["English"];
+
+  const data = [
+    {
+      title: t["Product"],
+      links: [
+        { to: "/all-tools", text: t["Features"] },
+        { to: "/pricing", text: t["Pricing"] },
+      ],
+    },
+    {
+      title: t["Company"],
+      links: [
+        { to: "/about", text: t["About"] },
+        { to: "/contact-us", text: t["Contact"] },
+      ],
+    },
+    {
+      title: t["Legal"],
+      links: [
+        { to: "/privacy-policy", text: t["Privacy Policy"] },
+        { to: "/terms-of-service", text: t["Terms of Service"] },
+      ],
+    },
+  ];
 
   return (
     <div
@@ -55,8 +60,8 @@ function Footer({ setActiveView }) {
                 isRTL ? "flex-row-reverse text-right" : "text-left"
               }`}
               onClick={() => {
-                localStorage.setItem("activeView", "home");
-                setActiveView("home");
+                localStorage.setItem("activeView", "Home");
+                setActiveView("Home");
                 window.scrollTo({
                   top: 0,
                   behavior: "smooth",
@@ -76,7 +81,11 @@ function Footer({ setActiveView }) {
               className="lg:w-[55%] mb-10 lg:mb-0 text-[rgba(0, 0, 0, 0.52)]"
               dir={direction}
             >
-              AI-powered photo editing made simple and accessible for everyone
+              {
+                t[
+                  "AI-powered photo editing made simple and accessible for everyone"
+                ]
+              }
             </p>
           </div>
 
@@ -115,7 +124,7 @@ function Footer({ setActiveView }) {
           }`}
           style={{ color: "rgba(0, 0, 0, 0.52)", fontSize: "15px" }}
         >
-          <span>© 2025 picsharps. All rights reserved</span>
+          <span>© 2025 picsharps {t["All rights reserved"]}</span>
           <ChangeLanguage openFrom={"top"} />
           <div
             className={`flex items-center gap-8 ${

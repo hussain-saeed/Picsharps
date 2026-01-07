@@ -1,5 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useContext } from "react";
 import { Slider } from "@mui/material";
+import { LanguageContext } from "/src/context/LanguageContext";
 
 export const OptionSlider = ({
   label,
@@ -10,6 +11,8 @@ export const OptionSlider = ({
   disabled,
   onCommitChange,
 }) => {
+  const { direction } = useContext(LanguageContext);
+  const isRTL = direction === "rtl";
   const [tempValue, setTempValue] = useState(value);
   const lastValueRef = useRef(value);
   const timerRef = useRef(null);
@@ -33,6 +36,8 @@ export const OptionSlider = ({
     }, 1200);
   };
 
+  const getDisplayValue = (val) => (isRTL ? max + min - val : val);
+
   return (
     <div style={{ paddingLeft: "14px", paddingRight: "14px" }}>
       <div
@@ -43,11 +48,11 @@ export const OptionSlider = ({
         }}
       >
         <span style={{ fontSize: "14px", fontWeight: 500 }}>{label}</span>
-        <span style={{ fontSize: "13px", color: "#666" }}>{tempValue}</span>
+        <span style={{ fontSize: "13px", color: "#666" }}>{getDisplayValue(tempValue)}</span>
       </div>
 
       <Slider
-        value={tempValue}
+        value={getDisplayValue(tempValue)}
         min={min}
         max={max}
         step={step}
@@ -55,7 +60,7 @@ export const OptionSlider = ({
         onChange={handleChange}
         sx={{
           height: 6,
-
+          transform: isRTL ? "rotate(180deg)" : "none",
           "& .MuiSlider-track": {
             background: "var(--gradient-color)",
             border: "none",

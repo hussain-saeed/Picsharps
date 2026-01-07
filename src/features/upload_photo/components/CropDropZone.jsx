@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback, useContext } from "react";
 import { useDropzone } from "react-dropzone";
-import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { TOOL_CONFIG } from "../config/toolConfig";
 import ImageCompare from "../../../components/ImageCompare";
@@ -28,7 +27,6 @@ const CropDropZone = () => {
     ERROR: "error",
   };
 
-  const navigate = useNavigate();
   const currentTool = "crop-image";
   const { accessToken } = useAuth();
 
@@ -469,25 +467,6 @@ const CropDropZone = () => {
     }
   };
 
-  const goToTool = (toolPath) => {
-    if (!processedImage) {
-      toast.error("No processed image available");
-      return;
-    }
-
-    localStorage.setItem("came_from_tool", "true");
-
-    const resultData = {
-      sourceImageId,
-      previewUrl: processedImage,
-      originalUrl: uploadedImageUrl,
-      tool: currentTool,
-    };
-    localStorage.setItem(`dropzone_last_result`, JSON.stringify(resultData));
-
-    navigate(`/${toolPath}`);
-  };
-
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept: {
@@ -501,13 +480,6 @@ const CropDropZone = () => {
       status === COMPONENT_STATES.UPLOADING ||
       status === COMPONENT_STATES.PROCESSING,
   });
-
-  const availableTools = Object.keys(TOOL_CONFIG)
-    .filter((tool) => tool !== currentTool)
-    .map((tool) => ({
-      path: tool,
-      label: TOOL_CONFIG[tool].name,
-    }));
 
   const getAspectRatioValue = () => {
     switch (aspectRatio) {
@@ -538,7 +510,7 @@ const CropDropZone = () => {
   };
 
   return (
-    <div>
+    <div dir={isRTL ? "rtl" : "ltr"}>
       {showDropZone && (
         <div
           {...getRootProps()}
@@ -646,8 +618,8 @@ const CropDropZone = () => {
                   }}
                 >
                   {status === COMPONENT_STATES.UPLOADING
-                    ? "Uploading ..."
-                    : "Processing ..."}
+                    ? t["Uploading ..."]
+                    : t["Processing ..."]}
                   <div
                     style={{
                       marginTop: "10px",
@@ -871,7 +843,6 @@ const CropDropZone = () => {
                           border: "none",
                           borderRadius: "8px",
                           fontSize: "16px",
-                          fontWeight: "600",
                           cursor: "pointer",
                           display: "flex",
                           justifyContent: "center",
@@ -879,8 +850,15 @@ const CropDropZone = () => {
                           gap: "8px",
                         }}
                       >
-                        <Play size={18} />
-                        Start Processing
+                        {isRTL ? (
+                          <Play
+                            size={18}
+                            style={{ transform: "rotate(180deg)" }}
+                          />
+                        ) : (
+                          <Play size={18} />
+                        )}
+                        {t["Start Processing"]}
                       </button>
                     </>
 
@@ -904,10 +882,11 @@ const CropDropZone = () => {
                             display: "flex",
                             alignItems: "center",
                             gap: "8px",
+                            marginTop: "30px",
                           }}
                         >
                           <RefreshCw size={18} />
-                          Change Photo
+                          {t["Change Photo"]}
                         </button>
                       </div>
                     )}
@@ -944,8 +923,8 @@ const CropDropZone = () => {
               }}
             >
               {status === COMPONENT_STATES.UPLOADING
-                ? "Uploading ..."
-                : "Processing ..."}
+                ? t["Uploading ..."]
+                : t["Processing ..."]}
               <div
                 style={{
                   marginTop: "10px",
@@ -1011,17 +990,17 @@ const CropDropZone = () => {
                         fontSize: "18px",
                         fontWeight: "600",
                         backgroundColor: "green",
-                        marginTop: "8px",
                         letterSpacing: "2px",
                         position: "absolute",
                         opacity: "0.5",
                         bottom: "10px",
-                        left: "10px",
+                        left: isRTL ? "unset" : "10px",
+                        right: isRTL ? "10px" : "unset",
                         borderRadius: "10px",
                         padding: "2px 8px",
                       }}
                     >
-                      PROCESSED
+                      {t["PROCESSED"]}
                     </h3>
                   </div>
                 </div>
@@ -1043,6 +1022,7 @@ const CropDropZone = () => {
 
           {accessToken ? (
             <button
+              dir={isRTL ? "rtl" : "ltr"}
               onClick={saveResult}
               style={{
                 padding: "10px 18px",
@@ -1059,42 +1039,10 @@ const CropDropZone = () => {
               }}
             >
               <Download size={18} />
-              Download Result
+              {t["Download Result"]}
             </button>
           ) : (
             ""
-          )}
-
-          {availableTools.length > 0 && (
-            <Box sx={{ minWidth: "300px" }}>
-              <FormControl fullWidth>
-                <InputLabel>
-                  Select a tool to process the result with ...
-                </InputLabel>
-                <Select
-                  label="Select a tool to process the result with ..."
-                  defaultValue=""
-                  onChange={(e) => goToTool(e.target.value)}
-                  sx={{
-                    borderRadius: "8px",
-                    background: "transparent",
-                    ".MuiOutlinedInput-notchedOutline": { borderColor: "#ccc" },
-                    "&:hover .MuiOutlinedInput-notchedOutline": {
-                      borderColor: "#aaa",
-                    },
-                    "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                      borderColor: "#1976d2",
-                    },
-                  }}
-                >
-                  {availableTools.map((tool) => (
-                    <MenuItem key={tool.path} value={tool.path}>
-                      {tool.label}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Box>
           )}
 
           <button
@@ -1114,7 +1062,7 @@ const CropDropZone = () => {
             }}
           >
             <RefreshCw size={18} />
-            Change Photo
+            {t["Change Photo"]}
           </button>
         </div>
       )}
@@ -1123,10 +1071,10 @@ const CropDropZone = () => {
       <style jsx>{`
         @keyframes loading {
           0% {
-            transform: translateX(-100%);
+            transform: ${isRTL ? "translateX(100%)" : "translateX(-100%)"};
           }
           100% {
-            transform: translateX(300%);
+            transform: ${isRTL ? "translateX(-300%)" : "translateX(300%)"};
           }
         }
       `}</style>

@@ -311,7 +311,7 @@ const ObjectRemovalTool = () => {
   };
 
   return (
-    <div>
+    <div dir={isRTL ? "rtl" : "ltr"}>
       {status === COMPONENT_STATES.IDLE && (
         <div>
           <input
@@ -413,8 +413,8 @@ const ObjectRemovalTool = () => {
               }}
             >
               {status === COMPONENT_STATES.UPLOADING
-                ? "Uploading ..."
-                : "Processing ..."}
+                ? t["Uploading ..."]
+                : t["Processing ..."]}
               <div
                 style={{
                   marginTop: "10px",
@@ -446,7 +446,7 @@ const ObjectRemovalTool = () => {
             <>
               <div style={{ marginBottom: "30px" }}>
                 <h3 className="mb-6 text-lg font-semibold">
-                  Select the object to remove!
+                  {t["Select the object to remove!"]}
                 </h3>
 
                 <div className="flex justify-center gap-8 items-start flex-wrap">
@@ -489,29 +489,30 @@ const ObjectRemovalTool = () => {
                     />
                   </div>
 
-                  <div className="bg-white p-4 rounded-3xl">
+                  <div className="bg-white p-4 rounded-3xl min-w-[16%]">
                     <div
                       style={{
                         display: "flex",
                         alignItems: "center",
                         gap: "10px",
                         flex: "1",
-                        minWidth: "250px",
                         marginBottom: "20px",
                       }}
                     >
                       <OptionSlider
-                        label="Brush Size"
-                        value={brushSize}
+                        label={t["Brush Size"]}
+                        value={isRTL ? 35 - brushSize : brushSize}
                         min={5}
                         max={30}
                         step={1}
                         disabled={status === COMPONENT_STATES.PROCESSING}
                         onPreviewChange={(val) => {
-                          setBrushSize(val);
+                          const actualVal = isRTL ? 35 - val : val;
+                          setBrushSize(actualVal);
                         }}
                         onCommitChange={(val) => {
-                          setBrushSize(val);
+                          const actualVal = isRTL ? 35 - val : val;
+                          setBrushSize(actualVal);
                         }}
                       />
                     </div>
@@ -533,7 +534,7 @@ const ObjectRemovalTool = () => {
                       }}
                     >
                       <Eraser size={18} />
-                      Clear Mask
+                      {t["Clear Mask"]}
                     </button>
                     <button
                       onClick={processImage}
@@ -546,7 +547,6 @@ const ObjectRemovalTool = () => {
                         border: "none",
                         borderRadius: "8px",
                         fontSize: "16px",
-                        fontWeight: "600",
                         cursor: "pointer",
                         display: "flex",
                         justifyContent: "center",
@@ -554,8 +554,15 @@ const ObjectRemovalTool = () => {
                         gap: "8px",
                       }}
                     >
-                      <Play size={18} />
-                      Start Processing
+                      {isRTL ? (
+                        <Play
+                          size={18}
+                          style={{ transform: "rotate(180deg)" }}
+                        />
+                      ) : (
+                        <Play size={18} />
+                      )}
+                      {t["Start Processing"]}
                     </button>
                   </div>
                 </div>
@@ -604,17 +611,17 @@ const ObjectRemovalTool = () => {
                           fontSize: "18px",
                           fontWeight: "600",
                           backgroundColor: "green",
-                          marginTop: "8px",
                           letterSpacing: "2px",
                           position: "absolute",
                           opacity: "0.5",
                           bottom: "10px",
-                          left: "10px",
+                          left: isRTL ? "unset" : "10px",
+                          right: isRTL ? "10px" : "unset",
                           borderRadius: "10px",
                           padding: "2px 8px",
                         }}
                       >
-                        PROCESSED
+                        {t["PROCESSED"]}
                       </h3>
                     </div>
                   </div>
@@ -636,6 +643,7 @@ const ObjectRemovalTool = () => {
 
             {accessToken ? (
               <button
+                dir={isRTL ? "rtl" : "ltr"}
                 onClick={saveResult}
                 style={{
                   padding: "10px 18px",
@@ -652,7 +660,7 @@ const ObjectRemovalTool = () => {
                 }}
               >
                 <Download size={18} />
-                Download Result
+                {t["Download Result"]}
               </button>
             ) : (
               ""
@@ -675,7 +683,7 @@ const ObjectRemovalTool = () => {
               }}
             >
               <RefreshCw size={18} />
-              Change Photo
+              {t["Change Photo"]}
             </button>
           </div>
         )}
@@ -699,10 +707,10 @@ const ObjectRemovalTool = () => {
       <style jsx>{`
         @keyframes loading {
           0% {
-            transform: translateX(-100%);
+            transform: ${isRTL ? "translateX(100%)" : "translateX(-100%)"};
           }
           100% {
-            transform: translateX(300%);
+            transform: ${isRTL ? "translateX(-300%)" : "translateX(300%)"};
           }
         }
       `}</style>

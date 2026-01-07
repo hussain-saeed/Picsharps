@@ -532,7 +532,7 @@ const DropZone = () => {
 
   // Component render function
   return (
-    <div>
+    <div dir={isRTL ? "rtl" : "ltr"}>
       {/* Dropzone area for file upload - only shown when showDropZone is true */}
       {showDropZone && (
         <div
@@ -644,8 +644,8 @@ const DropZone = () => {
                 }}
               >
                 {status === COMPONENT_STATES.UPLOADING
-                  ? "Uploading ..."
-                  : "Processing ..."}
+                  ? t["Uploading ..."]
+                  : t["Processing ..."]}
                 <div
                   style={{
                     marginTop: "10px",
@@ -707,12 +707,13 @@ const DropZone = () => {
                       position: "absolute",
                       opacity: "0.5",
                       bottom: "10px",
-                      left: "10px",
+                      left: isRTL ? "unset" : "10px",
+                      right: isRTL ? "10px" : "unset",
                       borderRadius: "10px",
                       padding: "2px 8px",
                     }}
                   >
-                    ORIGINAL
+                    {t["ORIGINAL"]}
                   </h3>
                 </div>
               </div>
@@ -746,23 +747,15 @@ const DropZone = () => {
                           >
                             {/* Dynamic title based on current tool */}
                             {currentTool === TOOL_TYPES.ENHANCE
-                              ? "Level"
-                              : currentTool === TOOL_TYPES.FLIP
-                              ? "Direction"
-                              : currentTool === TOOL_TYPES.RESIZE
-                              ? "Settings"
-                              : currentTool === TOOL_TYPES.ROTATE
-                              ? "Angle"
+                              ? t["Level"]
                               : currentTool === TOOL_TYPES.SHARPEN
-                              ? "Strength"
-                              : currentTool === TOOL_TYPES.REMOVE
-                              ? "Bg Color"
+                              ? t["Strength"]
                               : currentTool === TOOL_TYPES.BLUR
-                              ? "Amount"
+                              ? t["Amount"]
                               : currentTool === TOOL_TYPES.ROUNDED
-                              ? "Radius"
+                              ? t["Radius"]
                               : currentTool === TOOL_TYPES.OILING
-                              ? "Amount"
+                              ? t["Amount"]
                               : ""}
                           </h4>
 
@@ -801,6 +794,7 @@ const DropZone = () => {
                                             : "1px solid #ccc",
                                           cursor: "pointer",
                                           userSelect: "none",
+                                          width: "120px",
                                         }}
                                       >
                                         <input
@@ -812,73 +806,6 @@ const DropZone = () => {
                                             handleOptionChange(
                                               "upscaleFactor",
                                               parseInt(e.target.value)
-                                            )
-                                          }
-                                          disabled={
-                                            status ===
-                                            COMPONENT_STATES.PROCESSING
-                                          }
-                                          style={{
-                                            width: "16px",
-                                            height: "16px",
-                                            cursor: "pointer",
-                                          }}
-                                        />
-
-                                        <span
-                                          style={{
-                                            fontWeight: 500,
-                                            color: "#333",
-                                          }}
-                                        >
-                                          {option.label}
-                                        </span>
-                                      </label>
-                                    );
-                                  }
-                                )}
-                              </div>
-                            )}
-
-                            {/* Flip tool options */}
-                            {currentTool === TOOL_TYPES.FLIP && (
-                              <div
-                                style={{
-                                  display: "flex",
-                                  flexDirection: "column",
-                                  gap: "10px",
-                                }}
-                              >
-                                {toolConfig.options.direction.values.map(
-                                  (option) => {
-                                    const isSelected =
-                                      options.direction === option.value;
-
-                                    return (
-                                      <label
-                                        key={option.value}
-                                        style={{
-                                          display: "flex",
-                                          alignItems: "center",
-                                          gap: "10px",
-                                          padding: "10px 14px",
-                                          borderRadius: "8px",
-                                          border: isSelected
-                                            ? "2px solid #00c853"
-                                            : "1px solid #ccc",
-                                          cursor: "pointer",
-                                          userSelect: "none",
-                                        }}
-                                      >
-                                        <input
-                                          type="radio"
-                                          name="direction"
-                                          value={option.value}
-                                          checked={isSelected}
-                                          onChange={(e) =>
-                                            handleOptionChange(
-                                              "direction",
-                                              e.target.value
                                             )
                                           }
                                           disabled={
@@ -1012,7 +939,7 @@ const DropZone = () => {
                                               color: "#333",
                                             }}
                                           >
-                                            {option.label}
+                                            {t[option.label]}
                                           </span>
                                         </label>
                                       );
@@ -1035,82 +962,21 @@ const DropZone = () => {
                                     display: "flex",
                                     alignItems: "center",
                                     gap: "8px",
-                                    fontSize: "15px",
-                                    fontWeight: 500,
+                                    fontSize: "16px",
                                     width: "fit-content",
                                   }}
                                 >
-                                  <Play size={18} />
-                                  Start Processing
+                                  {isRTL ? (
+                                    <Play
+                                      size={18}
+                                      style={{ transform: "rotate(180deg)" }}
+                                    />
+                                  ) : (
+                                    <Play size={18} />
+                                  )}
+                                  {t["Start Processing"]}
                                 </button>
                               </>
-                            )}
-
-                            {/* Rotate tool options */}
-                            {currentTool === TOOL_TYPES.ROTATE && (
-                              <div
-                                style={{
-                                  display: "flex",
-                                  flexDirection: "column",
-                                  gap: "10px",
-                                }}
-                              >
-                                {toolConfig.options.angle.values.map(
-                                  (option) => {
-                                    const isSelected =
-                                      options.angle === option.value;
-
-                                    return (
-                                      <label
-                                        key={option.value}
-                                        style={{
-                                          display: "flex",
-                                          alignItems: "center",
-                                          gap: "10px",
-                                          padding: "10px 14px",
-                                          borderRadius: "8px",
-                                          border: isSelected
-                                            ? "2px solid #00c853"
-                                            : "1px solid #ccc",
-                                          cursor: "pointer",
-                                          userSelect: "none",
-                                        }}
-                                      >
-                                        <input
-                                          type="radio"
-                                          name="angle"
-                                          value={option.value}
-                                          checked={isSelected}
-                                          onChange={(e) =>
-                                            handleOptionChange(
-                                              "angle",
-                                              parseInt(e.target.value)
-                                            )
-                                          }
-                                          disabled={
-                                            status ===
-                                            COMPONENT_STATES.PROCESSING
-                                          }
-                                          style={{
-                                            width: "16px",
-                                            height: "16px",
-                                            cursor: "pointer",
-                                          }}
-                                        />
-
-                                        <span
-                                          style={{
-                                            fontWeight: 500,
-                                            color: "#333",
-                                          }}
-                                        >
-                                          {option.label}
-                                        </span>
-                                      </label>
-                                    );
-                                  }
-                                )}
-                              </div>
                             )}
 
                             {/* Sharpen tool options */}
@@ -1141,6 +1007,7 @@ const DropZone = () => {
                                             : "1px solid #ccc",
                                           cursor: "pointer",
                                           userSelect: "none",
+                                          width: "120px",
                                         }}
                                       >
                                         <input
@@ -1192,9 +1059,9 @@ const DropZone = () => {
                                 {[
                                   {
                                     value: "transparent",
-                                    label: "Transparent",
+                                    label: t["Transparent"],
                                   },
-                                  { value: "color", label: "Color" },
+                                  { value: "color", label: t["Color"] },
                                 ].map((option) => {
                                   const isSelected =
                                     !options.bgColor ||
@@ -1216,6 +1083,7 @@ const DropZone = () => {
                                           : "1px solid #ccc",
                                         cursor: "pointer",
                                         userSelect: "none",
+                                        width: "185px",
                                       }}
                                     >
                                       <input
@@ -1291,8 +1159,15 @@ const DropZone = () => {
                                     marginTop: "10px",
                                   }}
                                 >
-                                  <Play size={18} />
-                                  Start Processing
+                                  {isRTL ? (
+                                    <Play
+                                      size={18}
+                                      style={{ transform: "rotate(180deg)" }}
+                                    />
+                                  ) : (
+                                    <Play size={18} />
+                                  )}
+                                  {t["Start Processing"]}
                                 </button>
                               </div>
                             )}
@@ -1324,6 +1199,7 @@ const DropZone = () => {
                                             : "1px solid #ccc",
                                           cursor: "pointer",
                                           userSelect: "none",
+                                          width: "120px",
                                         }}
                                       >
                                         <input
@@ -1390,6 +1266,7 @@ const DropZone = () => {
                                             : "1px solid #ccc",
                                           cursor: "pointer",
                                           userSelect: "none",
+                                          width: "120px",
                                         }}
                                       >
                                         <input
@@ -1435,7 +1312,6 @@ const DropZone = () => {
                                   display: "flex",
                                   flexDirection: "column",
                                   gap: "10px",
-                                  width: "165px",
                                 }}
                               >
                                 {toolConfig.options.amount.values.map(
@@ -1457,6 +1333,7 @@ const DropZone = () => {
                                             : "1px solid #ccc",
                                           cursor: "pointer",
                                           userSelect: "none",
+                                          width: "120px",
                                         }}
                                       >
                                         <input
@@ -1499,25 +1376,38 @@ const DropZone = () => {
                             {currentTool === TOOL_TYPES.ADJUST && (
                               <div className="w-[200px]">
                                 {Object.entries(toolConfig.options).map(
-                                  ([key, config]) => (
-                                    <OptionSlider
-                                      key={key}
-                                      label={config.label}
-                                      value={options[key]}
-                                      min={config.min}
-                                      max={config.max}
-                                      step={config.step}
-                                      disabled={
-                                        status === COMPONENT_STATES.PROCESSING
-                                      }
-                                      onPreviewChange={(val) =>
-                                        handleOptionChange(key, val)
-                                      }
-                                      onCommitChange={(val) => {
-                                        handleOptionChange(key, val);
-                                      }}
-                                    />
-                                  )
+                                  ([key, config]) => {
+                                    const flipValue = (val) =>
+                                      isRTL
+                                        ? config.max + config.min - val
+                                        : val;
+
+                                    return (
+                                      <OptionSlider
+                                        key={key}
+                                        label={t[config.label]}
+                                        value={flipValue(options[key])}
+                                        min={config.min}
+                                        max={config.max}
+                                        step={config.step}
+                                        disabled={
+                                          status === COMPONENT_STATES.PROCESSING
+                                        }
+                                        onPreviewChange={(val) =>
+                                          handleOptionChange(
+                                            key,
+                                            flipValue(val)
+                                          )
+                                        }
+                                        onCommitChange={(val) => {
+                                          handleOptionChange(
+                                            key,
+                                            flipValue(val)
+                                          );
+                                        }}
+                                      />
+                                    );
+                                  }
                                 )}
                               </div>
                             )}
@@ -1554,13 +1444,19 @@ const DropZone = () => {
                                   display: "flex",
                                   alignItems: "center",
                                   gap: "8px",
-                                  fontSize: "15px",
-                                  fontWeight: 500,
+                                  fontSize: "16px",
                                   marginBottom: "10px",
                                 }}
                               >
-                                <Play size={18} />
-                                Start Processing
+                                {isRTL ? (
+                                  <Play
+                                    size={18}
+                                    style={{ transform: "rotate(180deg)" }}
+                                  />
+                                ) : (
+                                  <Play size={18} />
+                                )}
+                                {t["Start Processing"]}
                               </button>
                             )}
 
@@ -1583,7 +1479,7 @@ const DropZone = () => {
                               }}
                             >
                               <RefreshCw size={18} />
-                              Change Photo
+                              {t["Change Photo"]}
                             </button>
                           )}
                         </div>
@@ -1628,33 +1524,37 @@ const DropZone = () => {
                             fontSize: "18px",
                             fontWeight: "600",
                             backgroundColor: "green",
-                            marginTop: "8px",
                             letterSpacing: "2px",
                             position: "absolute",
                             opacity: "0.5",
                             bottom: "10px",
-                            left: "10px",
+                            left: isRTL ? "unset" : "10px",
+                            right: isRTL ? "10px" : "unset",
                             borderRadius: "10px",
                             padding: "2px 8px",
                           }}
                         >
-                          PROCESSED
+                          {t["PROCESSED"]}
                         </h3>
                       </div>
                     </div>
                   </div>
 
                   {/* Image comparison component for before/after visualization */}
-                  <div className="w-[92%] lg:w-[48.5%]">
-                    <ImageCompare
-                      hasBorder={true}
-                      before={uploadedImageUrl}
-                      after={processedImage}
-                      background={uploadedImageUrl}
-                      aspectRatio={12 / 8}
-                      fit={"contain"}
-                    />
-                  </div>
+                  {currentTool === TOOL_TYPES.RESIZE ? (
+                    ""
+                  ) : (
+                    <div className="w-[92%] lg:w-[48.5%]">
+                      <ImageCompare
+                        hasBorder={true}
+                        before={uploadedImageUrl}
+                        after={processedImage}
+                        background={uploadedImageUrl}
+                        aspectRatio={12 / 8}
+                        fit={"contain"}
+                      />
+                    </div>
+                  )}
                 </>
               )}
             </>
@@ -1691,6 +1591,7 @@ const DropZone = () => {
                 {/* Download button for processed image */}
                 {accessToken ? (
                   <button
+                    dir={isRTL ? "rtl" : "ltr"}
                     onClick={() => saveResult()}
                     style={{
                       padding: "10px 18px",
@@ -1707,7 +1608,7 @@ const DropZone = () => {
                     }}
                   >
                     <Download size={18} />
-                    Download Result
+                    {t["Download Result"]}
                   </button>
                 ) : (
                   ""
@@ -1722,16 +1623,41 @@ const DropZone = () => {
                         xs: "100%",
                         sm: "440px",
                       },
+                      direction: isRTL ? "rtl" : "ltr",
+                      "& *": {
+                        fontFamily: "inherit !important",
+                      },
+                      "& .MuiInputLabel-root": {
+                        right: isRTL ? 0 : "auto",
+                        left: isRTL ? "auto" : 0,
+                        top: isRTL ? -5 : "auto",
+                        width: "100%",
+                        textAlign: isRTL ? "right" : "left",
+                        transformOrigin: isRTL ? "right" : "left",
+                        paddingRight: isRTL ? "24px" : "0",
+                      },
+                      "& .MuiInputLabel-shrink": {
+                        transform: isRTL
+                          ? "translate(0, -1.5px) scale(0.75)"
+                          : "translate(14px, -9px) scale(0.75)",
+                      },
+                      "& .MuiOutlinedInput-notchedOutline": {
+                        textAlign: isRTL ? "right" : "left",
+                      },
+                      "& .MuiSelect-icon": {
+                        right: isRTL ? "unset" : "7px",
+                        left: isRTL ? "7px" : "unset",
+                      },
                     }}
                   >
                     <InputLabel id="tool-select-label">
-                      Select a tool to process the result with ...
+                      {t["Select a tool to process the result with ..."]}
                     </InputLabel>
 
                     <Select
                       labelId="tool-select-label"
                       defaultValue=""
-                      label="Select a tool to process the result with ..."
+                      label={t["Select a tool to process the result with ..."]}
                       onChange={(e) => goToTool(e.target.value)}
                       sx={{
                         borderRadius: "8px",
@@ -1744,6 +1670,16 @@ const DropZone = () => {
                         },
                         "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
                           borderColor: "#1976d2",
+                        },
+                      }}
+                      MenuProps={{
+                        dir: isRTL ? "rtl" : "ltr",
+                        PaperProps: {
+                          sx: {
+                            "& .MuiMenuItem-root": {
+                              fontFamily: "inherit",
+                            },
+                          },
                         },
                       }}
                     >
@@ -1772,13 +1708,12 @@ const DropZone = () => {
                   display: "flex",
                   alignItems: "center",
                   gap: "8px",
-                  fontSize: "15px",
-                  fontWeight: 500,
+                  fontSize: "16px",
                   marginLeft: "0",
                 }}
               >
                 <RefreshCw size={18} />
-                Change Photo
+                {t["Change Photo"]}
               </button>
             </div>
           </div>
@@ -1788,10 +1723,10 @@ const DropZone = () => {
         <style jsx>{`
           @keyframes loading {
             0% {
-              transform: translateX(-100%);
+              transform: ${isRTL ? "translateX(100%)" : "translateX(-100%)"};
             }
             100% {
-              transform: translateX(300%);
+              transform: ${isRTL ? "translateX(-300%)" : "translateX(300%)"};
             }
           }
         `}</style>

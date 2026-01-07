@@ -188,20 +188,20 @@ const CollageMaker = () => {
         sx={{
           minWidth: 260,
           marginBottom: "50px",
-          direction: isRTL ? "rtl" : "ltr", // ضبط الاتجاه هنا
+          direction: isRTL ? "rtl" : "ltr",
           "& *": {
-            fontFamily: "inherit !important", // يضمن أن كل العناصر الداخلية تأخذ نفس الخط
+            fontFamily: "inherit !important",
           },
           "& .MuiInputLabel-root": {
-            right: isRTL ? -65 : "auto", // تعديل مكان الليبل عند التحول لـ RTL
+            right: isRTL ? -65 : "auto",
             transformOrigin: isRTL ? "right" : "left",
           },
           "& .MuiOutlinedInput-notchedOutline": {
             textAlign: isRTL ? "right" : "left",
           },
           "& .MuiSelect-icon": {
-            right: isRTL ? "unset" : "7px", // إلغاء مكانه من اليمين في RTL
-            left: isRTL ? "7px" : "unset", // وضعه على اليسار في RTL
+            right: isRTL ? "unset" : "7px",
+            left: isRTL ? "7px" : "unset",
           },
         }}
       >
@@ -209,7 +209,7 @@ const CollageMaker = () => {
         <Select
           labelId="slot-count-label"
           value={selectedSlotCount}
-          label={t["Number of Photos"]} // تأكد أن الليبل هنا يطابق النص المترجم
+          label={t["Number of Photos"]}
           onChange={handleSlotCountChange}
           MenuProps={{
             dir: isRTL ? "rtl" : "ltr",
@@ -360,14 +360,14 @@ const CollageMaker = () => {
                   <button
                     onClick={() => removeImage(img.id)}
                     className="cursor-pointer absolute -top-2 -right-2 w-8 h-8 text-white rounded-full flex items-center justify-center shadow-lg text-sm"
-                    style={{ backgroundColor: "#ff2828", opacity: "0.9" }}
+                    style={{ backgroundColor: "#ff2828", opacity: "0.95" }}
                   >
                     X
                   </button>
                 ) : (
                   <button
                     className="cursor-not-allowed absolute -top-2 -right-2 w-8 h-8 text-white rounded-full flex items-center justify-center shadow-lg text-sm"
-                    style={{ backgroundColor: "#ff2828", opacity: "0.9" }}
+                    style={{ backgroundColor: "#ff2828", opacity: "0.95" }}
                   >
                     X
                   </button>
@@ -420,6 +420,7 @@ const CollageMaker = () => {
           </div>
           {accessToken ? (
             <button
+              dir={isRTL ? "rtl" : "ltr"}
               onClick={() => saveResult()}
               style={{
                 padding: "10px 18px",
@@ -437,7 +438,7 @@ const CollageMaker = () => {
               className="mt-8 mx-auto"
             >
               <Download size={18} />
-              Download Result
+              {t["Download Result"]}
             </button>
           ) : (
             ""

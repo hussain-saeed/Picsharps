@@ -58,7 +58,7 @@ function ToolsMenuMobile({ setActiveView }) {
       className="pt-30 pb-14 sm:pt-14 sm:pb-0"
     >
       <div className="min-h-[calc(100vh-300px)] flex flex-col items-center justify-center">
-        <Container className="pb-6 grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 place-content-center">
+        <Container className="pb-6 grid gap-4 grid-cols-1 sm:grid-cols-2 place-content-center">
           {data.map((tool, i) => (
             <div
               key={i}

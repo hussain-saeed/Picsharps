@@ -111,7 +111,7 @@ export default function Header({ setActiveView }) {
         </Link>
 
         <nav
-          className={`hidden lg:flex gap-16 font-medium text-black ${
+          className={`hidden xl:flex gap-16 font-medium text-black ${
             isRTL ? "flex-row-reverse" : ""
           }`}
         >
@@ -148,7 +148,7 @@ export default function Header({ setActiveView }) {
         </nav>
 
         <div
-          className={`hidden lg:flex items-center gap-2.5 ${
+          className={`hidden xl:flex items-center gap-2.5 ${
             isRTL ? "flex-row-reverse" : ""
           }`}
         >
@@ -163,28 +163,44 @@ export default function Header({ setActiveView }) {
               <RxAvatar />
             </Link>
           ) : (
-            <button
-              style={{
-                padding: "5px 20px",
-                background: "var(--gradient-color)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                border: "1px solid #00d0ff",
-                borderRadius: "30px",
-                fontWeight: "600",
-                cursor: "pointer",
-              }}
-              onClick={() => openLoginPopup()}
-            >
-              {t.LoginHeaderButton}
-            </button>
+            <>
+              <button
+                style={{
+                  padding: "5px 20px",
+                  background: "var(--gradient-color)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  border: "1px solid #00d0ff",
+                  borderRadius: "30px",
+                  fontWeight: "600",
+                  cursor: "pointer",
+                }}
+                onClick={() => openLoginPopup()}
+              >
+                {t.LoginHeaderButton}
+              </button>
+              <button
+                style={{
+                  padding: "5px 20px",
+                  background: "var(--gradient-color)",
+                  color: "white",
+                  border: "1px solid #00d0ff",
+                  borderRadius: "30px",
+                  fontWeight: "600",
+                  cursor: "pointer",
+                }}
+                onClick={() => openLoginPopup()}
+              >
+                {t["Start Creating"]}
+              </button>
+            </>
           )}
         </div>
 
         <ToolsMenu toolsMenuOpen={toolsMenuOpen} />
 
         <div
-          className={`flex gap-3 lg:hidden ${
+          className={`flex gap-3 xl:hidden ${
             isRTL ? "flex-row-reverse" : "flex-row"
           }`}
         >
@@ -203,7 +219,7 @@ export default function Header({ setActiveView }) {
         {menuOpen && (
           <div
             className={`shadow-md absolute top-[78px] bg-white p-6 flex flex-col gap-4 ${
-              isRTL ? "left-[5%]" : "right-[5%]"
+              isRTL ? "left-[7.5%]" : "right-[7.5%]"
             } rounded-b-[10px]`}
           >
             {[
@@ -230,21 +246,37 @@ export default function Header({ setActiveView }) {
                 <span style={{ fontSize: "17px" }}>Profile</span>
               </Link>
             ) : (
-              <button
-                style={{
-                  padding: "5px 20px",
-                  background: "var(--gradient-color)",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  border: "1px solid #00d0ff",
-                  borderRadius: "30px",
-                  fontWeight: "600",
-                  cursor: "pointer",
-                }}
-                onClick={() => openLoginPopup()}
-              >
-                {t.LoginHeaderButton}
-              </button>
+              <>
+                <button
+                  style={{
+                    padding: "5px 20px",
+                    background: "var(--gradient-color)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    border: "1px solid #00d0ff",
+                    borderRadius: "30px",
+                    fontWeight: "600",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => openLoginPopup()}
+                >
+                  {t.LoginHeaderButton}
+                </button>
+                <button
+                  style={{
+                    padding: "5px 20px",
+                    background: "var(--gradient-color)",
+                    color: "white",
+                    border: "1px solid #00d0ff",
+                    borderRadius: "30px",
+                    fontWeight: "600",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => openLoginPopup()}
+                >
+                  {t["Start Creating"]}
+                </button>
+              </>
             )}
           </div>
         )}

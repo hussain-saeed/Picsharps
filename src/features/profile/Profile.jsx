@@ -19,7 +19,7 @@ const tabsData = [
   { id: 0, label: "Profile", key: "profile", icon: <CiUser /> },
   {
     id: 1,
-    label: "Billing & Subscription",
+    label: "Subscriptions",
     key: "billing",
     icon: <CiCreditCard1 />,
   },
@@ -201,7 +201,7 @@ function Profile() {
                   {renderedSection === 0
                     ? "Profile"
                     : renderedSection === 1
-                    ? "Billing and Subscription"
+                    ? "Subscriptions"
                     : "Downloads"}
                 </h1>
                 {renderedSection === 2 ? (

@@ -18,7 +18,9 @@ const Downloads = ({ data }) => {
   if (images.length === 0) {
     return (
       <div className="flex items-center justify-center py-20">
-        <div className="text-gray-500 text-xl font-semibold">No images yet!</div>
+        <div className="text-gray-500 text-xl font-semibold">
+          No images yet!
+        </div>
       </div>
     );
   }
@@ -70,15 +72,15 @@ const Downloads = ({ data }) => {
         {currentImages.map((image) => (
           <div
             key={image.id}
-            className="rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105 cursor-pointer"
+            className="rounded-xl overflow-hidden shadow-lg transition-all duration-300 transform"
             style={{ backgroundColor: "rgba(221, 244, 255, 1)" }}
-            onClick={() => window.open(image.resultUrl, "_blank")}
           >
             <div className="relative aspect-square overflow-hidden">
               <img
                 src={image.thumbnailUrl}
                 alt={image.tool.name}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover cursor-pointer"
+                onClick={() => window.open(image.resultUrl, "_blank")}
               />
               <div
                 className="absolute top-2 right-2 px-3 py-1 rounded-full text-xs font-semibold text-white"
@@ -123,7 +125,7 @@ const Downloads = ({ data }) => {
                   e.stopPropagation();
                   handleDownload(image.resultUrl, `image-${image.id}.jpg`);
                 }}
-                className="w-full py-2 px-4 rounded-lg text-white font-semibold flex items-center justify-center gap-2 hover:opacity-90 transition-opacity"
+                className="cursor-pointer w-full py-2 px-4 rounded-lg text-white font-semibold flex items-center justify-center gap-2 hover:opacity-90 transition-opacity"
                 style={{
                   background:
                     "linear-gradient(141deg, #00c853 0%, #00b0ff 62.41%)",

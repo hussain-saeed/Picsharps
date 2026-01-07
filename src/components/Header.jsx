@@ -14,6 +14,7 @@ import Arabic from "../i18n/arabic.json";
 import { useAuth } from "../features/auth/AuthProvider";
 import { RxAvatar } from "react-icons/rx";
 import { FaUser } from "react-icons/fa";
+import Spinner from "./Spinner";
 
 const translations = { English, Arabic };
 
@@ -29,7 +30,7 @@ export default function Header({ setActiveView }) {
   const t = translations[language] || translations["English"];
   const isRTL = direction === "rtl";
 
-  const { userData, openLoginPopup } = useAuth();
+  const { userData, isLoadingUserData, openLoginPopup } = useAuth();
 
   const handleHeaderClick = () => {
     if (toolsMenuOpen === true) {
@@ -152,7 +153,9 @@ export default function Header({ setActiveView }) {
           }`}
         >
           <ChangeLanguage openFrom={"down"} />
-          {userData ? (
+          {isLoadingUserData ? (
+            <Spinner />
+          ) : userData ? (
             <Link
               to="/profile"
               style={{ fontSize: "40px", color: "rgb(60, 60, 60)" }}

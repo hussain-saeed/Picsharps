@@ -6,6 +6,7 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   // 1) Basic Auth State
   const [userData, setUserData] = useState(null);
+  const [isLoadingUserData, setIsLoadingUserData] = useState(true);
   const [accessToken, setAccessToken] = useState(null);
 
   // 2) Token Management (refresh token)
@@ -31,6 +32,8 @@ export const AuthProvider = ({ children }) => {
       console.error("Refresh token error:", err);
       setUserData(null);
       setAccessToken(null);
+    } finally {
+      setIsLoadingUserData(false);
     }
   };
 
@@ -224,6 +227,7 @@ export const AuthProvider = ({ children }) => {
     <AuthContext.Provider
       value={{
         userData,
+        isLoadingUserData,
         accessToken,
 
         // Token

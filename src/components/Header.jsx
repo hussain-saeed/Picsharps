@@ -30,8 +30,7 @@ export default function Header({ setActiveView }) {
   const t = translations[language] || translations["English"];
   const isRTL = direction === "rtl";
 
-  const { userData, accessToken, isLoadingUserData, openLoginPopup } =
-    useAuth();
+  const { userData, isLoadingUserData, openLoginPopup } = useAuth();
 
   const handleHeaderClick = () => {
     if (toolsMenuOpen === true) {
@@ -149,51 +148,55 @@ export default function Header({ setActiveView }) {
         </nav>
 
         <div
-          className={`hidden xl:flex items-center gap-2.5 ${
+          className={`hidden xl:flex items-center gap-2.5 justify-end min-w-[370px] min-h-10 ${
             isRTL ? "flex-row-reverse" : ""
           }`}
         >
-          <ChangeLanguage openFrom={"down"} />
           {isLoadingUserData ? (
             <Spinner />
-          ) : userData ? (
-            <Link
-              to="/profile"
-              style={{ fontSize: "40px", color: "rgb(60, 60, 60)" }}
-            >
-              <RxAvatar />
-            </Link>
           ) : (
             <>
-              <button
-                style={{
-                  padding: "5px 20px",
-                  background: "var(--gradient-color)",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  border: "1px solid #00d0ff",
-                  borderRadius: "30px",
-                  fontWeight: "600",
-                  cursor: "pointer",
-                }}
-                onClick={() => openLoginPopup()}
-              >
-                {t.LoginHeaderButton}
-              </button>
-              <button
-                style={{
-                  padding: "5px 20px",
-                  background: "var(--gradient-color)",
-                  color: "white",
-                  border: "1px solid #00d0ff",
-                  borderRadius: "30px",
-                  fontWeight: "600",
-                  cursor: "pointer",
-                }}
-                onClick={() => openLoginPopup()}
-              >
-                {t["Start Creating"]}
-              </button>
+              <ChangeLanguage openFrom={"down"} />
+              {userData ? (
+                <Link
+                  to="/profile"
+                  style={{ fontSize: "40px", color: "rgb(60, 60, 60)" }}
+                >
+                  <RxAvatar />
+                </Link>
+              ) : (
+                <>
+                  <button
+                    style={{
+                      padding: "5px 20px",
+                      background: "var(--gradient-color)",
+                      WebkitBackgroundClip: "text",
+                      WebkitTextFillColor: "transparent",
+                      border: "1px solid #00d0ff",
+                      borderRadius: "30px",
+                      fontWeight: "600",
+                      cursor: "pointer",
+                    }}
+                    onClick={() => openLoginPopup()}
+                  >
+                    {t.LoginHeaderButton}
+                  </button>
+                  <button
+                    style={{
+                      padding: "5px 20px",
+                      background: "var(--gradient-color)",
+                      color: "white",
+                      border: "1px solid #00d0ff",
+                      borderRadius: "30px",
+                      fontWeight: "600",
+                      cursor: "pointer",
+                    }}
+                    onClick={() => openLoginPopup()}
+                  >
+                    {t["Start Creating"]}
+                  </button>
+                </>
+              )}
             </>
           )}
         </div>

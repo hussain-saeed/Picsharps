@@ -148,7 +148,7 @@ export default function Header({ setActiveView }) {
         </nav>
 
         <div
-          className={`hidden xl:flex items-center gap-2.5 ${
+          className={`hidden xl:flex items-center gap-2.5 min-w-[380px] ${
             isRTL ? "flex-row-reverse" : ""
           }`}
         >

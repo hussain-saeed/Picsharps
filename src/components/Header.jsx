@@ -30,7 +30,8 @@ export default function Header({ setActiveView }) {
   const t = translations[language] || translations["English"];
   const isRTL = direction === "rtl";
 
-  const { userData, isLoadingUserData, openLoginPopup } = useAuth();
+  const { userData, accessToken, isLoadingUserData, openLoginPopup } =
+    useAuth();
 
   const handleHeaderClick = () => {
     if (toolsMenuOpen === true) {
@@ -148,7 +149,7 @@ export default function Header({ setActiveView }) {
         </nav>
 
         <div
-          className={`hidden xl:flex items-center gap-2.5 min-w-[380px] ${
+          className={`hidden xl:flex items-center gap-2.5 ${
             isRTL ? "flex-row-reverse" : ""
           }`}
         >

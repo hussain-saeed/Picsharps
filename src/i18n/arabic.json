@@ -241,27 +241,6 @@
   "Recompose photos with precision using freeform crop, preset ratios, and rule-of-thirds guides to improve framing instantly. Auto-suggestions highlight better crops based on subject positioning and visual balance. Edge-aware cropping keeps important areas visible and allows non-destructive crops saved as versions. Quick keyboard shortcuts and snap-to guides speed up iterative adjustments during editing sessions. Ideal for tightening composition for thumbnails, profile pictures, and layout-ready assets.": "أعد تركيب الصور بدقة باستخدام القص الحر، ونسب الأبعاد الجاهزة، وإرشادات قاعدة الأثلاث لتحسين الإطار فورًا. تبرز الاقتراحات التلقائية أفضل القصوص بناءً على موضع الموضوع والتوازن البصري. يحافظ القص الواعي للحواف على ظهور المناطق المهمة ويسمح بالقصوص غير المدمرة المحفوظة كإصدارات. تسهّل اختصارات لوحة المفاتيح السريعة وإرشادات الالتقاط الضبط التدريجي أثناء جلسات التحرير. مثالي لتقوية التركيب للصور المصغرة، وصور الملفات الشخصية، والأصول الجاهزة للتصميم.",
   "Combine multiple photos into cohesive, well-composed collages using modern templates and flexible grid controls. Drag-and-drop placement, rounded corners, and consistent spacing keep the layout neat while smart cropping preserves important subject areas. Templates include thematic choices (travel, portfolio, product grid) and adjustable aspect ratios for Instagram posts or story formats. Users can add optional frames, subtle shadows, and color-coordinated backgrounds for polish. Excellent for moodboards, social campaigns, and multi-photo storytelling.": "ادمج عدة صور في كولاجات متناسقة وذات تركيب جيد باستخدام قوالب حديثة وتحكمات شبكة مرنة. يحافظ السحب والإفلات، والزوايا المستديرة، والتباعد المتسق على ترتيب التصميم، بينما يحافظ القص الذكي على المناطق المهمة للموضوع. تتضمن القوالب خيارات موضوعية (سفر، ملف أعمال، شبكة منتجات) ونسب أبعاد قابلة للتعديل لمنشورات إنستجرام أو القصص. يمكن للمستخدمين إضافة إطارات اختيارية، وظلال خفيفة، وخلفيات منسقة بالألوان لإضفاء لمسة نهائية. ممتاز للوحات الإلهام، والحملات الاجتماعية، وسرد القصص المتعدد الصور.",
 
-  "**********comment-341**********": "login popup",
-
-  "##########comment-351##########": "head",
-  "Hi there!": "مرحبًا!",
-  "Welcome to Picsharps, so happy to see you.": "مرحبًا بك في Picsharps، سعداء جدًا بوجودك معنا.",
-
-  "##########comment-361##########": "google login screen",
-  "Continue with Google": "المتابعة باستخدام Google",
-  "Or use email": "أو استخدم البريد الإلكتروني",
-  "By continuing, you agree to our": "بالمتابعة، فإنك توافق على",
-  "Terms Of Service": "شروط الخدمة",
-  "and": "و",
-
-  "##########comment-371##########": "mail login screen",
-  "Email": "البريد الإلكتروني",
-  "Password": "كلمة المرور",
-  "Enter password": "أدخل كلمة المرور",
-  "Login": "تسجيل الدخول",
-  "Forgot Password?": "هل نسيت كلمة المرور؟",
-  "Back to Login with Google": "العودة إلى تسجيل الدخول باستخدام Google",
-
   "**********comment-381**********": "tools dropdown",
   "Background & Object Editing": "تحرير الخلفية والكائنات",
   "Remove Background": "إزالة الخلفية",
@@ -337,5 +316,54 @@
   "Automatic Edge Detection": "اكتشاف تلقائي للحواف",
   "Smart algorithms handle complex images effortlessly": "خوارزميات ذكية تتعامل مع الصور المعقدة بسهولة",
   "Supports Large Images": "يدعم الصور كبيرة الحجم",
-  "Process high-resolution images up to 10MB": "معالجة صور عالية الدقة حتى 10 ميجابايت"
+  "Process high-resolution images up to 10MB": "معالجة صور عالية الدقة حتى 10 ميجابايت",
+
+  "##########comment-441##########": "profile",
+  "MANAGE YOUR ACCOUNT!": "إدارة حسابك!",
+  "User Data": "بيانات المستخدم",
+  "Subscriptions": "الاشتراكات",
+  "My Downloads": "تنزيلاتي",
+  "Log Out": "تسجيل الخروج",
+
+  "**********comment-451**********": "user data screen",
+  "Set Password": "تعيين كلمة المرور",
+  "must have 8+ chars & one uppercase & one digit": "يجب أن تحتوي على 8 أحرف على الأقل، وحرف كبير واحد، ورقم واحد",
+  "Confirm": "تأكيد",
+
+  "**********comment-461**********": "my downloads screen",
+  "Images you've downloaded in the last 30 days": "الصور التي قمت بتنزيلها خلال آخر 30 يومًا",
+  "Size": "الحجم",
+  "Created Date": "تاريخ الإنشاء",
+  "Expiry Date": "تاريخ الانتهاء",
+  "Download": "تحميل",
+
+  "**********comment-471**********": "login popup",
+
+  "##########comment-481##########": "head",
+  "Hi there!": "مرحبًا!",
+  "Welcome to Picsharps, so happy to see you.": "مرحبًا بك في Picsharps، سعداء جدًا بوجودك معنا.",
+
+  "##########comment-491##########": "google login screen",
+  "Continue with Google": "المتابعة باستخدام Google",
+  "Or use email": "أو استخدم البريد الإلكتروني",
+  "By continuing, you agree to our": "بالمتابعة، فإنك توافق على",
+  "Terms Of Service": "شروط الخدمة",
+  "and": "و",
+
+  "##########comment-501##########": "mail login screen",
+  "Email": "البريد الإلكتروني",
+  "Password": "كلمة المرور",
+  "Enter password": "أدخل كلمة المرور",
+  "Login": "تسجيل الدخول",
+  "Forgot Password?": "هل نسيت كلمة المرور؟",
+  "Back to Login with Google": "العودة إلى تسجيل الدخول باستخدام Google",
+
+  "##########comment-511##########": "rest flow",
+  "Request Code": "طلب رمز",
+  "Code": "الرمز",
+  "6-digit code": "الرمز المكوّن من 6 أرقام",
+  "Verify Code": "تأكيد الرمز",
+  "Set New Password": "تعيين كلمة مرور جديدة",
+  "New Password": "كلمة المرور الجديدة",
+  "Reset Password": "إعادة تعيين كلمة المرور"
 }

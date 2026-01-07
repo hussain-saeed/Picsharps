@@ -14,9 +14,13 @@ import { LanguageContext } from "../../context/LanguageContext";
 import { Download } from "lucide-react";
 import Downloads from "./sections/Downloads";
 import { BACKEND_URL } from "../../api";
+import English from "/src/i18n/english.json";
+import Arabic from "/src/i18n/arabic.json";
+
+const translations = { English, Arabic };
 
 const tabsData = [
-  { id: 0, label: "Profile", key: "profile", icon: <CiUser /> },
+  { id: 0, label: "User Data", key: "profile", icon: <CiUser /> },
   {
     id: 1,
     label: "Subscriptions",
@@ -28,7 +32,8 @@ const tabsData = [
 
 function Profile() {
   const { accessToken, logout } = useAuth();
-  const { direction } = useContext(LanguageContext);
+  const { language, direction } = useContext(LanguageContext);
+  const t = translations[language] || translations["English"];
   const isRTL = direction === "rtl";
   const [data, setData] = useState(null);
 
@@ -39,17 +44,14 @@ function Profile() {
 
   const getImages = async () => {
     try {
-      const res = await fetch(
-        `${BACKEND_URL}/users/me`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${accessToken}`,
-          },
-          credentials: "include",
-        }
-      );
+      const res = await fetch(`${BACKEND_URL}/users/me`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+        credentials: "include",
+      });
 
       const data = await res.json();
       setData(data);
@@ -122,7 +124,7 @@ function Profile() {
               fontWeight: "900",
             }}
           >
-            MANAGE YOUR Account !
+            {t["MANAGE YOUR ACCOUNT!"]}
           </h2>
           <div className="flex gap-8 flex-col lg:flex-row">
             {/* Sidebar - Sticky */}
@@ -153,7 +155,7 @@ function Profile() {
                       background:
                         renderedSection === tab.id
                           ? "var(--gradient-color-2)"
-                          : "white",
+                          : "rgb(248, 248, 248)",
                     }}
                     onClick={() => handleTabClick(tab.id)}
                   >
@@ -164,7 +166,7 @@ function Profile() {
                     >
                       {tab.icon}
                     </div>
-                    <span> {tab.label}</span>
+                    <span>{t[tab.label]}</span>
                   </div>
                 ))}
               </div>
@@ -177,7 +179,7 @@ function Profile() {
                 <div className="w-8 h-6 flex items-center justify-center text-xl">
                   {isRTL ? <CiLogout /> : <MdOutlineLogout />}
                 </div>
-                <span style={{ fontWeight: "500" }}>Log Out</span>
+                <span style={{ fontWeight: "500" }}>{t["Log Out"]}</span>
               </button>
             </div>
 
@@ -199,14 +201,14 @@ function Profile() {
               >
                 <h1 style={{ fontSize: "20px", fontWeight: "500" }}>
                   {renderedSection === 0
-                    ? "Profile"
+                    ? t["User Data"]
                     : renderedSection === 1
-                    ? "Subscriptions"
-                    : "Downloads"}
+                    ? t["Subscriptions"]
+                    : t["My Downloads"]}
                 </h1>
                 {renderedSection === 2 ? (
                   <p style={{ fontSize: "15px", color: "rgba(58, 58, 58, 1)" }}>
-                    Images you've downloaded in the last 30 days
+                    {t["Images you've downloaded in the last 30 days"]}
                   </p>
                 ) : (
                   ""

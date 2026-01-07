@@ -1,8 +1,17 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { LanguageContext } from "/src/context/LanguageContext";
 import { useAuth } from "../../auth/AuthProvider";
 import { toast } from "react-toastify";
+import English from "/src/i18n/english.json";
+import Arabic from "/src/i18n/arabic.json";
+
+const translations = { English, Arabic };
 
 function Edit() {
+  const { language, direction } = useContext(LanguageContext);
+  const t = translations[language] || translations["English"];
+  const isRTL = direction === "rtl";
+
   const { setPassword, userData } = useAuth();
 
   const [password, setPasswordInput] = useState("");
@@ -22,7 +31,7 @@ function Edit() {
 
   return (
     <div>
-      <span style={{ fontWeight: "600" }}>Email</span>
+      <span style={{ fontWeight: "600" }}>{t["Email"]}</span>
       <div
         style={{
           backgroundColor: "rgba(235, 235, 235, 1)",
@@ -41,7 +50,7 @@ function Edit() {
         />
       </div>
 
-      <span style={{ fontWeight: "600" }}>Name</span>
+      <span style={{ fontWeight: "600" }}>{t["Name"]}</span>
       <div
         style={{
           backgroundColor: "rgba(235, 235, 235, 1)",
@@ -55,14 +64,14 @@ function Edit() {
         {(userData?.name || "").replace(/(.{20})/g, "$1\n")}{" "}
       </div>
 
-      <span style={{ fontWeight: "600" }}>Set Password</span>
+      <span style={{ fontWeight: "600" }}>{t["Set Password"]}</span>
       <div
         style={{ marginTop: "8px" }}
         className="w-full lg:w-[75%] flex gap-2 lg:gap-5 flex-wrap flex-col lg:flex-row lg:items-end items-start"
       >
         <input
           type="password"
-          placeholder="must have 8+ chars & one uppercase & one digit"
+          placeholder={t["must have 8+ chars & one uppercase & one digit"]}
           value={password}
           onChange={(e) => setPasswordInput(e.target.value)}
           style={{
@@ -79,7 +88,7 @@ function Edit() {
           style={{ background: "var(--gradient-color-2)" }}
           className="text-white py-1.5 px-3 rounded-lg"
         >
-          Confirm
+          {t["Confirm"]}
         </button>
       </div>
     </div>

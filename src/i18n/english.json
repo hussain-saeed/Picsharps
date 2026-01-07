@@ -241,27 +241,6 @@
   "Recompose photos with precision using freeform crop, preset ratios, and rule-of-thirds guides to improve framing instantly. Auto-suggestions highlight better crops based on subject positioning and visual balance. Edge-aware cropping keeps important areas visible and allows non-destructive crops saved as versions. Quick keyboard shortcuts and snap-to guides speed up iterative adjustments during editing sessions. Ideal for tightening composition for thumbnails, profile pictures, and layout-ready assets.": "Recompose photos with precision using freeform crop, preset ratios, and rule-of-thirds guides to improve framing instantly. Auto-suggestions highlight better crops based on subject positioning and visual balance. Edge-aware cropping keeps important areas visible and allows non-destructive crops saved as versions. Quick keyboard shortcuts and snap-to guides speed up iterative adjustments during editing sessions. Ideal for tightening composition for thumbnails, profile pictures, and layout-ready assets.",
   "Combine multiple photos into cohesive, well-composed collages using modern templates and flexible grid controls. Drag-and-drop placement, rounded corners, and consistent spacing keep the layout neat while smart cropping preserves important subject areas. Templates include thematic choices (travel, portfolio, product grid) and adjustable aspect ratios for Instagram posts or story formats. Users can add optional frames, subtle shadows, and color-coordinated backgrounds for polish. Excellent for moodboards, social campaigns, and multi-photo storytelling.": "Combine multiple photos into cohesive, well-composed collages using modern templates and flexible grid controls. Drag-and-drop placement, rounded corners, and consistent spacing keep the layout neat while smart cropping preserves important subject areas. Templates include thematic choices (travel, portfolio, product grid) and adjustable aspect ratios for Instagram posts or story formats. Users can add optional frames, subtle shadows, and color-coordinated backgrounds for polish. Excellent for moodboards, social campaigns, and multi-photo storytelling.",
 
-  "**********comment-341**********": "login popup",
-
-  "##########comment-351##########": "head",
-  "Hi there!": "Hi there!",
-  "Welcome to Picsharps, so happy to see you.": "Welcome to Picsharps, so happy to see you.",
-
-  "##########comment-361##########": "google login screen",
-  "Continue with Google": "Continue with Google",
-  "Or use email": "Or use email",
-  "By continuing, you agree to our": "By continuing, you agree to our",
-  "Terms Of Service": "Terms Of Service",
-  "and": "and",
-
-  "##########comment-371##########": "mail login screen",
-  "Email": "Email",
-  "Password": "Password",
-  "Enter password": "Enter password",
-  "Login": "Login",
-  "Forgot Password?": "Forgot Password?",
-  "Back to Login with Google": "Back to Login with Google",
-
   "**********comment-381**********": "tools dropdown",
   "Background & Object Editing": "Background & Object Editing",
   "Remove Background": "Remove Background",
@@ -337,5 +316,54 @@
   "Automatic Edge Detection": "Automatic Edge Detection",
   "Smart algorithms handle complex images effortlessly": "Smart algorithms handle complex images effortlessly",
   "Supports Large Images": "Supports Large Images",
-  "Process high-resolution images up to 10MB": "Process high-resolution images up to 10MB"
+  "Process high-resolution images up to 10MB": "Process high-resolution images up to 10MB",
+
+  "##########comment-441##########": "profile",
+  "MANAGE YOUR ACCOUNT!": "MANAGE YOUR ACCOUNT!",
+  "User Data": "User Data",
+  "Subscriptions": "Subscriptions",
+  "My Downloads": "My Downloads",
+  "Log Out": "Log Out",
+
+  "**********comment-451**********": "user data screen",
+  "Set Password": "Set Password",
+  "must have 8+ chars & one uppercase & one digit": "must have 8+ chars & one uppercase & one digit",
+  "Confirm": "Confirm",
+
+  "**********comment-461**********": "my downloads screen",
+  "Images you've downloaded in the last 30 days": "Images you've downloaded in the last 30 days",
+  "Size": "Size",
+  "Created Date": "Created Date",
+  "Expiry Date": "Expiry Date",
+  "Download": "Download",
+
+  "**********comment-471**********": "login popup",
+
+  "##########comment-481##########": "head",
+  "Hi there!": "Hi there!",
+  "Welcome to Picsharps, so happy to see you.": "Welcome to Picsharps, so happy to see you.",
+
+  "##########comment-491##########": "google login screen",
+  "Continue with Google": "Continue with Google",
+  "Or use email": "Or use email",
+  "By continuing, you agree to our": "By continuing, you agree to our",
+  "Terms Of Service": "Terms Of Service",
+  "and": "and",
+
+  "##########comment-501##########": "mail login screen",
+  "Email": "Email",
+  "Password": "Password",
+  "Enter password": "Enter password",
+  "Login": "Login",
+  "Forgot Password?": "Forgot Password?",
+  "Back to Login with Google": "Back to Login with Google",
+
+  "##########comment-511##########": "rest flow",
+  "Request Code": "Request Code",
+  "Code": "Code",
+  "6-digit code": "6-digit code",
+  "Verify Code": "Verify Code",
+  "Set New Password": "Set New Password",
+  "New Password": "New Password",
+  "Reset Password": "Reset Password"
 }

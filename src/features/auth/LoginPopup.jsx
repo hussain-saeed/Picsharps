@@ -162,6 +162,9 @@ const LoginPopup = () => {
                         color: "rgba(0, 176, 255, 1)",
                         cursor: "pointer",
                       }}
+                      onClick={() =>
+                        (window.location.href = "/terms-of-service")
+                      }
                     >
                       {t["Terms Of Service"]}
                     </span>{" "}
@@ -171,6 +174,9 @@ const LoginPopup = () => {
                         color: "rgba(0, 176, 255, 1)",
                         cursor: "pointer",
                       }}
+                      onClick={() =>
+                        (window.location.href = "/terms-of-service")
+                      }
                     >
                       {t["Privacy Policy"]}
                     </span>
@@ -258,9 +264,9 @@ const LoginPopup = () => {
               marginBottom: "24px",
             }}
           >
-            Forgot Password ?
+            {t["Forgot Password?"]}
           </h2>
-          <p style={{ fontWeight: "600" }}>Email</p>
+          <p style={{ fontWeight: "600" }}>{t["Email"]}</p>
           <input
             type="email"
             placeholder="your.example@gmail.com"
@@ -290,7 +296,7 @@ const LoginPopup = () => {
               cursor: "pointer",
             }}
           >
-            Request code{" "}
+            {t["Request Code"]}
           </button>
         </div>
       );
@@ -300,10 +306,10 @@ const LoginPopup = () => {
     if (forgotPassScreen === 3) {
       return (
         <div>
-          <p style={{ fontWeight: "600" }}>Code</p>
+          <p style={{ fontWeight: "600" }}>{t["Code"]}</p>
           <input
             type="text"
-            placeholder="6-digit code"
+            placeholder={t["6-digit code"]}
             value={code}
             onChange={(e) => setCode(e.target.value)}
             style={{
@@ -330,7 +336,7 @@ const LoginPopup = () => {
               cursor: "pointer",
             }}
           >
-            Verify Code
+            {t["Verify Code"]}
           </button>
         </div>
       );
@@ -347,12 +353,12 @@ const LoginPopup = () => {
               marginBottom: "24px",
             }}
           >
-            Set New Password
+            {t["Set New Password"]}
           </h2>
-          <p style={{ fontWeight: "600" }}>New Password</p>
+          <p style={{ fontWeight: "600" }}> {t["New Password"]}</p>
           <input
             type="password"
-            placeholder="New password"
+            placeholder={t["New Password"]}
             value={newPass}
             onChange={(e) => setNewPass(e.target.value)}
             style={{
@@ -379,7 +385,7 @@ const LoginPopup = () => {
               cursor: "pointer",
             }}
           >
-            Reset Password
+            {t["Reset Password"]}
           </button>
         </div>
       );

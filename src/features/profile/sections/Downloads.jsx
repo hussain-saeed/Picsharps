@@ -1,9 +1,25 @@
-import React, { useState } from "react";
+import { useContext, useState } from "react";
+import { LanguageContext } from "/src/context/LanguageContext";
 import { Download, ChevronLeft, ChevronRight } from "lucide-react";
+import English from "/src/i18n/english.json";
+import Arabic from "/src/i18n/arabic.json";
+
+const translations = { English, Arabic };
 
 const Downloads = ({ data }) => {
+  const { language, direction } = useContext(LanguageContext);
+  const t = translations[language] || translations["English"];
+  const isRTL = direction === "rtl";
+
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 4;
+
+  const fixScroll = function () {
+    window.scrollTo({
+      top: 275,
+      behavior: "smooth",
+    });
+  };
 
   if (!data) {
     return (
@@ -97,14 +113,16 @@ const Downloads = ({ data }) => {
             <div className="p-4">
               <div className="space-y-3 mb-4">
                 <div className="flex flex-col">
-                  <span className="text-gray-600 text-xs mb-1">Size</span>
+                  <span className="text-gray-600 text-xs mb-1">
+                    {t["Size"]}
+                  </span>
                   <span className="font-semibold text-gray-800 text-sm">
                     {formatSize(image.sizeBytes)}
                   </span>
                 </div>
                 <div className="flex flex-col">
                   <span className="text-gray-600 text-xs mb-1">
-                    Created Date
+                    {t["Created Date"]}
                   </span>
                   <span className="font-semibold text-gray-800 text-sm">
                     {formatDate(image.createdAt)}
@@ -112,7 +130,7 @@ const Downloads = ({ data }) => {
                 </div>
                 <div className="flex flex-col">
                   <span className="text-gray-600 text-xs mb-1">
-                    Expiry Date
+                    {t["Expiry Date"]}
                   </span>
                   <span className="font-semibold text-gray-800 text-sm">
                     {formatDate(image.expiresAt)}
@@ -132,7 +150,7 @@ const Downloads = ({ data }) => {
                 }}
               >
                 <Download size={18} />
-                <span>Download</span>
+                <span> {t["Download"]}</span>
               </button>
             </div>
           </div>
@@ -142,7 +160,10 @@ const Downloads = ({ data }) => {
       {totalPages > 1 && (
         <div className="flex items-center justify-center gap-2">
           <button
-            onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
+            onClick={() => {
+              setCurrentPage((prev) => Math.max(1, prev - 1));
+              fixScroll();
+            }}
             disabled={currentPage === 1}
             className="p-2 rounded-lg text-white disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed hover:opacity-90 transition-opacity"
             style={{
@@ -152,13 +173,16 @@ const Downloads = ({ data }) => {
                   : "linear-gradient(141deg, #00c853 0%, #00b0ff 62.41%)",
             }}
           >
-            <ChevronLeft size={24} />
+            {isRTL ? <ChevronRight size={24} /> : <ChevronLeft size={24} />}
           </button>
 
           {[...Array(totalPages)].map((_, idx) => (
             <button
               key={idx}
-              onClick={() => setCurrentPage(idx + 1)}
+              onClick={() => {
+                setCurrentPage(idx + 1);
+                fixScroll();
+              }}
               className="w-10 h-10 rounded-lg font-semibold text-white cursor-pointer transition-all"
               style={{
                 background:
@@ -173,9 +197,10 @@ const Downloads = ({ data }) => {
           ))}
 
           <button
-            onClick={() =>
-              setCurrentPage((prev) => Math.min(totalPages, prev + 1))
-            }
+            onClick={() => {
+              setCurrentPage((prev) => Math.min(totalPages, prev + 1));
+              fixScroll();
+            }}
             disabled={currentPage === totalPages}
             className="p-2 rounded-lg text-white disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed hover:opacity-90 transition-opacity"
             style={{
@@ -185,7 +210,7 @@ const Downloads = ({ data }) => {
                   : "linear-gradient(141deg, #00c853 0%, #00b0ff 62.41%)",
             }}
           >
-            <ChevronRight size={24} />
+            {isRTL ? <ChevronLeft size={24} /> : <ChevronRight size={24} />}
           </button>
         </div>
       )}

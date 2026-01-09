@@ -402,6 +402,7 @@ const CropDropZone = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(requestBody),
+        credentials: "include",
       });
 
       const data = await res.json();
@@ -423,12 +424,15 @@ const CropDropZone = () => {
           JSON.stringify(resultData)
         );
       } else {
-        throw new Error(data.message || "Crop failed");
+        toast.error(data.message || "Unexpected error occurred!");
+        setStatus(COMPONENT_STATES.ERROR);
+        setShowOptions(true);
       }
-    } catch (error) {
-      console.error("Processing error:", error);
+    } catch (err) {
       setStatus(COMPONENT_STATES.ERROR);
-      toast.error("Processing failed");
+      toast.error(
+        "Unexpected error occurred! Make sure your internet connection is stable."
+      );
       setShowOptions(true);
     }
   };

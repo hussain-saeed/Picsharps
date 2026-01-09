@@ -1,4 +1,5 @@
 import { BACKEND_URL } from "../../../api";
+import { toast } from "react-toastify";
 
 export const roundedCornerImage = async ({
   sourceImageId,
@@ -6,18 +7,16 @@ export const roundedCornerImage = async ({
   radius,
 }) => {
   try {
-    const res = await fetch(
-      `${BACKEND_URL}/image/rounded-corners`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          sourceImageId,
-          imageUrl,
-          radius: Number(radius),
-        }),
-      }
-    );
+    const res = await fetch(`${BACKEND_URL}/image/rounded-corners`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        sourceImageId,
+        imageUrl,
+        radius: Number(radius),
+      }),
+      credentials: "include",
+    });
 
     const data = await res.json();
 
@@ -28,10 +27,11 @@ export const roundedCornerImage = async ({
         toolKey: data.data.toolKey,
       };
     } else {
-      throw new Error(data.message || "Rounding corner failed");
+      toast.error(data.message || "Unexpected error occurred!");
     }
   } catch (err) {
-    console.error("[Rounded Corner Tool] Error:", err);
-    throw err;
+    toast.error(
+      "Unexpected error occurred! Make sure your internet connection is stable."
+    );
   }
 };

@@ -7,6 +7,7 @@ import { TOOL_CONFIG } from "../config/toolConfig";
 import { BACKEND_URL } from "../../../api";
 import { useScrollToVH } from "../../../hooks/useScrollToVH";
 import { LanguageContext } from "/src/context/LanguageContext";
+import { toast } from "react-toastify";
 
 import English from "/src/i18n/english.json";
 import Arabic from "/src/i18n/arabic.json";
@@ -259,20 +260,24 @@ const ObjectRemovalTool = () => {
       const res = await fetch(`${BACKEND_URL}/image/object-removal`, {
         method: "POST",
         body: formData,
+        credentials: "include",
       });
 
       const data = await res.json();
 
-      if (!res.ok || data.status !== "success") {
-        throw new Error(data.message || "Object removal failed");
+      if (data.status === "success") {
+        setProcessedImage(data.data.previewUrl);
+        setToolKey(data.data.toolKey);
+        setStatus(COMPONENT_STATES.DONE);
+      } else {
+        toast.error(data.message || "Unexpected error occurred!");
+        setStatus(COMPONENT_STATES.ERROR);
       }
-
-      setProcessedImage(data.data.previewUrl);
-      setToolKey(data.data.toolKey);
-      setStatus(COMPONENT_STATES.DONE);
-    } catch (error) {
-      console.error("Processing error:", error);
+    } catch (err) {
       setStatus(COMPONENT_STATES.ERROR);
+      toast.error(
+        "Unexpected error occurred! Make sure your internet connection is stable."
+      );
     }
   };
 

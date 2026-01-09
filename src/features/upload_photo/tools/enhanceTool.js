@@ -1,4 +1,5 @@
 import { BACKEND_URL } from "../../../api";
+import { toast } from "react-toastify";
 
 export const enhanceImage = async ({
   sourceImageId,
@@ -6,18 +7,16 @@ export const enhanceImage = async ({
   upscaleFactor,
 }) => {
   try {
-    const res = await fetch(
-      `${BACKEND_URL}/image/enhance`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          sourceImageId,
-          imageUrl,
-          upscaleFactor: Number(upscaleFactor),
-        }),
-      }
-    );
+    const res = await fetch(`${BACKEND_URL}/image/enhance`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        sourceImageId,
+        imageUrl,
+        upscaleFactor: Number(upscaleFactor),
+      }),
+      credentials: "include",
+    });
 
     const data = await res.json();
 
@@ -28,10 +27,11 @@ export const enhanceImage = async ({
         toolKey: data.data.toolKey,
       };
     } else {
-      throw new Error(data.message || "Enhancement failed");
+      toast.error(data.message || "Unexpected error occurred!");
     }
   } catch (err) {
-    console.error("[Enhance Tool] Error:", err);
-    throw err;
+    toast.error(
+      "Unexpected error occurred! Make sure your internet connection is stable."
+    );
   }
 };

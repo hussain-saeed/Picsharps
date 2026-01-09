@@ -1,4 +1,5 @@
 import { BACKEND_URL } from "../../../api";
+import { toast } from "react-toastify";
 
 export const resizeImage = async ({
   sourceImageId,
@@ -9,23 +10,22 @@ export const resizeImage = async ({
 }) => {
   try {
     if (!width && !height) {
-      throw new Error("At least one of width or height must be provided");
+      toast.error("At least one of width or height must be provided");
+      return;
     }
 
-    const res = await fetch(
-      `${BACKEND_URL}/image/resize`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          sourceImageId,
-          imageUrl,
-          width: width ? parseInt(width) : null,
-          height: height ? parseInt(height) : null,
-          mode,
-        }),
-      }
-    );
+    const res = await fetch(`${BACKEND_URL}/image/resize`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        sourceImageId,
+        imageUrl,
+        width: width ? parseInt(width) : null,
+        height: height ? parseInt(height) : null,
+        mode,
+      }),
+      credentials: "include",
+    });
 
     const data = await res.json();
 
@@ -36,10 +36,11 @@ export const resizeImage = async ({
         toolKey: data.data.toolKey,
       };
     } else {
-      throw new Error(data.message || "Resize failed");
+      toast.error(data.message || "Unexpected error occurred!");
     }
   } catch (err) {
-    console.error("[Resize Tool] Error:", err);
-    throw err;
+    toast.error(
+      "Unexpected error occurred! Make sure your internet connection is stable."
+    );
   }
 };

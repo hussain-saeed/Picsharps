@@ -7,6 +7,7 @@ import { BACKEND_URL } from "../../../api";
 import { useAuth } from "../../auth/AuthProvider";
 import { Download } from "lucide-react";
 import { LanguageContext } from "/src/context/LanguageContext";
+import { toast } from "react-toastify";
 
 import English from "/src/i18n/english.json";
 import Arabic from "/src/i18n/arabic.json";
@@ -128,23 +129,26 @@ const CollageMaker = () => {
         formData.append(`image${index + 1}`, img.file);
       });
 
-      const response = await fetch(
+      const res = await fetch(
         `${BACKEND_URL}/image/collage/${selectedTemplate}`,
         {
           method: "POST",
           body: formData,
+          credentials: "include",
         }
       );
 
-      const data = await response.json();
+      const data = await res.json();
 
-      if (response.ok && data.data && data.data.result) {
+      if (data.status === "success") {
         setResultImage(data.data.result.collageUrl);
       } else {
-        throw new Error("failed");
+        toast.error(data.message || "Unexpected error occurred!");
       }
-    } catch (error) {
-      console.error(error);
+    } catch (err) {
+      toast.error(
+        "Unexpected error occurred! Make sure your internet connection is stable."
+      );
     } finally {
       setIsProcessing(false);
     }

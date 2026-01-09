@@ -24,6 +24,7 @@ export const AuthProvider = ({ children }) => {
       if (data.status === "success") {
         setAccessToken(data.accessToken);
         setUserData(data.data?.user || null);
+        console.log(data);
       } else {
         setUserData(null);
         setAccessToken(null);

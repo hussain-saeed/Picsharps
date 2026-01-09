@@ -7,9 +7,7 @@ import { LanguageContext } from "/src/context/LanguageContext";
 // Import tool functions for image processing
 import { enhanceImage } from "../tools/enhanceTool";
 import { cartoonPhoto } from "../tools/cartoonTool";
-import { flipImage } from "../tools/flipTool";
 import { resizeImage } from "../tools/resizeTool";
-import { rotateImage } from "../tools/rotateTool";
 import { sharpenImage } from "../tools/sharpenTool";
 import { removeBackground } from "../tools/removeBackgroundTool";
 import { blurImage } from "../tools/blurTool";
@@ -295,15 +293,6 @@ const DropZone = () => {
         });
       }
 
-      // Image flipping tool
-      else if (currentTool === TOOL_TYPES.FLIP) {
-        toolResult = await flipImage({
-          sourceImageId,
-          imageUrl: uploadedImageUrl,
-          direction: options.direction, // Horizontal or vertical flip
-        });
-      }
-
       // Image resizing tool
       else if (currentTool === TOOL_TYPES.RESIZE) {
         // Validate that at least one dimension is provided
@@ -319,15 +308,6 @@ const DropZone = () => {
           width: options.width, // Target width in pixels
           height: options.height, // Target height in pixels
           mode: options.mode, // Resize mode (contain, cover, etc.)
-        });
-      }
-
-      // Image rotation tool
-      else if (currentTool === TOOL_TYPES.ROTATE) {
-        toolResult = await rotateImage({
-          sourceImageId,
-          imageUrl: uploadedImageUrl,
-          angle: options.angle, // Rotation angle in degrees
         });
       }
 
@@ -430,7 +410,6 @@ const DropZone = () => {
       // Handle processing errors
       console.error("DropZone processing error:", error);
       setStatus(COMPONENT_STATES.ERROR);
-      toast.error("Processing failed");
 
       // Restore options panel on error for user to retry
       if (toolConfig && toolConfig.hasOptions) {
@@ -1720,7 +1699,7 @@ const DropZone = () => {
         )}
 
         {/* CSS animation for loading indicator */}
-        <style jsx>{`
+        <style>{`
           @keyframes loading {
             0% {
               transform: ${isRTL ? "translateX(100%)" : "translateX(-100%)"};

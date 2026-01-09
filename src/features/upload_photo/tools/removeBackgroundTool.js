@@ -1,4 +1,5 @@
 import { BACKEND_URL } from "../../../api";
+import { toast } from "react-toastify";
 
 export const removeBackground = async ({
   sourceImageId,
@@ -17,14 +18,12 @@ export const removeBackground = async ({
       payload.bgColor = bgColor;
     }
 
-    const res = await fetch(
-      `${BACKEND_URL}/image/remove-background`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      }
-    );
+    const res = await fetch(`${BACKEND_URL}/image/remove-background`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+      credentials: "include",
+    });
 
     const data = await res.json();
 
@@ -35,10 +34,11 @@ export const removeBackground = async ({
         toolKey: data.data.toolKey,
       };
     } else {
-      throw new Error(data.message || "Background removal failed");
+      toast.error(data.message || "Unexpected error occurred!");
     }
   } catch (err) {
-    console.error("[Remove Background Tool] Error:", err);
-    throw err;
+    toast.error(
+      "Unexpected error occurred! Make sure your internet connection is stable."
+    );
   }
 };

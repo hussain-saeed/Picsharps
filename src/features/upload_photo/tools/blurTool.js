@@ -1,19 +1,18 @@
 import { BACKEND_URL } from "../../../api";
+import { toast } from "react-toastify";
 
 export const blurImage = async ({ sourceImageId, imageUrl, amount }) => {
   try {
-    const res = await fetch(
-      `${BACKEND_URL}/image/blur`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          sourceImageId,
-          imageUrl,
-          amount: Number(amount),
-        }),
-      }
-    );
+    const res = await fetch(`${BACKEND_URL}/image/blur`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        sourceImageId,
+        imageUrl,
+        amount: Number(amount),
+      }),
+      credentials: "include",
+    });
 
     const data = await res.json();
 
@@ -24,10 +23,11 @@ export const blurImage = async ({ sourceImageId, imageUrl, amount }) => {
         toolKey: data.data.toolKey,
       };
     } else {
-      throw new Error(data.message || "Enhancement failed");
+      toast.error(data.message || "Unexpected error occurred!");
     }
   } catch (err) {
-    console.error("[Enhance Tool] Error:", err);
-    throw err;
+    toast.error(
+      "Unexpected error occurred! Make sure your internet connection is stable."
+    );
   }
 };

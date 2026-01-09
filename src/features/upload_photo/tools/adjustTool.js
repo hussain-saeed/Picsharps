@@ -1,4 +1,5 @@
 import { BACKEND_URL } from "../../../api";
+import { toast } from "react-toastify";
 
 export const adjustImage = async ({
   sourceImageId,
@@ -9,21 +10,19 @@ export const adjustImage = async ({
   gamma = 0,
 }) => {
   try {
-    const res = await fetch(
-      `${BACKEND_URL}/image/adjust-colors`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          sourceImageId,
-          imageUrl,
-          brightness,
-          contrast,
-          saturation,
-          gamma,
-        }),
-      }
-    );
+    const res = await fetch(`${BACKEND_URL}/image/adjust-colors`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        sourceImageId,
+        imageUrl,
+        brightness,
+        contrast,
+        saturation,
+        gamma,
+      }),
+      credentials: "include",
+    });
 
     const data = await res.json();
 
@@ -34,10 +33,11 @@ export const adjustImage = async ({
         toolKey: data.data.toolKey,
       };
     } else {
-      throw new Error(data.message || "Adjust failed");
+      toast.error(data.message || "Unexpected error occurred!");
     }
   } catch (err) {
-    console.error("[Adjust Tool] Error:", err);
-    throw err;
+    toast.error(
+      "Unexpected error occurred! Make sure your internet connection is stable."
+    );
   }
 };

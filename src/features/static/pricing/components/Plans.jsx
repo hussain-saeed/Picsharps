@@ -4,6 +4,7 @@ import { GiCheckMark } from "react-icons/gi";
 import { RxCross2 } from "react-icons/rx";
 import English from "/src/i18n/english.json";
 import Arabic from "/src/i18n/arabic.json";
+import { useAuth } from "/src/features/auth/AuthProvider";
 
 const translations = { English, Arabic };
 
@@ -12,6 +13,8 @@ export default function Pricing() {
   const isRTL = direction === "rtl";
   const t = translations[language] || translations["English"];
   const [isYearly, setIsYearly] = useState(false);
+  const [planSlug, setPlanSlug] = useState(null);
+  const { requireLogin } = useAuth();
 
   const plans = [
     {
@@ -137,6 +140,21 @@ export default function Pricing() {
     },
   ];
 
+  const handlePlanClick = (planType) => {
+    requireLogin(() => {
+      let newPlanSlug = null;
+
+      if (planType === "Pro") {
+        newPlanSlug = isYearly ? "pro-yearly" : "pro-monthly";
+      } else if (planType === "Premium") {
+        newPlanSlug = isYearly ? "premium-yearly" : "premium-monthly";
+      }
+
+      setPlanSlug(newPlanSlug);
+      console.log("Selected planSlug:", newPlanSlug);
+    });
+  };
+
   return (
     <div className="w-full">
       <div className="flex items-center justify-center gap-4 mb-16 flex-col md:flex-row">
@@ -195,7 +213,7 @@ export default function Pricing() {
       </div>
 
       <div className="grid gap-12 lg:gap-6 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1">
-        {plans.map((plan) => (
+        {plans.map((plan, indx) => (
           <div
             key={plan.id}
             className={`p-10 flex flex-col justify-between relative`}
@@ -263,7 +281,7 @@ export default function Pricing() {
                 </span>
               </div>
 
-              <p
+              <div
                 style={{
                   color: "rgba(154, 154, 154, 1)",
                   fontSize: "12px",
@@ -280,7 +298,7 @@ export default function Pricing() {
                 ) : (
                   plan.smallText
                 )}
-              </p>
+              </div>
 
               <p
                 style={{
@@ -325,19 +343,25 @@ export default function Pricing() {
               </div>
             </div>
 
-            <button
-              style={{
-                background: plan.buttonBg,
-                color: plan.buttonColor,
-                fontWeight: "600",
-                fontSize: "18px",
-                border: plan.buttonBorder,
-                padding: "16px 0",
-                borderRadius: "15px",
-              }}
-            >
-              {plan.buttonText}
-            </button>
+            {indx === 0 ? (
+              ""
+            ) : (
+              <button
+                style={{
+                  background: plan.buttonBg,
+                  color: plan.buttonColor,
+                  fontWeight: "600",
+                  fontSize: "18px",
+                  border: plan.buttonBorder,
+                  padding: "16px 0",
+                  borderRadius: "15px",
+                  cursor: "pointer",
+                }}
+                onClick={() => handlePlanClick(plan.imageLabel)}
+              >
+                {plan.buttonText}
+              </button>
+            )}
           </div>
         ))}
       </div>

@@ -88,8 +88,8 @@ export const AuthProvider = ({ children }) => {
 
       if (data.status === "success") {
         setAccessToken(data.accessToken);
-
         setUserData(data.data.user);
+        window.location.reload();
       }
 
       return data;

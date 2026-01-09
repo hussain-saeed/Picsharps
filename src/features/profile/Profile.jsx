@@ -16,6 +16,7 @@ import Downloads from "./sections/Downloads";
 import { BACKEND_URL } from "../../api";
 import English from "/src/i18n/english.json";
 import Arabic from "/src/i18n/arabic.json";
+import Subscriptions from "./sections/Subscriptions";
 
 const translations = { English, Arabic };
 
@@ -36,10 +37,15 @@ function Profile() {
   const t = translations[language] || translations["English"];
   const isRTL = direction === "rtl";
   const [data, setData] = useState(null);
+  const [billings, setBillings] = useState(null);
 
   const [renderedSection, setRenderedSection] = useState(0);
   const handleTabClick = (id) => {
     setRenderedSection(id);
+    window.scrollTo({
+      top: 130,
+      behavior: "smooth",
+    });
   };
 
   const getImages = async () => {
@@ -55,15 +61,41 @@ function Profile() {
 
       const data = await res.json();
       setData(data);
+      console.log("me", data);
 
       return data;
     } catch (err) {
-      console.error("Set password error:", err);
+      console.error(err);
     }
   };
 
   useEffect(() => {
     getImages();
+  }, []);
+
+  const getBillings = async () => {
+    try {
+      const res = await fetch(`${BACKEND_URL}/billing/history`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+        credentials: "include",
+      });
+
+      const billings = await res.json();
+      setBillings(billings);
+      console.log("Billings", billings);
+
+      return billings;
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  useEffect(() => {
+    getBillings();
   }, []);
 
   return (
@@ -110,7 +142,9 @@ function Profile() {
               </div>
             ))}
             <button
-              className="text-red-500 flex items-center cursor-pointer bg-red-300 p-2 rounded-lg ml-4 text-2xl"
+              className={`text-red-500 flex items-center cursor-pointer bg-red-300 p-2 rounded-lg ${
+                isRTL ? "mr-2" : "ml-2"
+              } text-2xl`}
               onClick={() => logout()}
             >
               {isRTL ? <CiLogout /> : <MdOutlineLogout />}
@@ -196,7 +230,7 @@ function Profile() {
                 style={{
                   borderBottom: "1px dashed rgba(186, 186, 186, 1)",
                   paddingBottom: "25px",
-                  marginBottom: "25px",
+                  marginBottom: renderedSection === 0 ? "25px" : "35px",
                 }}
               >
                 <h1 style={{ fontSize: "20px", fontWeight: "500" }}>
@@ -220,7 +254,7 @@ function Profile() {
               ) : renderedSection === 2 ? (
                 <Downloads data={data} />
               ) : (
-                <div></div>
+                <Subscriptions data={data} billings={billings} />
               )}
             </div>
           </div>

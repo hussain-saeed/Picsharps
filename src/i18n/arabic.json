@@ -7,6 +7,7 @@
   "Pricing": "الأسعار",
   "LoginHeaderButton": "تسجيل الدخول",
   "Start Creating": "ابدأ الآن",
+  "Profile": "حسابي",
 
   "##########comment-21##########": "hero section",
   "DESIGN EASILY": "صمّم بسهولة",
@@ -325,10 +326,15 @@
   "My Downloads": "تنزيلاتي",
   "Log Out": "تسجيل الخروج",
 
-  "**********comment-451**********": "user data screen",
+  "**********comment-451**********": "user data screen and subscriptions screen",
   "Set Password": "تعيين كلمة المرور",
   "must have 8+ chars & one uppercase & one digit": "يجب أن تحتوي على 8 أحرف على الأقل، وحرف كبير واحد، ورقم واحد",
   "Confirm": "تأكيد",
+  "Free Plan": "الخطة المجانية",
+  "Credits of": "نقطة من",
+  "Change Plan": "تغيير الخطة",
+  "Billing History": "سجل المدفوعات",
+  "You haven't made any payments yet!": "لم تقم بأي مدفوعات بعد!",
 
   "**********comment-461**********": "my downloads screen",
   "Images you've downloaded in the last 30 days": "الصور التي قمت بتنزيلها خلال آخر 30 يومًا",

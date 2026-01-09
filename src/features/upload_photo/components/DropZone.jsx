@@ -380,6 +380,7 @@ const DropZone = () => {
           contrast: options.contrast,
           saturation: options.saturation,
           gamma: options.gamma,
+          accessToken,
         });
       }
 

@@ -8,11 +8,15 @@ export const adjustImage = async ({
   contrast = 0,
   saturation = 0,
   gamma = 0,
+  accessToken,
 }) => {
   try {
     const res = await fetch(`${BACKEND_URL}/image/adjust-colors`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
+      },
       body: JSON.stringify({
         sourceImageId,
         imageUrl,

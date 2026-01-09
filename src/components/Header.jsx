@@ -245,9 +245,14 @@ export default function Header({ setActiveView }) {
             ))}
 
             {userData ? (
-              <Link to="/profile" style={{}} className="mt-2.5 flex gap-1">
+              <Link
+                to="/profile"
+                style={{}}
+                className="mt-2.5 flex gap-1"
+                dir={isRTL ? "rtl" : "ltr"}
+              >
                 <FaUser style={{ fontSize: "22px" }} />
-                <span style={{ fontSize: "17px" }}>Profile</span>
+                <span style={{ fontSize: "17px" }}>{t["Profile"]}</span>
               </Link>
             ) : (
               <>

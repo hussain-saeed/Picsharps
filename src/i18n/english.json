@@ -7,6 +7,7 @@
   "Pricing": "Pricing",
   "LoginHeaderButton": "Login",
   "Start Creating": "Start Creating",
+  "Profile": "Profile",
 
   "##########comment-21##########": "hero section",
   "DESIGN EASILY": "DESIGN EASILY",
@@ -325,10 +326,15 @@
   "My Downloads": "My Downloads",
   "Log Out": "Log Out",
 
-  "**********comment-451**********": "user data screen",
+  "**********comment-451**********": "user data screen and subscriptions screen",
   "Set Password": "Set Password",
   "must have 8+ chars & one uppercase & one digit": "must have 8+ chars & one uppercase & one digit",
   "Confirm": "Confirm",
+  "Free Plan": "Free Plan",
+  "Credits of": "Credits of",
+  "Change Plan": "Change Plan",
+  "Billing History": "Billing History",
+  "You haven't made any payments yet!": "You haven't made any payments yet!",
 
   "**********comment-461**********": "my downloads screen",
   "Images you've downloaded in the last 30 days": "Images you've downloaded in the last 30 days",

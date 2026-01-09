@@ -5,11 +5,15 @@ export const roundedCornerImage = async ({
   sourceImageId,
   imageUrl,
   radius,
+  accessToken,
 }) => {
   try {
     const res = await fetch(`${BACKEND_URL}/image/rounded-corners`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
+      },
       body: JSON.stringify({
         sourceImageId,
         imageUrl,

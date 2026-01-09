@@ -282,6 +282,7 @@ const DropZone = () => {
           sourceImageId,
           imageUrl: uploadedImageUrl,
           upscaleFactor: options.upscaleFactor, // Enhancement level
+          accessToken,
         });
       }
 
@@ -290,6 +291,7 @@ const DropZone = () => {
         toolResult = await cartoonPhoto({
           sourceImageId,
           imageUrl: uploadedImageUrl,
+          accessToken,
         });
       }
 
@@ -308,6 +310,7 @@ const DropZone = () => {
           width: options.width, // Target width in pixels
           height: options.height, // Target height in pixels
           mode: options.mode, // Resize mode (contain, cover, etc.)
+          accessToken,
         });
       }
 
@@ -317,6 +320,7 @@ const DropZone = () => {
           sourceImageId,
           imageUrl: uploadedImageUrl,
           strength: options.strength, // Sharpening intensity
+          accessToken,
         });
       }
 
@@ -327,6 +331,7 @@ const DropZone = () => {
           imageUrl: uploadedImageUrl,
           outputType: "cutout", // Type of output (cutout image)
           format: "png", // Output format (PNG for transparency)
+          accessToken,
         };
 
         if (options.bgColor && options.bgColor !== "transparent") {
@@ -342,6 +347,7 @@ const DropZone = () => {
           sourceImageId,
           imageUrl: uploadedImageUrl,
           amount: options.amount, // Enhancement level
+          accessToken,
         });
       }
 
@@ -350,6 +356,7 @@ const DropZone = () => {
         toolResult = await grayscalePhoto({
           sourceImageId,
           imageUrl: uploadedImageUrl,
+          accessToken,
         });
       }
 
@@ -359,6 +366,7 @@ const DropZone = () => {
           sourceImageId,
           imageUrl: uploadedImageUrl,
           radius: options.radius,
+          accessToken,
         });
       }
 
@@ -368,6 +376,7 @@ const DropZone = () => {
           sourceImageId,
           imageUrl: uploadedImageUrl,
           amount: options.amount,
+          accessToken,
         });
       }
 

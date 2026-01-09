@@ -133,6 +133,9 @@ const CollageMaker = () => {
         `${BACKEND_URL}/image/collage/${selectedTemplate}`,
         {
           method: "POST",
+          headers: {
+            ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
+          },
           body: formData,
           credentials: "include",
         }

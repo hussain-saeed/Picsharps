@@ -1,11 +1,19 @@
 import { BACKEND_URL } from "../../../api";
 import { toast } from "react-toastify";
 
-export const sharpenImage = async ({ sourceImageId, imageUrl, strength }) => {
+export const sharpenImage = async ({
+  sourceImageId,
+  imageUrl,
+  strength,
+  accessToken,
+}) => {
   try {
     const res = await fetch(`${BACKEND_URL}/image/sharpen`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
+      },
       body: JSON.stringify({
         sourceImageId,
         imageUrl,

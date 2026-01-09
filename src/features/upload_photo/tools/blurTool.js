@@ -1,11 +1,19 @@
 import { BACKEND_URL } from "../../../api";
 import { toast } from "react-toastify";
 
-export const blurImage = async ({ sourceImageId, imageUrl, amount }) => {
+export const blurImage = async ({
+  sourceImageId,
+  imageUrl,
+  amount,
+  accessToken,
+}) => {
   try {
     const res = await fetch(`${BACKEND_URL}/image/blur`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
+      },
       body: JSON.stringify({
         sourceImageId,
         imageUrl,

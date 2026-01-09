@@ -6,6 +6,7 @@ export const removeBackground = async ({
   imageUrl,
   outputType = "cutout",
   bgColor = null,
+  accessToken,
 }) => {
   try {
     const payload = {
@@ -20,7 +21,10 @@ export const removeBackground = async ({
 
     const res = await fetch(`${BACKEND_URL}/image/remove-background`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
+      },
       body: JSON.stringify(payload),
       credentials: "include",
     });

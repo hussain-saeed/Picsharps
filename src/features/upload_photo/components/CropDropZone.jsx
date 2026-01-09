@@ -400,6 +400,7 @@ const CropDropZone = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
         },
         body: JSON.stringify(requestBody),
         credentials: "include",

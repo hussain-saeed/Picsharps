@@ -5,11 +5,15 @@ export const enhanceImage = async ({
   sourceImageId,
   imageUrl,
   upscaleFactor,
+  accessToken,
 }) => {
   try {
     const res = await fetch(`${BACKEND_URL}/image/enhance`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
+      },
       body: JSON.stringify({
         sourceImageId,
         imageUrl,

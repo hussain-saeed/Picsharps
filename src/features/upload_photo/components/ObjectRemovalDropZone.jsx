@@ -259,6 +259,9 @@ const ObjectRemovalTool = () => {
 
       const res = await fetch(`${BACKEND_URL}/image/object-removal`, {
         method: "POST",
+        headers: {
+          ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
+        },
         body: formData,
         credentials: "include",
       });

@@ -7,6 +7,7 @@ export const resizeImage = async ({
   width,
   height,
   mode = "fill",
+  accessToken,
 }) => {
   try {
     if (!width && !height) {
@@ -16,7 +17,10 @@ export const resizeImage = async ({
 
     const res = await fetch(`${BACKEND_URL}/image/resize`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
+      },
       body: JSON.stringify({
         sourceImageId,
         imageUrl,

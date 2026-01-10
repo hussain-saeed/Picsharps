@@ -343,6 +343,11 @@
   "End:": "End:",
   "Billing History": "Billing History",
   "You haven't made any payments yet!": "You haven't made any payments yet!",
+  "Date": "Date",
+  "AmountText": "Amount",
+  "More Details": "More Details",
+  "More": "More",
+  "Less": "Less",
 
   "##########comment-461##########": "my downloads screen",
   "Images you've downloaded in the last 30 days": "Images you've downloaded in the last 30 days",
@@ -528,21 +533,17 @@
   "Actions taken by users": "Actions taken by users",
   "Force Majeure": "Force Majeure",
   "Events outside our control": "Events outside our control",
-
   "We may terminate accounts for:": "We may terminate accounts for:",
   "Abuse or Misuse": "Abuse or Misuse",
   "Illegal Activity": "Illegal Activity",
   "System Attacks or Exploitation": "System Attacks or Exploitation",
-
   "Changes to Terms of Service": "Changes to Terms of Service",
   "Users will be notified via Email when terms are updated. Continued use after notification constitutes acceptance of new terms.": "Users will be notified via Email when terms are updated. Continued use after notification constitutes acceptance of new terms.",
-
   "Governing Law": "Governing Law",
   "These Terms are governed by the laws of United Arab Emirates (UAE)": "These Terms are governed by the laws of United Arab Emirates (UAE)",
   "United": "United",
   "Arab": "Arab",
   "Emirates": "Emirates",
-
   "Questions About Terms?": "Questions About Terms?",
   "If you have any questions about these Terms of Service, please contact us.": "If you have any questions about these Terms of Service, please contact us."
 }

@@ -343,6 +343,11 @@
   "End:": "النهاية:",
   "Billing History": "سجل المدفوعات",
   "You haven't made any payments yet!": "لم تقم بأي مدفوعات بعد!",
+  "Date": "التاريخ",
+  "AmountText": "المبلغ",
+  "More Details": "تفاصيل أكثر",
+  "More": "أكثر",
+  "Less": "أقل",
 
   "##########comment-461##########": "my downloads screen",
   "Images you've downloaded in the last 30 days": "الصور التي قمت بتنزيلها خلال آخر 30 يومًا",
@@ -528,21 +533,17 @@
   "Actions taken by users": "الإجراءات التي يتخذها المستخدمون",
   "Force Majeure": "القوة القاهرة",
   "Events outside our control": "أحداث خارجة عن إرادتنا",
-
   "We may terminate accounts for:": "قد نقوم بإنهاء الحسابات في الحالات التالية:",
   "Abuse or Misuse": "الإساءة أو سوء الاستخدام",
   "Illegal Activity": "أنشطة غير قانونية",
   "System Attacks or Exploitation": "الهجمات على النظام أو استغلاله",
-
   "Changes to Terms of Service": "التعديلات على شروط الخدمة",
   "Users will be notified via Email when terms are updated. Continued use after notification constitutes acceptance of new terms.": "سيتم إخطار المستخدمين عبر البريد الإلكتروني عند تحديث الشروط. ويُعد الاستمرار في استخدام الخدمة بعد الإخطار قبولًا للشروط الجديدة.",
-
   "Governing Law": "القانون الحاكم",
   "These Terms are governed by the laws of United Arab Emirates (UAE)": "تخضع هذه الشروط لقوانين الإمارات العربية المتحدة (UAE)",
   "United": "المتحدة",
   "Arab": "العربية",
   "Emirates": "الإمارات",
-
   "Questions About Terms?": "أسئلة حول الشروط؟",
   "If you have any questions about these Terms of Service, please contact us.": "إذا كانت لديك أي أسئلة حول شروط الخدمة هذه، يُرجى التواصل معنا."
 }

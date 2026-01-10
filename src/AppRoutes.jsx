@@ -16,6 +16,7 @@ import Profile from "./features/profile/Profile";
 import VerifyEmailPage from "./features/auth/VerifyEmailPage";
 import LoginPopup from "./features/auth/LoginPopup";
 import Success from "./features/static/pricing/components/Success";
+import Cancel from "./features/static/pricing/components/Cancel";
 
 const data = [
   "remove-background",
@@ -57,10 +58,12 @@ export default function AppRoutes() {
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="/terms-of-service" element={<TermsOfService />} />
-            <Route path="/auth/callback" element={<Callback />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/verify-email" element={<VerifyEmailPage />} />
+
+            <Route path="/auth/callback" element={<Callback />} />
             <Route path="/success" element={<Success />} />
+            <Route path="/cancel" element={<Cancel />} />
 
             <Route path="*" element={<NotFound />} />
           </Routes>

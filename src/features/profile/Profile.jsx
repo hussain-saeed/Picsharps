@@ -75,7 +75,6 @@ function Profile() {
         });
         const userData = await userRes.json();
         setData(userData);
-        console.log(userData);
 
         const billingRes = await fetch(`${BACKEND_URL}/billing/history`, {
           method: "GET",
@@ -87,6 +86,7 @@ function Profile() {
         });
         const billingData = await billingRes.json();
         setBillings(billingData);
+        console.log(billingData);
       } catch (err) {
         console.error("Error fetching profile or billing:", err);
       } finally {
@@ -112,18 +112,21 @@ function Profile() {
         dir={isRTL ? "rtl" : "ltr"}
       >
         <Container>
-          <div
-            className="sticky top-19 h-fit lg:hidden shadow-md mb-30 bg-white flex items-center justify-center w-[90%] mx-auto pt-5 pb-[18px] px-4"
-            style={{
-              borderBottomLeftRadius: "30px",
-              borderBottomRightRadius: "30px",
-              zIndex: 50,
-            }}
-          >
-            {tabsData.map((tab) => (
-              <div
-                key={tab.id}
-                className={`
+          {isLoading ? (
+            ""
+          ) : (
+            <div
+              className="sticky top-19 h-fit lg:hidden shadow-md mb-30 bg-white flex items-center justify-center w-[90%] mx-auto pt-5 pb-[18px] px-4"
+              style={{
+                borderBottomLeftRadius: "30px",
+                borderBottomRightRadius: "30px",
+                zIndex: 50,
+              }}
+            >
+              {tabsData.map((tab) => (
+                <div
+                  key={tab.id}
+                  className={`
                     px-4 py-2.5 rounded-xl cursor-pointer flex items-center
                     ${
                       renderedSection === tab.id
@@ -131,26 +134,27 @@ function Profile() {
                         : "text-gray-600 text-xl"
                     }
                   `}
-                style={{
-                  background:
-                    renderedSection === tab.id
-                      ? "var(--gradient-color-2)"
-                      : "white",
-                }}
-                onClick={() => handleTabClick(tab.id)}
+                  style={{
+                    background:
+                      renderedSection === tab.id
+                        ? "var(--gradient-color-2)"
+                        : "white",
+                  }}
+                  onClick={() => handleTabClick(tab.id)}
+                >
+                  {tab.icon}
+                </div>
+              ))}
+              <button
+                className={`text-red-500 flex items-center cursor-pointer bg-red-300 p-2 rounded-lg ${
+                  isRTL ? "mr-2" : "ml-2"
+                } text-2xl`}
+                onClick={() => logout()}
               >
-                {tab.icon}
-              </div>
-            ))}
-            <button
-              className={`text-red-500 flex items-center cursor-pointer bg-red-300 p-2 rounded-lg ${
-                isRTL ? "mr-2" : "ml-2"
-              } text-2xl`}
-              onClick={() => logout()}
-            >
-              {isRTL ? <CiLogout /> : <MdOutlineLogout />}
-            </button>
-          </div>
+                {isRTL ? <CiLogout /> : <MdOutlineLogout />}
+              </button>
+            </div>
+          )}
 
           <h2 className="text-center lg:mb-20 mb-8 text-4xl font-bold lg:text-5xl lg:font-extrabold">
             {t["MANAGE YOUR ACCOUNT!"]}

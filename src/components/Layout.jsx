@@ -1,14 +1,19 @@
 import { useContext } from "react";
-import { LanguageContext } from "../context/LanguageContext";
 import Header from "./Header";
 import Container from "./Container";
 import Footer from "./Footer";
 import { Link, useLocation } from "react-router-dom";
 import { FaLongArrowAltLeft, FaLongArrowAltRight } from "react-icons/fa";
+import { LanguageContext } from "/src/context/LanguageContext";
+import English from "/src/i18n/english.json";
+import Arabic from "/src/i18n/arabic.json";
+
+const translations = { English, Arabic };
 
 function Layout({ children }) {
-  const { direction } = useContext(LanguageContext);
+  const { language, direction } = useContext(LanguageContext);
   const isRTL = direction === "rtl";
+  const t = translations[language] || translations["English"];
   const location = useLocation();
 
   return (
@@ -45,8 +50,8 @@ function Layout({ children }) {
             }}
           >
             {location.pathname === "/privacy-policy"
-              ? "Have Questions About Your Privacy?"
-              : "Ready to Get Started?"}
+              ? t["Have Questions About Your Privacy?"]
+              : t["Ready to Get Started?"]}
           </h2>
           <p
             style={{
@@ -56,10 +61,13 @@ function Layout({ children }) {
               color: "white",
               padding: "0 80px 0 80px",
             }}
+            dir={isRTL ? "rtl" : "ltr"}
           >
             {location.pathname === "/privacy-policy"
-              ? "Our Team Is Here To Help. Reach Out With Any Concerns Or Questions About How We Protect Your Data."
-              : "Join thousands of users transforming their images."}
+              ? t[
+                  "Our Team Is Here To Help. Reach Out With Any Concerns Or Questions About How We Protect Your Data."
+                ]
+              : t["Join thousands of users transforming their images."]}
           </p>
           <Link
             className={`
@@ -76,7 +84,7 @@ function Layout({ children }) {
               fontWeight: 600,
             }}
           >
-            <span>Get Started Free</span>
+            <span>{t["Get Started Free"]}</span>
             {isRTL ? <FaLongArrowAltLeft /> : <FaLongArrowAltRight />}
           </Link>
         </Container>

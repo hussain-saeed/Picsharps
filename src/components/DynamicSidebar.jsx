@@ -1,8 +1,18 @@
 import { useScrollSpy } from "../hooks/useScrollSpy";
+import { LanguageContext } from "/src/context/LanguageContext";
+import English from "/src/i18n/english.json";
+import Arabic from "/src/i18n/arabic.json";
+import { useContext } from "react";
+
+const translations = { English, Arabic };
 
 function DynamicSidebar({ items }) {
   const sectionIds = items.map((item) => item.targetId);
   const { activeId, scrollToSection } = useScrollSpy(sectionIds);
+
+  const { language, direction } = useContext(LanguageContext);
+  const isRTL = direction === "rtl";
+  const t = translations[language] || translations["English"];
 
   return (
     <aside
@@ -13,9 +23,9 @@ function DynamicSidebar({ items }) {
       }}
     >
       <span style={{ fontSize: "20px", fontWeight: "700" }}>
-        Quick Navigation
+        {t["Quick Navigation"]}
       </span>
-      <nav className="mt-6">
+      <nav className="mt-6 space-y-1">
         {items.map((item) => (
           <button
             key={item.id}
@@ -43,7 +53,7 @@ function DynamicSidebar({ items }) {
               }
             }}
           >
-            <div className="flex items-center">{item.label}</div>
+            <div className="flex items-center">{t[item.label]}</div>
           </button>
         ))}
       </nav>

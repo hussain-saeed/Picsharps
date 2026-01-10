@@ -7,13 +7,17 @@ import BulletListHasBold from "./Components/BulletListHasBold";
 import BorderedBox from "./Components/BorderedBox";
 import ReusableButton from "../../../components/ReusableButton";
 import { useContext } from "react";
-import { LanguageContext } from "../../../context/LanguageContext";
+import { LanguageContext } from "/src/context/LanguageContext";
+import English from "/src/i18n/english.json";
+import Arabic from "/src/i18n/arabic.json";
+
+const translations = { English, Arabic };
 
 const heroContent = {
   id: "privacy-hero",
   title: "Privacy Policy",
   paragraphs: [
-    "your privacy matters to us. Learn how we collect, use, and protect your data.",
+    "Your privacy matters to us. Learn how we collect, use, and protect your data.",
     "Last Updated: November 24, 2025",
   ],
   imageUrl: "/images/privacy-60.png",
@@ -89,8 +93,9 @@ const data = [
 ];
 
 function PrivacyPolicy() {
-  const { direction } = useContext(LanguageContext);
+  const { language, direction } = useContext(LanguageContext);
   const isRTL = direction === "rtl";
+  const t = translations[language] || translations["English"];
 
   return (
     <Layout>
@@ -106,13 +111,14 @@ function PrivacyPolicy() {
             border=""
             boxShadow={"0px 0px 4px 1px rgba(205, 228, 247, 1)"}
             image="/images/privacy-101.png"
-            title="Introduction"
+            title={t["Introduction"]}
           >
             <ParagraphHasBold>
-              Yes, we collect limited user data necessary to operate and improve
-              our services. This may include technical data such as browser
-              type, device information, and usage statistics. We do not collect
-              any unnecessary personal information.
+              {
+                t[
+                  "Yes, we collect limited user data necessary to operate and improve our services. This may include technical data such as browser type, device information, and usage statistics. We do not collect any unnecessary personal information."
+                ]
+              }
             </ParagraphHasBold>
           </ContentSection>
 
@@ -122,15 +128,17 @@ function PrivacyPolicy() {
             border=""
             boxShadow={"0px 0px 4px 1px rgba(205, 228, 247, 1)"}
             image="/images/privacy-102.png"
-            title="What Information We Collect"
+            title={t["Information We Collect"]}
           >
             <BulletListHasBold
-              title="We collect the following types of information:"
+              title={t["We collect the following types of information:"]}
               items={[
-                "Technical data (browser type, device information)",
-                "Usage statistics to improve service performance",
-                "Images you upload (stored temporarily)",
-                "Account information from Google login (name, email, profile picture)",
+                t["Technical data (browser type, device information)"],
+                t["Usage statistics to improve service performance"],
+                t["Images you upload (stored temporarily)"],
+                t[
+                  "Account information from Google login (name, email, profile picture)"
+                ],
               ]}
             />
           </ContentSection>
@@ -141,23 +149,31 @@ function PrivacyPolicy() {
             border=""
             boxShadow={"0px 0px 4px 1px rgba(205, 228, 247, 1)"}
             image="/images/privacy-103.png"
-            title="How We Use Your Data"
+            title={t["How We Use Your Data"]}
           >
             <BulletListHasBold
-              title="We use your data exclusively for the following purposes:"
+              title={
+                t["We use your data exclusively for the following purposes:"]
+              }
               items={[
-                "Service Operation: To provide core functionality and process your requests",
-                "Performance Improvement: To analyze usage patterns and optimize our platform",
-                "User Experience Enhancement: To personalize your experience and provide better results",
+                t[
+                  "Service Operation: To provide core functionality and process your requests"
+                ],
+                t[
+                  "Performance Improvement: To analyze usage patterns and optimize our platform"
+                ],
+                t[
+                  "User Experience Enhancement: To personalize your experience and provide better results"
+                ],
               ]}
               boldWords={[
-                "Service",
-                "Operation:",
-                "Performance",
-                "Improvement:",
-                "User",
-                "Experience",
-                "Enhancement:",
+                t["Service"],
+                t["Operation:"],
+                t["Performance"],
+                t["Improvement:"],
+                t["User"],
+                t["Experience"],
+                t["Enhancement:"],
               ]}
             />
           </ContentSection>
@@ -168,19 +184,19 @@ function PrivacyPolicy() {
             border="1px solid rgba(151, 220, 255, 1)"
             boxShadow=""
             image="/images/privacy-104.png"
-            title="Data Sharing & Third Parties"
+            title={t["Data Sharing & Third Parties"]}
           >
             <div className="space-y-5">
               <BulletListHasBold
-                title="We only share data with:"
+                title={t["We only share data with:"]}
                 items={[
-                  "Stripe for secure payment processing",
-                  "Analytics providers for performance improvement",
+                  t["Stripe for secure payment processing"],
+                  t["Analytics providers for performance improvement"],
                 ]}
-                boldWords={["Stripe", "Analytics", "providers"]}
+                boldWords={[t["Stripe"], t["Analytics"], t["providers"]]}
               />
               <BorderedBox
-                title="We do not sell user data. Period."
+                title={t["We do not sell user data, period."]}
                 borderColor="rgba(0, 228, 95, 1)"
                 bgColor="rgba(211, 255, 229, 1)"
               />
@@ -193,7 +209,7 @@ function PrivacyPolicy() {
             border="1px solid rgba(151, 220, 255, 1)"
             boxShadow=""
             image="/images/privacy-105.png"
-            title="Data Storage & Retention"
+            title={t["Data Storage & Retention"]}
           >
             <div
               style={{
@@ -223,7 +239,7 @@ function PrivacyPolicy() {
                       marginBottom: "15px",
                     }}
                   >
-                    {item.title}
+                    {t[item.title]}
                   </h2>
 
                   {item.points.map((point, i) => (
@@ -237,7 +253,7 @@ function PrivacyPolicy() {
                         letterSpacing: "2px",
                       }}
                     >
-                      {point}
+                      {t[point]}
                     </span>
                   ))}
                 </div>
@@ -251,15 +267,19 @@ function PrivacyPolicy() {
             border=""
             boxShadow={"0px 0px 4px 1px rgba(205, 228, 247, 1)"}
             image="/images/privacy-106.png"
-            title="Your Data Rights"
+            title={t["Your Data Rights"]}
           >
             <BulletListHasBold
-              title="You have complete control over your data. You have the right to:"
+              title={
+                t[
+                  "You have complete control over your data. You have the right to:"
+                ]
+              }
               items={[
-                "Download a copy of all your data",
-                "Request complete account deletion",
-                "Access and review your information at any time",
-                "Opt-out of non-essential data collection",
+                t["Download a copy of all your data"],
+                t["Request complete account deletion"],
+                t["Access and review your information at any time"],
+                t["Opt-out of non-essential data collection"],
               ]}
             />
           </ContentSection>
@@ -270,22 +290,27 @@ function PrivacyPolicy() {
             border=""
             boxShadow={"0px 0px 4px 1px rgba(205, 228, 247, 1)"}
             image="/images/privacy-107.png"
-            title="Third-Party Authentication"
+            title={t["Third-Party Authentication"]}
           >
             <div className="space-y-1.5">
               <BulletListHasBold
-                title="Our platform provides login through Google for your convenience. When you sign in with Google, we only access basic profile information necessary for account creation, including:"
+                title={
+                  t[
+                    "Our platform provides login through Google for your convenience. When you sign in with Google, we only access basic profile information necessary for account creation, including:"
+                  ]
+                }
                 items={[
-                  "Your name",
-                  "Email address",
-                  "Profile picture (optional)",
+                  t["Your name"],
+                  t["Email address"],
+                  t["Profile picture (optional)"],
                 ]}
               />
               <ParagraphHasBold>
-                Yes, we collect limited user data necessary to operate and
-                improve our services. This may include technical data such as
-                browser type, device information, and usage statistics. We do
-                not collect any unnecessary personal information.
+                {
+                  t[
+                    "Yes, we collect limited user data necessary to operate and improve our services. This may include technical data such as browser type, device information, and usage statistics. We do not collect any unnecessary personal information."
+                  ]
+                }
               </ParagraphHasBold>
             </div>
           </ContentSection>
@@ -296,28 +321,36 @@ function PrivacyPolicy() {
             border="1px solid rgba(151, 220, 255, 1)"
             boxShadow=""
             image="/images/privacy-108.png"
-            title="How We Protect Your Images"
+            title={t["How We Protect Your Images"]}
           >
             <div className="space-y-1.5">
               <ParagraphHasBold>
-                We temporarily store the images you upload on our servers to
-                ensure proper processing and to provide features such as
-                download history or re-accessing previous results.
+                {
+                  t[
+                    "We temporarily store the images you upload on our servers to ensure proper processing and to provide features such as download history or re-accessing previous results."
+                  ]
+                }
               </ParagraphHasBold>
               <BulletListHasBold
-                title="Security measures include:"
+                title={t["Security measures include:"]}
                 items={[
-                  "End-to-end encryption during upload and storage name",
-                  "Strict access controls - only you can access your imagesEmail address",
-                  "Regular security audits and monitoring",
-                  "Automatic deletion after 30 days",
+                  t["End-to-end encryption during upload and storage"],
+                  t["Strict access controls - only you can access your images"],
+                  t["Regular security audits and monitoring"],
+                  t["Automatic deletion after 30 days"],
                 ]}
-                boldWords={["Security", "measures", "include:"]}
+                boldWords={[t["Security"], t["measures"], t["include:"]]}
               />
               <div style={{ marginTop: "16px" }}>
                 <BorderedBox
-                  title="Your images are never shared, reused, or used for AI training."
-                  description="You may request immediate deletion at any time."
+                  title={
+                    t[
+                      "Your images are never shared, reused, or used for AI training."
+                    ]
+                  }
+                  description={
+                    t["You may request immediate deletion at any time."]
+                  }
                   borderColor="rgb(8, 120, 255)"
                   bgColor="white"
                 />
@@ -331,19 +364,26 @@ function PrivacyPolicy() {
             border="1px solid rgba(151, 220, 255, 1)"
             boxShadow=""
             image="/images/privacy-109.png"
-            title="Cookies & Tracking"
+            title={t["Cookies & Tracking"]}
           >
             <div style={{ marginTop: "25px", marginBottom: "16px" }}>
               <BorderedBox
-                title="Good news!"
-                description="We do not use cookies or tracking tools like Google Analytics. Your browsing experience is completely private and ad-free."
+                title={t["Good news!"]}
+                description={
+                  t[
+                    "We do not use cookies or tracking tools like Google Analytics. Your browsing experience is completely private and ad-free."
+                  ]
+                }
                 borderColor="rgba(0, 228, 95, 1)"
                 bgColor="rgba(211, 255, 229, 1)"
               />
             </div>
             <ParagraphHasBold>
-              We only use essential session storage to maintain your login
-              state, which is cleared when you log out or close your browser.
+              {
+                t[
+                  "We only use essential session storage to maintain your login state, which is cleared when you log out or close your browser."
+                ]
+              }
             </ParagraphHasBold>
           </ContentSection>
 
@@ -353,12 +393,14 @@ function PrivacyPolicy() {
             border=""
             boxShadow={"0px 0px 4px 1px rgba(205, 228, 247, 1)"}
             image="/images/privacy-110.png"
-            title="Age Policy"
+            title={t["Age Policy"]}
           >
             <ParagraphHasBold>
-              Our service is designed to be safe and appropriate for all age
-              groups. We do not knowingly collect personal information from
-              children, and we encourage parental supervision for younger users.
+              {
+                t[
+                  "Our service is designed to be safe and appropriate for all age groups. We do not knowingly collect personal information from children, and we encourage parental supervision for younger users."
+                ]
+              }
             </ParagraphHasBold>
           </ContentSection>
 
@@ -368,16 +410,18 @@ function PrivacyPolicy() {
             border=""
             boxShadow={"0px 0px 4px 1px rgba(205, 228, 247, 1)"}
             image="/images/privacy-111.png"
-            title="Privacy Questions?"
+            title={t["Privacy Questions?"]}
           >
             <div className="space-y-3">
               <ParagraphHasBold>
-                If you have any questions about our privacy practices, need
-                clarification on how we handle your data, or want to exercise
-                your data rights, please don't hesitate to reach out.
+                {
+                  t[
+                    "If you have any questions about our privacy practices, need clarification on how we handle your data, or want to exercise your data rights, please don't hesitate to reach out."
+                  ]
+                }
               </ParagraphHasBold>
               <ReusableButton
-                text="Contact us"
+                text={t["Contact Us"]}
                 position={isRTL ? "right" : "left"}
                 onClick={() => (window.location.href = "/contact-us")}
               />

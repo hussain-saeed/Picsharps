@@ -1,4 +1,15 @@
+import { LanguageContext } from "/src/context/LanguageContext";
+import English from "/src/i18n/english.json";
+import Arabic from "/src/i18n/arabic.json";
+import { useContext } from "react";
+
+const translations = { English, Arabic };
+
 function HeroSection({ content }) {
+  const { language, direction } = useContext(LanguageContext);
+  const isRTL = direction === "rtl";
+  const t = translations[language] || translations["English"];
+
   return (
     <div
       style={{ paddingTop: "190px", marginBottom: "70px", textAlign: "center" }}
@@ -20,7 +31,7 @@ function HeroSection({ content }) {
           marginBottom: "12px",
         }}
       >
-        {content.title}
+        {t[content.title]}
       </h1>
 
       <div className="space-y-3">
@@ -34,7 +45,7 @@ function HeroSection({ content }) {
               fontWeight: "500",
             }}
           >
-            {paragraph}
+            {t[paragraph]}
           </p>
         ))}
       </div>

@@ -27,6 +27,7 @@ export const grayscalePhoto = async ({
       };
     } else {
       toast.error(data.message || "Unexpected error occurred!");
+      console.log(data);
     }
   } catch (err) {
     toast.error(

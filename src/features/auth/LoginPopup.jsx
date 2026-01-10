@@ -54,19 +54,17 @@ const LoginPopup = () => {
 
   // HANDLERS
   const handleEmailLogin = async () => {
-    if (!email || !password) return alert("Please enter email and password");
 
     const data = await login(email, password);
     if (data?.status === "success") {
       closeLoginPopup();
     } else {
       toast.error(data?.message || "Login failed");
+      console.log(data);
     }
   };
 
   const handleForgotEmail = async () => {
-    if (!forgotEmail) return alert("Enter your email");
-
     const res = await forgotPassword(forgotEmail);
 
     if (res?.status === "success") {
@@ -78,7 +76,6 @@ const LoginPopup = () => {
   };
 
   const handleVerifyCode = async () => {
-    if (!code) return alert("Enter the code");
 
     const res = await verifyResetCode(forgotEmail, code);
 

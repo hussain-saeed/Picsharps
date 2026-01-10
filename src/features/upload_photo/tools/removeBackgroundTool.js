@@ -38,6 +38,7 @@ export const removeBackground = async ({
         toolKey: data.data.toolKey,
       };
     } else {
+      console.log(data);
       toast.error(data.message || "Unexpected error occurred!");
     }
   } catch (err) {

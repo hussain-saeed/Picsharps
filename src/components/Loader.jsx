@@ -1,8 +1,8 @@
-export default function Loader({ className }) {
+export default function Loader({ className, style }) {
   return (
     <div
       className={`w-full flex items-center justify-center ${className}`}
-      style={{ minHeight: "400px" }}
+      style={{ minHeight: "400px", ...style }}
     >
       <style>{`
         .loader-wrapper {

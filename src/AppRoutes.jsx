@@ -15,6 +15,7 @@ import Callback from "./features/auth/Callback";
 import Profile from "./features/profile/Profile";
 import VerifyEmailPage from "./features/auth/VerifyEmailPage";
 import LoginPopup from "./features/auth/LoginPopup";
+import Success from "./features/static/pricing/components/Success";
 
 const data = [
   "remove-background",
@@ -22,8 +23,6 @@ const data = [
   "sharpen-image",
   "photo-to-cartoon",
   "resize-image",
-  // "flip-image",
-  // "rotate-image",
   "blur-image",
   "grayscale-image",
   "rounded-corner-image",
@@ -61,6 +60,7 @@ export default function AppRoutes() {
             <Route path="/auth/callback" element={<Callback />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/verify-email" element={<VerifyEmailPage />} />
+            <Route path="/success" element={<Success />} />
 
             <Route path="*" element={<NotFound />} />
           </Routes>

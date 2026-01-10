@@ -14,8 +14,8 @@ function Subscriptions({ data, billings }) {
   return (
     <div className="">
       <div className="mb-12">
+        {/* free plan case*/}
         {data?.data?.profile?.lastSubscription === null ? (
-          // free plan case
           <div
             style={{ border: "3px solid #00b0ff", borderRadius: "15px" }}
             className="p-6"
@@ -35,7 +35,8 @@ function Subscriptions({ data, billings }) {
                   data?.data?.profile?.creditsBalance == 0 ? "red" : "#00c853",
               }}
             >
-              {data?.data?.profile?.creditsBalance} {t["Credits of"]} 100
+              {data?.data?.profile?.creditsBalance} {t["credits remaining of"]}{" "}
+              100
             </p>
             <ReusableButton
               text={t["Change Plan"]}
@@ -44,7 +45,91 @@ function Subscriptions({ data, billings }) {
             />
           </div>
         ) : (
-          ""
+          <div
+            style={{ border: "3px solid #00b0ff", borderRadius: "15px" }}
+            className="p-6"
+          >
+            <h3
+              style={{
+                color: "#00b0ff",
+              }}
+              className="font-bold text-xl mb-2"
+            >
+              {t[data?.data?.profile?.lastSubscription?.plan?.slug]}{" "}
+              {data?.data?.profile?.lastSubscription?.status === "ACTIVE" ? (
+                <span
+                  className={`font-semibold text-[#00c853] italic ${
+                    isRTL ? "mr-2" : " ml-2"
+                  }`}
+                  style={{ fontSize: "15px" }}
+                >
+                  {t["Active"]}
+                </span>
+              ) : (
+                <span
+                  className="font-semibold text-[red] italic"
+                  style={{ fontSize: "15px" }}
+                >
+                  {t["Not Active"]}
+                </span>
+              )}
+            </h3>
+            <p
+              className="font-semibold text-md mb-2"
+              style={{
+                color:
+                  data?.data?.profile?.creditsBalance == 0 ? "red" : "#00c853",
+              }}
+            >
+              {data?.data?.profile?.creditsBalance} {t["credits remaining of"]}{" "}
+              {data?.data?.profile?.lastSubscription?.plan?.creditsPerPeriod}
+            </p>
+            <p className="font-semibold text-lg">
+              {t["Start:"]}{" "}
+              <span
+                className="font-semibold italic text-gray-700"
+                style={{ fontSize: "15px" }}
+              >
+                {new Date(
+                  data?.data?.profile?.lastSubscription?.currentPeriodStart
+                ).toLocaleDateString(
+                  localStorage.getItem("language").slice(0, 2).toLowerCase(),
+                  {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  }
+                )}
+              </span>
+            </p>
+            <p className="mb-6 font-semibold text-lg">
+              {t["End:"]}{" "}
+              <span
+                className="font-semibold italic text-gray-700"
+                style={{ fontSize: "15px" }}
+              >
+                {new Date(
+                  data?.data?.profile?.lastSubscription?.currentPeriodEnd
+                ).toLocaleDateString(
+                  localStorage.getItem("language").slice(0, 2).toLowerCase(),
+                  {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  }
+                )}
+              </span>
+            </p>
+            <ReusableButton
+              text={t["Change Plan"]}
+              position={isRTL ? "right" : "left"}
+              onClick={() => (window.location.href = "/pricing")}
+            />
+          </div>
         )}
       </div>
       <div className="">

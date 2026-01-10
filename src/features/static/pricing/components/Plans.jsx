@@ -5,6 +5,7 @@ import { RxCross2 } from "react-icons/rx";
 import English from "/src/i18n/english.json";
 import Arabic from "/src/i18n/arabic.json";
 import { useAuth } from "/src/features/auth/AuthProvider";
+import { BACKEND_URL } from "/src/api";
 
 const translations = { English, Arabic };
 
@@ -14,7 +15,9 @@ export default function Pricing() {
   const t = translations[language] || translations["English"];
   const [isYearly, setIsYearly] = useState(false);
   const [planSlug, setPlanSlug] = useState(null);
-  const { requireLogin } = useAuth();
+  const { requireLogin, accessToken } = useAuth();
+  const [isCheckoutLoading, setIsCheckoutLoading] = useState(false);
+  const [clickedPlan, setClickedPlan] = useState(null);
 
   const plans = [
     {
@@ -141,17 +144,56 @@ export default function Pricing() {
   ];
 
   const handlePlanClick = (planType) => {
-    requireLogin(() => {
-      let newPlanSlug = null;
+    if (isCheckoutLoading) return;
+
+    requireLogin(async () => {
+      setClickedPlan(planType);
+
+      let slug = null;
 
       if (planType === "Pro") {
-        newPlanSlug = isYearly ? "pro-yearly" : "pro-monthly";
+        slug = isYearly ? "pro-yearly" : "pro-monthly";
       } else if (planType === "Premium") {
-        newPlanSlug = isYearly ? "premium-yearly" : "premium-monthly";
+        slug = isYearly ? "premium-yearly" : "premium-monthly";
       }
 
-      setPlanSlug(newPlanSlug);
-      console.log("Selected planSlug:", newPlanSlug);
+      setPlanSlug(slug);
+      console.log("Selected planSlug:", slug);
+
+      try {
+        setIsCheckoutLoading(true);
+
+        const res = await fetch(
+          `${BACKEND_URL}/plans/create-checkout-session`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${accessToken}`,
+            },
+            credentials: "include",
+            body: JSON.stringify({
+              planSlug: slug,
+            }),
+          }
+        );
+
+        const data = await res.json();
+        console.log("Checkout response:", data);
+
+        if (!res.ok) {
+          console.error("Checkout error:", data);
+          setIsCheckoutLoading(false);
+          return;
+        }
+
+        if (data?.data?.url) {
+          window.location.href = data.data.url;
+        }
+      } catch (error) {
+        console.error("Network error:", error);
+        setIsCheckoutLoading(false);
+      }
     });
   };
 
@@ -169,13 +211,17 @@ export default function Pricing() {
           </span>
 
           <button
-            className={`w-15 h-8 rounded-full flex items-center px-1 transition cursor-pointer`}
+            className={`w-15 h-8 rounded-full flex items-center px-1 transition`}
             style={{
               backgroundColor: isYearly
                 ? "rgba(0, 176, 255, 1)"
                 : "rgba(225, 225, 225, 1)",
+              cursor: isCheckoutLoading ? "not-allowed" : "pointer",
             }}
-            onClick={() => setIsYearly(!isYearly)}
+            onClick={() => {
+              if (isCheckoutLoading) return;
+              setIsYearly(!isYearly);
+            }}
           >
             <div
               className={`w-6 h-6 bg-white rounded-full shadow transform duration-300 ${
@@ -355,11 +401,18 @@ export default function Pricing() {
                   border: plan.buttonBorder,
                   padding: "16px 0",
                   borderRadius: "15px",
-                  cursor: "pointer",
+                  cursor: isCheckoutLoading ? "not-allowed" : "pointer",
+                  opacity:
+                    isCheckoutLoading && clickedPlan === plan.imageLabel
+                      ? 0.6
+                      : 1,
                 }}
                 onClick={() => handlePlanClick(plan.imageLabel)}
+                disabled={isCheckoutLoading}
               >
-                {plan.buttonText}
+                {isCheckoutLoading && clickedPlan === plan.imageLabel
+                  ? "Loading ..."
+                  : plan.buttonText}
               </button>
             )}
           </div>

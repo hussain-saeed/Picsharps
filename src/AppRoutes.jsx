@@ -36,8 +36,8 @@ const data = [
 
 export default function AppRoutes() {
   return (
-    <LanguageProvider>
-      <LoginPopup />
+    <>
+    <LoginPopup />
       <OverlayProvider>
         <BrowserRouter>
           <ScrollToTop />
@@ -69,6 +69,6 @@ export default function AppRoutes() {
           </Routes>
         </BrowserRouter>
       </OverlayProvider>
-    </LanguageProvider>
+    </>
   );
 }

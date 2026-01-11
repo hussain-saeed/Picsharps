@@ -1,13 +1,24 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { BACKEND_URL } from "../../api";
+import { toast } from "react-toastify";
+import { LanguageContext } from "/src/context/LanguageContext";
+import English from "/src/i18n/english.json";
+import Arabic from "/src/i18n/arabic.json";
+
+const translations = { English, Arabic };
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
+  const { language, direction } = useContext(LanguageContext);
+  const isRTL = direction === "rtl";
+  const t = translations[language] || translations["English"];
+
   // 1) Basic Auth State
   const [userData, setUserData] = useState(null);
   const [isLoadingUserData, setIsLoadingUserData] = useState(true);
   const [accessToken, setAccessToken] = useState(null);
+  const [isPopupActionLoading, setIsPopupActionLoading] = useState(false);
 
   // 2) Token Management (refresh token)
   const refreshToken = async () => {
@@ -76,6 +87,7 @@ export const AuthProvider = ({ children }) => {
 
   // 5) Email & Password Login
   const login = async (email, password) => {
+    setIsPopupActionLoading(true);
     try {
       const res = await fetch(`${BACKEND_URL}/auth/login`, {
         method: "POST",
@@ -90,11 +102,31 @@ export const AuthProvider = ({ children }) => {
         setAccessToken(data.accessToken);
         setUserData(data.data.user);
         window.location.reload();
+        return;
       }
 
-      return data;
+      if (data.status === "fail") {
+        if (data.message.includes("Invalid email address")) {
+          toast.error(t["Invalid Email Address!"]);
+          setIsPopupActionLoading(false);
+          return;
+        }
+
+        if (
+          data.message.includes("Password") ||
+          data.message.includes("Invalid credentials")
+        ) {
+          toast.error(t["Invalid Credentials!"]);
+          setIsPopupActionLoading(false);
+          return;
+        }
+      }
+
+      toast.error(t["Something Went Wrong!"]);
+      setIsPopupActionLoading(false);
     } catch (err) {
-      console.error("Login error:", err);
+      toast.error(t["Something Went Wrong!"]);
+      setIsPopupActionLoading(false);
     }
   };
 
@@ -103,6 +135,7 @@ export const AuthProvider = ({ children }) => {
   const [resetToken, setResetToken] = useState(null);
 
   const forgotPassword = async (email) => {
+    setIsPopupActionLoading(true);
     try {
       const res = await fetch(`${BACKEND_URL}/auth/forgot-password`, {
         method: "POST",
@@ -111,13 +144,32 @@ export const AuthProvider = ({ children }) => {
       });
 
       const data = await res.json();
-      return data;
+
+      if (data.status === "success") {
+        toast.success(t["Code sent to your email!"]);
+        setForgotPassScreen(3);
+        setIsPopupActionLoading(false);
+        return;
+      }
+
+      if (
+        data.status === "fail" &&
+        data.message.includes("Invalid email address")
+      ) {
+        toast.error(t["Invalid Email Address!"]);
+        setIsPopupActionLoading(false);
+        return;
+      }
+      toast.error(t["Something Went Wrong!"]);
+      setIsPopupActionLoading(false);
     } catch (err) {
-      console.error("Forgot Password Error:", err);
+      toast.error(t["Something Went Wrong!"]);
+      setIsPopupActionLoading(false);
     }
   };
 
   const verifyResetCode = async (email, code) => {
+    setIsPopupActionLoading(true);
     try {
       const res = await fetch(`${BACKEND_URL}/auth/verify-reset-code`, {
         method: "POST",
@@ -126,13 +178,36 @@ export const AuthProvider = ({ children }) => {
       });
 
       const data = await res.json();
-      return data;
+
+      if (data.status === "success") {
+        setResetToken(data.data.resetToken);
+        setForgotPassScreen(4);
+        setIsPopupActionLoading(false);
+        return;
+      }
+
+      if (data.status === "fail") {
+        if (
+          data.message.includes("Invalid code") ||
+          data.message.includes("Code expired")
+        ) {
+          toast.error(t["Invalid or expired code!"]);
+          setIsPopupActionLoading(false);
+          return;
+        }
+      }
+      console.log(data);
+      toast.error(t["Something Went Wrong!"]);
+      setIsPopupActionLoading(false);
     } catch (err) {
-      console.error("Verify Reset Code Error:", err);
+      console.log(err);
+      toast.error(t["Something Went Wrong!"]);
+      setIsPopupActionLoading(false);
     }
   };
 
   const resetPassword = async (token, newPassword) => {
+    setIsPopupActionLoading(true);
     try {
       const res = await fetch(`${BACKEND_URL}/auth/reset-password`, {
         method: "POST",
@@ -141,48 +216,25 @@ export const AuthProvider = ({ children }) => {
       });
 
       const data = await res.json();
-      return data;
+      if (data.status === "success") {
+        toast.success(t["Password reset successfully!"]);
+        setForgotPassScreen(1);
+        setIsPopupActionLoading(false);
+        return;
+      }
+
+      if (data.status === "fail" && data.message.includes("Password")) {
+        toast.error(
+          t["Password must be 8+ chars with upper and lower case letters!"]
+        );
+        setIsPopupActionLoading(false);
+        return;
+      }
+      toast.error(t["Something Went Wrong!"]);
+      setIsPopupActionLoading(false);
     } catch (err) {
-      console.error("Reset Password Error:", err);
-    }
-  };
-
-  const changeEmail = async (newEmail) => {
-    try {
-      const res = await fetch(`${BACKEND_URL}/auth/change-email`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-        credentials: "include",
-        body: JSON.stringify({ newEmail }),
-      });
-
-      const data = await res.json();
-
-      return data;
-    } catch (err) {
-      console.error("Change email error:", err);
-    }
-  };
-
-  const verifyEmail = async (token, id) => {
-    if (!token || !id)
-      return { status: "fail", message: "Invalid verification link" };
-
-    try {
-      const res = await fetch(`${BACKEND_URL}/auth/verify-email`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ token, id }),
-      });
-
-      const data = await res.json();
-      return data;
-    } catch (err) {
-      console.error("Verify email error:", err);
-      return { status: "error", message: "Network error" };
+      toast.error(t["Something Went Wrong!"]);
+      setIsPopupActionLoading(false);
     }
   };
 
@@ -227,6 +279,9 @@ export const AuthProvider = ({ children }) => {
   return (
     <AuthContext.Provider
       value={{
+        setIsPopupActionLoading,
+        isPopupActionLoading,
+
         userData,
         isLoadingUserData,
         accessToken,
@@ -254,9 +309,6 @@ export const AuthProvider = ({ children }) => {
         forgotPassword,
         verifyResetCode,
         resetPassword,
-
-        changeEmail,
-        verifyEmail,
 
         setPassword,
 

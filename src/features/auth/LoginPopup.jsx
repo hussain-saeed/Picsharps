@@ -4,6 +4,7 @@ import { LanguageContext } from "../../context/LanguageContext";
 import { toast } from "react-toastify";
 import English from "/src/i18n/english.json";
 import Arabic from "/src/i18n/arabic.json";
+import ParticleCanvas from "../../components/ParticleCanvas";
 
 const translations = { English, Arabic };
 
@@ -17,6 +18,9 @@ const LoginPopup = () => {
     closeLoginPopup,
     loginWithGoogle,
     login,
+
+    setIsPopupActionLoading,
+    isPopupActionLoading,
 
     // Forgot Password Flow
     forgotPassScreen,
@@ -54,52 +58,41 @@ const LoginPopup = () => {
 
   // HANDLERS
   const handleEmailLogin = async () => {
-
-    const data = await login(email, password);
-    if (data?.status === "success") {
-      closeLoginPopup();
-    } else {
-      toast.error(data?.message || "Login failed");
-      console.log(data);
+    if (!email) {
+      toast.error(t["Email is Required!"]);
+      return;
     }
+    if (!password) {
+      toast.error(t["Password is Required!"]);
+      return;
+    }
+    await login(email, password);
   };
 
   const handleForgotEmail = async () => {
-    const res = await forgotPassword(forgotEmail);
-
-    if (res?.status === "success") {
-      toast.success("Code sent to your email");
-      setForgotPassScreen(3);
-    } else {
-      toast.error(res?.message || "Something went wrong");
+    if (!forgotEmail) {
+      toast.error(t["Email is Required!"]);
+      return;
     }
+    await forgotPassword(forgotEmail);
   };
 
   const handleVerifyCode = async () => {
-
-    const res = await verifyResetCode(forgotEmail, code);
-
-    if (res?.status === "success") {
-      setResetToken(res.data.resetToken);
-      setForgotPassScreen(4);
-    } else {
-      toast.error(res?.message || "Invalid or expired code");
+    if (!code) {
+      toast.error(t["Code is Required!"]);
+      return;
     }
+    if (code.length < 6) {
+      toast.error(t["Invalid Code!"]);
+      return;
+    }
+
+    await verifyResetCode(forgotEmail, code);
   };
 
   const handleResetPassword = async () => {
-    if (!newPass) return toast.error("Enter a new password");
-
-    const res = await resetPassword(resetToken, newPass);
-
-    if (res?.status === "success") {
-      toast.success("Password reset successfully!");
-
-      // Back to first screen
-      setForgotPassScreen(1);
-    } else {
-      toast.error(res?.message || "Failed to reset password");
-    }
+    if (!newPass) return toast.error(t["New password is Required!"]);
+    await resetPassword(resetToken, newPass);
   };
 
   // RENDER SCREENS
@@ -189,6 +182,12 @@ const LoginPopup = () => {
                 placeholder="your.example@gmail.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                onFocus={(e) => {
+                  e.target.style.border = "2px solid #00b0ff";
+                }}
+                onBlur={(e) => {
+                  e.target.style.border = "2px solid transparent";
+                }}
                 style={{
                   width: "100%",
                   padding: "10px 20px",
@@ -196,6 +195,7 @@ const LoginPopup = () => {
                   marginTop: "5px",
                   marginBottom: "12px",
                   borderRadius: "10px",
+                  outline: "none",
                 }}
               />
               <label> {t["Password"]}</label>
@@ -204,6 +204,12 @@ const LoginPopup = () => {
                 placeholder={t["Enter password"]}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                onFocus={(e) => {
+                  e.target.style.border = "2px solid #00b0ff";
+                }}
+                onBlur={(e) => {
+                  e.target.style.border = "2px solid transparent";
+                }}
                 style={{
                   width: "100%",
                   padding: "10px 20px",
@@ -211,11 +217,18 @@ const LoginPopup = () => {
                   marginTop: "5px",
                   marginBottom: "24px",
                   borderRadius: "10px",
+                  outline: "none",
                 }}
               />
               <button
-                onClick={handleEmailLogin}
+                onClick={
+                  isPopupActionLoading === true ? null : handleEmailLogin
+                }
+                disabled={isPopupActionLoading === true}
                 style={{
+                  cursor:
+                    isPopupActionLoading === true ? "not-allowed" : "pointer",
+                  opacity: isPopupActionLoading === true ? "0.5" : "1",
                   padding: "10px",
                   width: "100%",
                   background: "var(--gradient-color-2)",
@@ -226,7 +239,7 @@ const LoginPopup = () => {
                   marginBottom: "18px",
                 }}
               >
-                {t["Login"]}
+                {isPopupActionLoading === true ? t["Loading ..."] : t["Login"]}
               </button>
               <button
                 onClick={() => setForgotPassScreen(2)}
@@ -269,6 +282,12 @@ const LoginPopup = () => {
             placeholder="your.example@gmail.com"
             value={forgotEmail}
             onChange={(e) => setForgotEmail(e.target.value)}
+            onFocus={(e) => {
+              e.target.style.border = "2px solid #00b0ff";
+            }}
+            onBlur={(e) => {
+              e.target.style.border = "2px solid transparent";
+            }}
             style={{
               width: "100%",
               padding: "10px 20px",
@@ -276,12 +295,16 @@ const LoginPopup = () => {
               marginTop: "5px",
               marginBottom: "32px",
               borderRadius: "10px",
+              outline: "none",
             }}
           />
 
           <button
-            onClick={handleForgotEmail}
+            onClick={isPopupActionLoading === true ? null : handleForgotEmail}
+            disabled={isPopupActionLoading === true}
             style={{
+              cursor: isPopupActionLoading === true ? "not-allowed" : "pointer",
+              opacity: isPopupActionLoading === true ? "0.5" : "1",
               padding: "10px",
               width: "100%",
               background: "var(--gradient-color-2)",
@@ -290,10 +313,11 @@ const LoginPopup = () => {
               fontSize: "20px",
               borderRadius: "10px",
               marginBottom: "65px",
-              cursor: "pointer",
             }}
           >
-            {t["Request Code"]}
+            {isPopupActionLoading === true
+              ? t["Loading ..."]
+              : t["Request Code"]}
           </button>
         </div>
       );
@@ -308,7 +332,18 @@ const LoginPopup = () => {
             type="text"
             placeholder={t["6-digit code"]}
             value={code}
-            onChange={(e) => setCode(e.target.value)}
+            maxLength={6}
+            inputMode="numeric"
+            onChange={(e) => {
+              const onlyNumbers = e.target.value.replace(/\D/g, "");
+              setCode(onlyNumbers);
+            }}
+            onFocus={(e) => {
+              e.target.style.border = "2px solid #00b0ff";
+            }}
+            onBlur={(e) => {
+              e.target.style.border = "2px solid transparent";
+            }}
             style={{
               width: "100%",
               padding: "10px 20px",
@@ -316,12 +351,15 @@ const LoginPopup = () => {
               marginTop: "5px",
               marginBottom: "38px",
               borderRadius: "10px",
+              outline: "none",
             }}
           />
 
           <button
-            onClick={handleVerifyCode}
+            onClick={isPopupActionLoading === true ? null : handleVerifyCode}
             style={{
+              cursor: isPopupActionLoading === true ? "not-allowed" : "pointer",
+              opacity: isPopupActionLoading === true ? "0.5" : "1",
               padding: "10px",
               width: "100%",
               background: "var(--gradient-color-2)",
@@ -330,10 +368,11 @@ const LoginPopup = () => {
               fontSize: "20px",
               borderRadius: "10px",
               marginBottom: "85px",
-              cursor: "pointer",
             }}
           >
-            {t["Verify Code"]}
+            {isPopupActionLoading === true
+              ? t["Loading ..."]
+              : t["Verify Code"]}
           </button>
         </div>
       );
@@ -358,6 +397,12 @@ const LoginPopup = () => {
             placeholder={t["New Password"]}
             value={newPass}
             onChange={(e) => setNewPass(e.target.value)}
+            onFocus={(e) => {
+              e.target.style.border = "2px solid #00b0ff";
+            }}
+            onBlur={(e) => {
+              e.target.style.border = "2px solid transparent";
+            }}
             style={{
               width: "100%",
               padding: "10px 20px",
@@ -365,12 +410,16 @@ const LoginPopup = () => {
               marginTop: "5px",
               marginBottom: "32px",
               borderRadius: "10px",
+              outline: "none",
             }}
           />
 
           <button
-            onClick={handleResetPassword}
+            onClick={isPopupActionLoading === true ? null : handleResetPassword}
+            disabled={isPopupActionLoading === true}
             style={{
+              cursor: isPopupActionLoading === true ? "not-allowed" : "pointer",
+              opacity: isPopupActionLoading === true ? "0.5" : "1",
               padding: "10px",
               width: "100%",
               background: "var(--gradient-color-2)",
@@ -379,10 +428,11 @@ const LoginPopup = () => {
               fontSize: "20px",
               borderRadius: "10px",
               marginBottom: "70px",
-              cursor: "pointer",
             }}
           >
-            {t["Reset Password"]}
+            {isPopupActionLoading === true
+              ? t["Loading ..."]
+              : t["Reset Password"]}
           </button>
         </div>
       );
@@ -420,13 +470,15 @@ const LoginPopup = () => {
         <img
           src="/images/close.png"
           onClick={() => {
+            if (isPopupActionLoading === true) return;
+            setIsPopupActionLoading(false);
             setRenderLogWithGoogle(true);
             closeLoginPopup();
           }}
           style={{
             position: "absolute",
             top: "-25px",
-            cursor: "pointer",
+            cursor: isPopupActionLoading === true ? "not-allowed" : "pointer",
             zIndex: 2000,
             width: "65px",
           }}
@@ -453,7 +505,7 @@ const LoginPopup = () => {
             className="w-[50%] lg:block hidden"
           ></div>
 
-          <div className="lg:w-[50%] w-full py-10 px-8 md:px-17 flex flex-col justify-between">
+          <div className="lg:w-[50%] w-full py-10 px-8 md:px-17 flex flex-col justify-between relative">
             <div className="text-center">
               <h2 style={{ fontSize: "40px", fontWeight: "700" }}>
                 {t["Hi there!"]}
@@ -462,7 +514,6 @@ const LoginPopup = () => {
                 {t["Welcome to Picsharps, so happy to see you."]}
               </p>
             </div>
-
             {renderScreen()}
           </div>
         </div>

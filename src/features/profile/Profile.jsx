@@ -18,6 +18,7 @@ import English from "/src/i18n/english.json";
 import Arabic from "/src/i18n/arabic.json";
 import Subscriptions from "./sections/Subscriptions";
 import Loader from "/src/components/Loader";
+import Spinner from "../../components/Spinner";
 
 const translations = { English, Arabic };
 
@@ -33,7 +34,8 @@ const tabsData = [
 ];
 
 function Profile() {
-  const { accessToken, logout } = useAuth();
+  const { accessToken, logout, isPopupActionLoading } = useAuth();
+
   const { language, direction } = useContext(LanguageContext);
   const t = translations[language] || translations["English"];
   const isRTL = direction === "rtl";
@@ -211,15 +213,28 @@ function Profile() {
                 </div>
 
                 {/* Logout Button */}
-                <button
-                  className="w-full text-red-500 px-4 py-2.5 flex items-center gap-2 cursor-pointer"
-                  onClick={() => logout()}
-                >
-                  <div className="w-8 h-6 flex items-center justify-center text-xl">
-                    {isRTL ? <CiLogout /> : <MdOutlineLogout />}
-                  </div>
-                  <span style={{ fontWeight: "500" }}>{t["Log Out"]}</span>
-                </button>
+                <div className="w-full flex justify-between items-center pr-4">
+                  <button
+                    className="w-[70%] text-red-500 px-4 py-2.5 flex items-center gap-2 cursor-pointer"
+                    onClick={() =>
+                      isPopupActionLoading === true ? null : logout()
+                    }
+                    disabled={isPopupActionLoading === true}
+                    style={{
+                      cursor:
+                        isPopupActionLoading === true
+                          ? "not-allowed"
+                          : "pointer",
+                      opacity: isPopupActionLoading === true ? "0.5" : "1",
+                    }}
+                  >
+                    <div className="w-8 h-6 flex items-center justify-center text-xl">
+                      {isRTL ? <CiLogout /> : <MdOutlineLogout />}
+                    </div>
+                    <span style={{ fontWeight: "500" }}>{t["Log Out"]}</span>
+                  </button>
+                  {isPopupActionLoading === true ? <Spinner /> : ""}
+                </div>
               </div>
 
               {/* Main Content */}

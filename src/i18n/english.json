@@ -388,7 +388,7 @@
   "Invalid or expired code!": "Invalid or expired code!",
   "New password is Required!": "New password is Required!",
   "Password reset successfully!": "Password reset successfully!",
-  "Password must be 8+ chars with upper and lower case letters!": "Password must be 8+ chars with upper and lower case letters!",
+  "Password must be 8+ chars with upper, lower case letters, and at least one number!": "Password must be 8+ chars with upper, lower case letters, and at least one number!",
 
   "##########comment-511##########": "rest flow",
   "Request Code": "Request Code",

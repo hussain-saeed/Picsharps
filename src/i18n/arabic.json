@@ -388,7 +388,7 @@
   "Invalid or expired code!": "!الرمز غير صالح",
   "New password is Required!": "!كلمة المرور الجديدة مطلوبة",
   "Password reset successfully!": "!تمت إعادة تهيئة كلمة السر بنجاح",
-  "Password must be 8+ chars with upper and lower case letters!": "كلمة المرور يجب أن تتكون من 8 أحرف على الأقل وتشمل أحرفاً كبيرة وصغيرة",
+  "Password must be 8+ chars with upper, lower case letters, and at least one number!": "كلمة المرور يجب أن تتكون من 8 أحرف على الأقل وتشمل أحرفاً كبيرة وصغيرة ورقما واحدا على الأقل",
 
   "##########comment-511##########": "rest flow",
   "Request Code": "طلب رمز",

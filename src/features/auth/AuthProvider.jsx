@@ -225,7 +225,9 @@ export const AuthProvider = ({ children }) => {
 
       if (data.status === "fail" && data.message.includes("Password")) {
         toast.error(
-          t["Password must be 8+ chars with upper and lower case letters!"]
+          t[
+            "Password must be 8+ chars with upper, lower case letters, and at least one number!"
+          ]
         );
         setIsPopupActionLoading(false);
         return;
@@ -239,6 +241,8 @@ export const AuthProvider = ({ children }) => {
   };
 
   const setPassword = async (newPassword) => {
+    setIsPopupActionLoading(true);
+
     try {
       const res = await fetch(`${BACKEND_URL}/auth/set-password`, {
         method: "POST",
@@ -252,23 +256,42 @@ export const AuthProvider = ({ children }) => {
 
       const data = await res.json();
 
-      return data;
+      if (data.status === "success") {
+        toast.success(t["Password reset successfully!"]);
+        setIsPopupActionLoading(false);
+        return data;
+      }
+
+      if (data.status === "fail" && data.message.includes("Password")) {
+        toast.error(
+          t[
+            "Password must be 8+ chars with upper, lower case letters, and at least one number!"
+          ]
+        );
+        setIsPopupActionLoading(false);
+        return;
+      }
+
+      toast.error(t["Something Went Wrong!"]);
+      setIsPopupActionLoading(false);
     } catch (err) {
-      console.error("Set password error:", err);
+      toast.error(t["Something Went Wrong!"]);
+      setIsPopupActionLoading(false);
     }
   };
 
   // 6) Logout
   const logout = async () => {
+    setIsPopupActionLoading(true);
+
     try {
       await fetch(`${BACKEND_URL}/auth/logout`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
       });
-    } catch (err) {
-      console.error("Logout error:", err);
     } finally {
+      setIsPopupActionLoading(false);
       setUserData(null);
       setAccessToken(null);
       window.location.href = "/";

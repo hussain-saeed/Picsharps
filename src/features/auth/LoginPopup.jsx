@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import English from "/src/i18n/english.json";
 import Arabic from "/src/i18n/arabic.json";
 import ParticleCanvas from "../../components/ParticleCanvas";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const translations = { English, Arabic };
 
@@ -12,6 +13,7 @@ const LoginPopup = () => {
   const { language, direction } = useContext(LanguageContext);
   const isRTL = direction === "rtl";
   const t = translations[language] || translations["English"];
+  const [showPassword, setShowPassword] = useState(false);
 
   const {
     isLoginPopupOpen,
@@ -66,7 +68,10 @@ const LoginPopup = () => {
       toast.error(t["Password is Required!"]);
       return;
     }
-    await login(email, password);
+    const res = await login(email, password);
+    if (res?.status === "success") {
+      setShowPassword(false);
+    }
   };
 
   const handleForgotEmail = async () => {
@@ -199,27 +204,47 @@ const LoginPopup = () => {
                 }}
               />
               <label> {t["Password"]}</label>
-              <input
-                type="password"
-                placeholder={t["Enter password"]}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                onFocus={(e) => {
-                  e.target.style.border = "2px solid #00b0ff";
-                }}
-                onBlur={(e) => {
-                  e.target.style.border = "2px solid transparent";
-                }}
-                style={{
-                  width: "100%",
-                  padding: "10px 20px",
-                  backgroundColor: "rgba(245, 245, 245, 1)",
-                  marginTop: "5px",
-                  marginBottom: "24px",
-                  borderRadius: "10px",
-                  outline: "none",
-                }}
-              />
+              <div style={{ position: "relative" }}>
+                <input
+                  type={showPassword ? "text" : "password"}
+                  placeholder={t["Enter password"]}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  onFocus={(e) => {
+                    e.target.style.border = "2px solid #00b0ff";
+                  }}
+                  onBlur={(e) => {
+                    e.target.style.border = "2px solid transparent";
+                  }}
+                  style={{
+                    width: "100%",
+                    backgroundColor: "rgba(245, 245, 245, 1)",
+                    marginTop: "5px",
+                    marginBottom: "24px",
+                    borderRadius: "10px",
+                    outline: "none",
+                  }}
+                  className={`${
+                    isRTL ? "pl-[60px] pr-5" : "pl-5 pr-[60px]"
+                  } py-2.5`}
+                />
+
+                <span
+                  onClick={() => setShowPassword(!showPassword)}
+                  style={{
+                    position: "absolute",
+                    right: isRTL ? "unset" : "18px",
+                    left: isRTL ? "18px" : "unset",
+                    top: "20%",
+                    cursor: "pointer",
+                    color: "#00b0ff",
+                    fontSize: "24px",
+                  }}
+                >
+                  {showPassword ? <FaEyeSlash /> : <FaEye />}
+                </span>
+              </div>
+
               <button
                 onClick={
                   isPopupActionLoading === true ? null : handleEmailLogin
@@ -392,27 +417,45 @@ const LoginPopup = () => {
             {t["Set New Password"]}
           </h2>
           <p style={{ fontWeight: "600" }}> {t["New Password"]}</p>
-          <input
-            type="password"
-            placeholder={t["New Password"]}
-            value={newPass}
-            onChange={(e) => setNewPass(e.target.value)}
-            onFocus={(e) => {
-              e.target.style.border = "2px solid #00b0ff";
-            }}
-            onBlur={(e) => {
-              e.target.style.border = "2px solid transparent";
-            }}
-            style={{
-              width: "100%",
-              padding: "10px 20px",
-              backgroundColor: "rgba(245, 245, 245, 1)",
-              marginTop: "5px",
-              marginBottom: "32px",
-              borderRadius: "10px",
-              outline: "none",
-            }}
-          />
+          <div className="relative">
+            <input
+              type={showPassword ? "text" : "password"}
+              placeholder={t["New Password"]}
+              value={newPass}
+              onChange={(e) => setNewPass(e.target.value)}
+              onFocus={(e) => {
+                e.target.style.border = "2px solid #00b0ff";
+              }}
+              onBlur={(e) => {
+                e.target.style.border = "2px solid transparent";
+              }}
+              style={{
+                width: "100%",
+                backgroundColor: "rgba(245, 245, 245, 1)",
+                marginTop: "5px",
+                marginBottom: "32px",
+                borderRadius: "10px",
+                outline: "none",
+              }}
+              className={`${
+                isRTL ? "pl-[60px] pr-5" : "pl-5 pr-[60px]"
+              } py-2.5`}
+            />
+            <span
+              onClick={() => setShowPassword(!showPassword)}
+              style={{
+                position: "absolute",
+                right: isRTL ? "unset" : "18px",
+                left: isRTL ? "18px" : "unset",
+                top: "19%",
+                cursor: "pointer",
+                color: "#00b0ff",
+                fontSize: "24px",
+              }}
+            >
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
+            </span>
+          </div>
 
           <button
             onClick={isPopupActionLoading === true ? null : handleResetPassword}

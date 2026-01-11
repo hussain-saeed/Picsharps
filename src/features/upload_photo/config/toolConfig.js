@@ -32,15 +32,15 @@ export const TOOL_CONFIG = {
       width: {
         type: "number",
         label: "Width (px)",
-        default: 800,
-        min: 1,
+        default: 600,
+        min: 5,
         max: 5000,
       },
       height: {
         type: "number",
         label: "Height (px)",
         default: 600,
-        min: 1,
+        min: 5,
         max: 5000,
       },
       mode: {

@@ -13,7 +13,6 @@ import TermsOfService from "./features/static/terms/TermsOfService";
 import NotFound from "./features/static/NotFound";
 import Callback from "./features/auth/Callback";
 import Profile from "./features/profile/Profile";
-import VerifyEmailPage from "./features/auth/VerifyEmailPage";
 import LoginPopup from "./features/auth/LoginPopup";
 import Success from "./features/static/pricing/components/Success";
 import Cancel from "./features/static/pricing/components/Cancel";
@@ -59,7 +58,6 @@ export default function AppRoutes() {
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="/terms-of-service" element={<TermsOfService />} />
             <Route path="/profile" element={<Profile />} />
-            <Route path="/verify-email" element={<VerifyEmailPage />} />
 
             <Route path="/auth/callback" element={<Callback />} />
             <Route path="/success" element={<Success />} />

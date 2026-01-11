@@ -6,6 +6,7 @@ import English from "/src/i18n/english.json";
 import Arabic from "/src/i18n/arabic.json";
 import { useAuth } from "/src/features/auth/AuthProvider";
 import { BACKEND_URL } from "/src/api";
+import { toast } from "react-toastify";
 
 const translations = { English, Arabic };
 
@@ -158,7 +159,6 @@ export default function Pricing() {
       }
 
       setPlanSlug(slug);
-      console.log("Selected planSlug:", slug);
 
       try {
         setIsCheckoutLoading(true);
@@ -179,11 +179,10 @@ export default function Pricing() {
         );
 
         const data = await res.json();
-        console.log("Checkout response:", data);
 
         if (!res.ok) {
-          console.error("Checkout error:", data);
           setIsCheckoutLoading(false);
+          toast.error(t["Something Went Wrong!"]);
           return;
         }
 
@@ -191,7 +190,7 @@ export default function Pricing() {
           window.location.href = data.data.url;
         }
       } catch (error) {
-        console.error("Network error:", error);
+        toast.error(t["Something Went Wrong!"]);
         setIsCheckoutLoading(false);
       }
     });

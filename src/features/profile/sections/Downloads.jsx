@@ -3,6 +3,7 @@ import { LanguageContext } from "/src/context/LanguageContext";
 import { Download, ChevronLeft, ChevronRight } from "lucide-react";
 import English from "/src/i18n/english.json";
 import Arabic from "/src/i18n/arabic.json";
+import { toast } from "react-toastify";
 
 const translations = { English, Arabic };
 
@@ -13,6 +14,8 @@ const Downloads = ({ data }) => {
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 4;
+
+  const [isDownloading, setIsDownloading] = useState(null);
 
   const fixScroll = function () {
     window.scrollTo({
@@ -77,8 +80,10 @@ const Downloads = ({ data }) => {
       link.click();
       document.body.removeChild(link);
       URL.revokeObjectURL(link.href);
-    } catch (error) {
-      console.error("Download failed:", error);
+    } catch (err) {
+      toast.error(t["Something Went Wrong!"]);
+    } finally {
+      setIsDownloading(null);
     }
   };
 
@@ -104,6 +109,7 @@ const Downloads = ({ data }) => {
                   background:
                     "linear-gradient(141deg, #00b0ff 0%, #00c853 62.41%)",
                 }}
+                dir="ltr"
                 title={image.tool.name}
               >
                 {truncateText(image.tool.name, 15)}
@@ -139,18 +145,31 @@ const Downloads = ({ data }) => {
               </div>
 
               <button
+                key={image.id}
                 onClick={(e) => {
                   e.stopPropagation();
+                  if (isDownloading) return;
+
+                  setIsDownloading(image.id); 
                   handleDownload(image.resultUrl, `image-${image.id}.jpg`);
                 }}
-                className="cursor-pointer w-full py-2 px-4 rounded-lg text-white font-semibold flex items-center justify-center gap-2 hover:opacity-90 transition-opacity"
+                className="w-full py-2 px-4 rounded-lg text-white font-semibold flex items-center justify-center gap-2 transition-opacity"
                 style={{
                   background:
                     "linear-gradient(141deg, #00c853 0%, #00b0ff 62.41%)",
+                  cursor: isDownloading ? "not-allowed" : "pointer",
+                  opacity: isDownloading === image.id ? 0.5 : 1, 
                 }}
+                disabled={!!isDownloading === image.id}
               >
-                <Download size={18} />
-                <span> {t["Download"]}</span>
+                {isDownloading === image.id ? (
+                  t["Loading ..."]
+                ) : (
+                  <>
+                    <Download size={18} />
+                    <span>{t["Download"]}</span>
+                  </>
+                )}
               </button>
             </div>
           </div>

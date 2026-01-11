@@ -311,6 +311,10 @@
   "PROCESSED": "PROCESSED",
   "Select a tool to process the result with ...": "Select a tool to process the result with ...",
   "Download Result": "Download Result",
+  "Successfully saved locally and to your downloads!": "Successfully saved locally and to your downloads!",
+  "Failed saving locally and to your downloads!": "Failed saving locally and to your downloads!",
+  "Successfully saved locally but failed saving to your downloads!": "Successfully saved locally but failed saving to your downloads!",
+  "Failed saving locally but successfully saved to your downloads!": "Failed saving locally but successfully saved to your downloads!",
 
   "##########comment-431##########": "bottom static boxes",
   "Fast AI Processing": "Fast AI Processing",

@@ -51,6 +51,7 @@ const CollageMaker = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [resultImage, setResultImage] = useState(null);
   const { accessToken } = useAuth();
+  const [isDownloading, setIsDownloading] = useState(false);
 
   const currentTemplates = templates.find(
     (t) => t.slotCount === selectedSlotCount
@@ -193,11 +194,11 @@ const CollageMaker = () => {
   };
 
   const saveResult = async () => {
+    setIsDownloading(true);
     try {
-      // Download locally
       await downloadImage(resultImage, `create-collage-result.png`);
-    } catch (err) {
-      console.error("Download or saving error:", err);
+    } finally {
+      setIsDownloading(false);
     }
   };
 
@@ -443,14 +444,18 @@ const CollageMaker = () => {
           {accessToken ? (
             <button
               dir={isRTL ? "rtl" : "ltr"}
-              onClick={() => saveResult()}
+              onClick={() => {
+                isDownloading === true ? null : saveResult();
+              }}
+              disabled={isDownloading === true}
               style={{
+                cursor: isDownloading === true ? "not-allowed" : "pointer",
+                opacity: isDownloading === true ? "0.5" : "1",
                 padding: "10px 18px",
                 background: "var(--gradient-color)",
                 color: "white",
                 border: "none",
                 borderRadius: "5px",
-                cursor: "pointer",
                 display: "flex",
                 alignItems: "center",
                 gap: "8px",
@@ -460,7 +465,7 @@ const CollageMaker = () => {
               className="mt-8 mx-auto"
             >
               <Download size={18} />
-              {t["Download Result"]}
+              {isDownloading === true ? t["Loading ..."] : t["Download Result"]}
             </button>
           ) : (
             ""

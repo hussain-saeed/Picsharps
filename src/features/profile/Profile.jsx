@@ -34,6 +34,8 @@ const tabsData = [
 ];
 
 function Profile() {
+  const [error, setError] = useState(false);
+
   const { accessToken, logout, isPopupActionLoading } = useAuth();
 
   const { language, direction } = useContext(LanguageContext);
@@ -63,42 +65,67 @@ function Profile() {
   };
 
   useEffect(() => {
+    setIsLoading(true);
+    setError(false);
+
+    if (!accessToken) return;
+
+    let redirectTimeout;
+    let loadingTimeout;
+
     const fetchAll = async () => {
-      setIsLoading(true);
-
       try {
-        const userRes = await fetch(`${BACKEND_URL}/users/me`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${accessToken}`,
-          },
-          credentials: "include",
-        });
-        const userData = await userRes.json();
-        setData(userData);
+        const [userRes, billingRes] = await Promise.all([
+          fetch(`${BACKEND_URL}/users/me`, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${accessToken}`,
+            },
+            credentials: "include",
+          }),
+          fetch(`${BACKEND_URL}/billing/history`, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${accessToken}`,
+            },
+            credentials: "include",
+          }),
+        ]);
 
-        const billingRes = await fetch(`${BACKEND_URL}/billing/history`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${accessToken}`,
-          },
-          credentials: "include",
-        });
-        const billingData = await billingRes.json();
+        const [userData, billingData] = await Promise.all([
+          userRes.json(),
+          billingRes.json(),
+        ]);
+
+        setData(userData);
         setBillings(billingData);
-        console.log(billingData);
+
+        if (userData.status !== "success" || billingData.status !== "success") {
+          setError(true);
+          redirectTimeout = setTimeout(() => {
+            window.location.href = "/";
+          }, 3000);
+        }
       } catch (err) {
-        console.error("Error fetching profile or billing:", err);
+        setError(true);
+        redirectTimeout = setTimeout(() => {
+          window.location.href = "/";
+        }, 3000);
       } finally {
-        setTimeout(() => {
+        loadingTimeout = setTimeout(() => {
           setIsLoading(false);
         }, 1200);
       }
     };
 
     fetchAll();
+
+    return () => {
+      clearTimeout(redirectTimeout);
+      clearTimeout(loadingTimeout);
+    };
   }, [accessToken]);
 
   return (
@@ -114,7 +141,7 @@ function Profile() {
         dir={isRTL ? "rtl" : "ltr"}
       >
         <Container>
-          {isLoading ? (
+          {isLoading || error ? (
             ""
           ) : (
             <div
@@ -166,6 +193,13 @@ function Profile() {
               className="-mt-14 lg:-mt-24"
               style={{ marginBottom: "165px" }}
             />
+          ) : error ? (
+            <p
+              dir={isRTL ? "rtl" : "ltr"}
+              className="text-center pt-10 pb-110 text-2xl text-red-600 font-semibold"
+            >
+              {t["Something Went Wrong!"]}
+            </p>
           ) : (
             <div className="flex gap-8 flex-col lg:flex-row">
               {/* Sidebar - Sticky */}

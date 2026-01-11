@@ -39,6 +39,7 @@ const CropDropZone = () => {
   const [status, setStatus] = useState(COMPONENT_STATES.IDLE);
   const [showDropZone, setShowDropZone] = useState(true);
   const [showOptions, setShowOptions] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
 
   // Cropper states
   const [cropArea, setCropArea] = useState({
@@ -80,7 +81,7 @@ const CropDropZone = () => {
           resetToInitialState();
         }
       } catch (error) {
-        console.error("Error parsing stored result:", error);
+        toast.error(t["Something Went Wrong!"]);
         resetToInitialState();
       }
     } else {
@@ -179,7 +180,7 @@ const CropDropZone = () => {
 
       if (uploadData.status !== "success") {
         setStatus(COMPONENT_STATES.ERROR);
-        toast.error(uploadData.message || "Upload failed");
+        toast.error(t["Something Went Wrong!"]);
         resetComponent();
         return;
       }
@@ -191,9 +192,8 @@ const CropDropZone = () => {
       setStatus(COMPONENT_STATES.DONE);
       setShowOptions(true);
     } catch (error) {
-      console.error("Upload error:", error);
       setStatus(COMPONENT_STATES.ERROR);
-      toast.error("Network error occurred");
+      toast.error(t["Something Went Wrong!"]);
       resetComponent();
     }
   }, []);
@@ -469,25 +469,47 @@ const CropDropZone = () => {
   };
 
   const saveResult = async () => {
-    try {
-      await downloadImage(processedImage, `${currentTool}-result.png`);
+    setIsDownloading(true);
+    const downloadPromise = downloadImage(
+      processedImage,
+      `${currentTool}-result.png`
+    );
+    const serverPromise = fetch(`${BACKEND_URL}/image/save-result`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+      credentials: "include",
+      body: JSON.stringify({
+        sourceImageId,
+        resultUrl: processedImage,
+        toolKey,
+      }),
+    });
 
-      await fetch(`${BACKEND_URL}/image/save-result`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-        credentials: "include",
-        body: JSON.stringify({
-          sourceImageId,
-          resultUrl: processedImage,
-          toolKey,
-        }),
-      });
-    } catch (err) {
-      console.error("Download or saving error:", err);
+    const [downloadRes, serverRes] = await Promise.allSettled([
+      downloadPromise,
+      serverPromise,
+    ]);
+
+    const localSuccess = downloadRes.status === "fulfilled";
+    const serverSuccess = serverRes.status === "fulfilled";
+
+    if (localSuccess && serverSuccess) {
+      toast.success(t["Successfully saved locally and to your downloads!"]);
+    } else if (!localSuccess && !serverSuccess) {
+      toast.error(t["Failed saving locally and to your downloads!"]);
+    } else if (localSuccess && !serverSuccess) {
+      toast.warn(
+        t["Successfully saved locally but failed saving to your downloads!"]
+      );
+    } else {
+      toast.warn(
+        t["Failed saving locally but successfully saved to your downloads!"]
+      );
     }
+    setIsDownloading(false);
   };
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -1046,14 +1068,18 @@ const CropDropZone = () => {
           {accessToken ? (
             <button
               dir={isRTL ? "rtl" : "ltr"}
-              onClick={saveResult}
+              onClick={() => {
+                isDownloading === true ? null : saveResult();
+              }}
+              disabled={isDownloading === true}
               style={{
+                cursor: isDownloading === true ? "not-allowed" : "pointer",
+                opacity: isDownloading === true ? "0.5" : "1",
                 padding: "10px 18px",
                 background: "var(--gradient-color)",
                 color: "white",
                 border: "none",
                 borderRadius: "5px",
-                cursor: "pointer",
                 display: "flex",
                 alignItems: "center",
                 gap: "8px",
@@ -1062,7 +1088,7 @@ const CropDropZone = () => {
               }}
             >
               <Download size={18} />
-              {t["Download Result"]}
+              {isDownloading === true ? t["Loading ..."] : t["Download Result"]}
             </button>
           ) : (
             ""

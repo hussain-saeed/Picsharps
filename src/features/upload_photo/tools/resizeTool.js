@@ -14,7 +14,6 @@ export const resizeImage = async ({
 }) => {
   try {
     if (!width && !height) {
-      toast.error("At least one of width or height must be provided");
       return;
     }
 

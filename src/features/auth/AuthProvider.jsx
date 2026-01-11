@@ -35,13 +35,11 @@ export const AuthProvider = ({ children }) => {
       if (data.status === "success") {
         setAccessToken(data.accessToken);
         setUserData(data.data?.user || null);
-        console.log("refresh", data);
       } else {
         setUserData(null);
         setAccessToken(null);
       }
     } catch (err) {
-      console.error("Refresh token error:", err);
       setUserData(null);
       setAccessToken(null);
     } finally {
@@ -196,11 +194,9 @@ export const AuthProvider = ({ children }) => {
           return;
         }
       }
-      console.log(data);
       toast.error(t["Something Went Wrong!"]);
       setIsPopupActionLoading(false);
     } catch (err) {
-      console.log(err);
       toast.error(t["Something Went Wrong!"]);
       setIsPopupActionLoading(false);
     }

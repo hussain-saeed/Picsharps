@@ -91,6 +91,7 @@ const DropZone = () => {
   const [renderedResultBefore, setRenderedResultBefore] = useState(false); // Track if result was shown before
   const { accessToken } = useAuth();
   const scrollToVH = useScrollToVH();
+  const [isDownloading, setIsDownloading] = useState(false);
 
   useEffect(() => {
     // LocalStorage keys for state persistence
@@ -125,7 +126,7 @@ const DropZone = () => {
           resetToInitialState();
         }
       } catch (error) {
-        console.error("Error parsing stored result from localStorage:", error);
+        toast.error(t["Something Went Wrong!"]);
         resetToInitialState(); // Reset on parsing error
       }
     } else {
@@ -231,7 +232,7 @@ const DropZone = () => {
         if (uploadData.status !== "success") {
           // Handle upload failure
           setStatus(COMPONENT_STATES.ERROR);
-          toast.error(uploadData.message || "Upload failed");
+          toast.error(t["Something Went Wrong!"]);
           resetComponent(); // Reset on error
           return;
         }
@@ -250,9 +251,8 @@ const DropZone = () => {
         }
       } catch (error) {
         // Handle network or unexpected errors
-        console.error("DropZone upload error:", error);
         setStatus(COMPONENT_STATES.ERROR);
-        toast.error("Network error occurred");
+        toast.error(t["Something Went Wrong!"]);
         resetComponent(); // Reset on error
       }
     },
@@ -264,7 +264,7 @@ const DropZone = () => {
 
     // Validation: ensure we have required data
     if (!sourceImageId || !uploadedImageUrl) {
-      toast.error("No image available for processing");
+      toast.error(t["Something Went Wrong!"]);
       return;
     }
 
@@ -317,7 +317,6 @@ const DropZone = () => {
       else if (currentTool === TOOL_TYPES.RESIZE) {
         // Validate that at least one dimension is provided
         if (!options.width && !options.height) {
-          toast.error("Please specify width or height for resizing");
           setStatus(COMPONENT_STATES.ERROR);
           return;
         }
@@ -508,7 +507,6 @@ const DropZone = () => {
       }
     } catch (error) {
       // Handle processing errors
-      console.error("DropZone processing error:", error);
       setStatus(COMPONENT_STATES.ERROR);
 
       // Restore options panel on error for user to retry
@@ -539,33 +537,52 @@ const DropZone = () => {
   };
 
   const saveResult = async () => {
-    try {
-      // Download locally FIRST
-      await downloadImage(processedImage, `${currentTool}-result.png`);
+    setIsDownloading(true);
+    const downloadPromise = downloadImage(
+      processedImage,
+      `${currentTool}-result.png`
+    );
+    const serverPromise = fetch(`${BACKEND_URL}/image/save-result`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+      credentials: "include",
+      body: JSON.stringify({
+        sourceImageId,
+        resultUrl: processedImage,
+        toolKey,
+      }),
+    });
 
-      // Then save on backend
-      await fetch(`${BACKEND_URL}/image/save-result`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-        credentials: "include",
-        body: JSON.stringify({
-          sourceImageId,
-          resultUrl: processedImage,
-          toolKey,
-        }),
-      });
-    } catch (err) {
-      console.error("Download or saving error:", err);
+    const [downloadRes, serverRes] = await Promise.allSettled([
+      downloadPromise,
+      serverPromise,
+    ]);
+
+    const localSuccess = downloadRes.status === "fulfilled";
+    const serverSuccess = serverRes.status === "fulfilled";
+
+    if (localSuccess && serverSuccess) {
+      toast.success(t["Successfully saved locally and to your downloads!"]);
+    } else if (!localSuccess && !serverSuccess) {
+      toast.error(t["Failed saving locally and to your downloads!"]);
+    } else if (localSuccess && !serverSuccess) {
+      toast.warn(
+        t["Successfully saved locally but failed saving to your downloads!"]
+      );
+    } else {
+      toast.warn(
+        t["Failed saving locally but successfully saved to your downloads!"]
+      );
     }
+    setIsDownloading(false);
   };
 
   const goToTool = (toolPath) => {
     // Validate that we have a processed image
     if (!processedImage) {
-      toast.error("No processed image available for tool navigation");
       return;
     }
 
@@ -922,18 +939,18 @@ const DropZone = () => {
                                     type="number"
                                     size="small"
                                     fullWidth
-                                    placeholder="e.g. 800"
+                                    placeholder="e.g. 600"
                                     value={options.width}
                                     onChange={(e) =>
                                       handleOptionChange(
                                         "width",
-                                        parseInt(e.target.value) || 0
+                                        parseInt(e.target.value) || 5
                                       )
                                     }
                                     disabled={
                                       status === COMPONENT_STATES.PROCESSING
                                     }
-                                    InputProps={{ inputProps: { min: 0 } }}
+                                    InputProps={{ inputProps: { min: 5 } }}
                                     sx={{ marginTop: "5px" }}
                                   />
                                 </div>
@@ -954,13 +971,13 @@ const DropZone = () => {
                                     onChange={(e) =>
                                       handleOptionChange(
                                         "height",
-                                        parseInt(e.target.value) || 0
+                                        parseInt(e.target.value) || 5
                                       )
                                     }
                                     disabled={
                                       status === COMPONENT_STATES.PROCESSING
                                     }
-                                    InputProps={{ inputProps: { min: 0 } }}
+                                    InputProps={{ inputProps: { min: 5 } }}
                                   />
                                 </div>
 
@@ -1671,14 +1688,19 @@ const DropZone = () => {
                 {accessToken ? (
                   <button
                     dir={isRTL ? "rtl" : "ltr"}
-                    onClick={() => saveResult()}
+                    onClick={() => {
+                      isDownloading === true ? null : saveResult();
+                    }}
+                    disabled={isDownloading === true}
                     style={{
+                      cursor:
+                        isDownloading === true ? "not-allowed" : "pointer",
+                      opacity: isDownloading === true ? "0.5" : "1",
                       padding: "10px 18px",
                       background: "var(--gradient-color)",
                       color: "white",
                       border: "none",
                       borderRadius: "5px",
-                      cursor: "pointer",
                       display: "flex",
                       alignItems: "center",
                       gap: "8px",
@@ -1687,7 +1709,9 @@ const DropZone = () => {
                     }}
                   >
                     <Download size={18} />
-                    {t["Download Result"]}
+                    {isDownloading === true
+                      ? t["Loading ..."]
+                      : t["Download Result"]}
                   </button>
                 ) : (
                   ""

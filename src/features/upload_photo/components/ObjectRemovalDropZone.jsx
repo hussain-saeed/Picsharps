@@ -39,6 +39,7 @@ const ObjectRemovalTool = () => {
   const [toolKey, setToolKey] = useState(null);
   const [status, setStatus] = useState(COMPONENT_STATES.IDLE);
   const scrollToVH = useScrollToVH();
+  const [isDownloading, setIsDownloading] = useState(false);
 
   // Drawing states
   const [isDrawing, setIsDrawing] = useState(false);
@@ -101,6 +102,7 @@ const ObjectRemovalTool = () => {
       const uploadData = await uploadRes.json();
 
       if (uploadData.status !== "success") {
+        toast.error(t["Something Went Wrong!"]);
         setStatus(COMPONENT_STATES.ERROR);
         return;
       }
@@ -111,7 +113,7 @@ const ObjectRemovalTool = () => {
       setUploadedImageUrl(sourceUrl);
       setStatus(COMPONENT_STATES.DONE);
     } catch (error) {
-      console.error("Upload error:", error);
+      toast.error(t["Something Went Wrong!"]);
       setStatus(COMPONENT_STATES.ERROR);
     }
   };
@@ -315,25 +317,47 @@ const ObjectRemovalTool = () => {
   };
 
   const saveResult = async () => {
-    try {
-      await downloadImage(processedImage, `object-removal-result.png`);
+    setIsDownloading(true);
+    const downloadPromise = downloadImage(
+      processedImage,
+      `object-removal-result.png`
+    );
+    const serverPromise = fetch(`${BACKEND_URL}/image/save-result`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+      credentials: "include",
+      body: JSON.stringify({
+        sourceImageId,
+        resultUrl: processedImage,
+        toolKey,
+      }),
+    });
 
-      await fetch(`${BACKEND_URL}/image/save-result`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-        credentials: "include",
-        body: JSON.stringify({
-          sourceImageId,
-          resultUrl: processedImage,
-          toolKey,
-        }),
-      });
-    } catch (err) {
-      console.error("Download or saving error:", err);
+    const [downloadRes, serverRes] = await Promise.allSettled([
+      downloadPromise,
+      serverPromise,
+    ]);
+
+    const localSuccess = downloadRes.status === "fulfilled";
+    const serverSuccess = serverRes.status === "fulfilled";
+
+    if (localSuccess && serverSuccess) {
+      toast.success(t["Successfully saved locally and to your downloads!"]);
+    } else if (!localSuccess && !serverSuccess) {
+      toast.error(t["Failed saving locally and to your downloads!"]);
+    } else if (localSuccess && !serverSuccess) {
+      toast.warn(
+        t["Successfully saved locally but failed saving to your downloads!"]
+      );
+    } else {
+      toast.warn(
+        t["Failed saving locally but successfully saved to your downloads!"]
+      );
     }
+    setIsDownloading(false);
   };
 
   return (
@@ -670,14 +694,18 @@ const ObjectRemovalTool = () => {
             {accessToken ? (
               <button
                 dir={isRTL ? "rtl" : "ltr"}
-                onClick={saveResult}
+                onClick={() => {
+                  isDownloading === true ? null : saveResult();
+                }}
+                disabled={isDownloading === true}
                 style={{
+                  cursor: isDownloading === true ? "not-allowed" : "pointer",
+                  opacity: isDownloading === true ? "0.5" : "1",
                   padding: "10px 18px",
                   background: "var(--gradient-color)",
                   color: "white",
                   border: "none",
                   borderRadius: "5px",
-                  cursor: "pointer",
                   display: "flex",
                   alignItems: "center",
                   gap: "8px",
@@ -686,7 +714,9 @@ const ObjectRemovalTool = () => {
                 }}
               >
                 <Download size={18} />
-                {t["Download Result"]}
+                {isDownloading === true
+                  ? t["Loading ..."]
+                  : t["Download Result"]}
               </button>
             ) : (
               ""

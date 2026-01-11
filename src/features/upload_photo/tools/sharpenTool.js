@@ -6,6 +6,9 @@ export const sharpenImage = async ({
   imageUrl,
   strength,
   accessToken,
+  customMsg,
+  customMsg2,
+  generalMsg,
 }) => {
   try {
     const res = await fetch(`${BACKEND_URL}/image/sharpen`, {
@@ -30,12 +33,20 @@ export const sharpenImage = async ({
         providerImageId: data.data.providerImageId,
         toolKey: data.data.toolKey,
       };
-    } else {
-      toast.error(data.message || "Unexpected error occurred!");
     }
+
+    if (data.status === "fail") {
+      if (data.data.code === "RUN_LIMIT") {
+        toast.error(customMsg);
+        return;
+      }
+      if (data.message === "INSUFFICIENT_CREDITS") {
+        toast.error(customMsg2);
+        return;
+      }
+    }
+    toast.error(generalMsg);
   } catch (err) {
-    toast.error(
-      "Unexpected error occurred! Make sure your internet connection is stable."
-    );
+    toast.error(generalMsg);
   }
 };

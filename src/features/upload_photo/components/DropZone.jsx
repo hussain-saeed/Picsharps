@@ -283,6 +283,15 @@ const DropZone = () => {
           imageUrl: uploadedImageUrl,
           upscaleFactor: options.upscaleFactor, // Enhancement level
           accessToken,
+          customMsg:
+            t[
+              "You have used up your free attempts! Please log in to continue."
+            ],
+          customMsg2:
+            t[
+              "Your points are insufficient or your subscription has expired! Please check the subscriptions section."
+            ],
+          generalMsg: t["Something Went Wrong!"],
         });
       }
 
@@ -292,6 +301,15 @@ const DropZone = () => {
           sourceImageId,
           imageUrl: uploadedImageUrl,
           accessToken,
+          customMsg:
+            t[
+              "You have used up your free attempts! Please log in to continue."
+            ],
+          customMsg2:
+            t[
+              "Your points are insufficient or your subscription has expired! Please check the subscriptions section."
+            ],
+          generalMsg: t["Something Went Wrong!"],
         });
       }
 
@@ -311,6 +329,15 @@ const DropZone = () => {
           height: options.height, // Target height in pixels
           mode: options.mode, // Resize mode (contain, cover, etc.)
           accessToken,
+          customMsg:
+            t[
+              "You have used up your free attempts! Please log in to continue."
+            ],
+          customMsg2:
+            t[
+              "Your points are insufficient or your subscription has expired! Please check the subscriptions section."
+            ],
+          generalMsg: t["Something Went Wrong!"],
         });
       }
 
@@ -321,6 +348,15 @@ const DropZone = () => {
           imageUrl: uploadedImageUrl,
           strength: options.strength, // Sharpening intensity
           accessToken,
+          customMsg:
+            t[
+              "You have used up your free attempts! Please log in to continue."
+            ],
+          customMsg2:
+            t[
+              "Your points are insufficient or your subscription has expired! Please check the subscriptions section."
+            ],
+          generalMsg: t["Something Went Wrong!"],
         });
       }
 
@@ -332,6 +368,15 @@ const DropZone = () => {
           outputType: "cutout", // Type of output (cutout image)
           format: "png", // Output format (PNG for transparency)
           accessToken,
+          customMsg:
+            t[
+              "You have used up your free attempts! Please log in to continue."
+            ],
+          customMsg2:
+            t[
+              "Your points are insufficient or your subscription has expired! Please check the subscriptions section."
+            ],
+          generalMsg: t["Something Went Wrong!"],
         };
 
         if (options.bgColor && options.bgColor !== "transparent") {
@@ -348,6 +393,15 @@ const DropZone = () => {
           imageUrl: uploadedImageUrl,
           amount: options.amount, // Enhancement level
           accessToken,
+          customMsg:
+            t[
+              "You have used up your free attempts! Please log in to continue."
+            ],
+          customMsg2:
+            t[
+              "Your points are insufficient or your subscription has expired! Please check the subscriptions section."
+            ],
+          generalMsg: t["Something Went Wrong!"],
         });
       }
 
@@ -357,6 +411,15 @@ const DropZone = () => {
           sourceImageId,
           imageUrl: uploadedImageUrl,
           accessToken,
+          customMsg:
+            t[
+              "You have used up your free attempts! Please log in to continue."
+            ],
+          customMsg2:
+            t[
+              "Your points are insufficient or your subscription has expired! Please check the subscriptions section."
+            ],
+          generalMsg: t["Something Went Wrong!"],
         });
       }
 
@@ -367,6 +430,15 @@ const DropZone = () => {
           imageUrl: uploadedImageUrl,
           radius: options.radius,
           accessToken,
+          customMsg:
+            t[
+              "You have used up your free attempts! Please log in to continue."
+            ],
+          customMsg2:
+            t[
+              "Your points are insufficient or your subscription has expired! Please check the subscriptions section."
+            ],
+          generalMsg: t["Something Went Wrong!"],
         });
       }
 
@@ -377,6 +449,15 @@ const DropZone = () => {
           imageUrl: uploadedImageUrl,
           amount: options.amount,
           accessToken,
+          customMsg:
+            t[
+              "You have used up your free attempts! Please log in to continue."
+            ],
+          customMsg2:
+            t[
+              "Your points are insufficient or your subscription has expired! Please check the subscriptions section."
+            ],
+          generalMsg: t["Something Went Wrong!"],
         });
       }
 
@@ -390,6 +471,15 @@ const DropZone = () => {
           saturation: options.saturation,
           gamma: options.gamma,
           accessToken,
+          customMsg:
+            t[
+              "You have used up your free attempts! Please log in to continue."
+            ],
+          customMsg2:
+            t[
+              "Your points are insufficient or your subscription has expired! Please check the subscriptions section."
+            ],
+          generalMsg: t["Something Went Wrong!"],
         });
       }
 

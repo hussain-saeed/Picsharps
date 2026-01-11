@@ -230,6 +230,7 @@ const ObjectRemovalTool = () => {
     ); // Ignore alpha
 
     if (!hasDrawing) {
+      toast.error(t["Select something firstly!"]);
       return;
     }
 
@@ -272,15 +273,32 @@ const ObjectRemovalTool = () => {
         setProcessedImage(data.data.previewUrl);
         setToolKey(data.data.toolKey);
         setStatus(COMPONENT_STATES.DONE);
-      } else {
-        toast.error(data.message || "Unexpected error occurred!");
-        setStatus(COMPONENT_STATES.ERROR);
+        return;
       }
-    } catch (err) {
+
+      if (data.status === "fail") {
+        if (data.data.code === "RUN_LIMIT") {
+          toast.error(
+            t["You have used up your free attempts! Please log in to continue."]
+          );
+          setStatus(COMPONENT_STATES.ERROR);
+          return;
+        }
+        if (data.message === "INSUFFICIENT_CREDITS") {
+          toast.error(
+            t[
+              "Your points are insufficient or your subscription has expired! Please check the subscriptions section."
+            ]
+          );
+          setStatus(COMPONENT_STATES.ERROR);
+          return;
+        }
+      }
+      toast.error(t["Something Went Wrong!"]);
       setStatus(COMPONENT_STATES.ERROR);
-      toast.error(
-        "Unexpected error occurred! Make sure your internet connection is stable."
-      );
+    } catch (err) {
+      toast.error(t["Something Went Wrong!"]);
+      setStatus(COMPONENT_STATES.ERROR);
     }
   };
 

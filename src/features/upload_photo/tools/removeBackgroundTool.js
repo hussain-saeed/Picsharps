@@ -7,6 +7,9 @@ export const removeBackground = async ({
   outputType = "cutout",
   bgColor = null,
   accessToken,
+  customMsg,
+  customMsg2,
+  generalMsg,
 }) => {
   try {
     const payload = {
@@ -37,13 +40,20 @@ export const removeBackground = async ({
         providerImageId: data.data.providerImageId,
         toolKey: data.data.toolKey,
       };
-    } else {
-      console.log(data);
-      toast.error(data.message || "Unexpected error occurred!");
     }
+
+    if (data.status === "fail") {
+      if (data.data.code === "RUN_LIMIT") {
+        toast.error(customMsg);
+        return;
+      }
+      if (data.message === "INSUFFICIENT_CREDITS") {
+        toast.error(customMsg2);
+        return;
+      }
+    }
+    toast.error(generalMsg);
   } catch (err) {
-    toast.error(
-      "Unexpected error occurred! Make sure your internet connection is stable."
-    );
+    toast.error(generalMsg);
   }
 };

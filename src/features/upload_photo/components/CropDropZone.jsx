@@ -363,7 +363,6 @@ const CropDropZone = () => {
     scrollToVH(30);
 
     if (!sourceImageId || !uploadedImageUrl || !cropArea) {
-      toast.error("Please select a crop area");
       return;
     }
 
@@ -424,16 +423,35 @@ const CropDropZone = () => {
           `dropzone_last_result`,
           JSON.stringify(resultData)
         );
-      } else {
-        toast.error(data.message || "Unexpected error occurred!");
-        setStatus(COMPONENT_STATES.ERROR);
-        setShowOptions(true);
+        return;
       }
-    } catch (err) {
+
+      if (data.status === "fail") {
+        if (data.data.code === "RUN_LIMIT") {
+          toast.error(
+            t["You have used up your free attempts! Please log in to continue."]
+          );
+          setStatus(COMPONENT_STATES.ERROR);
+          setShowOptions(true);
+          return;
+        }
+        if (data.message === "INSUFFICIENT_CREDITS") {
+          toast.error(
+            t[
+              "Your points are insufficient or your subscription has expired! Please check the subscriptions section."
+            ]
+          );
+          setStatus(COMPONENT_STATES.ERROR);
+          setShowOptions(true);
+          return;
+        }
+      }
+      toast.error(t["Something Went Wrong!"]);
       setStatus(COMPONENT_STATES.ERROR);
-      toast.error(
-        "Unexpected error occurred! Make sure your internet connection is stable."
-      );
+      setShowOptions(true);
+    } catch (err) {
+      toast.error(t["Something Went Wrong!"]);
+      setStatus(COMPONENT_STATES.ERROR);
       setShowOptions(true);
     }
   };

@@ -145,13 +145,28 @@ const CollageMaker = () => {
 
       if (data.status === "success") {
         setResultImage(data.data.result.collageUrl);
-      } else {
-        toast.error(data.message || "Unexpected error occurred!");
+        return;
       }
+
+      if (data.status === "fail") {
+        if (data.data.code === "RUN_LIMIT") {
+          toast.error(
+            t["You have used up your free attempts! Please log in to continue."]
+          );
+          return;
+        }
+        if (data.message === "INSUFFICIENT_CREDITS") {
+          toast.error(
+            t[
+              "Your points are insufficient or your subscription has expired! Please check the subscriptions section."
+            ]
+          );
+          return;
+        }
+      }
+      toast.error(t["Something Went Wrong!"]);
     } catch (err) {
-      toast.error(
-        "Unexpected error occurred! Make sure your internet connection is stable."
-      );
+      toast.error(t["Something Went Wrong!"]);
     } finally {
       setIsProcessing(false);
     }

@@ -55,11 +55,13 @@ export default function ChangeLanguage({ openFrom }) {
       {isChangeLangOpen && (
         <div
           className={`
-            absolute w-full text-center
+            p-2
+            absolute text-center
             bg-white rounded-xl shadow-lg
             border border-gray-200
             overflow-hidden
-            ${openFrom === "down" ? "mt-[3px]" : "top-[-220%]"}
+            ${openFrom === "down" ? "mt-[5px]" : "top-[-740%] sm:top-[-760%]"}
+            right-[50%] translate-x-1/2
           `}
         >
           {languages.map((lang) => (
@@ -73,6 +75,7 @@ export default function ChangeLanguage({ openFrom }) {
                 cursor-pointer 
                 hover:bg-gray-100
                 transition
+                rounded-lg
               "
             >
               {lang.name}

@@ -1,22 +1,33 @@
 import { useContext, useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { FiChevronDown, FiMenu, FiX } from "react-icons/fi";
-
 import Container from "./Container";
 import ChangeLanguage from "./ChangeLanguage";
 import ToolsMenu from "./ToolsMenu";
-
 import { LanguageContext } from "../context/LanguageContext";
 import { useOverlay } from "../context/OverlayContext";
-
-import English from "../i18n/english.json";
-import Arabic from "../i18n/arabic.json";
 import { useAuth } from "../features/auth/AuthProvider";
 import { RxAvatar } from "react-icons/rx";
 import { FaUser } from "react-icons/fa";
 import Spinner from "./Spinner";
 
-const translations = { English, Arabic };
+import English from "/src/i18n/english.json";
+import Arabic from "/src/i18n/arabic.json";
+import French from "/src/i18n/french.json";
+import Portuguese from "/src/i18n/portuguese.json";
+import Spanish from "/src/i18n/spanish.json";
+import Hindi from "/src/i18n/hindi.json";
+import Indonesian from "/src/i18n/indonesian.json";
+
+const translations = {
+  English,
+  Arabic,
+  French,
+  Portuguese,
+  Spanish,
+  Hindi,
+  Indonesian,
+};
 
 export default function Header({ setActiveView }) {
   const { language, direction } = useContext(LanguageContext);

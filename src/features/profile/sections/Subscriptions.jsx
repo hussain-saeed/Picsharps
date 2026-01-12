@@ -1,6 +1,4 @@
 import ReusableButton from "/src/components/ReusableButton";
-import English from "/src/i18n/english.json";
-import Arabic from "/src/i18n/arabic.json";
 import { useContext } from "react";
 import { LanguageContext } from "/src/context/LanguageContext";
 import { FiCalendar, FiDollarSign, FiExternalLink } from "react-icons/fi";
@@ -10,7 +8,23 @@ import { useState } from "react";
 import { BsArrowsFullscreen } from "react-icons/bs";
 import { AiOutlineFullscreenExit } from "react-icons/ai";
 
-const translations = { English, Arabic };
+import English from "/src/i18n/english.json";
+import Arabic from "/src/i18n/arabic.json";
+import French from "/src/i18n/french.json";
+import Portuguese from "/src/i18n/portuguese.json";
+import Spanish from "/src/i18n/spanish.json";
+import Hindi from "/src/i18n/hindi.json";
+import Indonesian from "/src/i18n/indonesian.json";
+
+const translations = {
+  English,
+  Arabic,
+  French,
+  Portuguese,
+  Spanish,
+  Hindi,
+  Indonesian,
+};
 
 function Subscriptions({ data, billings }) {
   const { language, direction } = useContext(LanguageContext);

@@ -2,10 +2,24 @@ import { useContext } from "react";
 import { Link } from "react-router-dom";
 import Container from "./Container";
 import { LanguageContext } from "../context/LanguageContext";
+
 import English from "/src/i18n/english.json";
 import Arabic from "/src/i18n/arabic.json";
+import French from "/src/i18n/french.json";
+import Portuguese from "/src/i18n/portuguese.json";
+import Spanish from "/src/i18n/spanish.json";
+import Hindi from "/src/i18n/hindi.json";
+import Indonesian from "/src/i18n/indonesian.json";
 
-const translations = { English, Arabic };
+const translations = {
+  English,
+  Arabic,
+  French,
+  Portuguese,
+  Spanish,
+  Hindi,
+  Indonesian,
+};
 
 function ToolsMenuMobile({ setActiveView }) {
   const { language, direction } = useContext(LanguageContext);

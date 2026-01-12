@@ -5,6 +5,11 @@ import { createContext, useState, useEffect } from "react";
 export const languages = [
   { name: "English", direction: "ltr" },
   { name: "Arabic", direction: "rtl" },
+  { name: "French", direction: "ltr" },
+  { name: "Portuguese", direction: "ltr" },
+  { name: "Spanish", direction: "ltr" },
+  { name: "Hindi", direction: "ltr" },
+  { name: "Indonesian", direction: "ltr" },
 ];
 
 export const LanguageContext = createContext();

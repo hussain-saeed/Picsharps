@@ -3,11 +3,25 @@ import { LanguageContext } from "/src/context/LanguageContext";
 import Container from "/src/components/Container";
 import ImageCompare from "../../../../components/ImageCompare";
 import { Link } from "react-router-dom";
+import Loader from "/src/components/Loader";
+
 import English from "/src/i18n/english.json";
 import Arabic from "/src/i18n/arabic.json";
-import Loader from "../../../../components/Loader";
+import French from "/src/i18n/french.json";
+import Portuguese from "/src/i18n/portuguese.json";
+import Spanish from "/src/i18n/spanish.json";
+import Hindi from "/src/i18n/hindi.json";
+import Indonesian from "/src/i18n/indonesian.json";
 
-const translations = { English, Arabic };
+const translations = {
+  English,
+  Arabic,
+  French,
+  Portuguese,
+  Spanish,
+  Hindi,
+  Indonesian,
+};
 
 function Hero() {
   const { language, direction } = useContext(LanguageContext);

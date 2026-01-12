@@ -11,7 +11,21 @@ import { toast } from "react-toastify";
 
 import English from "/src/i18n/english.json";
 import Arabic from "/src/i18n/arabic.json";
-const translations = { English, Arabic };
+import French from "/src/i18n/french.json";
+import Portuguese from "/src/i18n/portuguese.json";
+import Spanish from "/src/i18n/spanish.json";
+import Hindi from "/src/i18n/hindi.json";
+import Indonesian from "/src/i18n/indonesian.json";
+
+const translations = {
+  English,
+  Arabic,
+  French,
+  Portuguese,
+  Spanish,
+  Hindi,
+  Indonesian,
+};
 
 const templates = [
   {
@@ -410,7 +424,7 @@ const CollageMaker = () => {
           <button
             onClick={handleStartProcess}
             disabled={!canProcess}
-            className={`w-full md:w-auto px-8 py-3 rounded-lg font-medium text-white transition-all flex gap-2 ${
+            className={`md:w-auto px-8 py-3 rounded-lg font-medium text-white transition-all flex gap-2 ${
               canProcess
                 ? "bg-linear-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 cursor-pointer"
                 : "bg-gray-400 cursor-not-allowed"

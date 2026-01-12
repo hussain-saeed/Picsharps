@@ -2,11 +2,25 @@ import { useContext, useState } from "react";
 import { LanguageContext } from "/src/context/LanguageContext";
 import { useAuth } from "../../auth/AuthProvider";
 import { toast } from "react-toastify";
-import English from "/src/i18n/english.json";
-import Arabic from "/src/i18n/arabic.json";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
-const translations = { English, Arabic };
+import English from "/src/i18n/english.json";
+import Arabic from "/src/i18n/arabic.json";
+import French from "/src/i18n/french.json";
+import Portuguese from "/src/i18n/portuguese.json";
+import Spanish from "/src/i18n/spanish.json";
+import Hindi from "/src/i18n/hindi.json";
+import Indonesian from "/src/i18n/indonesian.json";
+
+const translations = {
+  English,
+  Arabic,
+  French,
+  Portuguese,
+  Spanish,
+  Hindi,
+  Indonesian,
+};
 
 function Edit() {
   const { language, direction } = useContext(LanguageContext);
@@ -93,11 +107,11 @@ function Edit() {
               position: "absolute",
               right: isRTL ? "unset" : "18px",
               left: isRTL ? "18px" : "unset",
-              top: "30%",
               cursor: "pointer",
               color: "#00b0ff",
               fontSize: "24px",
             }}
+            className="top-[22%] md:top-[30%]"
           >
             {showPassword ? <FaEyeSlash /> : <FaEye />}
           </span>

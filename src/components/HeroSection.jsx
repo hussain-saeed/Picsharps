@@ -1,9 +1,23 @@
 import { LanguageContext } from "/src/context/LanguageContext";
-import English from "/src/i18n/english.json";
-import Arabic from "/src/i18n/arabic.json";
 import { useContext } from "react";
 
-const translations = { English, Arabic };
+import English from "/src/i18n/english.json";
+import Arabic from "/src/i18n/arabic.json";
+import French from "/src/i18n/french.json";
+import Portuguese from "/src/i18n/portuguese.json";
+import Spanish from "/src/i18n/spanish.json";
+import Hindi from "/src/i18n/hindi.json";
+import Indonesian from "/src/i18n/indonesian.json";
+
+const translations = {
+  English,
+  Arabic,
+  French,
+  Portuguese,
+  Spanish,
+  Hindi,
+  Indonesian,
+};
 
 function HeroSection({ content }) {
   const { language, direction } = useContext(LanguageContext);

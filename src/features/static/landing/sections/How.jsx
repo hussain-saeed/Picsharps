@@ -2,10 +2,24 @@ import React, { useContext } from "react";
 import { LanguageContext } from "/src/context/LanguageContext";
 import Container from "/src/components/Container";
 import TitleBlock from "/src/components/TitleBlock";
+
 import English from "/src/i18n/english.json";
 import Arabic from "/src/i18n/arabic.json";
+import French from "/src/i18n/french.json";
+import Portuguese from "/src/i18n/portuguese.json";
+import Spanish from "/src/i18n/spanish.json";
+import Hindi from "/src/i18n/hindi.json";
+import Indonesian from "/src/i18n/indonesian.json";
 
-const translations = { English, Arabic };
+const translations = {
+  English,
+  Arabic,
+  French,
+  Portuguese,
+  Spanish,
+  Hindi,
+  Indonesian,
+};
 
 const How = () => {
   const { language, direction } = useContext(LanguageContext);

@@ -2,12 +2,26 @@ import React, { useState, useEffect, useContext } from "react";
 import { useAuth } from "./AuthProvider";
 import { LanguageContext } from "../../context/LanguageContext";
 import { toast } from "react-toastify";
-import English from "/src/i18n/english.json";
-import Arabic from "/src/i18n/arabic.json";
 import ParticleCanvas from "../../components/ParticleCanvas";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
-const translations = { English, Arabic };
+import English from "/src/i18n/english.json";
+import Arabic from "/src/i18n/arabic.json";
+import French from "/src/i18n/french.json";
+import Portuguese from "/src/i18n/portuguese.json";
+import Spanish from "/src/i18n/spanish.json";
+import Hindi from "/src/i18n/hindi.json";
+import Indonesian from "/src/i18n/indonesian.json";
+
+const translations = {
+  English,
+  Arabic,
+  French,
+  Portuguese,
+  Spanish,
+  Hindi,
+  Indonesian,
+};
 
 const LoginPopup = () => {
   const { language, direction } = useContext(LanguageContext);

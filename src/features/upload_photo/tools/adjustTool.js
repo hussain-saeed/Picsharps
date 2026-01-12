@@ -46,7 +46,7 @@ export const adjustImage = async ({
         toast.error(customMsg);
         return;
       }
-      if (data.message === "INSUFFICIENT_CREDITS") {
+      if (data.data.code === "INSUFFICIENT_CREDITS") {
         toast.error(customMsg2);
         return;
       }

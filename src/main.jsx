@@ -28,6 +28,7 @@ function AppWrapper() {
         hideProgressBar
         rtl={isRTL}
         theme="colored"
+        newestOnTop={true}
       />
     </>
   );

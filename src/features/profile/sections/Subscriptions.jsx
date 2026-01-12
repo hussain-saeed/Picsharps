@@ -84,6 +84,8 @@ function Subscriptions({ data, billings }) {
               )}
             </h3>
 
+            <div className="block w-full h-4 sm:hidden border-dashed border-t mt-4 border-gray-400"></div>
+
             {data?.data?.profile?.lastSubscription?.status === "ACTIVE" ? (
               <p
                 className="font-semibold text-md mb-2"
@@ -114,6 +116,8 @@ function Subscriptions({ data, billings }) {
               {data?.data?.profile?.lastSubscription?.plan?.creditsPerPeriod}
             </p>*/}
 
+            <div className="block w-full h-4 sm:hidden border-dashed border-t mt-4 border-gray-400"></div>
+
             <p className="font-semibold text-lg">
               {t["Start:"]}{" "}
               <span
@@ -135,6 +139,9 @@ function Subscriptions({ data, billings }) {
                 )}
               </span>
             </p>
+
+            <div className="block w-full h-4 sm:hidden border-dashed border-t mt-4 border-gray-400"></div>
+
             <p className="mb-6 font-semibold text-lg">
               {t["End:"]}{" "}
               <span
@@ -179,7 +186,7 @@ function Subscriptions({ data, billings }) {
           t["You haven't made any payments yet!"]
         ) : (
           <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 2xl:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {billings.data.items.slice(0, visibleCount).map((item, index) => (
                 <div
                   key={index}

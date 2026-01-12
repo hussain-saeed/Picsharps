@@ -286,7 +286,7 @@ const ObjectRemovalTool = () => {
           setStatus(COMPONENT_STATES.ERROR);
           return;
         }
-        if (data.message === "INSUFFICIENT_CREDITS") {
+        if (data.data.code === "INSUFFICIENT_CREDITS") {
           toast.error(
             t[
               "Your points are insufficient or your subscription has expired! Please check the subscriptions section."

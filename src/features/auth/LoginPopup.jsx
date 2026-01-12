@@ -53,6 +53,7 @@ const LoginPopup = () => {
       setPassword("");
       setCode("");
       setNewPass("");
+      setShowPassword(false);
     }
   }, [isLoginPopupOpen]);
 
@@ -97,7 +98,10 @@ const LoginPopup = () => {
 
   const handleResetPassword = async () => {
     if (!newPass) return toast.error(t["New password is Required!"]);
-    await resetPassword(resetToken, newPass);
+    const res = await resetPassword(resetToken, newPass);
+    if (res?.status === "success") {
+      setShowPassword(false);
+    }
   };
 
   // RENDER SCREENS

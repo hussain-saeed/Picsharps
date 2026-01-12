@@ -150,7 +150,7 @@ const Downloads = ({ data }) => {
                   e.stopPropagation();
                   if (isDownloading) return;
 
-                  setIsDownloading(image.id); 
+                  setIsDownloading(image.id);
                   handleDownload(image.resultUrl, `image-${image.id}.jpg`);
                 }}
                 className="w-full py-2 px-4 rounded-lg text-white font-semibold flex items-center justify-center gap-2 transition-opacity"
@@ -158,7 +158,7 @@ const Downloads = ({ data }) => {
                   background:
                     "linear-gradient(141deg, #00c853 0%, #00b0ff 62.41%)",
                   cursor: isDownloading ? "not-allowed" : "pointer",
-                  opacity: isDownloading === image.id ? 0.5 : 1, 
+                  opacity: isDownloading === image.id ? 0.5 : 1,
                 }}
                 disabled={!!isDownloading === image.id}
               >
@@ -177,7 +177,7 @@ const Downloads = ({ data }) => {
       </div>
 
       {totalPages > 1 && (
-        <div className="flex items-center justify-center gap-2">
+        <div className="flex items-center gap-2">
           <button
             onClick={() => {
               setCurrentPage((prev) => Math.max(1, prev - 1));
@@ -186,34 +186,12 @@ const Downloads = ({ data }) => {
             disabled={currentPage === 1}
             className="p-2 rounded-lg text-white disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed hover:opacity-90 transition-opacity"
             style={{
-              background:
-                currentPage === 1
-                  ? "#ccc"
-                  : "linear-gradient(141deg, #00c853 0%, #00b0ff 62.41%)",
+              background: "var(--gradient-color)",
+              opacity: currentPage === 1 ? "0.5" : "1",
             }}
           >
             {isRTL ? <ChevronRight size={24} /> : <ChevronLeft size={24} />}
           </button>
-
-          {[...Array(totalPages)].map((_, idx) => (
-            <button
-              key={idx}
-              onClick={() => {
-                setCurrentPage(idx + 1);
-                fixScroll();
-              }}
-              className="w-10 h-10 rounded-lg font-semibold text-white cursor-pointer transition-all"
-              style={{
-                background:
-                  currentPage === idx + 1
-                    ? "linear-gradient(141deg, #00c853 0%, #00b0ff 62.41%)"
-                    : "linear-gradient(141deg, #00b0ff 0%, #00c853 62.41%)",
-                opacity: currentPage === idx + 1 ? 1 : 0.6,
-              }}
-            >
-              {idx + 1}
-            </button>
-          ))}
 
           <button
             onClick={() => {
@@ -223,10 +201,8 @@ const Downloads = ({ data }) => {
             disabled={currentPage === totalPages}
             className="p-2 rounded-lg text-white disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed hover:opacity-90 transition-opacity"
             style={{
-              background:
-                currentPage === totalPages
-                  ? "#ccc"
-                  : "linear-gradient(141deg, #00c853 0%, #00b0ff 62.41%)",
+              background: "var(--gradient-color-2)",
+              opacity: currentPage === totalPages ? "0.5" : "1",
             }}
           >
             {isRTL ? <ChevronLeft size={24} /> : <ChevronRight size={24} />}

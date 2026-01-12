@@ -101,6 +101,7 @@ function Profile() {
 
         setData(userData);
         setBillings(billingData);
+        console.log(userData);
 
         if (userData.status !== "success" || billingData.status !== "success") {
           setError(true);

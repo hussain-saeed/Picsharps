@@ -74,14 +74,36 @@ function Subscriptions({ data, billings }) {
                 </span>
               ) : (
                 <span
-                  className="font-semibold text-[red] italic"
+                  className={`font-semibold text-[red] italic ${
+                    isRTL ? "mr-2" : " ml-2"
+                  }`}
                   style={{ fontSize: "15px" }}
                 >
                   {t["Not Active"]}
                 </span>
               )}
             </h3>
-            <p
+
+            {data?.data?.profile?.lastSubscription?.status === "ACTIVE" ? (
+              <p
+                className="font-semibold text-md mb-2"
+                style={{
+                  color:
+                    data?.data?.profile?.creditsBalance == 0
+                      ? "red"
+                      : "#00c853",
+                }}
+              >
+                {data?.data?.profile?.creditsBalance}{" "}
+                {t["credits remaining of"]}{" "}
+                {data?.data?.profile?.lastSubscription?.plan?.creditsPerPeriod}
+              </p>
+            ) : (
+              ""
+            )}
+
+            {/* temp if we may show criedts in all cases */}
+            {/*<p
               className="font-semibold text-md mb-2"
               style={{
                 color:
@@ -90,7 +112,8 @@ function Subscriptions({ data, billings }) {
             >
               {data?.data?.profile?.creditsBalance} {t["credits remaining of"]}{" "}
               {data?.data?.profile?.lastSubscription?.plan?.creditsPerPeriod}
-            </p>
+            </p>*/}
+
             <p className="font-semibold text-lg">
               {t["Start:"]}{" "}
               <span

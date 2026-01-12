@@ -63,9 +63,13 @@ function Hero() {
             isRTL ? "flex-row-reverse" : ""
           }`}
         >
-          {loading ? <Loader className={`absolute mb-56`} /> : ""}
+          {loading ? (
+            <Loader className={`absolute mb-56 -mt-40 lg:mt-20 xl:mt-4`} />
+          ) : (
+            ""
+          )}
           <div
-            className={`w-[92%] lg:w-[48.5%] ${
+            className={`w-[85%] 2xs:w-[92%] lg:w-[48.5%] ${
               loading ? "opacity-0" : "opacity-100"
             }`}
           >
@@ -87,7 +91,7 @@ function Hero() {
               borderRadius: "20px",
               opacity: loading ? "0" : "1",
             }}
-            className="lg:w-[48.5%] w-[92%] lg:p-10 xl:p-20 2xl:p-31 p-12"
+            className="lg:w-[48.5%] 2xs:w-[92%] w-[85%] lg:p-10 xl:p-20 2xl:p-31 p-12"
           >
             <div>
               <div
@@ -135,10 +139,10 @@ function Hero() {
                     background: "var(--gradient-color)",
                     width: "250px",
                     textAlign: "center",
-                    padding: "10px 55px",
                     color: "white",
                     borderRadius: "20px",
                   }}
+                  className="py-2.5 2xs:px-[55px]"
                 >
                   {t["Upload Image"]}
                 </span>

@@ -36,7 +36,7 @@ const tabsData = [
 function Profile() {
   const [error, setError] = useState(false);
 
-  const { accessToken, logout, isPopupActionLoading } = useAuth();
+  const { accessToken, logout, isPopupActionLoading, loggingOut } = useAuth();
 
   const { language, direction } = useContext(LanguageContext);
   const t = translations[language] || translations["English"];
@@ -190,7 +190,7 @@ function Profile() {
           </h2>
           {isLoading ? (
             <Loader
-              className="-mt-14 lg:-mt-24"
+              className="-mt-2 lg:-mt-24"
               style={{ marginBottom: "165px" }}
             />
           ) : error ? (
@@ -250,16 +250,11 @@ function Profile() {
                 <div className="w-full flex justify-between items-center pr-4">
                   <button
                     className="w-[70%] text-red-500 px-4 py-2.5 flex items-center gap-2 cursor-pointer"
-                    onClick={() =>
-                      isPopupActionLoading === true ? null : logout()
-                    }
-                    disabled={isPopupActionLoading === true}
+                    onClick={() => (loggingOut === true ? null : logout())}
+                    disabled={loggingOut === true}
                     style={{
-                      cursor:
-                        isPopupActionLoading === true
-                          ? "not-allowed"
-                          : "pointer",
-                      opacity: isPopupActionLoading === true ? "0.5" : "1",
+                      cursor: loggingOut === true ? "not-allowed" : "pointer",
+                      opacity: loggingOut === true ? "0.5" : "1",
                     }}
                   >
                     <div className="w-8 h-6 flex items-center justify-center text-xl">
@@ -267,7 +262,7 @@ function Profile() {
                     </div>
                     <span style={{ fontWeight: "500" }}>{t["Log Out"]}</span>
                   </button>
-                  {isPopupActionLoading === true ? <Spinner /> : ""}
+                  {loggingOut === true ? <Spinner /> : ""}
                 </div>
               </div>
 

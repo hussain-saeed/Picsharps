@@ -287,14 +287,10 @@ function TermsOfService() {
             title={t["How to Cancel Your Subscription"]}
           >
             <p
-              style={{ color: "rgba(102, 102, 102, 1)", marginBottom: "15px" }}
+              style={{ color: "rgba(102, 102, 102, 1)" }}
             >
               {t["Users can cancel anytime from the Billing page."]}
             </p>
-            <ReusableButton
-              text={t["Go to Billing"]}
-              position={isRTL ? "right" : "left"}
-            />
           </ContentSection>
 
           <ContentSection

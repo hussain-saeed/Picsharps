@@ -19,6 +19,7 @@ export const AuthProvider = ({ children }) => {
   const [isLoadingUserData, setIsLoadingUserData] = useState(true);
   const [accessToken, setAccessToken] = useState(null);
   const [isPopupActionLoading, setIsPopupActionLoading] = useState(false);
+  const [loggingOut, setLoggingOut] = useState(false);
 
   // 2) Token Management (refresh token)
   const refreshToken = async () => {
@@ -278,7 +279,7 @@ export const AuthProvider = ({ children }) => {
 
   // 6) Logout
   const logout = async () => {
-    setIsPopupActionLoading(true);
+    setLoggingOut(true);
 
     try {
       await fetch(`${BACKEND_URL}/auth/logout`, {
@@ -287,7 +288,7 @@ export const AuthProvider = ({ children }) => {
         credentials: "include",
       });
     } finally {
-      setIsPopupActionLoading(false);
+      setLoggingOut(false);
       setUserData(null);
       setAccessToken(null);
       window.location.href = "/";
@@ -300,6 +301,7 @@ export const AuthProvider = ({ children }) => {
       value={{
         setIsPopupActionLoading,
         isPopupActionLoading,
+        loggingOut,
 
         userData,
         isLoadingUserData,

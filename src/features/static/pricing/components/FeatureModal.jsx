@@ -1,8 +1,31 @@
 import { X } from "lucide-react";
 import { GiCheckMark } from "react-icons/gi";
 import { RxCross1 } from "react-icons/rx";
+import English from "/src/i18n/english.json";
+import Arabic from "/src/i18n/arabic.json";
+import French from "/src/i18n/french.json";
+import Portuguese from "/src/i18n/portuguese.json";
+import Spanish from "/src/i18n/spanish.json";
+import Hindi from "/src/i18n/hindi.json";
+import Indonesian from "/src/i18n/indonesian.json";
+import { useContext } from "react";
+import { LanguageContext } from "../../../../context/LanguageContext";
+
+const translations = {
+  English,
+  Arabic,
+  French,
+  Portuguese,
+  Spanish,
+  Hindi,
+  Indonesian,
+};
 
 export default function FeatureModal({ feature, onClose }) {
+  const { language, direction } = useContext(LanguageContext);
+  const isRTL = direction === "rtl";
+  const t = translations[language] || translations["English"];
+
   if (!feature) return null;
 
   return (
@@ -33,7 +56,7 @@ export default function FeatureModal({ feature, onClose }) {
                   index === 1 ? "text-[#00BCA9]" : "text-gray-600"
                 }`}
               >
-                {key}
+                {t[key]}
               </span>
               <span
                 className={`font-semibold ${
@@ -46,7 +69,8 @@ export default function FeatureModal({ feature, onClose }) {
                 {feature.values[key] === false && (
                   <RxCross1 className="w-5 h-5 mx-auto text-red-400" />
                 )}
-                {typeof feature.values[key] === "string" && feature.values[key]}
+                {typeof feature.values[key] === "string" &&
+                  t[feature.values[key]]}
               </span>
             </div>
           ))}
@@ -64,7 +88,7 @@ export default function FeatureModal({ feature, onClose }) {
             className="shadow-md"
             onClick={onClose}
           >
-            OK
+            {t["OK"]}
           </button>
         </div>
       </div>

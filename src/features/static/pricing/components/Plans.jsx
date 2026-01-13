@@ -52,8 +52,8 @@ export default function Pricing() {
       priceColor: "black",
       priceLabel: "",
 
-      smallText: "Forever free",
-      smallTextYearly: "Forever free",
+      smallText: t["Forever free"],
+      smallTextYearly: t["Forever free"],
       smallTextYearlyPlus: "",
       desc: "Perfect for trying out our tools",
 
@@ -92,9 +92,9 @@ export default function Pricing() {
       priceColor: "var(--gradient-color-2)",
       priceLabel: "/ month",
 
-      smallText: "Billed monthly",
-      smallTextYearly: "$95.88 /year",
-      smallTextYearlyPlus: "(save 20%)",
+      smallText: t["Billed monthly"],
+      smallTextYearly: t["$95.88 /year"],
+      smallTextYearlyPlus: `(${t["Save 20%"]})`,
       desc: "Best for creators and professionals",
 
       features: [
@@ -133,8 +133,9 @@ export default function Pricing() {
       priceColor: "black",
       priceLabel: "/ month",
 
-      smallTextYearly: "$179.88 /year",
-      smallTextYearlyPlus: "(save 20%)",
+      smallText: t["Billed monthly"],
+      smallTextYearly: t["$179.88 /year"],
+      smallTextYearlyPlus: `(${t["Save 20%"]})`,
       desc: "For power users and businesses",
 
       features: [
@@ -266,7 +267,7 @@ export default function Pricing() {
               borderRadius: "20px",
             }}
           >
-            Save 20%
+            {t["Save 20%"]}
           </span>
         )}
       </div>
@@ -297,7 +298,7 @@ export default function Pricing() {
                 transform: "translate(-50%, -50%)",
               }}
             >
-              {plan.badgeText}
+              {t[plan.badgeText]}
             </div>
 
             <div style={{ marginBottom: "40px" }}>
@@ -312,7 +313,7 @@ export default function Pricing() {
                   <img src={plan.image} alt={plan.imageLabel} />
                 </div>
                 <span className="font-semibold text-[24px]">
-                  {plan.imageLabel}
+                  {t[plan.imageLabel]}
                 </span>
               </div>
 
@@ -336,7 +337,7 @@ export default function Pricing() {
                     wordSpacing: "-3px",
                   }}
                 >
-                  {plan.priceLabel}
+                  {t[plan.priceLabel]}
                 </span>
               </div>
 
@@ -366,7 +367,7 @@ export default function Pricing() {
                   marginBottom: "14px",
                 }}
               >
-                {plan.desc}
+                {t[plan.desc]}
               </p>
 
               <div className="space-y-1.5">
@@ -395,7 +396,7 @@ export default function Pricing() {
                         fontSize: "12px",
                       }}
                     >
-                      {f.text}
+                      {t[f.text]}
                     </span>
                   </div>
                 ))}

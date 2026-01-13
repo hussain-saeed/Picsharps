@@ -3,14 +3,34 @@ import { LanguageContext } from "../../../../context/LanguageContext";
 import { GiCheckMark } from "react-icons/gi";
 import { RxCross1 } from "react-icons/rx";
 
+import English from "/src/i18n/english.json";
+import Arabic from "/src/i18n/arabic.json";
+import French from "/src/i18n/french.json";
+import Portuguese from "/src/i18n/portuguese.json";
+import Spanish from "/src/i18n/spanish.json";
+import Hindi from "/src/i18n/hindi.json";
+import Indonesian from "/src/i18n/indonesian.json";
+
+const translations = {
+  English,
+  Arabic,
+  French,
+  Portuguese,
+  Spanish,
+  Hindi,
+  Indonesian,
+};
+
 export default function ComparisonTableDesktop({ data }) {
-  const { direction } = useContext(LanguageContext);
+  const { language, direction } = useContext(LanguageContext);
   const isRTL = direction === "rtl";
+  const t = translations[language] || translations["English"];
+
   return (
     <div
       style={{
         borderRadius: "30px",
-        border: "1px solid rgba(210, 210, 210)", 
+        border: "1px solid rgba(210, 210, 210)",
         overflow: "hidden",
         letterSpacing: "2px",
       }}
@@ -23,7 +43,7 @@ export default function ComparisonTableDesktop({ data }) {
         <div
           className="p-6 text-left"
           style={{
-            borderRight: "1px solid rgba(210, 210, 210)", 
+            borderRight: "1px solid rgba(210, 210, 210)",
             backgroundColor: "rgba(230, 230, 230)",
             color: "black",
             fontSize: "22px",
@@ -31,7 +51,7 @@ export default function ComparisonTableDesktop({ data }) {
             textAlign: isRTL ? "right" : "left",
           }}
         >
-          Feature
+          {t["Feature"]}
         </div>
 
         {data.columns.map((col, index) => (
@@ -39,14 +59,14 @@ export default function ComparisonTableDesktop({ data }) {
             key={col}
             className="p-6 last:border-r-0"
             style={{
-              backgroundColor: index === 1 ? "#DFE8F3" : "rgba(230, 230, 230)", 
+              backgroundColor: index === 1 ? "#DFE8F3" : "rgba(230, 230, 230)",
               color: index === 1 ? "#00BCA9" : "black",
-              borderRight: index === 2 ? "" : "1px solid rgba(210, 210, 210)", 
+              borderRight: index === 2 ? "" : "1px solid rgba(210, 210, 210)",
               fontSize: "22px",
               fontWeight: "600",
             }}
           >
-            {col}
+            {t[col]}
           </div>
         ))}
       </div>
@@ -55,22 +75,22 @@ export default function ComparisonTableDesktop({ data }) {
         <div key={idx}>
           <div
             style={{
-              backgroundColor: "rgb(240 240 240)", 
-              borderBottom: "1px solid rgba(210, 210, 210)", 
+              backgroundColor: "rgb(240 240 240)",
+              borderBottom: "1px solid rgba(210, 210, 210)",
             }}
             className="grid grid-cols-4 font-semibold text-gray-600"
           >
             <div
               className="w-full p-6"
               style={{
-                backgroundColor: "rgb(240 240 240)", 
+                backgroundColor: "rgb(240 240 240)",
                 borderRight: "1px solid rgba(210, 210, 210)",
                 color: "rgba(0, 176, 255, 1)",
                 fontSize: "21px",
                 fontWeight: "600",
               }}
             >
-              {section.section}
+              {t[section.section]}
             </div>
           </div>
 
@@ -80,19 +100,19 @@ export default function ComparisonTableDesktop({ data }) {
               className="grid grid-cols-4"
               style={{
                 borderBottom:
-                  idx === 3 && i === 1 ? "" : "1px solid rgba(210, 210, 210)", 
+                  idx === 3 && i === 1 ? "" : "1px solid rgba(210, 210, 210)",
               }}
             >
               <div
                 className="p-6 border-r font-medium text-gray-700"
                 style={{
                   borderRight: "1px solid rgba(210, 210, 210)",
-                  backgroundColor: "rgba(230, 230, 230)", 
+                  backgroundColor: "rgba(230, 230, 230)",
                   color: "black",
                   fontSize: "20px",
                 }}
               >
-                {row.feature}
+                {t[row.feature]}
               </div>
 
               {data.columns.map((col, cIdx) => {
@@ -103,9 +123,9 @@ export default function ComparisonTableDesktop({ data }) {
                     className="flex items-center justify-center"
                     style={{
                       backgroundColor:
-                        col === "Pro" ? "#DFE8F3" : "rgba(230, 230, 230)", 
+                        col === "Pro" ? "#DFE8F3" : "rgba(230, 230, 230)",
                       borderRight:
-                        cIdx === 2 ? "" : "1px solid rgba(210, 210, 210)", 
+                        cIdx === 2 ? "" : "1px solid rgba(210, 210, 210)",
                       color: "black",
                       fontSize: "20px",
                       fontWeight: "600",
@@ -118,7 +138,9 @@ export default function ComparisonTableDesktop({ data }) {
                       <RxCross1 className="w-5 h-5 mx-auto text-red-400" />
                     )}
                     {typeof val === "string" && (
-                      <span className="font-semibold text-gray-700">{val}</span>
+                      <span className="font-semibold text-gray-700">
+                        {t[val]}
+                      </span>
                     )}
                   </div>
                 );

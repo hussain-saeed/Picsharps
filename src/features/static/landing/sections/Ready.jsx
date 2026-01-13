@@ -63,7 +63,7 @@ function Ready() {
             }
           </p>
           <Link
-            className={`bg-white px-10 py-1.5 flex gap-3 w-fit mx-auto ${
+            className={`bg-white px-10 py-1.5 flex gap-3 w-fit mx-auto items-center ${
               isRTL ? "flex-row-reverse" : ""
             }`}
             style={{ borderRadius: "50px" }}

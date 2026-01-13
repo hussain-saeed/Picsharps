@@ -426,7 +426,7 @@ export default function Pricing() {
               >
                 {isCheckoutLoading && clickedPlan === plan.imageLabel
                   ? "Loading ..."
-                  : plan.buttonText}
+                  : t[plan.buttonText]}
               </button>
             )}
           </div>

@@ -100,25 +100,6 @@ function Subscriptions({ data, billings }) {
 
             <div className="block w-full h-4 sm:hidden border-dashed border-t mt-4 border-gray-400"></div>
 
-            {/*data?.data?.profile?.lastSubscription?.status === "ACTIVE" ? (
-              <p
-                className="font-semibold text-md mb-2"
-                style={{
-                  color:
-                    data?.data?.profile?.creditsBalance == 0
-                      ? "red"
-                      : "#00c853",
-                }}
-              >
-                {data?.data?.profile?.creditsBalance}{" "}
-                {t["credits remaining of"]}{" "}
-                {data?.data?.profile?.lastSubscription?.plan?.creditsPerPeriod}
-              </p>
-            ) : (
-              ""
-            )*/}
-
-            {/* temp if we may show criedts in all cases */}
             {<p
               className="font-semibold text-md mb-2"
               style={{

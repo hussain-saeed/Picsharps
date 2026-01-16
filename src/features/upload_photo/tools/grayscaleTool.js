@@ -24,6 +24,7 @@ export const grayscalePhoto = async ({
     });
 
     const data = await res.json();
+    
     if (data.status === "success") {
       return {
         previewUrl: data.data.previewUrl,

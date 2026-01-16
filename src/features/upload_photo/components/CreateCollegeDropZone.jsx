@@ -8,6 +8,7 @@ import { useAuth } from "../../auth/AuthProvider";
 import { Download } from "lucide-react";
 import { LanguageContext } from "/src/context/LanguageContext";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 import English from "/src/i18n/english.json";
 import Arabic from "/src/i18n/arabic.json";
@@ -53,6 +54,8 @@ const templates = [
 ];
 
 const CollageMaker = () => {
+  const navigate = useNavigate();
+
   const { language, direction } = useContext(LanguageContext);
   const isRTL = direction === "rtl";
   const t = translations[language] || translations["English"];
@@ -64,7 +67,7 @@ const CollageMaker = () => {
   const [uploadedImages, setUploadedImages] = useState([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [resultImage, setResultImage] = useState(null);
-  const { accessToken } = useAuth();
+  const { accessToken, openLoginPopup } = useAuth();
   const [isDownloading, setIsDownloading] = useState(false);
 
   const currentTemplates = templates.find(
@@ -164,13 +167,19 @@ const CollageMaker = () => {
       }
 
       if (data.status === "fail") {
-        if (data.data.code === "RUN_LIMIT") {
+        if (
+          data?.data?.code === "RUN_LIMIT" ||
+          data?.message ===
+            "Guest trial limit reached. Please sign up to continue."
+        ) {
           toast.error(
             t["You have used up your free attempts! Please log in to continue."]
           );
+          openLoginPopup();
+          navigate("/");
           return;
         }
-        if (data.data.code === "INSUFFICIENT_CREDITS") {
+        if (data?.data?.code === "INSUFFICIENT_CREDITS") {
           toast.error(
             t[
               "Your points are insufficient or your subscription has expired! Please check the subscriptions section."

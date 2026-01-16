@@ -9,6 +9,7 @@ import { useAuth } from "../../auth/AuthProvider";
 import { BACKEND_URL } from "../../../api";
 import { useScrollToVH } from "../../../hooks/useScrollToVH";
 import { LanguageContext } from "/src/context/LanguageContext";
+import { useNavigate } from "react-router-dom";
 
 import English from "/src/i18n/english.json";
 import Arabic from "/src/i18n/arabic.json";
@@ -29,6 +30,8 @@ const translations = {
 };
 
 const CropDropZone = () => {
+  const navigate = useNavigate();
+
   const { language, direction } = useContext(LanguageContext);
   const isRTL = direction === "rtl";
   const t = translations[language] || translations["English"];
@@ -42,7 +45,7 @@ const CropDropZone = () => {
   };
 
   const currentTool = "crop-image";
-  const { accessToken } = useAuth();
+  const { accessToken, openLoginPopup } = useAuth();
 
   // State declarations
   const [uploadedFile, setUploadedFile] = useState(null);
@@ -441,15 +444,20 @@ const CropDropZone = () => {
       }
 
       if (data.status === "fail") {
-        if (data.data.code === "RUN_LIMIT") {
+        if (
+          data?.data?.code === "RUN_LIMIT" ||
+          data?.message ===
+            "Guest trial limit reached. Please sign up to continue."
+        ) {
           toast.error(
             t["You have used up your free attempts! Please log in to continue."]
           );
-          setStatus(COMPONENT_STATES.ERROR);
-          setShowOptions(true);
+          openLoginPopup();
+          resetComponent();
+          navigate("/");
           return;
         }
-        if (data.data.code === "INSUFFICIENT_CREDITS") {
+        if (data?.data?.code === "INSUFFICIENT_CREDITS") {
           toast.error(
             t[
               "Your points are insufficient or your subscription has expired! Please check the subscriptions section."
@@ -460,6 +468,7 @@ const CropDropZone = () => {
           return;
         }
       }
+
       toast.error(t["Something Went Wrong!"]);
       setStatus(COMPONENT_STATES.ERROR);
       setShowOptions(true);

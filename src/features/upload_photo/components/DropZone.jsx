@@ -103,7 +103,7 @@ const DropZone = () => {
   const [showOptions, setShowOptions] = useState(false); // Toggle tool options panel
   const [options, setOptions] = useState({}); // Tool-specific options
   const [renderedResultBefore, setRenderedResultBefore] = useState(false); // Track if result was shown before
-  const { accessToken } = useAuth();
+  const { accessToken, openLoginPopup } = useAuth();
   const scrollToVH = useScrollToVH();
   const [isDownloading, setIsDownloading] = useState(false);
 
@@ -306,6 +306,9 @@ const DropZone = () => {
               "Your points are insufficient or your subscription has expired! Please check the subscriptions section."
             ],
           generalMsg: t["Something Went Wrong!"],
+          openLoginPopup,
+          resetComponent,
+          navigate,
         });
       }
 
@@ -324,6 +327,9 @@ const DropZone = () => {
               "Your points are insufficient or your subscription has expired! Please check the subscriptions section."
             ],
           generalMsg: t["Something Went Wrong!"],
+          openLoginPopup,
+          resetComponent,
+          navigate,
         });
       }
 
@@ -351,6 +357,9 @@ const DropZone = () => {
               "Your points are insufficient or your subscription has expired! Please check the subscriptions section."
             ],
           generalMsg: t["Something Went Wrong!"],
+          openLoginPopup,
+          resetComponent,
+          navigate,
         });
       }
 
@@ -370,6 +379,9 @@ const DropZone = () => {
               "Your points are insufficient or your subscription has expired! Please check the subscriptions section."
             ],
           generalMsg: t["Something Went Wrong!"],
+          openLoginPopup,
+          resetComponent,
+          navigate,
         });
       }
 
@@ -390,6 +402,9 @@ const DropZone = () => {
               "Your points are insufficient or your subscription has expired! Please check the subscriptions section."
             ],
           generalMsg: t["Something Went Wrong!"],
+          openLoginPopup,
+          resetComponent,
+          navigate,
         };
 
         if (options.bgColor && options.bgColor !== "transparent") {
@@ -415,6 +430,9 @@ const DropZone = () => {
               "Your points are insufficient or your subscription has expired! Please check the subscriptions section."
             ],
           generalMsg: t["Something Went Wrong!"],
+          openLoginPopup,
+          resetComponent,
+          navigate,
         });
       }
 
@@ -433,6 +451,9 @@ const DropZone = () => {
               "Your points are insufficient or your subscription has expired! Please check the subscriptions section."
             ],
           generalMsg: t["Something Went Wrong!"],
+          openLoginPopup,
+          resetComponent,
+          navigate,
         });
       }
 
@@ -452,6 +473,9 @@ const DropZone = () => {
               "Your points are insufficient or your subscription has expired! Please check the subscriptions section."
             ],
           generalMsg: t["Something Went Wrong!"],
+          openLoginPopup,
+          resetComponent,
+          navigate,
         });
       }
 
@@ -471,6 +495,9 @@ const DropZone = () => {
               "Your points are insufficient or your subscription has expired! Please check the subscriptions section."
             ],
           generalMsg: t["Something Went Wrong!"],
+          openLoginPopup,
+          resetComponent,
+          navigate,
         });
       }
 
@@ -493,6 +520,9 @@ const DropZone = () => {
               "Your points are insufficient or your subscription has expired! Please check the subscriptions section."
             ],
           generalMsg: t["Something Went Wrong!"],
+          openLoginPopup,
+          resetComponent,
+          navigate,
         });
       }
 

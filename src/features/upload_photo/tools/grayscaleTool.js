@@ -8,6 +8,9 @@ export const grayscalePhoto = async ({
   customMsg,
   customMsg2,
   generalMsg,
+  openLoginPopup,
+  resetComponent,
+  navigate,
 }) => {
   try {
     const res = await fetch(`${BACKEND_URL}/image/grayscale`, {
@@ -30,11 +33,18 @@ export const grayscalePhoto = async ({
     }
 
     if (data.status === "fail") {
-      if (data.data.code === "RUN_LIMIT") {
+      if (
+        data?.data?.code === "RUN_LIMIT" ||
+        data?.message ===
+          "Guest trial limit reached. Please sign up to continue."
+      ) {
         toast.error(customMsg);
+        openLoginPopup();
+        resetComponent();
+        navigate("/");
         return;
       }
-      if (data.data.code === "INSUFFICIENT_CREDITS") {
+      if (data?.data?.code === "INSUFFICIENT_CREDITS") {
         toast.error(customMsg2);
         return;
       }

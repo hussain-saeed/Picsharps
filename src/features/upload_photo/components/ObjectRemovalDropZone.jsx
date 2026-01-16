@@ -8,6 +8,7 @@ import { BACKEND_URL } from "../../../api";
 import { useScrollToVH } from "../../../hooks/useScrollToVH";
 import { LanguageContext } from "/src/context/LanguageContext";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 import English from "/src/i18n/english.json";
 import Arabic from "/src/i18n/arabic.json";
@@ -28,6 +29,8 @@ const translations = {
 };
 
 const ObjectRemovalTool = () => {
+  const navigate = useNavigate();
+
   const { language, direction } = useContext(LanguageContext);
   const isRTL = direction === "rtl";
   const t = translations[language] || translations["English"];
@@ -43,7 +46,7 @@ const ObjectRemovalTool = () => {
   const canvasRef = useRef(null);
   const imageRef = useRef(null);
   const fileInputRef = useRef(null);
-  const { accessToken } = useAuth();
+  const { accessToken, openLoginPopup } = useAuth();
 
   // State declarations
   const [uploadedFile, setUploadedFile] = useState(null);
@@ -293,14 +296,19 @@ const ObjectRemovalTool = () => {
       }
 
       if (data.status === "fail") {
-        if (data.data.code === "RUN_LIMIT") {
+        if (
+          data?.data?.code === "RUN_LIMIT" ||
+          data?.message ===
+            "Guest trial limit reached. Please sign up to continue."
+        ) {
           toast.error(
             t["You have used up your free attempts! Please log in to continue."]
           );
-          setStatus(COMPONENT_STATES.ERROR);
+          openLoginPopup();
+          navigate("/");
           return;
         }
-        if (data.data.code === "INSUFFICIENT_CREDITS") {
+        if (data?.data?.code === "INSUFFICIENT_CREDITS") {
           toast.error(
             t[
               "Your points are insufficient or your subscription has expired! Please check the subscriptions section."
@@ -310,6 +318,7 @@ const ObjectRemovalTool = () => {
           return;
         }
       }
+
       toast.error(t["Something Went Wrong!"]);
       setStatus(COMPONENT_STATES.ERROR);
     } catch (err) {

@@ -46,10 +46,15 @@ export const AuthProvider = ({ children }) => {
       });
 
       const data = await res.json();
-
-      if (data.status === "success") {
-        setAccessToken(data.accessToken);
-        setUserData(data.data?.user || null);
+      if (data?.status === "success") {
+        if (data?.data?.user?.roles?.length === 0) {
+          setAccessToken(data.accessToken);
+          setUserData(data.data.user || null);
+        } else {
+          toast.error(t["Something Went Wrong!"]);
+          setUserData(null);
+          setAccessToken(null);
+        }
       } else {
         setUserData(null);
         setAccessToken(null);
@@ -69,9 +74,12 @@ export const AuthProvider = ({ children }) => {
 
   // Auto token refresh every 10 min
   useEffect(() => {
-    const interval = setInterval(() => {
-      refreshToken();
-    }, 10 * 60 * 1000);
+    const interval = setInterval(
+      () => {
+        refreshToken();
+      },
+      10 * 60 * 1000,
+    );
 
     return () => clearInterval(interval);
   }, []);
@@ -112,8 +120,6 @@ export const AuthProvider = ({ children }) => {
       const data = await res.json();
 
       if (data.status === "success") {
-        setAccessToken(data.accessToken);
-        setUserData(data.data.user);
         window.location.reload();
         return;
       }
@@ -238,7 +244,7 @@ export const AuthProvider = ({ children }) => {
         toast.error(
           t[
             "Password must be 8+ chars with upper, lower case letters, and at least one number!"
-          ]
+          ],
         );
         setIsPopupActionLoading(false);
         return;
@@ -277,7 +283,7 @@ export const AuthProvider = ({ children }) => {
         toast.error(
           t[
             "Password must be 8+ chars with upper, lower case letters, and at least one number!"
-          ]
+          ],
         );
         setIsPopupActionLoading(false);
         return;

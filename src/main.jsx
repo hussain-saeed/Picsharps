@@ -1,5 +1,6 @@
 import { createRoot } from "react-dom/client";
 import AppRoutes from "./AppRoutes";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./features/auth/AuthProvider";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -14,6 +15,7 @@ import Portuguese from "/src/i18n/portuguese.json";
 import Spanish from "/src/i18n/spanish.json";
 import Hindi from "/src/i18n/hindi.json";
 import Indonesian from "/src/i18n/indonesian.json";
+import AdminApp from "./admin/AdminApp";
 
 const translations = {
   English,
@@ -50,8 +52,21 @@ function AppWrapper() {
 
 createRoot(document.getElementById("root")).render(
   <LanguageProvider>
-    <AuthProvider>
-      <AppWrapper />
-    </AuthProvider>
-  </LanguageProvider>
+    <BrowserRouter>
+      <Routes>
+        {/* admin portal */}
+        <Route path="/admin/*" element={<AdminApp />} />
+
+        {/* user portal */}
+        <Route
+          path="/*"
+          element={
+            <AuthProvider>
+              <AppWrapper />
+            </AuthProvider>
+          }
+        />
+      </Routes>
+    </BrowserRouter>
+  </LanguageProvider>,
 );

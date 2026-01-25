@@ -38,34 +38,32 @@ export default function AppRoutes() {
     <>
       <LoginPopup />
       <OverlayProvider>
-        <BrowserRouter>
-          <ScrollToTop />
-          <Routes>
-            <Route path="/" element={<Landing />} />
+        <ScrollToTop />
+        <Routes>
+          <Route path="/" element={<Landing />} />
 
-            {data.map((path) => (
-              <Route
-                key={path}
-                path={`/${path}`}
-                element={<UploadPhoto key={path} />}
-              />
-            ))}
+          {data.map((path) => (
+            <Route
+              key={path}
+              path={`/${path}`}
+              element={<UploadPhoto key={path} />}
+            />
+          ))}
 
-            <Route path="/all-tools" element={<AllTools />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/contact-us" element={<ContactUs />} />
-            <Route path="/pricing" element={<Pricing />} />
-            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-            <Route path="/terms-of-service" element={<TermsOfService />} />
-            <Route path="/profile" element={<Profile />} />
+          <Route path="/all-tools" element={<AllTools />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact-us" element={<ContactUs />} />
+          <Route path="/pricing" element={<Pricing />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/terms-of-service" element={<TermsOfService />} />
+          <Route path="/profile" element={<Profile />} />
 
-            <Route path="/auth/callback" element={<Callback />} />
-            <Route path="/success" element={<Success />} />
-            <Route path="/cancel" element={<Cancel />} />
+          <Route path="/auth/callback" element={<Callback />} />
+          <Route path="/success" element={<Success />} />
+          <Route path="/cancel" element={<Cancel />} />
 
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
+          <Route path="*" element={<NotFound />} />
+        </Routes>
       </OverlayProvider>
     </>
   );

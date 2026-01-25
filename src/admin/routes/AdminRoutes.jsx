@@ -3,16 +3,55 @@ import AdminLogin from "../pages/AdminLogin";
 import AdminMainLayout from "../layouts/AdminMainLayout";
 import Test1 from "../pages/Test1";
 import Test2 from "../pages/Test2";
+import AdminGate from "../guards/AdminGate";
+import RequireAdminAuth from "../guards/RequireAdminAuth";
+import RequireRole from "../guards/RequireRole";
+import AdminMainIndex from "../pages/AdminMainIndex";
+import AdminNotFound from "../pages/AdminNotFound";
+import RedirectIfAdmin from "../guards/RedirectIfAdmin";
 
 function AdminRoutes() {
   return (
     <Routes>
-      <Route path="login" element={<AdminLogin />} />
+      {/* /admin */}
+      <Route index element={<AdminGate />} />
 
-      <Route path="main" element={<AdminMainLayout />}>
-        <Route path="test1" element={<Test1 />} />
-        <Route path="test2" element={<Test2 />} />
+      {/* /admin/login */}
+      <Route element={<RedirectIfAdmin />}>
+        <Route path="login" element={<AdminLogin />} />
       </Route>
+
+      {/* protected area */}
+      <Route element={<RequireAdminAuth />}>
+        <Route path="main" element={<AdminMainLayout />}>
+          {/* /admin/main */}
+          <Route index element={<AdminMainIndex />} />
+
+          {/* can add other allowed roles here */}
+          <Route
+            path="test1"
+            element={
+              <>
+                <RequireRole allowedRoles={["superadmin"]} />
+                <Test1 />
+              </>
+            }
+          />
+
+          <Route
+            path="test2"
+            element={
+              <>
+                <RequireRole allowedRoles={["superadmin"]} />
+                <Test2 />
+              </>
+            }
+          />
+        </Route>
+      </Route>
+
+      {/* 404 */}
+      <Route path="*" element={<AdminNotFound />} />
     </Routes>
   );
 }

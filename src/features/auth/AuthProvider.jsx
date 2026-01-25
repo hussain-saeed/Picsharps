@@ -24,8 +24,7 @@ const translations = {
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const { language, direction } = useContext(LanguageContext);
-  const isRTL = direction === "rtl";
+  const { language } = useContext(LanguageContext);
   const t = translations[language] || translations["English"];
 
   // 1) Basic Auth State

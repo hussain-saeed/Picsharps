@@ -1,0 +1,5 @@
+if we have a new role with
+1 go to "adminAuthSlice" and check for the role id, then give it a name
+2 go to "AdminRoutes" and for each route we can decide which roles will be allowed exactly in the array
+3 go to "AdminMainLayout" and add the navlink refering to the path
+4 we can use the same approach found in "AdminMainLayout" to apply the same concept in other places

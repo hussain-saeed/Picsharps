@@ -7,6 +7,8 @@ import "react-toastify/dist/ReactToastify.css";
 import "./index.css";
 import { LanguageProvider, LanguageContext } from "./context/LanguageContext";
 import { useContext } from "react";
+import { Provider } from "react-redux";
+import { adminStore } from "./admin/store/adminStore";
 
 import English from "/src/i18n/english.json";
 import Arabic from "/src/i18n/arabic.json";
@@ -55,7 +57,14 @@ createRoot(document.getElementById("root")).render(
     <BrowserRouter>
       <Routes>
         {/* admin portal */}
-        <Route path="/admin/*" element={<AdminApp />} />
+        <Route
+          path="/admin/*"
+          element={
+            <Provider store={adminStore}>
+              <AdminApp />
+            </Provider>
+          }
+        />
 
         {/* user portal */}
         <Route

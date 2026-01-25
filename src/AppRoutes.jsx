@@ -36,7 +36,7 @@ const data = [
 export default function AppRoutes() {
   return (
     <>
-    <LoginPopup />
+      <LoginPopup />
       <OverlayProvider>
         <BrowserRouter>
           <ScrollToTop />

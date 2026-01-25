@@ -47,7 +47,11 @@ export const AuthProvider = ({ children }) => {
 
       const data = await res.json();
       if (data?.status === "success") {
-        if (data?.data?.user?.roles?.length === 0) {
+        if (
+          data?.data?.user?.roles?.length === 0 ||
+          data?.data?.user?.roles[0]?.roleId === 1 ||
+          data?.data?.user?.roles[0]?.role?.id === 1
+        ) {
           setAccessToken(data.accessToken);
           setUserData(data.data.user || null);
         } else {

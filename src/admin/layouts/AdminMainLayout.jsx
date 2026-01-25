@@ -1,30 +1,34 @@
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useAdminAuth } from "../hooks/useAdminAuth";
 
 function AdminMainLayout() {
   const { roles } = useSelector((s) => s.adminAuth);
   const { logoutAdmin } = useAdminAuth();
+  const location = useLocation();
 
   console.log("[LAYOUT] roles:", roles);
 
-  // define navigation links with allowed roles
   const links = [
+    { name: "Test 1", path: "/admin/main/test1", allowedRoles: ["superadmin"] },
+    { name: "Test 2", path: "/admin/main/test2", allowedRoles: ["superadmin"] },
     {
-      name: "Test 1",
-      path: "/admin/main/test1",
-      allowedRoles: ["superadmin"],
-    },
-    {
-      name: "Test 2",
-      path: "/admin/main/test2",
+      name: "OverView",
+      path: "/admin/main/overview",
       allowedRoles: ["superadmin"],
     },
   ];
 
+  // نجيب الاسم النشط بناءً على الـ path الحالي
+  const activeLink = links.find(
+    (link) =>
+      link.path === location.pathname &&
+      link.allowedRoles.some((r) => roles.includes(r)),
+  );
+
   return (
     <div style={{ padding: 20 }}>
-      <h2>Admin Panel</h2>
+      <h2>{activeLink ? activeLink.name : "Admin Panel"}</h2>
 
       <ul style={{ display: "flex", gap: 20 }}>
         {links.map((link) => {

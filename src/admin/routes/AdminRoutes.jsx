@@ -3,6 +3,7 @@ import AdminLogin from "../pages/AdminLogin";
 import AdminMainLayout from "../layouts/AdminMainLayout";
 import Test1 from "../pages/Test1";
 import Test2 from "../pages/Test2";
+import OverviewWholePage from "../pages/overview/OverviewWholePage";
 import AdminGate from "../guards/AdminGate";
 import RequireAdminAuth from "../guards/RequireAdminAuth";
 import RequireRole from "../guards/RequireRole";
@@ -44,6 +45,16 @@ function AdminRoutes() {
               <>
                 <RequireRole allowedRoles={["superadmin"]} />
                 <Test2 />
+              </>
+            }
+          />
+
+          <Route
+            path="overview"
+            element={
+              <>
+                <RequireRole allowedRoles={["superadmin"]} />
+                <OverviewWholePage />
               </>
             }
           />

@@ -10,6 +10,7 @@ import RequireRole from "../guards/RequireRole";
 import AdminMainIndex from "../pages/AdminMainIndex";
 import AdminNotFound from "../pages/AdminNotFound";
 import RedirectIfAdmin from "../guards/RedirectIfAdmin";
+import ActiveUsers from "../pages/active-users/ActiveUsers";
 
 function AdminRoutes() {
   return (
@@ -55,6 +56,16 @@ function AdminRoutes() {
               <>
                 <RequireRole allowedRoles={["superadmin"]} />
                 <OverviewWholePage />
+              </>
+            }
+          />
+
+          <Route
+            path="active-users"
+            element={
+              <>
+                <RequireRole allowedRoles={["superadmin"]} />
+                <ActiveUsers />
               </>
             }
           />

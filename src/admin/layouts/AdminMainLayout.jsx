@@ -17,9 +17,14 @@ function AdminMainLayout() {
       path: "/admin/main/overview",
       allowedRoles: ["superadmin"],
     },
+    {
+      name: "Active Users",
+      path: "/admin/main/active-users",
+      allowedRoles: ["superadmin"],
+    },
   ];
 
-  // نجيب الاسم النشط بناءً على الـ path الحالي
+  // Determine the active link based on the current location and user roles
   const activeLink = links.find(
     (link) =>
       link.path === location.pathname &&

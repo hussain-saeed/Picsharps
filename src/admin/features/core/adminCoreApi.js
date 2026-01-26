@@ -36,8 +36,31 @@ export const adminCoreApi = createApi({
         },
       }),
     }),
+
+    // endpoint to get active users with filters
+    getActiveUsers: builder.query({
+      query: ({
+        q = "",
+        page = 1,
+        limit = 2,
+        status = "active",
+        plan,
+      } = {}) => ({
+        url: "/users",
+        params: {
+          q,
+          page,
+          limit,
+          status,
+          plan,
+        },
+      }),
+    }),
   }),
 });
 
-export const { useGetOverviewStatisticsQuery, useGetRecentActivityQuery } =
-  adminCoreApi;
+export const {
+  useGetOverviewStatisticsQuery,
+  useGetRecentActivityQuery,
+  useGetActiveUsersQuery,
+} = adminCoreApi;

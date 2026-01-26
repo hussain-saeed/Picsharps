@@ -10,8 +10,6 @@ function AdminMainLayout() {
   console.log("[LAYOUT] roles:", roles);
 
   const links = [
-    { name: "Test 1", path: "/admin/main/test1", allowedRoles: ["superadmin"] },
-    { name: "Test 2", path: "/admin/main/test2", allowedRoles: ["superadmin"] },
     {
       name: "OverView",
       path: "/admin/main/overview",

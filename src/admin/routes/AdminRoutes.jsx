@@ -1,8 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import AdminLogin from "../pages/AdminLogin";
 import AdminMainLayout from "../layouts/AdminMainLayout";
-import Test1 from "../pages/Test1";
-import Test2 from "../pages/Test2";
 import OverviewWholePage from "../pages/overview/OverviewWholePage";
 import AdminGate from "../guards/AdminGate";
 import RequireAdminAuth from "../guards/RequireAdminAuth";
@@ -30,26 +28,6 @@ function AdminRoutes() {
           <Route index element={<AdminMainIndex />} />
 
           {/* can add other allowed roles here */}
-          <Route
-            path="test1"
-            element={
-              <>
-                <RequireRole allowedRoles={["superadmin"]} />
-                <Test1 />
-              </>
-            }
-          />
-
-          <Route
-            path="test2"
-            element={
-              <>
-                <RequireRole allowedRoles={["superadmin"]} />
-                <Test2 />
-              </>
-            }
-          />
-
           <Route
             path="overview"
             element={

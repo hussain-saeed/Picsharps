@@ -8,7 +8,8 @@ import RequireRole from "../guards/RequireRole";
 import AdminMainIndex from "../pages/AdminMainIndex";
 import AdminNotFound from "../pages/AdminNotFound";
 import RedirectIfAdmin from "../guards/RedirectIfAdmin";
-import ActiveUsers from "../pages/all-users/AllUsers";
+import AllUsers from "../pages/all-users/AllUsers";
+import SuspendedUsers from "../pages/suspended-users/SuspendedUsers";
 
 function AdminRoutes() {
   return (
@@ -43,7 +44,17 @@ function AdminRoutes() {
             element={
               <>
                 <RequireRole allowedRoles={["superadmin"]} />
-                <ActiveUsers />
+                <AllUsers />
+              </>
+            }
+          />
+
+          <Route
+            path="suspended-users"
+            element={
+              <>
+                <RequireRole allowedRoles={["superadmin"]} />
+                <SuspendedUsers />
               </>
             }
           />

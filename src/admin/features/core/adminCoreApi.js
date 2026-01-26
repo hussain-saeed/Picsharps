@@ -39,13 +39,7 @@ export const adminCoreApi = createApi({
 
     // endpoint to get all users with filters
     getAllUsers: builder.query({
-      query: ({
-        q = "",
-        page = 1,
-        limit = 2,
-        status = "",
-        plan,
-      } = {}) => ({
+      query: ({ q = "", page = 1, limit = 10, status = "", plan } = {}) => ({
         url: "/users",
         params: {
           q,
@@ -56,6 +50,17 @@ export const adminCoreApi = createApi({
         },
       }),
     }),
+
+    // endpoint to get suspended users with filters
+    getSuspendedUsers: builder.query({
+      query: ({ page = 1, limit = 10 } = {}) => ({
+        url: "/users/suspended",
+        params: {
+          page,
+          limit,
+        },
+      }),
+    }),
   }),
 });
 
@@ -63,4 +68,5 @@ export const {
   useGetOverviewStatisticsQuery,
   useGetRecentActivityQuery,
   useGetAllUsersQuery,
+  useGetSuspendedUsersQuery,
 } = adminCoreApi;

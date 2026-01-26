@@ -8,7 +8,7 @@ import RequireRole from "../guards/RequireRole";
 import AdminMainIndex from "../pages/AdminMainIndex";
 import AdminNotFound from "../pages/AdminNotFound";
 import RedirectIfAdmin from "../guards/RedirectIfAdmin";
-import ActiveUsers from "../pages/active-users/ActiveUsers";
+import ActiveUsers from "../pages/all-users/AllUsers";
 
 function AdminRoutes() {
   return (
@@ -39,7 +39,7 @@ function AdminRoutes() {
           />
 
           <Route
-            path="active-users"
+            path="all-users"
             element={
               <>
                 <RequireRole allowedRoles={["superadmin"]} />

@@ -16,8 +16,8 @@ function AdminMainLayout() {
       allowedRoles: ["superadmin"],
     },
     {
-      name: "Active Users",
-      path: "/admin/main/active-users",
+      name: "All Users",
+      path: "/admin/main/all-users",
       allowedRoles: ["superadmin"],
     },
   ];

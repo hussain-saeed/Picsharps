@@ -17,7 +17,7 @@ import {
   InputLabel,
   Pagination,
 } from "@mui/material";
-import { useGetActiveUsersQuery } from "../../features/core/adminCoreApi";
+import { useGetAllUsersQuery } from "../../features/core/adminCoreApi";
 
 // List of plans
 const PLANS = [
@@ -29,25 +29,38 @@ const PLANS = [
   { label: "Premium Yearly", value: "premium-yearly" },
 ];
 
-const ActiveUsers = () => {
+// List of status
+const STATUS = [
+  { label: "All Status", value: "" },
+  { label: "Active", value: "active" },
+  { label: "Suspended", value: "suspended" },
+];
+
+const AllUsers = () => {
   // ================= STATE =================
   const [search, setSearch] = useState("");
   const [plan, setPlan] = useState("");
+  const [status, setStatus] = useState("");
 
-  const [appliedFilters, setAppliedFilters] = useState({ q: "", plan: "" });
+  const [appliedFilters, setAppliedFilters] = useState({
+    q: "",
+    plan: "",
+    status: "",
+  });
   const [page, setPage] = useState(1);
 
   // ================= QUERY =================
-  const { data, isFetching, isError } = useGetActiveUsersQuery(
+  const { data, isFetching, isError } = useGetAllUsersQuery(
     {
       q: appliedFilters.q,
       plan: appliedFilters.plan,
       page,
       limit: 10,
-      status: "active",
+      status: appliedFilters.status,
     },
     { keepUnusedDataFor: 300 },
   );
+  console.log("Fetched data:", data);
 
   // ================= DERIVED DATA =================
   const users = data?.data?.users ?? [];
@@ -57,13 +70,16 @@ const ActiveUsers = () => {
   const isEmpty = !isInitialLoading && users.length === 0;
 
   const canApplyFilters =
-    search !== appliedFilters.q || plan !== appliedFilters.plan;
+    search !== appliedFilters.q ||
+    plan !== appliedFilters.plan ||
+    status !== appliedFilters.status;
 
   const canResetRemove =
     search !== "" ||
     plan !== "" ||
     appliedFilters.q !== "" ||
-    appliedFilters.plan !== "";
+    appliedFilters.plan !== "" ||
+    appliedFilters.status !== "";
 
   const isPageLoading = isFetching && page > 1;
 
@@ -71,13 +87,14 @@ const ActiveUsers = () => {
   const handleApplyFilters = () => {
     if (!canApplyFilters) return;
     setPage(1);
-    setAppliedFilters({ q: search, plan });
+    setAppliedFilters({ q: search, plan, status });
   };
 
   const handleResetRemove = () => {
     setSearch("");
     setPlan("");
-    setAppliedFilters({ q: "", plan: "" });
+    setStatus("");
+    setAppliedFilters({ q: "", plan: "", status: "" });
     setPage(1);
   };
 
@@ -144,6 +161,29 @@ const ActiveUsers = () => {
           </Select>
         </FormControl>
 
+        <FormControl size="small">
+          <Select
+            value={status}
+            onChange={(e) => setStatus(e.target.value)}
+            size="small"
+            sx={{ minWidth: 140 }}
+            displayEmpty
+            renderValue={(selected) => {
+              if (selected === "") {
+                return "All Status";
+              }
+
+              return STATUS.find((s) => s.value === selected)?.label;
+            }}
+          >
+            {STATUS.map((s) => (
+              <MenuItem key={s.value} value={s.value}>
+                {s.label}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+
         <button
           disabled={!canApplyFilters || isFetching}
           onClick={handleApplyFilters}
@@ -183,8 +223,9 @@ const ActiveUsers = () => {
               <TableRow>
                 <TableCell>User</TableCell>
                 <TableCell>Email</TableCell>
+                <TableCell>Plan</TableCell>
+                <TableCell>Status</TableCell>
                 <TableCell>Registered</TableCell>
-                <TableCell>Current Plan</TableCell>
                 <TableCell>Images Used</TableCell>
                 <TableCell>Credits</TableCell>
                 <TableCell>Actions</TableCell>
@@ -213,10 +254,11 @@ const ActiveUsers = () => {
                   </TableCell>
 
                   <TableCell>{u.email}</TableCell>
+                  <TableCell>{u.currentPlan}</TableCell>
+                  <TableCell>{u.status}</TableCell>
                   <TableCell>
                     {new Date(u.joinedAt).toLocaleDateString("en-GB")}
                   </TableCell>
-                  <TableCell>{u.currentPlan}</TableCell>
                   <TableCell>{u.imagesUsed}</TableCell>
                   <TableCell>{u.credits}</TableCell>
                   <TableCell>
@@ -262,4 +304,4 @@ const ActiveUsers = () => {
   );
 };
 
-export default ActiveUsers;
+export default AllUsers;

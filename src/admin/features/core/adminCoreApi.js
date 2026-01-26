@@ -25,7 +25,19 @@ export const adminCoreApi = createApi({
     getOverviewStatistics: builder.query({
       query: () => "/stats/overview",
     }),
+
+    // endpoint to get recent activity
+    getRecentActivity: builder.query({
+      query: ({ limit = 5, cursor } = {}) => ({
+        url: "/stats/activity",
+        params: {
+          limit,
+          cursor,
+        },
+      }),
+    }),
   }),
 });
 
-export const { useGetOverviewStatisticsQuery } = adminCoreApi;
+export const { useGetOverviewStatisticsQuery, useGetRecentActivityQuery } =
+  adminCoreApi;

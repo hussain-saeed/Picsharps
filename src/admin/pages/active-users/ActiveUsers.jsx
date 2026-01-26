@@ -22,11 +22,11 @@ import { useGetActiveUsersQuery } from "../../features/core/adminCoreApi";
 // List of plans
 const PLANS = [
   { label: "All Plans", value: "" },
-  { label: "Free", value: "Free" },
-  { label: "Pro Monthly", value: "Pro Monthly" },
-  { label: "Pro Yearly", value: "Pro Yearly" },
-  { label: "Premium Monthly", value: "Premium Monthly" },
-  { label: "Premium Yearly", value: "Premium Yearly" },
+  { label: "Free", value: "free" },
+  { label: "Pro Monthly", value: "pro-monthly" },
+  { label: "Pro Yearly", value: "pro-yearly" },
+  { label: "Premium Monthly", value: "premium-monthly" },
+  { label: "Premium Yearly", value: "premium-yearly" },
 ];
 
 const ActiveUsers = () => {
@@ -56,11 +56,8 @@ const ActiveUsers = () => {
   const isInitialLoading = isFetching && !data;
   const isEmpty = !isInitialLoading && users.length === 0;
 
-  const isDefaultState = search === "" && plan === "";
-
   const canApplyFilters =
-    !isDefaultState &&
-    (search !== appliedFilters.q || plan !== appliedFilters.plan);
+    search !== appliedFilters.q || plan !== appliedFilters.plan;
 
   const canResetRemove =
     search !== "" ||
@@ -130,6 +127,7 @@ const ActiveUsers = () => {
             value={plan}
             label="Plan"
             onChange={(e) => setPlan(e.target.value)}
+            sx={{ minWidth: 100 }}
           >
             {PLANS.map((p) => (
               <MenuItem key={p.value} value={p.value}>
@@ -139,22 +137,35 @@ const ActiveUsers = () => {
           </Select>
         </FormControl>
 
-        <Button
-          variant="contained"
-          disabled={!canApplyFilters}
+        <button
+          disabled={!canApplyFilters || isFetching}
           onClick={handleApplyFilters}
+          className="
+            px-4 py-2 rounded-md border
+           bg-gray-100 text-gray-800
+            disabled:opacity-50
+            disabled:cursor-not-allowed
+            transition
+            cursor-pointer
+          "
         >
-          Apply
-        </Button>
+          {isFetching ? "Applying..." : "Apply"}
+        </button>
 
-        <Button
-          variant="outlined"
-          disabled={!canResetRemove}
-          color="error"
+        <button
+          disabled={!canResetRemove || isFetching}
           onClick={handleResetRemove}
+          className="
+            px-4 py-2 rounded-md border border-red-600
+          text-red-600 bg-white
+            disabled:opacity-50
+            disabled:cursor-not-allowed
+            transition
+            cursor-pointer
+          "
         >
-          Reset/Remove
-        </Button>
+          Reset
+        </button>
       </Box>
 
       {/* ================= TABLE ================= */}

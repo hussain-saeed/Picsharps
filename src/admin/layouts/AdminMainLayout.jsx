@@ -25,6 +25,11 @@ function AdminMainLayout() {
       path: "/admin/main/suspended-users",
       allowedRoles: ["superadmin"],
     },
+    {
+      name: "Plans",
+      path: "/admin/main/plans",
+      allowedRoles: ["superadmin"],
+    },
   ];
 
   // Determine the active link based on the current location and user roles

@@ -61,6 +61,22 @@ export const adminCoreApi = createApi({
         },
       }),
     }),
+
+    // endpoint to get plans
+    getPlans: builder.query({
+      query: () => "/plans",
+      providesTags: ["Plans"],
+    }),
+
+    // endpoint to update a plan
+    updatePlan: builder.mutation({
+      query: ({ code, body }) => ({
+        url: `/plans/${code}`,
+        method: "PATCH",
+        body,
+      }),
+      invalidatesTags: ["Plans"],
+    }),
   }),
 });
 
@@ -69,4 +85,6 @@ export const {
   useGetRecentActivityQuery,
   useGetAllUsersQuery,
   useGetSuspendedUsersQuery,
+  useGetPlansQuery,
+  useUpdatePlanMutation,
 } = adminCoreApi;

@@ -11,6 +11,7 @@ import RedirectIfAdmin from "../guards/RedirectIfAdmin";
 import AllUsers from "../pages/all-users/AllUsers";
 import SuspendedUsers from "../pages/suspended-users/SuspendedUsers";
 import Plans from "../pages/plans/Plans";
+import Settings from "../pages/settings/Settings";
 
 function AdminRoutes() {
   return (
@@ -66,6 +67,16 @@ function AdminRoutes() {
               <>
                 <RequireRole allowedRoles={["superadmin"]} />
                 <Plans />
+              </>
+            }
+          />
+
+          <Route
+            path="settings"
+            element={
+              <>
+                <RequireRole allowedRoles={["superadmin"]} />
+                <Settings />
               </>
             }
           />

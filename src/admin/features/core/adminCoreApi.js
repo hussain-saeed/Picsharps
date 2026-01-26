@@ -77,6 +77,22 @@ export const adminCoreApi = createApi({
       }),
       invalidatesTags: ["Plans"],
     }),
+
+    // endpoint to get settings
+    getSettings: builder.query({
+      query: () => "/settings/general",
+      providesTags: ["Settings"],
+    }),
+
+    // endpoint to update settings
+    updateSettings: builder.mutation({
+      query: ({ body }) => ({
+        url: `/settings/general`,
+        method: "PATCH",
+        body,
+      }),
+      invalidatesTags: ["Settings"],
+    }),
   }),
 });
 
@@ -87,4 +103,6 @@ export const {
   useGetSuspendedUsersQuery,
   useGetPlansQuery,
   useUpdatePlanMutation,
+  useGetSettingsQuery,
+  useUpdateSettingsMutation,
 } = adminCoreApi;

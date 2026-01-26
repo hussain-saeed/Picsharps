@@ -30,6 +30,12 @@ function AdminMainLayout() {
       path: "/admin/main/plans",
       allowedRoles: ["superadmin"],
     },
+
+    {
+      name: "Settings",
+      path: "/admin/main/settings",
+      allowedRoles: ["superadmin"],
+    },
   ];
 
   // Determine the active link based on the current location and user roles

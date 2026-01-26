@@ -122,12 +122,19 @@ const ActiveUsers = () => {
         />
 
         <FormControl size="small">
-          <InputLabel>Plan</InputLabel>
           <Select
             value={plan}
-            label="Plan"
             onChange={(e) => setPlan(e.target.value)}
-            sx={{ minWidth: 100 }}
+            size="small"
+            sx={{ minWidth: 140 }}
+            displayEmpty
+            renderValue={(selected) => {
+              if (selected === "") {
+                return "All Plans";
+              }
+
+              return PLANS.find((p) => p.value === selected)?.label;
+            }}
           >
             {PLANS.map((p) => (
               <MenuItem key={p.value} value={p.value}>
@@ -236,8 +243,8 @@ const ActiveUsers = () => {
             count={pagination.totalPages}
             page={page}
             onChange={handleChangePage}
-            siblingCount={1}
-            boundaryCount={2}
+            siblingCount={0}
+            boundaryCount={1}
             showFirstButton
             showLastButton
             disabled={isFetching}

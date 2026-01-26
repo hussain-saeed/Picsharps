@@ -1,10 +1,6 @@
 import { useState } from "react";
 import {
   Box,
-  TextField,
-  MenuItem,
-  Button,
-  Select,
   Table,
   TableBody,
   TableCell,
@@ -13,8 +9,7 @@ import {
   TableRow,
   Paper,
   Typography,
-  FormControl,
-  InputLabel,
+  Button,
   Pagination,
 } from "@mui/material";
 import { useGetSuspendedUsersQuery } from "../../features/core/adminCoreApi";
@@ -31,15 +26,16 @@ const SuspendedUsers = () => {
     },
     { keepUnusedDataFor: 300 },
   );
+
   console.log("Fetched data:", data);
 
   // ================= DERIVED DATA =================
-  const users = data?.data?.users ?? [];
-  const pagination = data?.data?.pagination ?? null;
+  const hasData = data?.status === "success" && Array.isArray(data.data?.users);
+  const users = hasData ? data.data.users : [];
+  const pagination = hasData ? data.data.pagination : null;
 
   const isInitialLoading = isFetching && !data;
   const isEmpty = !isInitialLoading && users.length === 0;
-
   const isPageLoading = isFetching && page > 1;
 
   // ================= HANDLERS =================
@@ -51,8 +47,9 @@ const SuspendedUsers = () => {
   const getInitials = (name = "") => {
     if (!name) return "G";
     const parts = name.trim().split(" ");
-    if (parts.length === 1) return parts[0][0].toUpperCase();
-    return (parts[0][0] + parts[1][0]).toUpperCase();
+    return parts.length === 1
+      ? parts[0][0].toUpperCase()
+      : (parts[0][0] + parts[1][0]).toUpperCase();
   };
 
   // ================= RENDER =================
@@ -64,7 +61,7 @@ const SuspendedUsers = () => {
     );
   }
 
-  if (isError) {
+  if (isError || !hasData) {
     return (
       <Box mt={4}>
         <Typography color="error">Something went wrong.</Typography>
@@ -111,7 +108,6 @@ const SuspendedUsers = () => {
 
                   <TableCell>{u.email}</TableCell>
                   <TableCell>
-                    {" "}
                     {new Date(u.suspendedAt).toLocaleDateString("en-GB")}
                   </TableCell>
                   <TableCell>{u.reason}</TableCell>

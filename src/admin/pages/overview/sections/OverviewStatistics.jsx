@@ -43,12 +43,14 @@ function OverviewStatistics() {
     },
   );
 
-  if (isFetching) return <div>Loading statistics...</div>;
-  if (isError)
-    return <div>Something went wrong while fetching statistics.</div>;
-  if (!data?.data) return <div>No data yet</div>;
+  const hasData = data?.status === "success" && data.data;
 
-  const stats = data.data;
+  const stats = hasData ? data.data : null;
+
+  if (isFetching) return <div>Loading statistics...</div>;
+  if (isError || !hasData)
+    return <div>Something went wrong while fetching statistics.</div>;
+  if (hasData && !stats) return <div>No data yet</div>;
 
   const boxStyle = {
     border: "1px solid #ddd",

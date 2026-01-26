@@ -19,13 +19,8 @@ function RecentActivities() {
   const [lastUpdated, setLastUpdated] = useState(null);
 
   const { data, isFetching, isError } = useGetRecentActivityQuery(
-    {
-      limit: LIMIT,
-      cursor,
-    },
-    {
-      refetchOnMountOrArgChange: true,
-    },
+    { limit: LIMIT, cursor },
+    { refetchOnMountOrArgChange: true },
   );
 
   // Reset on mount
@@ -36,39 +31,38 @@ function RecentActivities() {
     setLastUpdated(null);
   }, []);
 
+  // Determine if response is valid based on backend status
+  const hasData = data?.status === "success" && Array.isArray(data.data?.data);
+
   // Sync response
   useEffect(() => {
-    if (!data?.data) return;
+    if (!hasData) return;
 
     // prevent duplicates
     setItems((prev) => {
       const existingIds = new Set(prev.map((i) => i.id));
-
       const newOnes = data.data.data.filter(
         (item) => !existingIds.has(item.id),
       );
-
       return [...prev, ...newOnes];
     });
 
     setNextCursor(data.data.nextCursor ?? null);
 
-    if (cursor === undefined && data.status === "success") {
+    if (cursor === undefined) {
       setLastUpdated(new Date());
     }
-  }, [data, cursor]);
+  }, [data, cursor, hasData]);
 
   const isInitialLoading = isFetching && items.length === 0;
   const isLoadingMore = isFetching && items.length > 0;
 
   const getInitials = (name = "") => {
     if (!name) return "G";
-
     const parts = name.trim().split(" ");
-
-    if (parts.length === 1) return parts[0][0].toUpperCase();
-
-    return (parts[0][0] + parts[1][0]).toUpperCase();
+    return parts.length === 1
+      ? parts[0][0].toUpperCase()
+      : (parts[0][0] + parts[1][0]).toUpperCase();
   };
 
   const normalizeUserInfo = (item) => {
@@ -117,22 +111,26 @@ function RecentActivities() {
         </div>
       )}
 
-      {/* Initial Loading */}
+      {/* Loading */}
       {isInitialLoading && <div>Loading recent activities...</div>}
 
       {/* Error */}
-      {isError && (
+      {(!hasData || isError) && !isInitialLoading && (
         <div style={{ color: "red" }}>
           Something went wrong while fetching activities.
         </div>
       )}
 
+      {/* Empty */}
+      {hasData && !isInitialLoading && items.length === 0 && (
+        <div>No recent activities.</div>
+      )}
+
       {/* List */}
-      {!isInitialLoading && items.length > 0 && (
+      {hasData && items.length > 0 && (
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
           {items.map((item) => {
             const badge = EVENT_TYPE_MAP[item.type];
-
             const userInfo = normalizeUserInfo(item);
 
             return (
@@ -194,7 +192,6 @@ function RecentActivities() {
                     }}
                   >
                     <span>{formatDate(item.time)}</span>
-
                     {badge && (
                       <span
                         style={{
@@ -212,19 +209,12 @@ function RecentActivities() {
                   </div>
 
                   {(userInfo.reason || userInfo.details) && (
-                    <div
-                      style={{
-                        marginTop: 6,
-                        fontSize: 12,
-                        color: "#555",
-                      }}
-                    >
+                    <div style={{ marginTop: 6, fontSize: 12, color: "#555" }}>
                       {userInfo.reason && (
                         <div>
                           <strong>Reason:</strong> {userInfo.reason}
                         </div>
                       )}
-
                       {userInfo.details && (
                         <div>
                           <strong>Details:</strong> {userInfo.details}
@@ -240,7 +230,7 @@ function RecentActivities() {
       )}
 
       {/* Load More */}
-      {items.length > 0 && nextCursor && !isInitialLoading && (
+      {hasData && items.length > 0 && nextCursor && !isInitialLoading && (
         <button
           onClick={() => setCursor(nextCursor)}
           disabled={isLoadingMore}

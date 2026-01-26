@@ -14,7 +14,6 @@ import {
   Paper,
   Typography,
   FormControl,
-  InputLabel,
   Pagination,
 } from "@mui/material";
 import { useGetAllUsersQuery } from "../../features/core/adminCoreApi";
@@ -60,11 +59,13 @@ const AllUsers = () => {
     },
     { keepUnusedDataFor: 300 },
   );
+
   console.log("Fetched data:", data);
 
   // ================= DERIVED DATA =================
-  const users = data?.data?.users ?? [];
-  const pagination = data?.data?.pagination ?? null;
+  const hasData = data?.status === "success" && Array.isArray(data.data?.users);
+  const users = hasData ? data.data.users : [];
+  const pagination = hasData ? data.data.pagination : null;
 
   const isInitialLoading = isFetching && !data;
   const isEmpty = !isInitialLoading && users.length === 0;
@@ -77,6 +78,7 @@ const AllUsers = () => {
   const canResetRemove =
     search !== "" ||
     plan !== "" ||
+    status !== "" ||
     appliedFilters.q !== "" ||
     appliedFilters.plan !== "" ||
     appliedFilters.status !== "";
@@ -106,8 +108,9 @@ const AllUsers = () => {
   const getInitials = (name = "") => {
     if (!name) return "G";
     const parts = name.trim().split(" ");
-    if (parts.length === 1) return parts[0][0].toUpperCase();
-    return (parts[0][0] + parts[1][0]).toUpperCase();
+    return parts.length === 1
+      ? parts[0][0].toUpperCase()
+      : (parts[0][0] + parts[1][0]).toUpperCase();
   };
 
   // ================= RENDER =================
@@ -119,7 +122,7 @@ const AllUsers = () => {
     );
   }
 
-  if (isError) {
+  if (isError || !hasData) {
     return (
       <Box mt={4}>
         <Typography color="error">Something went wrong.</Typography>
@@ -145,13 +148,11 @@ const AllUsers = () => {
             size="small"
             sx={{ minWidth: 140 }}
             displayEmpty
-            renderValue={(selected) => {
-              if (selected === "") {
-                return "All Plans";
-              }
-
-              return PLANS.find((p) => p.value === selected)?.label;
-            }}
+            renderValue={(selected) =>
+              selected === ""
+                ? "All Plans"
+                : PLANS.find((p) => p.value === selected)?.label
+            }
           >
             {PLANS.map((p) => (
               <MenuItem key={p.value} value={p.value}>
@@ -168,13 +169,11 @@ const AllUsers = () => {
             size="small"
             sx={{ minWidth: 140 }}
             displayEmpty
-            renderValue={(selected) => {
-              if (selected === "") {
-                return "All Status";
-              }
-
-              return STATUS.find((s) => s.value === selected)?.label;
-            }}
+            renderValue={(selected) =>
+              selected === ""
+                ? "All Status"
+                : STATUS.find((s) => s.value === selected)?.label
+            }
           >
             {STATUS.map((s) => (
               <MenuItem key={s.value} value={s.value}>
@@ -189,7 +188,7 @@ const AllUsers = () => {
           onClick={handleApplyFilters}
           className="
             px-4 py-2 rounded-md border
-           bg-gray-100 text-gray-800
+            bg-gray-100 text-gray-800
             disabled:opacity-50
             disabled:cursor-not-allowed
             transition
@@ -204,7 +203,7 @@ const AllUsers = () => {
           onClick={handleResetRemove}
           className="
             px-4 py-2 rounded-md border border-red-600
-          text-red-600 bg-white
+            text-red-600 bg-white
             disabled:opacity-50
             disabled:cursor-not-allowed
             transition

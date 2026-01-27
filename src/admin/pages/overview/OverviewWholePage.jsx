@@ -1,5 +1,6 @@
 import OverviewStatistics from "./sections/OverviewStatistics";
 import RecentActivities from "./sections/RecentActivities";
+import Revenue from "./sections/Revenue";
 import UserGrowth from "./sections/UserGrowth";
 
 function OverviewWholePage() {
@@ -7,6 +8,7 @@ function OverviewWholePage() {
     <>
       <OverviewStatistics />
       <UserGrowth />
+      <Revenue />
       <RecentActivities />
     </>
   );

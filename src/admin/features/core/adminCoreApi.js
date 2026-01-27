@@ -26,6 +26,11 @@ export const adminCoreApi = createApi({
       query: () => "/stats/overview",
     }),
 
+    // endpoint to get user growth statistics
+    getUserGrowth: builder.query({
+      query: (period = "30d") => `/stats/growth?period=${period}`,
+    }),
+
     // endpoint to get recent activity
     getRecentActivity: builder.query({
       query: ({ limit = 5, cursor } = {}) => ({
@@ -138,6 +143,7 @@ export const adminCoreApi = createApi({
 
 export const {
   useGetOverviewStatisticsQuery,
+  useGetUserGrowthQuery,
   useGetRecentActivityQuery,
   useGetAllUsersQuery,
   useGetSuspendedUsersQuery,

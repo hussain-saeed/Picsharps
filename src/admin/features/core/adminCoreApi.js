@@ -49,9 +49,10 @@ export const adminCoreApi = createApi({
           plan,
         },
       }),
+      providesTags: ["AllUsers"],
     }),
 
-    // endpoint to get suspended users with filters
+    // endpoint to get suspended users
     getSuspendedUsers: builder.query({
       query: ({ page = 1, limit = 10 } = {}) => ({
         url: "/users/suspended",
@@ -60,6 +61,45 @@ export const adminCoreApi = createApi({
           limit,
         },
       }),
+      providesTags: ["SuspendedUsers"],
+    }),
+
+    // endpoint to suspend a user
+    suspendUser: builder.mutation({
+      query: ({ userId, body }) => ({
+        url: `/users/${userId}/suspend`,
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["AllUsers", "SuspendedUsers"],
+    }),
+
+    // endpoint to reactivate a suspended user
+    reactivateUser: builder.mutation({
+      query: (userId) => ({
+        url: `/users/${userId}/reactivate`,
+        method: "POST",
+      }),
+      invalidatesTags: ["AllUsers", "SuspendedUsers"],
+    }),
+
+    // endpoint to notify a user
+    notifyUser: builder.mutation({
+      query: ({ userId, body }) => ({
+        url: `/users/${userId}/notify`,
+        method: "POST",
+        body,
+      }),
+    }),
+
+    // endpoint to delete a user
+    deleteUser: builder.mutation({
+      query: ({ userId, body }) => ({
+        url: `/users/${userId}`,
+        method: "DELETE",
+        body,
+      }),
+      invalidatesTags: ["AllUsers", "SuspendedUsers"],
     }),
 
     // endpoint to get plans
@@ -101,6 +141,10 @@ export const {
   useGetRecentActivityQuery,
   useGetAllUsersQuery,
   useGetSuspendedUsersQuery,
+  useSuspendUserMutation,
+  useReactivateUserMutation,
+  useNotifyUserMutation,
+  useDeleteUserMutation,
   useGetPlansQuery,
   useUpdatePlanMutation,
   useGetSettingsQuery,

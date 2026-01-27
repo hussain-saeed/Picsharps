@@ -8,17 +8,37 @@ import {
   TextField,
   Button,
   Typography,
-  Box,
 } from "@mui/material";
+import { toast } from "react-toastify";
+import { useDeleteUserMutation } from "../features/core/adminCoreApi";
 
 const DeleteUserModal = ({ open, onClose, user }) => {
   const [reason, setReason] = useState("");
   const [details, setDetails] = useState("");
+  const [deleteUser, { isLoading }] = useDeleteUserMutation();
 
   const handleClose = () => {
     setReason("");
     setDetails("");
     onClose();
+  };
+
+  const handleDelete = async () => {
+    try {
+      const res = await deleteUser({
+        userId: user.id,
+        body: { reason, details },
+      }).unwrap();
+
+      if (res.status === "success") {
+        toast.success("User deleted successfully");
+        handleClose();
+      } else {
+        toast.error("Something went wrong");
+      }
+    } catch (err) {
+      toast.error("Something went wrong");
+    }
   };
 
   return (
@@ -33,6 +53,7 @@ const DeleteUserModal = ({ open, onClose, user }) => {
         Delete User
         <IconButton
           onClick={handleClose}
+          disabled={isLoading}
           sx={{ position: "absolute", right: 8, top: 8 }}
         >
           X
@@ -51,6 +72,7 @@ const DeleteUserModal = ({ open, onClose, user }) => {
           value={reason}
           onChange={(e) => setReason(e.target.value)}
           sx={{ mb: 2 }}
+          disabled={isLoading}
         />
 
         <TextField
@@ -60,16 +82,25 @@ const DeleteUserModal = ({ open, onClose, user }) => {
           rows={3}
           value={details}
           onChange={(e) => setDetails(e.target.value)}
+          disabled={isLoading}
         />
       </DialogContent>
 
       <DialogActions>
-        <Button onClick={handleClose}>Cancel</Button>
-        <Button color="error" variant="contained">
-          Delete
+        <Button onClick={handleClose} disabled={isLoading}>
+          Cancel
+        </Button>
+        <Button
+          color="error"
+          variant="contained"
+          onClick={handleDelete}
+          disabled={isLoading}
+        >
+          {isLoading ? "Deleting..." : "Delete"}
         </Button>
       </DialogActions>
     </Dialog>
   );
 };
+
 export default DeleteUserModal;

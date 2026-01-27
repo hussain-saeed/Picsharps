@@ -17,8 +17,10 @@ export default function AdminLogin() {
     if (!password) return toast.error("Password is required!");
 
     setLoading(true);
+
     try {
-      await loginAdmin({ email, password });
+      const success = await loginAdmin({ email, password });
+      if (!success) setLoading(false);
     } catch (err) {
       setLoading(false);
     }

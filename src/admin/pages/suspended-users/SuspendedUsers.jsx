@@ -13,10 +13,17 @@ import {
   Pagination,
 } from "@mui/material";
 import { useGetSuspendedUsersQuery } from "../../features/core/adminCoreApi";
+import UserActionsMenu from "../../components/UserActionsMenu";
+import DeleteUserModal from "../../components/DeleteUserModal";
+import ReactivateUserModal from "../../components/ReactivateUserModal";
 
 const SuspendedUsers = () => {
   // ================= STATE =================
   const [page, setPage] = useState(1);
+
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [openDelete, setOpenDelete] = useState(false);
+  const [openReactivate, setOpenReactivate] = useState(false);
 
   // ================= QUERY =================
   const { data, isFetching, isError } = useGetSuspendedUsersQuery(
@@ -112,14 +119,34 @@ const SuspendedUsers = () => {
                   </TableCell>
                   <TableCell>{u.reason}</TableCell>
                   <TableCell>
-                    <Button size="small" variant="outlined">
-                      Action
-                    </Button>
+                    <UserActionsMenu
+                      user={u}
+                      onDelete={(u) => {
+                        setSelectedUser(u);
+                        setOpenDelete(true);
+                      }}
+                      onReactivate={(u) => {
+                        setSelectedUser(u);
+                        setOpenReactivate(true);
+                      }}
+                    />
                   </TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
+
+          <DeleteUserModal
+            open={openDelete}
+            user={selectedUser}
+            onClose={() => setOpenDelete(false)}
+          />
+
+          <ReactivateUserModal
+            open={openReactivate}
+            user={selectedUser}
+            onClose={() => setOpenReactivate(false)}
+          />
         </TableContainer>
       )}
 

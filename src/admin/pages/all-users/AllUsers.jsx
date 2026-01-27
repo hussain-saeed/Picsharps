@@ -17,6 +17,11 @@ import {
   Pagination,
 } from "@mui/material";
 import { useGetAllUsersQuery } from "../../features/core/adminCoreApi";
+import UserActionsMenu from "../../components/UserActionsMenu";
+import SendNotificationModal from "./components/SendNotificationModal";
+import SuspendUserModal from "./components/SuspendUserModal";
+import DeleteUserModal from "../../components/DeleteUserModal";
+import ReactivateUserModal from "../../components/ReactivateUserModal";
 
 // List of plans
 const PLANS = [
@@ -47,6 +52,12 @@ const AllUsers = () => {
     status: "",
   });
   const [page, setPage] = useState(1);
+
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [openNotify, setOpenNotify] = useState(false);
+  const [openSuspend, setOpenSuspend] = useState(false);
+  const [openDelete, setOpenDelete] = useState(false);
+  const [openReactivate, setOpenReactivate] = useState(false);
 
   // ================= QUERY =================
   const { data, isFetching, isError } = useGetAllUsersQuery(
@@ -261,14 +272,54 @@ const AllUsers = () => {
                   <TableCell>{u.imagesUsed}</TableCell>
                   <TableCell>{u.credits}</TableCell>
                   <TableCell>
-                    <Button size="small" variant="outlined">
-                      Action
-                    </Button>
+                    <UserActionsMenu
+                      user={u}
+                      onDelete={(u) => {
+                        setSelectedUser(u);
+                        setOpenDelete(true);
+                      }}
+                      onSuspend={(u) => {
+                        setSelectedUser(u);
+                        setOpenSuspend(true);
+                      }}
+                      onReactivate={(u) => {
+                        setSelectedUser(u);
+                        setOpenReactivate(true);
+                      }}
+                      onNotify={(u) => {
+                        setSelectedUser(u);
+                        setOpenNotify(true);
+                      }}
+                    />
                   </TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
+
+          <SendNotificationModal
+            open={openNotify}
+            user={selectedUser}
+            onClose={() => setOpenNotify(false)}
+          />
+
+          <SuspendUserModal
+            open={openSuspend}
+            user={selectedUser}
+            onClose={() => setOpenSuspend(false)}
+          />
+
+          <DeleteUserModal
+            open={openDelete}
+            user={selectedUser}
+            onClose={() => setOpenDelete(false)}
+          />
+
+          <ReactivateUserModal
+            open={openReactivate}
+            user={selectedUser}
+            onClose={() => setOpenReactivate(false)}
+          />
         </TableContainer>
       )}
 

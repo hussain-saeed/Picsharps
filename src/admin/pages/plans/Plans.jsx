@@ -4,81 +4,119 @@ import {
   useUpdatePlanMutation,
 } from "../../features/core/adminCoreApi";
 import { toast } from "react-toastify";
+import { transformPlansBySlug } from "../../../utils/plansUtils";
 
 function Plans() {
+  const prevGroupRef = React.useRef(null);
+
   const { data, isFetching, isError } = useGetPlansQuery(undefined, {
     refetchOnMountOrArgChange: true,
   });
+
+  console.log("Fetched Plans Data:", data);
+
   const [updatePlan, { isLoading: isSaving }] = useUpdatePlanMutation();
 
-  const [selectedPlanId, setSelectedPlanId] = useState(null);
+  const [selectedGroupIndex, setSelectedGroupIndex] = useState(0);
+  const [selectedPeriod, setSelectedPeriod] = useState("monthly");
+
   const [formData, setFormData] = useState({
     name: "",
     description: "",
     creditsPerPeriod: 0,
     isActive: false,
   });
+
   const [originalFormData, setOriginalFormData] = useState(null);
 
-  // detect dirty
+  /* =============================
+      TRANSFORM BY SLUG
+  ============================== */
+
+  const transformedPlans = useMemo(() => {
+    return transformPlansBySlug(data?.data?.plans);
+  }, [data]);
+
+  /* =============================
+      INIT FORM
+  ============================== */
+
+  useEffect(() => {
+    if (!transformedPlans.length) return;
+
+    const currentGroup = transformedPlans[selectedGroupIndex];
+    const currentPlan = currentGroup?.[selectedPeriod];
+
+    if (!currentPlan) return;
+
+    const groupChanged = prevGroupRef.current !== selectedGroupIndex;
+
+    setFormData((prev) => ({
+      name: groupChanged ? currentGroup.name : prev.name, // 👈 فرقنا هنا
+      description: currentPlan.description,
+      creditsPerPeriod: currentPlan.creditsPerPeriod,
+      isActive: currentPlan.isActive,
+    }));
+
+    setOriginalFormData({
+      name: currentGroup.name,
+      description: currentPlan.description,
+      creditsPerPeriod: currentPlan.creditsPerPeriod,
+      isActive: currentPlan.isActive,
+    });
+
+    prevGroupRef.current = selectedGroupIndex;
+  }, [transformedPlans, selectedGroupIndex, selectedPeriod]);
+
+  /* =============================
+      DIRTY CHECK
+  ============================== */
+
   const isDirty = useMemo(() => {
     if (!originalFormData) return false;
     return JSON.stringify(formData) !== JSON.stringify(originalFormData);
   }, [formData, originalFormData]);
 
-  // init from API, preserve active plan if possible
-  useEffect(() => {
-    if (
-      data?.status === "success" &&
-      Array.isArray(data.data?.plans) &&
-      data.data.plans.length
-    ) {
-      // find current or default to first
-      const currentPlan =
-        data.data.plans.find((p) => p.id === selectedPlanId) ||
-        data.data.plans[0];
+  const activePlan = transformedPlans[selectedGroupIndex]?.[selectedPeriod];
 
-      const snapshot = {
-        name: currentPlan.name,
-        description: currentPlan.description,
-        creditsPerPeriod: currentPlan.creditsPerPeriod,
-        isActive: currentPlan.isActive,
-      };
+  /* =============================
+        HANDLERS
+  ============================== */
 
-      setSelectedPlanId(currentPlan.id);
-      setOriginalFormData(snapshot);
-      setFormData(snapshot);
+  const handleSave = async () => {
+    if (!activePlan?.slug) {
+      toast.error("Invalid plan selected");
+      return;
     }
-  }, [data]);
 
-  // has valid plans
-  const hasData = data?.status === "success" && Array.isArray(data.data?.plans);
-  const plans = hasData ? data.data.plans : [];
+    // جهز البودي
+    const body = { ...formData };
 
-  // swap second with third
-  const swappedPlans = [...plans];
-  if (swappedPlans.length >= 3) {
-    const temp = swappedPlans[1];
-    swappedPlans[1] = swappedPlans[2];
-    swappedPlans[2] = temp;
-  }
+    // لو الاسم نفس الاسم الأصلي، ما تبعتهوش
+    if (formData.name === originalFormData.name) {
+      delete body.name;
+    }
 
-  const activePlan = plans.find((p) => p.id === selectedPlanId);
+    try {
+      const res = await updatePlan({
+        code: activePlan.slug,
+        body,
+      }).unwrap();
 
-  const handleSelectPlan = (plan) => {
-    const snapshot = {
-      name: plan.name,
-      description: plan.description,
-      creditsPerPeriod: plan.creditsPerPeriod,
-      isActive: plan.isActive,
-    };
-    setSelectedPlanId(plan.id);
-    setOriginalFormData(snapshot);
-    setFormData(snapshot);
+      if (res.status === "success") {
+        toast.success("Plan updated successfully");
+        setOriginalFormData(formData);
+      } else {
+        toast.error("Something went wrong");
+      }
+    } catch (err) {
+      toast.error("Something went wrong");
+    }
   };
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
+
     setFormData((prev) => ({
       ...prev,
       [name]:
@@ -90,65 +128,42 @@ function Plans() {
     }));
   };
 
-  const handleSave = async () => {
-    if (!activePlan) return;
-
-    try {
-      const res = await updatePlan({
-        code: activePlan.slug,
-        body: formData,
-      }).unwrap();
-      if (res.status === "success") {
-        toast.success("Plan updated successfully");
-        setOriginalFormData(formData); // reset dirty
-      } else {
-        toast.error("Something went wrong"); // server rejected
-      }
-    } catch {
-      toast.error("Something went wrong"); // request failed
-    }
-  };
+  /* =============================
+        RENDER
+  ============================== */
 
   return (
     <div style={{ padding: "20px" }}>
-      {/* STATIC HEADER */}
       <h1 style={{ fontSize: "24px", fontWeight: 700, marginBottom: "20px" }}>
         Plan Management
       </h1>
 
-      {/* STATUS */}
       {isFetching && <div>Loading...</div>}
       {isError && <div>Error fetching plans</div>}
-      {!isFetching && !isError && !hasData && <div>Error fetching plans</div>}
-      {!isFetching && hasData && plans.length === 0 && <div>No plans yet</div>}
 
-      {/* PLAN BUTTONS */}
-      {!isFetching && hasData && plans.length > 0 && (
+      {!isFetching && transformedPlans.length > 0 && (
         <>
+          {/* PLAN GROUPS */}
           <div style={{ display: "flex", gap: "12px", marginBottom: "20px" }}>
-            {swappedPlans.map((plan) => (
+            {transformedPlans.map((group, index) => (
               <button
-                key={plan.id}
-                onClick={() => handleSelectPlan(plan)}
+                key={group.name}
+                onClick={() => {
+                  setSelectedGroupIndex(index);
+                  setSelectedPeriod("monthly"); // 👈 reset period on group change
+                }}
                 disabled={isSaving}
                 style={{
                   padding: "10px 18px",
                   borderRadius: "10px",
-                  cursor: isSaving ? "not-allowed" : "pointer",
                   border:
-                    selectedPlanId === plan.id
+                    selectedGroupIndex === index
                       ? "2px solid #4f46e5"
                       : "1px solid #ddd",
-                  background: selectedPlanId === plan.id ? "#eef2ff" : "#fff",
-                  fontWeight: selectedPlanId === plan.id ? 600 : 400,
-                  opacity: isSaving ? 0.6 : 1,
-                  transition: "all .2s",
+                  background: selectedGroupIndex === index ? "#eef2ff" : "#fff",
                 }}
               >
-                {plan.name}{" "}
-                <span className="text-sm font-normal text-gray-500">
-                  ({plan.slug})
-                </span>
+                {group.name}
               </button>
             ))}
           </div>
@@ -176,13 +191,33 @@ function Plans() {
                     padding: "10px 12px",
                     borderRadius: "8px",
                     border: "1px solid #ddd",
-                    outline: "none",
                     marginTop: "6px",
-                    transition: "0.2s",
                   }}
-                  onFocus={(e) => (e.target.style.border = "1px solid #4f46e5")}
-                  onBlur={(e) => (e.target.style.border = "1px solid #ddd")}
                 />
+              </div>
+
+              {/* PERIOD */}
+              <div
+                style={{ display: "flex", gap: "10px", marginBottom: "16px" }}
+              >
+                {["monthly", "yearly"].map((p) => (
+                  <button
+                    key={p}
+                    type="button"
+                    onClick={() => setSelectedPeriod(p)}
+                    style={{
+                      padding: "6px 14px",
+                      borderRadius: "999px",
+                      border:
+                        selectedPeriod === p
+                          ? "2px solid #16a34a"
+                          : "1px solid #ddd",
+                      background: selectedPeriod === p ? "#dcfce7" : "#fff",
+                    }}
+                  >
+                    {p.toUpperCase()}
+                  </button>
+                ))}
               </div>
 
               {/* Description */}
@@ -197,12 +232,8 @@ function Plans() {
                     padding: "10px 12px",
                     borderRadius: "8px",
                     border: "1px solid #ddd",
-                    outline: "none",
                     marginTop: "6px",
-                    transition: "0.2s",
                   }}
-                  onFocus={(e) => (e.target.style.border = "1px solid #4f46e5")}
-                  onBlur={(e) => (e.target.style.border = "1px solid #ddd")}
                 />
               </div>
 
@@ -219,24 +250,13 @@ function Plans() {
                     padding: "10px 12px",
                     borderRadius: "8px",
                     border: "1px solid #ddd",
-                    outline: "none",
                     marginTop: "6px",
-                    transition: "0.2s",
                   }}
-                  onFocus={(e) => (e.target.style.border = "1px solid #4f46e5")}
-                  onBlur={(e) => (e.target.style.border = "1px solid #ddd")}
                 />
               </div>
 
-              {/* Active Checkbox */}
-              <label
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "8px",
-                  marginTop: "8px",
-                }}
-              >
+              {/* Active */}
+              <label style={{ display: "flex", gap: "8px" }}>
                 <input
                   type="checkbox"
                   name="isActive"
@@ -246,9 +266,8 @@ function Plans() {
                 Active
               </label>
 
-              {/* ACTION BUTTONS */}
+              {/* ACTIONS */}
               <div style={{ marginTop: "20px", display: "flex", gap: "12px" }}>
-                {/* Save */}
                 <button
                   type="button"
                   disabled={!isDirty || isSaving}
@@ -257,17 +276,14 @@ function Plans() {
                     padding: "10px 18px",
                     borderRadius: "10px",
                     border: "none",
-                    background: !isDirty || isSaving ? "#d1d5db" : "#16a34a",
+                    background: "#16a34a",
                     color: "#fff",
-                    fontWeight: 600,
-                    cursor: !isDirty || isSaving ? "not-allowed" : "pointer",
-                    transition: "0.2s",
+                    opacity: !isDirty || isSaving ? 0.6 : 1,
                   }}
                 >
                   {isSaving ? "Saving..." : "Save"}
                 </button>
 
-                {/* Discard */}
                 <button
                   type="button"
                   disabled={!isDirty || isSaving}
@@ -276,11 +292,7 @@ function Plans() {
                     padding: "10px 18px",
                     borderRadius: "10px",
                     border: "1px solid #ddd",
-                    background: !isDirty || isSaving ? "#f3f4f6" : "#fff",
-                    fontWeight: 500,
-                    cursor: !isDirty || isSaving ? "not-allowed" : "pointer",
-                    opacity: !isDirty || isSaving ? 0.6 : 1,
-                    transition: "0.2s",
+                    background: "#fff",
                   }}
                 >
                   Discard

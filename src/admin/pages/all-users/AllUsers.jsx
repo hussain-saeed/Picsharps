@@ -1,4 +1,5 @@
 import { useState } from "react";
+import React, { useMemo } from "react";
 import {
   Box,
   TextField,
@@ -16,22 +17,16 @@ import {
   FormControl,
   Pagination,
 } from "@mui/material";
-import { useGetAllUsersQuery } from "../../features/core/adminCoreApi";
+import {
+  useGetAllUsersQuery,
+  useGetPlansQuery,
+} from "../../features/core/adminCoreApi";
 import UserActionsMenu from "../../components/UserActionsMenu";
 import SendNotificationModal from "./components/SendNotificationModal";
 import SuspendUserModal from "./components/SuspendUserModal";
 import DeleteUserModal from "../../components/DeleteUserModal";
 import ReactivateUserModal from "../../components/ReactivateUserModal";
-
-// List of plans
-const PLANS = [
-  { label: "All Plans", value: "" },
-  { label: "Free", value: "free" },
-  { label: "Pro Monthly", value: "pro-monthly" },
-  { label: "Pro Yearly", value: "pro-yearly" },
-  { label: "Premium Monthly", value: "premium-monthly" },
-  { label: "Premium Yearly", value: "premium-yearly" },
-];
+import { transformPlansBySlug } from "../../../utils/plansUtils";
 
 // List of status
 const STATUS = [
@@ -70,8 +65,25 @@ const AllUsers = () => {
     },
     { keepUnusedDataFor: 300 },
   );
-
   console.log("Fetched data:", data);
+
+  const { data: plansData } = useGetPlansQuery(undefined, {
+    refetchOnMountOrArgChange: true,
+  });
+  console.log("Fetched Plans Data:", plansData);
+
+  const transformedPlans = useMemo(() => {
+    if (plansData?.status !== "success") return [];
+    return transformPlansBySlug(plansData?.data?.plans);
+  }, [plansData]);
+
+  // List of plans
+  const PLANS = [
+    { label: "All Plans", value: "" },
+    { label: "Free", value: "free" },
+    { label: transformedPlans[0]?.name, value: transformedPlans[0]?.name },
+    { label: transformedPlans[1]?.name, value: transformedPlans[1]?.name },
+  ];
 
   // ================= DERIVED DATA =================
   const hasData = data?.status === "success" && Array.isArray(data.data?.users);
@@ -152,26 +164,30 @@ const AllUsers = () => {
           size="small"
         />
 
-        <FormControl size="small">
-          <Select
-            value={plan}
-            onChange={(e) => setPlan(e.target.value)}
-            size="small"
-            sx={{ minWidth: 140 }}
-            displayEmpty
-            renderValue={(selected) =>
-              selected === ""
-                ? "All Plans"
-                : PLANS.find((p) => p.value === selected)?.label
-            }
-          >
-            {PLANS.map((p) => (
-              <MenuItem key={p.value} value={p.value}>
-                {p.label}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+        {plansData?.status !== "success" ? (
+          ""
+        ) : (
+          <FormControl size="small">
+            <Select
+              value={plan}
+              onChange={(e) => setPlan(e.target.value)}
+              size="small"
+              sx={{ minWidth: 140 }}
+              displayEmpty
+              renderValue={(selected) =>
+                selected === ""
+                  ? "All Plans"
+                  : PLANS.find((p) => p.value === selected)?.label
+              }
+            >
+              {PLANS.map((p) => (
+                <MenuItem key={p.value} value={p.value}>
+                  {p.label}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        )}
 
         <FormControl size="small">
           <Select

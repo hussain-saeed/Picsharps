@@ -9,7 +9,7 @@ import { transformPlansBySlug } from "../../../utils/plansUtils";
 function Plans() {
   const prevGroupRef = React.useRef(null);
 
-  const { data, isFetching, isError } = useGetPlansQuery(undefined, {
+  const { data, isFetching } = useGetPlansQuery(undefined, {
     refetchOnMountOrArgChange: true,
   });
 
@@ -34,6 +34,7 @@ function Plans() {
   ============================== */
 
   const transformedPlans = useMemo(() => {
+    if (data?.status !== "success") return [];
     return transformPlansBySlug(data?.data?.plans);
   }, [data]);
 
@@ -139,7 +140,9 @@ function Plans() {
       </h1>
 
       {isFetching && <div>Loading...</div>}
-      {isError && <div>Error fetching plans</div>}
+      {!isFetching && data?.status !== "success" && (
+        <div>Error fetching plans</div>
+      )}
 
       {!isFetching && transformedPlans.length > 0 && (
         <>

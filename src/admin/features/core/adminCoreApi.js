@@ -125,7 +125,7 @@ export const adminCoreApi = createApi({
         method: "PATCH",
         body,
       }),
-      invalidatesTags: ["Plans"],
+      invalidatesTags: ["Plans", "AllUsers"],
     }),
 
     // endpoint to get settings

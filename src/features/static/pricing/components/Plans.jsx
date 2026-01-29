@@ -202,6 +202,18 @@ export default function Plans({ transformedPlans }) {
 
         const data = await res.json();
 
+        if (
+          data.status === "fail" &&
+          data.message.includes("Plan is not active")
+        ) {
+          setIsCheckoutLoading(false);
+          toast.error(
+            t[
+              "This plan is temporarily unavailable for the selected subscription period!"
+            ],
+          );
+          return;
+        }
         if (!res.ok || !data?.data?.url) {
           setIsCheckoutLoading(false);
           toast.error(t["Something Went Wrong!"]);

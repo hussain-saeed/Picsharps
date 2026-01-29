@@ -1,15 +1,6 @@
 import { useEffect, useState } from "react";
 import { useGetRecentActivityQuery } from "../../../features/core/adminCoreApi";
 
-const EVENT_TYPE_MAP = {
-  USER_LOGGED_IN: { label: "Login", color: "#3b82f6" },
-  IMAGE_UPLOADED: { label: "Upload", color: "#3b82f6" },
-  SUBSCRIPTION_CREATED: { label: "Subscription", color: "#22c55e" },
-  TOOL_RUN: { label: "Processing", color: "#3b82f6" },
-  USER_SIGNED_UP: { label: "Register", color: "#3b82f6" },
-  USER_DELETED: { label: "Deletion", color: "#ef4444" },
-};
-
 function RecentActivities() {
   const LIMIT = 5;
 

@@ -76,7 +76,8 @@ function Subscriptions({ data, billings }) {
               }}
               className="font-bold text-xl mb-2"
             >
-              {t[data?.data?.profile?.lastSubscription?.plan?.slug]}{" "}
+              {data?.data?.profile?.lastSubscription?.plan?.name}{" "}
+              {data?.data?.profile?.lastSubscription?.plan?.billingPeriod}
               {data?.data?.profile?.lastSubscription?.status === "ACTIVE" ? (
                 <span
                   className={`font-semibold text-[#00c853] italic ${
@@ -100,16 +101,22 @@ function Subscriptions({ data, billings }) {
 
             <div className="block w-full h-4 sm:hidden border-dashed border-t mt-4 border-gray-400"></div>
 
-            {<p
-              className="font-semibold text-md mb-2"
-              style={{
-                color:
-                  data?.data?.profile?.creditsBalance == 0 || data?.data?.profile?.lastSubscription?.status !== "ACTIVE" ? "red" : "#00c853",
-              }}
-            >
-              {data?.data?.profile?.creditsBalance} {t["credits remaining of"]}{" "}
-              {data?.data?.profile?.lastSubscription?.plan?.creditsPerPeriod}
-            </p>}
+            {
+              <p
+                className="font-semibold text-md mb-2"
+                style={{
+                  color:
+                    data?.data?.profile?.creditsBalance == 0 ||
+                    data?.data?.profile?.lastSubscription?.status !== "ACTIVE"
+                      ? "red"
+                      : "#00c853",
+                }}
+              >
+                {data?.data?.profile?.creditsBalance}{" "}
+                {t["credits remaining of"]}{" "}
+                {data?.data?.profile?.lastSubscription?.plan?.creditsPerPeriod}
+              </p>
+            }
 
             <div className="block w-full h-4 sm:hidden border-dashed border-t mt-4 border-gray-400"></div>
 
@@ -120,7 +127,7 @@ function Subscriptions({ data, billings }) {
                 style={{ fontSize: "15px" }}
               >
                 {new Date(
-                  data?.data?.profile?.lastSubscription?.currentPeriodStart
+                  data?.data?.profile?.lastSubscription?.currentPeriodStart,
                 ).toLocaleDateString(
                   localStorage.getItem("language").slice(0, 2).toLowerCase() ||
                     "en",
@@ -130,7 +137,7 @@ function Subscriptions({ data, billings }) {
                     day: "numeric",
                     hour: "2-digit",
                     minute: "2-digit",
-                  }
+                  },
                 )}
               </span>
             </p>
@@ -144,7 +151,7 @@ function Subscriptions({ data, billings }) {
                 style={{ fontSize: "15px" }}
               >
                 {new Date(
-                  data?.data?.profile?.lastSubscription?.currentPeriodEnd
+                  data?.data?.profile?.lastSubscription?.currentPeriodEnd,
                 ).toLocaleDateString(
                   localStorage.getItem("language").slice(0, 2).toLowerCase(),
                   {
@@ -153,7 +160,7 @@ function Subscriptions({ data, billings }) {
                     day: "numeric",
                     hour: "2-digit",
                     minute: "2-digit",
-                  }
+                  },
                 )}
               </span>
             </p>
@@ -208,7 +215,7 @@ function Subscriptions({ data, billings }) {
                           year: "numeric",
                           month: "long",
                           day: "numeric",
-                        }
+                        },
                       )}
                     </p>
                   </div>
@@ -250,7 +257,7 @@ function Subscriptions({ data, billings }) {
                 <button
                   onClick={() =>
                     setVisibleCount((prev) =>
-                      Math.min(prev + 4, billings.data.items.length)
+                      Math.min(prev + 4, billings.data.items.length),
                     )
                   }
                   disabled={visibleCount >= billings.data.items.length}

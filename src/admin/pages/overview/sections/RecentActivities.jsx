@@ -33,6 +33,7 @@ function RecentActivities() {
 
   // Determine if response is valid based on backend status
   const hasData = data?.status === "success" && Array.isArray(data.data?.data);
+  console.log(data);
 
   // Sync response
   useEffect(() => {
@@ -130,7 +131,6 @@ function RecentActivities() {
       {hasData && items.length > 0 && (
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
           {items.map((item) => {
-            const badge = EVENT_TYPE_MAP[item.type];
             const userInfo = normalizeUserInfo(item);
 
             return (
@@ -173,11 +173,14 @@ function RecentActivities() {
                     }}
                   >
                     <span>{userInfo.name}</span>
-                    {userInfo.email && (
+                    {item.type === "USER_DELETED" ? (
                       <div style={{ fontSize: 12, color: "#888" }}>
-                        ({userInfo.email})
+                        ({item.metadata.originalEmail})
                       </div>
+                    ) : (
+                      ""
                     )}
+
                     <span style={{ color: "#555" }}>{item.action}</span>
                   </div>
 
@@ -192,35 +195,44 @@ function RecentActivities() {
                     }}
                   >
                     <span>{formatDate(item.time)}</span>
-                    {badge && (
-                      <span
-                        style={{
-                          background: badge.color,
-                          color: "#fff",
-                          padding: "2px 8px",
-                          borderRadius: 999,
-                          fontSize: 11,
-                          fontWeight: 600,
-                        }}
-                      >
-                        {badge.label}
-                      </span>
-                    )}
+                    <span
+                      style={{
+                        background: item.metadata.color || "orange",
+                        color: "#fff",
+                        padding: "2px 8px",
+                        borderRadius: 999,
+                        fontSize: 11,
+                        fontWeight: 600,
+                      }}
+                    >
+                      {item.type}
+                    </span>
                   </div>
 
-                  {(userInfo.reason || userInfo.details) && (
+                  {item.type === "USER_DELETED" ? (
                     <div style={{ marginTop: 6, fontSize: 12, color: "#555" }}>
-                      {userInfo.reason && (
-                        <div>
-                          <strong>Reason:</strong> {userInfo.reason}
-                        </div>
-                      )}
-                      {userInfo.details && (
-                        <div>
-                          <strong>Details:</strong> {userInfo.details}
-                        </div>
-                      )}
+                      <div>
+                        <strong>Reason:</strong> {item.metadata.reason}
+                      </div>
+                      <div>
+                        <strong>Details:</strong> {item.metadata.details}
+                      </div>
                     </div>
+                  ) : (
+                    ""
+                  )}
+
+                  {item.type === "USER_SUSPENDED" ? (
+                    <div style={{ marginTop: 6, fontSize: 12, color: "#555" }}>
+                      <div>
+                        <strong>Reason:</strong> {item.metadata.reason}
+                      </div>
+                      <div>
+                        <strong>Notes:</strong> {item.metadata.notes}
+                      </div>
+                    </div>
+                  ) : (
+                    ""
                   )}
                 </div>
               </div>

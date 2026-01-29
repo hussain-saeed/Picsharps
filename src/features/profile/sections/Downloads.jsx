@@ -52,7 +52,7 @@ const Downloads = ({ data }) => {
     return (
       <div className="flex items-center justify-center py-20">
         <div className="text-gray-500 text-xl font-semibold">
-          No images yet!
+          {t["No images yet!"]}
         </div>
       </div>
     );

@@ -80,6 +80,8 @@ export default function Plans({ transformedPlans }) {
     {
       fetchedDescMonthly: transformedPlans[0]?.monthly.description,
       fetchedDescYearly: transformedPlans[0]?.yearly.description,
+      monthlySlug: transformedPlans[0]?.monthly.slug,
+      yearlySlug: transformedPlans[0]?.yearly.slug,
       id: 2,
       hasBorder: true,
       border: "rgba(0, 176, 255, 1)",
@@ -123,6 +125,8 @@ export default function Plans({ transformedPlans }) {
     {
       fetchedDescMonthly: transformedPlans[1]?.monthly.description,
       fetchedDescYearly: transformedPlans[1]?.yearly.description,
+      monthlySlug: transformedPlans[1]?.monthly.slug,
+      yearlySlug: transformedPlans[1]?.yearly.slug,
       id: 3,
       hasBorder: false,
       border: "",
@@ -165,21 +169,13 @@ export default function Plans({ transformedPlans }) {
     },
   ];
 
-  const handlePlanClick = (planType) => {
+  const handlePlanClick = (passedSlug) => {
     if (isCheckoutLoading) return;
 
     requireLogin(async () => {
-      setClickedPlan(planType);
-
-      let slug = null;
-
-      if (planType === "Pro") {
-        slug = isYearly ? "pro-yearly" : "pro-monthly";
-      } else if (planType === "Premium") {
-        slug = isYearly ? "premium-yearly" : "premium-monthly";
-      }
-
-      setPlanSlug(slug);
+      setClickedPlan(passedSlug);
+      console.log(passedSlug);
+      setIsCheckoutLoading(true);
 
       try {
         setIsCheckoutLoading(true);
@@ -194,25 +190,23 @@ export default function Plans({ transformedPlans }) {
             },
             credentials: "include",
             body: JSON.stringify({
-              planSlug: slug,
+              planSlug: passedSlug,
             }),
           },
         );
 
         const data = await res.json();
 
-        if (!res.ok) {
+        if (!res.ok || !data?.data?.url) {
           setIsCheckoutLoading(false);
           toast.error(t["Something Went Wrong!"]);
           return;
         }
 
-        if (data?.data?.url) {
-          window.location.href = data.data.url;
-        }
+        window.location.href = data.data.url;
       } catch (error) {
-        toast.error(t["Something Went Wrong!"]);
         setIsCheckoutLoading(false);
+        toast.error(t["Something Went Wrong!"]);
       }
     });
   };
@@ -428,14 +422,20 @@ export default function Plans({ transformedPlans }) {
                   borderRadius: "15px",
                   cursor: isCheckoutLoading ? "not-allowed" : "pointer",
                   opacity:
-                    isCheckoutLoading && clickedPlan === plan.imageLabel
+                    isCheckoutLoading &&
+                    (clickedPlan === plan.yearlySlug ||
+                      clickedPlan === plan.monthlySlug)
                       ? 0.6
                       : 1,
                 }}
-                onClick={() => handlePlanClick(plan.imageLabel)}
+                onClick={() =>
+                  handlePlanClick(isYearly ? plan.yearlySlug : plan.monthlySlug)
+                }
                 disabled={isCheckoutLoading}
               >
-                {isCheckoutLoading && clickedPlan === plan.imageLabel
+                {isCheckoutLoading &&
+                (clickedPlan === plan.yearlySlug ||
+                  clickedPlan === plan.monthlySlug)
                   ? "Loading ..."
                   : plan.buttonText}
               </button>

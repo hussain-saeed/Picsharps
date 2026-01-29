@@ -29,7 +29,6 @@ export default function Plans({ transformedPlans }) {
   const isRTL = direction === "rtl";
   const t = translations[language] || translations["English"];
   const [isYearly, setIsYearly] = useState(false);
-  const [planSlug, setPlanSlug] = useState(null);
   const { requireLogin, accessToken } = useAuth();
   const [isCheckoutLoading, setIsCheckoutLoading] = useState(false);
   const [clickedPlan, setClickedPlan] = useState(null);
@@ -38,6 +37,8 @@ export default function Plans({ transformedPlans }) {
     {
       fetchedDescMonthly: ".",
       fetchedDescYearly: ".",
+      monthlycredits: 100,
+      yearlycredits: 100,
       id: 1,
       hasBorder: false,
       border: "",
@@ -82,6 +83,8 @@ export default function Plans({ transformedPlans }) {
       fetchedDescYearly: transformedPlans[0]?.yearly.description,
       monthlySlug: transformedPlans[0]?.monthly.slug,
       yearlySlug: transformedPlans[0]?.yearly.slug,
+      monthlycredits: transformedPlans[0]?.monthly.creditsPerPeriod,
+      yearlycredits: transformedPlans[0]?.yearly.creditsPerPeriod,
       id: 2,
       hasBorder: true,
       border: "rgba(0, 176, 255, 1)",
@@ -127,6 +130,8 @@ export default function Plans({ transformedPlans }) {
       fetchedDescYearly: transformedPlans[1]?.yearly.description,
       monthlySlug: transformedPlans[1]?.monthly.slug,
       yearlySlug: transformedPlans[1]?.yearly.slug,
+      monthlycredits: transformedPlans[1]?.monthly.creditsPerPeriod,
+      yearlycredits: transformedPlans[1]?.yearly.creditsPerPeriod,
       id: 3,
       hasBorder: false,
       border: "",
@@ -350,11 +355,11 @@ export default function Plans({ transformedPlans }) {
                 style={{
                   color: "rgba(154, 154, 154, 1)",
                   fontSize: "12px",
-                  marginBottom: "16px",
+                  marginBottom: "12px",
                 }}
               >
                 {isYearly ? (
-                  <div className="flex  gap-1.5">
+                  <div className="flex gap-1.5">
                     <span>{plan.smallTextYearly}</span>
                     <span style={{ color: "rgba(0, 200, 83, 1)" }}>
                       {plan.smallTextYearlyPlus}
@@ -364,6 +369,11 @@ export default function Plans({ transformedPlans }) {
                   plan.smallText
                 )}
               </div>
+
+              <span style={{ marginBottom: "16px" }} className="block">
+                {isYearly ? plan.yearlycredits : plan.monthlycredits}{" "}
+                {[t["credits"]]}
+              </span>
 
               <p
                 style={{

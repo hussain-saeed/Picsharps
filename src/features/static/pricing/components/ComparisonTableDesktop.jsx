@@ -66,7 +66,7 @@ export default function ComparisonTableDesktop({ data }) {
               fontWeight: "600",
             }}
           >
-            {t[col]}
+            {col}
           </div>
         ))}
       </div>

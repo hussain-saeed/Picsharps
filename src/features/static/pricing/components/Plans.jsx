@@ -1,9 +1,9 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { LanguageContext } from "../../../../context/LanguageContext";
 import { GiCheckMark } from "react-icons/gi";
 import { RxCross2 } from "react-icons/rx";
 import { useAuth } from "/src/features/auth/AuthProvider";
-import { BACKEND_URL } from "/src/api";
+import { BACKEND_URL } from "../../../../api";
 import { toast } from "react-toastify";
 
 import English from "/src/i18n/english.json";
@@ -24,7 +24,7 @@ const translations = {
   Indonesian,
 };
 
-export default function Pricing() {
+export default function Plans({ transformedPlans }) {
   const { language, direction } = useContext(LanguageContext);
   const isRTL = direction === "rtl";
   const t = translations[language] || translations["English"];
@@ -36,6 +36,8 @@ export default function Pricing() {
 
   const plans = [
     {
+      fetchedDescMonthly: ".",
+      fetchedDescYearly: ".",
       id: 1,
       hasBorder: false,
       border: "",
@@ -76,6 +78,8 @@ export default function Pricing() {
     },
 
     {
+      fetchedDescMonthly: transformedPlans[0]?.monthly.description,
+      fetchedDescYearly: transformedPlans[0]?.yearly.description,
       id: 2,
       hasBorder: true,
       border: "rgba(0, 176, 255, 1)",
@@ -85,7 +89,7 @@ export default function Pricing() {
       badgeColor: "white",
 
       image: "images/star-9.png",
-      imageLabel: "Pro",
+      imageLabel: transformedPlans[0]?.name,
 
       priceMonthly: 9.99,
       priceYearly: 7.99,
@@ -112,11 +116,13 @@ export default function Pricing() {
 
       buttonBg: "var(--gradient-color-2)",
       buttonColor: "white",
-      buttonText: "Start Pro Plan",
+      buttonText: `${t["Start Plan"]} ${transformedPlans[0]?.name}`,
       buttonBorder: "",
     },
 
     {
+      fetchedDescMonthly: transformedPlans[1]?.monthly.description,
+      fetchedDescYearly: transformedPlans[1]?.yearly.description,
       id: 3,
       hasBorder: false,
       border: "",
@@ -126,7 +132,7 @@ export default function Pricing() {
       badgeColor: "white",
 
       image: "images/star-10.png",
-      imageLabel: "Premium",
+      imageLabel: transformedPlans[1]?.name,
 
       priceMonthly: 19.99,
       priceYearly: 14.99,
@@ -154,7 +160,7 @@ export default function Pricing() {
 
       buttonBg: "rgba(0, 200, 83, 1)",
       buttonColor: "white",
-      buttonText: "Start Premium Plan",
+      buttonText: `${t["Start Plan"]} ${transformedPlans[1]?.name}`,
       buttonBorder: "",
     },
   ];
@@ -190,7 +196,7 @@ export default function Pricing() {
             body: JSON.stringify({
               planSlug: slug,
             }),
-          }
+          },
         );
 
         const data = await res.json();
@@ -242,8 +248,8 @@ export default function Pricing() {
                 isYearly && isRTL
                   ? "-translate-x-7"
                   : isYearly && !isRTL
-                  ? "translate-x-7"
-                  : ""
+                    ? "translate-x-7"
+                    : ""
               }`}
             />
           </button>
@@ -302,6 +308,11 @@ export default function Pricing() {
             </div>
 
             <div style={{ marginBottom: "40px" }}>
+              <span
+                className={`block mb-4 text-center ${indx === 0 ? "opacity-0" : ""} text-sm -mt-4 text-gray-400`}
+              >
+                {isYearly ? plan.fetchedDescYearly : plan.fetchedDescMonthly}
+              </span>
               <div className="flex items-center gap-3 mb-4">
                 <div
                   className="w-[50px] h-[50px] flex items-center justify-center"
@@ -313,7 +324,7 @@ export default function Pricing() {
                   <img src={plan.image} alt={plan.imageLabel} />
                 </div>
                 <span className="font-semibold text-[24px]">
-                  {t[plan.imageLabel]}
+                  {plan.imageLabel}
                 </span>
               </div>
 
@@ -426,7 +437,7 @@ export default function Pricing() {
               >
                 {isCheckoutLoading && clickedPlan === plan.imageLabel
                   ? "Loading ..."
-                  : t[plan.buttonText]}
+                  : plan.buttonText}
               </button>
             )}
           </div>

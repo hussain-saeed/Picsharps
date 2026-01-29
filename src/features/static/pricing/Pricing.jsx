@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { LanguageContext } from "../../../context/LanguageContext";
 import Header from "../../../components/Header";
 import Container from "../../../components/Container";
@@ -10,6 +10,9 @@ import FaqList from "./components/FaqList";
 import { Link } from "react-router-dom";
 import { FaLongArrowAltLeft, FaLongArrowAltRight } from "react-icons/fa";
 import Footer from "../../../components/Footer";
+import { BACKEND_URL } from "../../../api";
+import { transformPlansBySlug } from "../../../utils/plansUtils";
+import Loader from "../../../components/Loader";
 
 import English from "/src/i18n/english.json";
 import Arabic from "/src/i18n/arabic.json";
@@ -35,8 +38,37 @@ function Pricing() {
   const t = translations[language] || translations["English"];
   const [selectedFeature, setSelectedFeature] = useState(null);
 
+  const [loadingPlans, setLoadingPlans] = useState(true);
+  const [errorFetchingPlans, setErrorFetchingPlans] = useState(false);
+  const [transformedPlans, setTransformedPlans] = useState([]);
+  useEffect(() => {
+    const fetchPlans = async () => {
+      try {
+        setLoadingPlans(true);
+        const res = await fetch(`${BACKEND_URL}/plans`);
+        const data = await res.json();
+        if (data?.status === "success") {
+          setTransformedPlans(transformPlansBySlug(data?.data?.plans));
+          console.log(
+            "Transformed Plans:",
+            transformPlansBySlug(data?.data?.plans),
+          );
+        } else {
+          setErrorFetchingPlans(true);
+        }
+      } catch (err) {
+        setErrorFetchingPlans(true);
+      } finally {
+        setTimeout(() => {
+          setLoadingPlans(false);
+        }, 1900);
+      }
+    };
+    fetchPlans();
+  }, []);
+
   const data = {
-    columns: ["Free", "Pro", "Premium"],
+    columns: ["Free", transformedPlans[0]?.name, transformedPlans[1]?.name],
     features: [
       {
         section: "USAGE LIMITS",
@@ -235,8 +267,17 @@ function Pricing() {
                 }
               </p>
             </div>
-
-            <Plans />
+            {loadingPlans ? (
+              <div className="text-center -mt-8 pb-20">
+                <Loader />
+              </div>
+            ) : errorFetchingPlans ? (
+              <div className="text-center text-2xl font-semibold text-red-500 pb-20">
+                {t["Something went wrong while loading the plans!"]}
+              </div>
+            ) : (
+              <Plans transformedPlans={transformedPlans} />
+            )}
           </Container>
         </section>
 
@@ -271,21 +312,33 @@ function Pricing() {
                 </p>
               </div>
 
-              <div className="hidden lg:block">
-                <ComparisonTableDesktop data={data} />
-              </div>
+              {loadingPlans ? (
+                <div className="text-center -mt-8 pb-20">
+                  <Loader />
+                </div>
+              ) : errorFetchingPlans ? (
+                <div className="text-center text-2xl font-semibold text-red-500 pb-20">
+                  {t["Something went wrong while loading the plans!"]}
+                </div>
+              ) : (
+                <>
+                  <div className="hidden lg:block">
+                    <ComparisonTableDesktop data={data} />
+                  </div>
 
-              <div className="block lg:hidden">
-                <ComparisonTableMobile
-                  data={data}
-                  onSelectFeature={setSelectedFeature}
-                />
-              </div>
+                  <div className="block lg:hidden">
+                    <ComparisonTableMobile
+                      data={data}
+                      onSelectFeature={setSelectedFeature}
+                    />
+                  </div>
 
-              <FeatureModal
-                feature={selectedFeature}
-                onClose={() => setSelectedFeature(null)}
-              />
+                  <FeatureModal
+                    feature={selectedFeature}
+                    onClose={() => setSelectedFeature(null)}
+                  />
+                </>
+              )}
             </div>
           </Container>
         </section>

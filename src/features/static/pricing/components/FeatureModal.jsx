@@ -39,7 +39,7 @@ export default function FeatureModal({ feature, onClose }) {
       "
     >
       <div className="bg-white w-[90%] max-w-md rounded-xl p-6 shadow-lg relative">
-        <h2 className={`text-xl font-semibold mb-4`}>{feature.feature}</h2>
+        <h2 className={`text-xl font-semibold mb-4`}>{t[feature.feature]}</h2>
 
         <div className="mb-5">
           {Object.keys(feature.values).map((key, index) => (
@@ -56,7 +56,7 @@ export default function FeatureModal({ feature, onClose }) {
                   index === 1 ? "text-[#00BCA9]" : "text-gray-600"
                 }`}
               >
-                {t[key]}
+                {key}
               </span>
               <span
                 className={`font-semibold ${

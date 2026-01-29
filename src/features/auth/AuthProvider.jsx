@@ -121,6 +121,7 @@ export const AuthProvider = ({ children }) => {
       });
 
       const data = await res.json();
+      console.log(data);
 
       if (data.status === "success") {
         window.location.reload();
@@ -139,6 +140,12 @@ export const AuthProvider = ({ children }) => {
           data.message.includes("Invalid credentials")
         ) {
           toast.error(t["Invalid Credentials!"]);
+          setIsPopupActionLoading(false);
+          return;
+        }
+
+        if (data.message.includes("Account suspended")) {
+          toast.error(t["Account suspended!"]);
           setIsPopupActionLoading(false);
           return;
         }

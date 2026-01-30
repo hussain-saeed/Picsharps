@@ -19,7 +19,14 @@ function AdminBootstrap() {
       10 * 60 * 1000,
     );
 
-    return () => clearInterval(interval);
+    document.documentElement.style.height = "100%";
+    document.documentElement.style.backgroundColor = "rgb(100, 255, 255, 0.05)";
+
+    return () => {
+      clearInterval(interval);
+      document.documentElement.style.height = "";
+      document.documentElement.style.backgroundColor = "";
+    };
   }, []);
 
   return null;

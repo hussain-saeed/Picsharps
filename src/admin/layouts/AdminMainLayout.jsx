@@ -61,20 +61,24 @@ function AdminMainLayout() {
   const categories = ["DASHBOARD", "USER MANAGEMENT", "BILLING", "SETTINGS"];
   const activeLink = links.find((l) => l.path === location.pathname);
 
-  const SidebarContent = () => (
+  const SidebarContent = ({ closeSidebar }) => (
     // أضفنا h-screen و overflow-y-auto هنا لضمان سكرول داخلي نظيف
     <div className="flex flex-col h-screen py-6 text-white overflow-y-auto overflow-x-hidden custom-scrollbar">
-      <div className="px-7.5 mb-8 flex flex-col pb-8 border-b border-white/10 flex-shrink-0">
+      <div className="px-7.5 mb-8 flex flex-col shrink-0">
         <div className="text-2xl font-semibold tracking-tight flex items-center gap-2 mb-4">
-          <img src="/images/logo.png" alt="logo" className="w-8 h-8" />
+          <img src="/images/logo.png" alt="logo" />
           <span>Picsharps</span>
         </div>
-        <span className="text-xs text-gray-500 tracking-[0.2em] font-medium uppercase">
+        <span className="text-xs text-gray-500 tracking-[0.2em] font-medium">
           Admin Dashboard
         </span>
       </div>
 
-      <nav className="flex-1 px-4 space-y-6">
+      <div className="pl-4 pr-7 mb-8">
+        <div className="w-full h-1 border-b border-white/10"></div>
+      </div>
+
+      <nav className="flex-1 pl-4 pr-7 space-y-8">
         {categories.map((cat) => {
           const catLinks = links.filter(
             (l) =>
@@ -84,7 +88,7 @@ function AdminMainLayout() {
           if (catLinks.length === 0) return null;
           return (
             <div key={cat} className="space-y-2">
-              <h3 className="px-4 text-[10px] font-bold text-gray-500 uppercase tracking-widest">
+              <h3 className="px-5 text-[10px] font-bold text-gray-500 uppercase tracking-widest">
                 {cat}
               </h3>
               <ul className="space-y-1">
@@ -92,9 +96,10 @@ function AdminMainLayout() {
                   <li key={link.path}>
                     <NavLink
                       to={link.path}
+                      onClick={closeSidebar}
                       className={({ isActive }) => `
-                        flex items-center gap-3 px-4 py-3 rounded-lg transition-all
-                        ${isActive ? "bg-white/10 text-white border-l-4 border-[#00B0FF]" : "text-gray-400 hover:bg-white/5 hover:text-white border-l-4 border-transparent"}
+                        flex items-center gap-2 px-3.5 py-2.5 rounded-lg transition-all
+                        ${isActive ? "bg-white/10 text-white border-l-4 border-[#00B0FF] cursor-default" : "text-gray-400 hover:bg-white/5 hover:text-white border-l-4 border-transparent"}
                       `}
                     >
                       <span className="text-xl">{link.icon}</span>
@@ -106,17 +111,14 @@ function AdminMainLayout() {
             </div>
           );
         })}
-      </nav>
-
-      <div className="px-4 mt-auto pt-6 border-t border-white/10 flex-shrink-0">
         <button
           onClick={logoutAdmin}
-          className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-red-500 hover:bg-red-500/10 transition-all"
+          className="w-full flex items-center gap-2 px-5 py-3 rounded-lg text-red-500 hover:bg-red-500/10 transition-all -mt-6.5"
         >
-          <FiLogOut className="text-xl" />
+          <FiLogOut style={{ fontSize: "20px" }} />
           <span className="text-sm font-medium">Log Out</span>
         </button>
-      </div>
+      </nav>
     </div>
   );
 
@@ -156,7 +158,7 @@ function AdminMainLayout() {
             >
               <HiX />
             </button>
-            <SidebarContent />
+            <SidebarContent closeSidebar={() => setIsSidebarOpen(false)} />
           </div>
         </div>
 

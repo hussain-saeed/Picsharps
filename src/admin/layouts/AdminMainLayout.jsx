@@ -13,6 +13,7 @@ import { LuUserRoundX, LuUsersRound } from "react-icons/lu";
 import { FiLogOut } from "react-icons/fi";
 import { LiaUser } from "react-icons/lia";
 import { FullBleedSection } from "../components/FullBleedSection";
+import { TbLayoutSidebarLeftExpand } from "react-icons/tb";
 
 function AdminMainLayout() {
   const { roles } = useSelector((s) => s.adminAuth);
@@ -62,7 +63,7 @@ function AdminMainLayout() {
   const activeLink = links.find((l) => l.path === location.pathname);
 
   const SidebarContent = ({ closeSidebar }) => (
-    <div className="flex flex-col h-screen py-6 text-white overflow-y-auto overflow-x-hidden custom-scrollbar">
+    <div className="flex flex-col min-h-screen py-6 text-white overflow-y-auto overflow-x-hidden custom-scrollbar">
       <div className="px-7.5 mb-8 flex flex-col shrink-0">
         <div className="text-2xl font-semibold tracking-tight flex items-center gap-2 mb-4">
           <img src="/images/logo.png" alt="logo" />
@@ -124,37 +125,33 @@ function AdminMainLayout() {
   return (
     <>
       {/* ================= STICKY HEADER CONTAINER ================= */}
-      <div className="sticky top-0 z-30">
+      <div className="sticky top-0 z-30 shadow-md">
         <div className="overflow-x-hidden">
-          <div className="mx-auto max-w-[1900px] flex">
+          <div className="mx-auto max-w-[2000px] flex">
             {/* Sidebar Spacer */}
             <div className="hidden lg:block w-72 shrink-0" />
 
             {/* Header */}
             <main className="flex-1 min-w-0 px-8">
               <FullBleedSection bg="bg-white shadow-md border-b border-gray-100">
-                <div className="h-20 flex items-center justify-between">
-                  <div className="flex items-center gap-4">
-                    <button
-                      onClick={() => setIsSidebarOpen(true)}
-                      className="lg:hidden text-2xl text-gray-500 p-2 hover:bg-gray-100 rounded-lg"
-                    >
-                      <HiMenuAlt2 />
-                    </button>
-                    <h2 className="text-xl font-bold text-gray-800">
-                      {activeLink?.name || "Dashboard"}
-                    </h2>
-                  </div>
-                  <div className="flex items-center gap-3">
+                <div className="h-21.5 flex items-center justify-between">
+                  <button
+                    onClick={() => setIsSidebarOpen(true)}
+                    className="lg:hidden text-2xl text-gray-500 p-2 bg-gray-200 rounded-lg"
+                  >
+                    <HiMenuAlt2 />
+                  </button>
+                  <h2 className="text-2xl font-bold text-gray-800">
+                    {activeLink?.name || "Welcome Page"}
+                  </h2>
+                  <div className="items-center gap-4 hidden sm:flex">
                     <div
                       className="w-10 h-10 rounded-full flex items-center justify-center text-white text-2xl"
-                      style={{ background: "var(--griedant-color)" }}
+                      style={{ background: "var(--gradient-color)" }}
                     >
                       <LiaUser />
                     </div>
-                    <p className="hidden sm:block text-sm font-bold text-gray-900">
-                      Admin User
-                    </p>
+                    <p className="font-semibold text-gray-900">Admin user</p>
                   </div>
                 </div>
               </FullBleedSection>
@@ -165,11 +162,11 @@ function AdminMainLayout() {
 
       {/* ================= MAIN CONTENT CONTAINER ================= */}
       <div className="min-h-screen overflow-x-hidden">
-        <div className="mx-auto max-w-[1900px] flex">
+        <div className="mx-auto max-w-[2000px] flex">
           {/* ---------- Sidebar Desktop ---------- */}
           <aside className="hidden lg:block w-72 shrink-0">
             <div
-              className="fixed top-0 h-screen w-73 z-40 bg-[#1B2337]"
+              className="fixed top-0 min-h-screen w-73 z-40 bg-[#1B2337]"
               style={{
                 boxShadow: "-100vw 0 0 100vw #1B2337",
               }}

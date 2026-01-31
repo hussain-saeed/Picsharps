@@ -114,7 +114,7 @@ function Countries() {
   const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8884d8"];
 
   return (
-    <div style={{ marginTop: 20, padding: 20 }}>
+    <div>
       {/* Title */}
       <h2 style={{ marginBottom: 30 }}>Geographic Analytics</h2>
 

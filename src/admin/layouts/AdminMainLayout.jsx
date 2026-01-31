@@ -133,7 +133,7 @@ function AdminMainLayout() {
 
             {/* Header */}
             <main className="flex-1 min-w-0 px-8">
-              <FullBleedSection bg="bg-white shadow-md border-b border-gray-100">
+              <FullBleedSection bg="white">
                 <div className="h-21.5 flex items-center justify-between">
                   <button
                     onClick={() => setIsSidebarOpen(true)}
@@ -141,7 +141,7 @@ function AdminMainLayout() {
                   >
                     <HiMenuAlt2 />
                   </button>
-                  <h2 className="text-2xl font-bold text-gray-800">
+                  <h2 className="text-2xl font-bold text-black">
                     {activeLink?.name || "Welcome Page"}
                   </h2>
                   <div className="items-center gap-4 hidden sm:flex">
@@ -151,7 +151,7 @@ function AdminMainLayout() {
                     >
                       <LiaUser />
                     </div>
-                    <p className="font-semibold text-gray-900">Admin user</p>
+                    <p className="font-semibold text-black">Admin user</p>
                   </div>
                 </div>
               </FullBleedSection>

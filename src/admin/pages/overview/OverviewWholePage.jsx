@@ -3,15 +3,26 @@ import OverviewStatistics from "./sections/OverviewStatistics";
 import RecentActivities from "./sections/RecentActivities";
 import Revenue from "./sections/Revenue";
 import UserGrowth from "./sections/UserGrowth";
+import { FullBleedSection } from "../../components/FullBleedSection";
 
 function OverviewWholePage() {
   return (
     <>
-      <OverviewStatistics />
-      <Countries />
-      <UserGrowth />
-      <Revenue />
-      <RecentActivities />
+      <div className="pb-8">
+        <OverviewStatistics />
+      </div>
+      <FullBleedSection bg="rgb(255, 255, 255)">
+        <Countries />
+      </FullBleedSection>
+      <div>
+        <UserGrowth />
+      </div>
+      <div>
+        <Revenue />
+      </div>
+      <div>
+        <RecentActivities />
+      </div>
     </>
   );
 }

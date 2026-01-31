@@ -27,6 +27,8 @@
   --gradient-color-2: linear-gradient(141deg, #00b0ff 0%, #00c853 62.41%);
   --primary-section-color: rgba(221, 244, 255, 1);
   --secondary-section-color: rgb(245, 245, 245);
+  --admin-active-color: "#00B0FF";
+  --admin-positive-color: "rgba(0, 200, 83, 1)";
 }
 
 html {

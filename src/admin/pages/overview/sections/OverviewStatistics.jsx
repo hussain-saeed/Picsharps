@@ -8,29 +8,100 @@ import {
   FaArrowUp,
   FaArrowDown,
 } from "react-icons/fa";
+import { AiOutlineUser } from "react-icons/ai";
+import { CiCreditCard1 } from "react-icons/ci";
+import { FiDollarSign } from "react-icons/fi";
+import { TbReport } from "react-icons/tb";
+import { FaArrowTrendUp } from "react-icons/fa6";
+import { FaArrowTrendDown } from "react-icons/fa6";
+
+function StatCard({
+  title,
+  icon: Icon,
+  value,
+  subValue,
+  change,
+  label,
+  extraContent,
+  footerText,
+}) {
+  const boxStyle = {
+    borderRadius: 8,
+    padding: 20,
+    flex: 1,
+    display: "flex",
+    flexDirection: "column",
+    gap: 10,
+    minWidth: 200,
+    backgroundColor: "#fff",
+    boxShadow: "0 1px 4px rgba(0,0,0,0.1)",
+    position: "relative",
+  };
+
+  return (
+    <div style={boxStyle} className="min-h-auto sm:min-h-[246px]">
+      <div
+        className="absolute right-5 top-5 w-12 h-12 rounded-xl flex justify-center items-center text-white text-3xl"
+        style={{ background: "var(--gradient-color)" }}
+      >
+        <Icon />
+      </div>
+
+      <span>{title}</span>
+
+      <div
+        style={{ fontSize: 28, fontWeight: "bold" }}
+        className={subValue ? "mb-4 flex flex-col" : "mb-4"}
+      >
+        {value}
+        {subValue && (
+          <span
+            style={{ fontSize: 14, fontWeight: 400 }}
+            className="text-gray-500"
+          >
+            {subValue}
+          </span>
+        )}
+      </div>
+
+      {change !== undefined && <ChangeIndicator value={change} label={label} />}
+
+      {footerText && (
+        <div style={{ fontSize: 14 }} className="text-gray-500">
+          {footerText}
+        </div>
+      )}
+
+      {extraContent}
+    </div>
+  );
+}
 
 function ChangeIndicator({ value, label }) {
   if (value == null) return null;
 
   const isPositive = value >= 0;
-  const ArrowIcon = isPositive ? FaArrowUp : FaArrowDown;
+  const ArrowIcon = isPositive ? FaArrowTrendUp : FaArrowTrendDown;
   const displayValue = isPositive && value > 0 ? `+${value}` : value;
-
-  const color = isPositive ? "green" : "red";
-
   return (
     <div
       style={{
-        color,
+        color: isPositive ? "rgba(0, 200, 83, 1)" : "red",
         display: "flex",
         alignItems: "center",
         gap: 5,
-        fontWeight: 500,
       }}
     >
-      <ArrowIcon />
-      <span>{displayValue}%</span>
-      {label && <span style={{ fontWeight: 400, marginLeft: 5 }}>{label}</span>}
+      <ArrowIcon style={{ fontSize: "19px" }} />
+      <span className="font-semibold">{displayValue}%</span>
+      {label && (
+        <span
+          style={{ fontSize: "14px", marginLeft: 5 }}
+          className="text-gray-500"
+        >
+          {label}
+        </span>
+      )}
     </div>
   );
 }
@@ -52,88 +123,53 @@ function OverviewStatistics() {
     return <div>Something went wrong while fetching statistics.</div>;
   if (hasData && !stats) return <div>No data yet</div>;
 
-  const boxStyle = {
-    border: "1px solid #ddd",
-    borderRadius: 8,
-    padding: 20,
-    flex: 1,
-    display: "flex",
-    flexDirection: "column",
-    gap: 10,
-    minWidth: 200,
-    backgroundColor: "#fff",
-    boxShadow: "0 1px 4px rgba(0,0,0,0.1)",
-  };
-
   return (
-    <div style={{ display: "flex", gap: 20, flexWrap: "wrap", marginTop: 20 }}>
-      {/* Total Users */}
-      <div style={boxStyle}>
-        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <FaUser size={24} />
-          <span>Total Users</span>
-        </div>
-        <div style={{ fontSize: 28, fontWeight: "bold" }}>
-          {stats.users?.total ?? "-"}
-        </div>
-        <ChangeIndicator
-          value={stats.users?.change}
-          label={stats.users?.label}
-        />
-      </div>
+    <div className="grid sm:grid-cols-2 xl:grid-cols-4 gap-4.5">
+      <StatCard
+        title="Total Users"
+        icon={AiOutlineUser}
+        value={stats.users?.total ?? "-"}
+        change={stats.users?.change}
+        label={stats.users?.label}
+      />
 
-      {/* Active Subscriptions */}
-      <div style={boxStyle}>
-        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <FaCreditCard size={24} />
-          <span>Active Subscriptions</span>
-        </div>
-        <div style={{ fontSize: 28, fontWeight: "bold" }}>
-          {stats.subscriptions?.total ?? "-"}
-        </div>
-        <ChangeIndicator value={stats.subscriptions?.change} />
-        {stats.subscriptions?.breakdown?.length > 0 && (
-          <div style={{ marginTop: 5 }}>
-            {stats.subscriptions.breakdown.map((b, idx) => (
-              <div key={idx} style={{ fontSize: 14 }}>
-                {b.name}: {b.count}
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
+      <StatCard
+        title="Active Subscriptions"
+        icon={CiCreditCard1}
+        value={stats.subscriptions?.total ?? "-"}
+        change={stats.subscriptions?.change}
+        extraContent={
+          stats.subscriptions?.breakdown?.length > 0 && (
+            <div style={{ marginTop: 5 }}>
+              {stats.subscriptions.breakdown.map((b, idx) => (
+                <div
+                  key={idx}
+                  style={{ fontSize: 14 }}
+                  className="text-gray-500"
+                >
+                  {b.name}: {b.count}
+                </div>
+              ))}
+            </div>
+          )
+        }
+      />
 
-      {/* Total Revenue */}
-      <div style={boxStyle}>
-        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <FaDollarSign size={24} />
-          <span>Total Revenue</span>
-        </div>
-        <div style={{ fontSize: 28, fontWeight: "bold" }}>
-          ${stats.revenue?.totalAllTime ?? "-"}{" "}
-          <span style={{ fontSize: 14, fontWeight: 400 }}>
-            (Current Month: ${stats.revenue?.currentMonth ?? "-"})
-          </span>
-        </div>
-        <ChangeIndicator
-          value={stats.revenue?.change}
-          label={stats.revenue?.label}
-        />
-      </div>
+      <StatCard
+        title="Total Revenue"
+        icon={FiDollarSign}
+        value={`$${stats.revenue?.totalAllTime ?? "-"}`}
+        subValue={`Current Month: $${stats.revenue?.currentMonth ?? "-"}`}
+        change={stats.revenue?.change}
+        label={stats.revenue?.label}
+      />
 
-      {/* Daily Operations */}
-      <div style={boxStyle}>
-        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <FaTasks size={24} />
-          <span>Daily Operations</span>
-        </div>
-        <div style={{ fontSize: 28, fontWeight: "bold" }}>
-          {stats.operations?.total ?? "-"}
-        </div>
-        <div style={{ fontSize: 14, fontWeight: 400 }}>
-          {stats.operations?.label}
-        </div>
-      </div>
+      <StatCard
+        title="Daily Operations"
+        icon={TbReport}
+        value={stats.operations?.total ?? "-"}
+        footerText={stats.operations?.label}
+      />
     </div>
   );
 }

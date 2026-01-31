@@ -199,7 +199,7 @@ function AdminMainLayout() {
           </div>
 
           {/* ---------- Main Content ---------- */}
-          <main className="flex-1 min-w-0 px-8">
+          <main className="flex-1 min-w-0 p-8">
             <Outlet />
           </main>
         </div>

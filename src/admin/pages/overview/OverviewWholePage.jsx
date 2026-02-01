@@ -8,18 +8,18 @@ import { FullBleedSection } from "../../components/FullBleedSection";
 function OverviewWholePage() {
   return (
     <>
-      <div className="pb-8">
+      <div className="pt-8 pb-16">
         <OverviewStatistics />
       </div>
-      <FullBleedSection bg="rgb(255, 255, 255)" className="pt-4 sm:pb-12">
+      <FullBleedSection bg="rgb(255, 255, 255)" className="pt-12 sm:pb-18">
         <Countries />
       </FullBleedSection>
-      <div>
+      <div className="pt-12 pb-16">
         <UserGrowth />
       </div>
-      <div>
+      <FullBleedSection bg="rgb(255, 255, 255)" className="pt-12 sm:pb-18">
         <Revenue />
-      </div>
+      </FullBleedSection>
       <div>
         <RecentActivities />
       </div>

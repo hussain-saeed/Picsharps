@@ -182,7 +182,7 @@ function Countries() {
             <span>Total Logins Identified: {processedData.totalUsers}</span>
           </div>
 
-          <div className="flex gap-8 sm:gap-4 xl:flex-row flex-col items-start">
+          <div className="flex gap-8 xl:gap-4 xl:flex-row flex-col items-start">
             <div className="flex-1 min-w-[48%] w-full">
               <p className="pb-4 text-gray-500 font-semibold pl-1">
                 All Records
@@ -394,9 +394,6 @@ function Countries() {
                 </div>
               )}
             </div>
-
-            {/* Bar Chart Container with dynamic width */}
-            {/* هذا الزرار سيظهر فقط في الموبايل ويختفي في الشاشات الكبيرة */}
 
             <div className="relative">
               <ShowAsPDF onClick={downloadPDF} />

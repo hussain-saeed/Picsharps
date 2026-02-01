@@ -10,8 +10,22 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { useGetUserGrowthQuery } from "../../../features/core/adminCoreApi";
+import { useRef } from "react";
+import useExportPDF from "../../../hooks/useExportPDF"; // استيراد الهوك الجديد
+import ShowAsPDF from "../../../components/ShowAsPDF";
+import useGeneralModal from "../../../hooks/useGeneralModal";
+import GeneralModal from "../../../components/GeneralModal";
+import { FiUserPlus } from "react-icons/fi";
+import { HiUsers } from "react-icons/hi";
+import { LuCalendarDays } from "react-icons/lu";
+import { BsFileEarmarkBarGraph } from "react-icons/bs";
+import { LuSquareArrowOutUpRight } from "react-icons/lu";
+import { FiChevronLeft } from "react-icons/fi";
+import { FiChevronRight } from "react-icons/fi";
+import { IoMdTrendingDown } from "react-icons/io";
+import { IoMdTrendingUp } from "react-icons/io";
 
-const PERIODS = ["7d", "30d", "90d", "1y"];
+const PERIODS = ["7D", "30D", "90D", "1Y"];
 
 // Function to generate Y-axis ticks based on max value
 const generateYAxisTicks = (maxValue) => {
@@ -44,13 +58,30 @@ const formatDate = (dateString) => {
 };
 
 function UserGrowth() {
-  const [period, setPeriod] = useState("90d");
+  const [period, setPeriod] = useState("90D");
   const [currentPage, setCurrentPage] = useState(1);
-  const [recordsPerPage] = useState(10); // Maximum records to display in view
+  const [recordsPerPage] = useState(3); // Maximum records to display in view
+  const { isOpen, openModal, closeModal } = useGeneralModal();
+  const [selectedItem, setSelectedItem] = useState(null);
+  const handleOpenModal = (item) => {
+    setSelectedItem(item);
+    openModal();
+  };
 
-  const { data, isFetching, isError } = useGetUserGrowthQuery(period, {
-    refetchOnMountOrArgChange: true,
-  });
+  const chartRef = useRef(null);
+  const { downloadPDF: exportToPDF } = useExportPDF(); // استخدام الهوك
+
+  const downloadPDF = async () => {
+    // استدعاء اللوجيك المفصول مع تمرير الـ ref
+    await exportToPDF(chartRef);
+  };
+
+  const { data, isFetching, isError } = useGetUserGrowthQuery(
+    period.slice(0, -1) + period.slice(-1).toLowerCase(),
+    {
+      refetchOnMountOrArgChange: true,
+    },
+  );
 
   const hasData = data?.status === "success";
   const rawData = data?.data || [];
@@ -152,15 +183,21 @@ function UserGrowth() {
     // Use strict comparison to check if previousValue is null or undefined
     // 0 should be treated as a valid number, not as falsy
     if (previousValue === null || previousValue === undefined) {
-      return { color: "blue", icon: null };
+      return { color: "#00B0FF", icon: null };
     }
 
     if (currentValue > previousValue) {
-      return { color: "green", icon: "↑" };
+      return {
+        color: "rgba(0, 200, 83, 1)",
+        icon: <IoMdTrendingUp style={{ fontSize: "20px" }} />,
+      };
     } else if (currentValue < previousValue) {
-      return { color: "red", icon: "↓" };
+      return {
+        color: "red",
+        icon: <IoMdTrendingDown style={{ fontSize: "20px" }} />,
+      };
     } else {
-      return { color: "blue", icon: null };
+      return { color: "#00B0FF", icon: null };
     }
   };
 
@@ -187,31 +224,36 @@ function UserGrowth() {
   }, [period]);
 
   return (
-    <div style={{ marginTop: 20, padding: 20 }}>
+    <div className>
+      <h2 className="text-xl font-semibold mb-4">User Growth</h2>
+
       {/* Period Buttons */}
-      <div style={{ display: "flex", gap: 10, marginBottom: 15 }}>
+      <div style={{ display: "flex", gap: 5, marginBottom: 40 }}>
         {PERIODS.map((p) => {
           const isActive = p === period;
           const isDisabled = isFetching;
 
           return (
-            <button
-              key={p}
-              onClick={() => setPeriod(p)}
-              disabled={isDisabled}
-              style={{
-                padding: "8px 14px",
-                borderRadius: 6,
-                border: "1px solid #ddd",
-                cursor: isDisabled ? "not-allowed" : "pointer",
-                backgroundColor: isActive ? "#000" : "#fff",
-                color: isActive ? "#fff" : "#000",
-                fontWeight: 500,
-                opacity: isDisabled ? 0.6 : 1,
-              }}
-            >
-              {p}
-            </button>
+            <>
+              <button
+                key={p}
+                onClick={() => setPeriod(p)}
+                disabled={isDisabled}
+                style={{
+                  width: "75px",
+                  padding: "8px",
+                  borderRadius: 10,
+                  border: "1px solid #ddd",
+                  cursor: isDisabled ? "not-allowed" : "pointer",
+                  backgroundColor: isActive ? "#00B0FF" : "#fff",
+                  color: isActive ? "#fff" : "#000",
+                  fontWeight: 600,
+                  opacity: isDisabled ? 0.6 : 1,
+                }}
+              >
+                {p}
+              </button>
+            </>
           );
         })}
       </div>
@@ -226,284 +268,325 @@ function UserGrowth() {
       {/* Chart */}
       {hasData && !isFetching && processedData.length > 0 && (
         <>
-          <ResponsiveContainer width="100%" height={400}>
-            <LineChart
-              data={processedData}
-              margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
-            >
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis
-                dataKey="formattedDate"
-                ticks={xAxisTicks.map((date) => {
-                  const item = processedData.find((d) => d.date === date);
-                  return item ? item.formattedDate : date;
-                })}
-                tick={{ fontSize: 12 }}
-                interval={0}
-              />
-              <YAxis
-                domain={[0, "auto"]}
-                ticks={yAxisTicks}
-                tick={{ fontSize: 12 }}
-              />
-              <Tooltip
-                formatter={(value, name) => {
-                  const labels = {
-                    totalUsers: "Total Users",
-                    newSignups: "New Signups",
-                    activeUsers: "Active Users",
-                  };
-                  return [value, labels[name] || name];
-                }}
-                labelFormatter={(label) => `Date: ${label}`}
-              />
-              <Legend />
+          {/* الحاوية الخارجية للتحكم في التمرير */}
+          <div className="relative">
+            {/* زر التحميل يرسل الـ ref للفانكشن */}
+            <ShowAsPDF onClick={() => downloadPDF(chartRef)} breakP="lg" />
 
-              {/* Lines */}
-              <Line
-                type="monotone"
-                dataKey="totalUsers"
-                stroke="#8884d8"
-                strokeWidth={2}
-                dot={{ r: 3 }}
-                activeDot={{ r: 6 }}
-                name="Total Users"
-              />
-              <Line
-                type="monotone"
-                dataKey="newSignups"
-                stroke="#82ca9d"
-                strokeWidth={2}
-                dot={{ r: 3 }}
-                activeDot={{ r: 6 }}
-                name="New Signups"
-              />
-              <Line
-                type="monotone"
-                dataKey="activeUsers"
-                stroke="#ff7300"
-                strokeWidth={2}
-                dot={{ r: 3 }}
-                activeDot={{ r: 6 }}
-                name="Active Users"
-              />
-            </LineChart>
-          </ResponsiveContainer>
+            {/* هذه الحاوية الخارجية تمنع الـ Scroll في الصفحة وتسمح للشارت بالخروج */}
+            <div style={{ width: "100%", overflow: "hidden" }}>
+              <div
+                ref={chartRef}
+                style={{
+                  display: "block",
+                }}
+                className="p-4 pb-12 lg:p-0 w-[1800px] lg:w-[103%]"
+              >
+                <div
+                  style={{ height: 400, width: "100%", marginLeft: "-40px" }}
+                >
+                  <ResponsiveContainer
+                    width="100%" // سيأخذ الـ 100% من الـ 1200px
+                    height="100%"
+                    accessibilityLayer={false}
+                  >
+                    <LineChart
+                      accessibilityLayer={false}
+                      data={processedData}
+                      margin={{ right: 50, left: 20, top: 20 }}
+                    >
+                      <CartesianGrid
+                        strokeDasharray="3 3"
+                        accessibilityLayer={false}
+                      />
+                      <XAxis
+                        accessibilityLayer={false}
+                        dataKey="formattedDate"
+                        ticks={xAxisTicks.map((date) => {
+                          const item = processedData.find(
+                            (d) => d.date === date,
+                          );
+                          return item ? item.formattedDate : date;
+                        })}
+                        tick={{ fontSize: 12 }}
+                        interval={0}
+                      />
+                      <YAxis
+                        accessibilityLayer={false}
+                        domain={[0, "auto"]}
+                        ticks={yAxisTicks}
+                        tick={{ fontSize: 12 }}
+                      />
+                      <Tooltip
+                        accessibilityLayer={false}
+                        formatter={(value, name) => {
+                          const labels = {
+                            totalUsers: "Total Users",
+                            newSignups: "New Signups",
+                            activeUsers: "Active Users",
+                          };
+                          return [value, labels[name] || name];
+                        }}
+                        labelFormatter={(label) => `Date: ${label}`}
+                      />
+                      <Legend />
+                      <Line
+                        accessibilityLayer={false}
+                        type="monotone"
+                        dataKey="totalUsers"
+                        stroke="#8884d8"
+                        strokeWidth={2}
+                        dot={{ r: 3 }}
+                        activeDot={{ r: 6 }}
+                        name="Total Users"
+                      />
+                      <Line
+                        accessibilityLayer={false}
+                        type="monotone"
+                        dataKey="newSignups"
+                        stroke="#82ca9d"
+                        strokeWidth={2}
+                        dot={{ r: 3 }}
+                        activeDot={{ r: 6 }}
+                        name="New Signups"
+                      />
+                      <Line
+                        accessibilityLayer={false}
+                        type="monotone"
+                        dataKey="activeUsers"
+                        stroke="#ff7300"
+                        strokeWidth={2}
+                        dot={{ r: 3 }}
+                        activeDot={{ r: 6 }}
+                        name="Active Users"
+                      />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
+            </div>
+          </div>
 
           {/* Table Section */}
           <div style={{ marginTop: 40 }}>
-            <h3>User Growth Data</h3>
-
             {formattedRawData.length > 0 ? (
               <>
-                {/* Data Table */}
-                <div style={{ overflowX: "auto", marginTop: 20 }}>
-                  <table style={{ width: "100%", borderCollapse: "collapse" }}>
-                    <thead>
-                      <tr style={{ borderBottom: "2px solid #ddd" }}>
-                        <th
-                          style={{
-                            textAlign: "left",
-                            padding: "12px",
-                            fontWeight: "bold",
-                          }}
-                        >
-                          Date
-                        </th>
-                        <th
-                          style={{
-                            textAlign: "left",
-                            padding: "12px",
-                            fontWeight: "bold",
-                          }}
-                        >
-                          Active Users
-                        </th>
-                        <th
-                          style={{
-                            textAlign: "left",
-                            padding: "12px",
-                            fontWeight: "bold",
-                          }}
-                        >
-                          New Signups
-                        </th>
-                        <th
-                          style={{
-                            textAlign: "left",
-                            padding: "12px",
-                            fontWeight: "bold",
-                          }}
-                        >
-                          Total Users
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {currentRecords.map((record, index) => {
-                        // Calculate global index in formattedRawData
-                        const globalIndex = indexOfFirstRecord + index;
+                {/* Data Table Container */}
+                <div className="overflow-x-auto rounded-xl shadow-lg mt-5">
+                  <div className="w-full overflow-hidden">
+                    <table className="w-full bg-white table-fixed sm:table-auto">
+                      <thead>
+                        <tr className="bg-linear-to-r from-[#00c853] to-[#00b0ff]">
+                          {/* عمود التاريخ: يأخذ مساحة أكبر في الموبايل */}
+                          <th className="px-3 md:pl-6 py-4 text-left w-2/3 md:w-auto">
+                            <div className="flex items-center gap-2 text-white font-semibold text-xs md:text-sm">
+                              <LuCalendarDays className="w-5 h-5 hidden md:block" />
+                              <span>Date</span>
+                            </div>
+                          </th>
 
-                        // Get previous day values for comparison (from the row above)
-                        const prevActiveUsers = getPreviousDayValue(
-                          globalIndex,
-                          "activeUsers",
-                        );
-                        const prevNewSignups = getPreviousDayValue(
-                          globalIndex,
-                          "newSignups",
-                        );
-                        const prevTotalUsers = getPreviousDayValue(
-                          globalIndex,
-                          "totalUsers",
-                        );
+                          {/* أعمدة البيانات: تختفي في الموبايل وتظهر من sm فأكبر */}
+                          <th className="px-5 py-4 text-left hidden md:table-cell">
+                            <div className="flex items-center gap-2 text-white font-semibold text-sm">
+                              <HiUsers className="w-5 h-5" />
+                              <span>Active Users</span>
+                            </div>
+                          </th>
+                          <th className="px-5 py-4 text-left hidden md:table-cell">
+                            <div className="flex items-center gap-2 text-white font-semibold text-sm">
+                              <FiUserPlus className="w-5 h-5" />
+                              <span>New Signups</span>
+                            </div>
+                          </th>
+                          <th className="px-5 py-4 text-left hidden md:table-cell">
+                            <div className="flex items-center gap-2 text-white font-semibold text-sm">
+                              <BsFileEarmarkBarGraph className="w-5 h-5" />
+                              <span>Total Users</span>
+                            </div>
+                          </th>
 
-                        // Determine indicators
-                        const activeUsersIndicator = getValueIndicator(
-                          record.activeUsers,
-                          prevActiveUsers,
-                          "activeUsers",
-                        );
-                        const newSignupsIndicator = getValueIndicator(
-                          record.newSignups,
-                          prevNewSignups,
-                          "newSignups",
-                        );
-                        const totalUsersIndicator = getValueIndicator(
-                          record.totalUsers,
-                          prevTotalUsers,
-                          "totalUsers",
-                        );
+                          {/* عمود زر التفاصيل للموبايل فقط */}
+                          <th className="px-3 py-4 md:hidden w-1/3"></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {currentRecords.map((record, index) => {
+                          const globalIndex = indexOfFirstRecord + index;
+                          // افتراض وجود ميثودز لجلب الـ Indicators كما في كودك
+                          const activeUsersIndicator = getValueIndicator(
+                            record.activeUsers,
+                            getPreviousDayValue(globalIndex, "activeUsers"),
+                            "activeUsers",
+                          );
+                          const newSignupsIndicator = getValueIndicator(
+                            record.newSignups,
+                            getPreviousDayValue(globalIndex, "newSignups"),
+                            "newSignups",
+                          );
+                          const totalUsersIndicator = getValueIndicator(
+                            record.totalUsers,
+                            getPreviousDayValue(globalIndex, "totalUsers"),
+                            "totalUsers",
+                          );
 
-                        return (
-                          <tr
-                            key={record.date}
-                            style={{ borderBottom: "1px solid #eee" }}
-                          >
-                            <td style={{ padding: "12px", minWidth: "120px" }}>
-                              {record.formattedDate}
-                            </td>
-                            <td style={{ padding: "12px", minWidth: "120px" }}>
-                              <div
-                                style={{
-                                  color: activeUsersIndicator.color,
-                                  display: "flex",
-                                  alignItems: "center",
-                                  gap: "6px",
-                                }}
-                              >
-                                <span>{record.activeUsers}</span>
-                                {activeUsersIndicator.icon && (
-                                  <span style={{ fontWeight: "bold" }}>
-                                    {activeUsersIndicator.icon}
-                                  </span>
-                                )}
-                              </div>
-                            </td>
-                            <td style={{ padding: "12px", minWidth: "120px" }}>
-                              <div
-                                style={{
-                                  color: newSignupsIndicator.color,
-                                  display: "flex",
-                                  alignItems: "center",
-                                  gap: "6px",
-                                }}
-                              >
-                                <span>{record.newSignups}</span>
-                                {newSignupsIndicator.icon && (
-                                  <span style={{ fontWeight: "bold" }}>
-                                    {newSignupsIndicator.icon}
-                                  </span>
-                                )}
-                              </div>
-                            </td>
-                            <td style={{ padding: "12px", minWidth: "120px" }}>
-                              <div
-                                style={{
-                                  color: totalUsersIndicator.color,
-                                  display: "flex",
-                                  alignItems: "center",
-                                  gap: "6px",
-                                }}
-                              >
-                                <span>{record.totalUsers}</span>
-                                {totalUsersIndicator.icon && (
-                                  <span style={{ fontWeight: "bold" }}>
-                                    {totalUsersIndicator.icon}
-                                  </span>
-                                )}
-                              </div>
-                            </td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
+                          return (
+                            <tr
+                              key={record.date}
+                              className={`
+                border-b border-gray-100 transition-all duration-200 hover:bg-[#ddf4ff]/30
+                ${index % 2 === 0 ? "bg-white" : "bg-gray-50/50"}
+              `}
+                            >
+                              <td className="px-3 md:pl-6 py-4">
+                                <span className="text-[13px] md:text-sm font-semibold text-gray-800">
+                                  {record.formattedDate}
+                                </span>
+                              </td>
+
+                              {/* البيانات للشاشات الكبيرة */}
+                              <td className="px-5 py-4 hidden md:table-cell">
+                                <div
+                                  className="flex items-center gap-2 text-md font-medium"
+                                  style={{ color: activeUsersIndicator.color }}
+                                >
+                                  {record.activeUsers}{" "}
+                                  {activeUsersIndicator.icon}
+                                </div>
+                              </td>
+                              <td className="px-5 py-4 hidden md:table-cell">
+                                <div
+                                  className="flex items-center gap-2 text-md font-medium"
+                                  style={{ color: newSignupsIndicator.color }}
+                                >
+                                  {record.newSignups} {newSignupsIndicator.icon}
+                                </div>
+                              </td>
+
+                              <td className="px-5 py-4 hidden md:table-cell">
+                                <div
+                                  className="flex items-center gap-2 text-md font-medium"
+                                  style={{ color: totalUsersIndicator.color }}
+                                >
+                                  {record.totalUsers} {totalUsersIndicator.icon}
+                                </div>
+                              </td>
+
+                              {/* زر المودال للموبايل فقط */}
+                              <td className="px-3 py-4 md:hidden">
+                                <button
+                                  onClick={() => handleOpenModal(record)} // تأكد من وجود الميثود لفتح المودال
+                                  className="flex items-center gap-1 text-[11px] font-bold text-[#00b0ff] cursor-pointer whitespace-nowrap"
+                                >
+                                  Details
+                                  <LuSquareArrowOutUpRight />
+                                </button>
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
 
-                {/* Pagination */}
+                {/* Pagination Section - Matches exactly your style */}
                 {formattedRawData.length > recordsPerPage && (
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      gap: "10px",
-                      marginTop: "20px",
-                    }}
-                  >
+                  <div className="flex justify-center lg:justify-end items-center gap-6 mt-6">
                     <button
                       onClick={() =>
                         setCurrentPage((prev) => Math.max(prev - 1, 1))
                       }
                       disabled={currentPage === 1 || isFetching}
-                      style={{
-                        padding: "6px 12px",
-                        border: "1px solid #ddd",
-                        borderRadius: "4px",
-                        backgroundColor: currentPage === 1 ? "#f5f5f5" : "#fff",
-                        cursor: currentPage === 1 ? "not-allowed" : "pointer",
-                        opacity: currentPage === 1 ? 0.6 : 1,
-                      }}
+                      className={`
+        group flex items-center gap-1 px-5 py-2.5 rounded-lg font-medium text-sm
+        transition-all duration-300 shadow-md
+        ${
+          currentPage === 1
+            ? "bg-gray-100 text-gray-400 cursor-not-allowed opacity-60"
+            : "text-white bg-linear-to-r from-[#00b0ff] to-[#00c853] hover:shadow-lg hover:scale-105 cursor-pointer"
+        }
+      `}
                     >
-                      Previous
+                      <FiChevronLeft
+                        className={`w-4 h-4 transition-transform duration-300 ${currentPage !== 1 ? "group-hover:-translate-x-1" : ""}`}
+                      />
+                      <span className="hidden sm:block">Previous</span>
                     </button>
 
-                    <span style={{ fontSize: "14px" }}>
-                      Page {currentPage} of {totalPages}
-                    </span>
+                    <div className="flex items-center gap-3 px-6 py-2.5 bg-gradient-to-r from-[#00c853]/10 to-[#00b0ff]/10 rounded-lg border border-[#00b0ff]/20">
+                      <span className="text-sm font-semibold text-gray-700">
+                        <span className="hidden sm:inline">Page</span>
+                        <span className="font-bold text-base mx-1">
+                          {currentPage}
+                        </span>
+                        of
+                        <span className="font-bold text-base mx-1">
+                          {totalPages}
+                        </span>
+                      </span>
+                    </div>
 
                     <button
                       onClick={() =>
                         setCurrentPage((prev) => Math.min(prev + 1, totalPages))
                       }
                       disabled={currentPage === totalPages || isFetching}
-                      style={{
-                        padding: "6px 12px",
-                        border: "1px solid #ddd",
-                        borderRadius: "4px",
-                        backgroundColor:
-                          currentPage === totalPages ? "#f5f5f5" : "#fff",
-                        cursor:
-                          currentPage === totalPages
-                            ? "not-allowed"
-                            : "pointer",
-                        opacity: currentPage === totalPages ? 0.6 : 1,
-                      }}
+                      className={`
+        group flex items-center gap-1 px-5 py-2.5 rounded-lg font-medium text-sm
+        transition-all duration-300 shadow-md
+        ${
+          currentPage === totalPages
+            ? "bg-gray-100 text-gray-400 cursor-not-allowed opacity-60"
+            : "text-white bg-linear-to-r from-[#00b0ff] to-[#00c853] hover:shadow-lg hover:scale-105 cursor-pointer"
+        }
+      `}
                     >
-                      Next
+                      <span className="hidden sm:block">Next</span>
+                      <FiChevronRight
+                        className={`w-4 h-4 transition-transform duration-300 ${currentPage !== totalPages ? "group-hover:translate-x-1" : ""}`}
+                      />
                     </button>
                   </div>
                 )}
 
-                {/* Show total records count */}
-                <div
-                  style={{ marginTop: "10px", fontSize: "14px", color: "#666" }}
-                >
-                  Showing {indexOfFirstRecord + 1} to{" "}
-                  {Math.min(indexOfLastRecord, formattedRawData.length)} of{" "}
-                  {formattedRawData.length} records
-                </div>
+                
+
+                {/* Modal Section - Same Layout */}
+                <GeneralModal isOpen={isOpen} onClose={closeModal}>
+                  {selectedItem && (
+                    <div className="text-left">
+                      <h2 className="font-bold text-lg border-b border-gray-400 pb-3 mb-3">
+                        {selectedItem.formattedDate}
+                      </h2>
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-1">
+                          <span className="text-gray-500 text-sm">
+                            Active Users:
+                          </span>
+                          <span className="font-semibold">
+                            {selectedItem.activeUsers}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <span className="text-gray-500 text-sm">
+                            New Signups:
+                          </span>
+                          <span className="font-semibold">
+                            {selectedItem.newSignups}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <span className="text-gray-500 text-sm">
+                            Total Users:
+                          </span>
+                          <span className="font-semibold">
+                            {selectedItem.totalUsers}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </GeneralModal>
               </>
             ) : (
               <div style={{ marginTop: 20 }}>No data available for table</div>

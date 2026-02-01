@@ -4,6 +4,9 @@ import {
   useUpdateSettingsMutation,
 } from "../../features/core/adminCoreApi";
 import { toast } from "react-toastify";
+import { IoCheckmarkCircle, IoCloseCircle } from "react-icons/io5"; // أيقونات شكلها مودرن
+import { IoCloseOutline } from "react-icons/io5";
+import { AiOutlineSave } from "react-icons/ai";
 
 function Settings() {
   // ================= QUERIES =================
@@ -66,10 +69,14 @@ function Settings() {
   };
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h1 style={{ fontSize: "24px", fontWeight: 700, marginBottom: "20px" }}>
-        System Settings
-      </h1>
+    <div
+      style={{ padding: "30px", border: "1px solid rgba(228, 228, 228, 1)" }}
+      className="bg-white w-full lg:max-w-[700px] rounded-2xl shadow-xl"
+    >
+      <div className="mb-10">
+        <h2 className="text-xl font-semibold ">General Settings</h2>
+        <p className="text-gray-500">Manage your application's basic information and preferences</p>
+      </div>
 
       {/* Loading / Error */}
       {isFetching && <div>Loading settings...</div>}
@@ -77,104 +84,83 @@ function Settings() {
       {!isFetching && !isError && !hasData && (
         <div>Error fetching settings</div>
       )}
-
       {/* Form */}
       {!isFetching && hasData && (
-        <form
-          style={{
-            maxWidth: "500px",
-            padding: "24px",
-            borderRadius: "14px",
-            background: "#fff",
-            boxShadow: "0 4px 20px rgba(0,0,0,.05)",
-          }}
-        >
-          {/* Site Name */}
-          <div style={{ marginBottom: "12px" }}>
-            <label>Site Name</label>
-            <input
-              name="siteName"
-              value={formData.siteName}
-              onChange={handleChange}
-              style={{
-                width: "100%",
-                padding: "10px 12px",
-                borderRadius: "8px",
-                border: "1px solid #ddd",
-                marginTop: "6px",
-              }}
-            />
-          </div>
+        <form onSubmit={(e) => e.preventDefault()}>
+          <div className="flex gap-6 flex-col md:flex-row mb-6">
+            <div className="w-full md:w-[50%]">
+              <label className="font-semibold block mb-2 text-[#374151]">
+                Site Name
+              </label>
+              <input
+                name="siteName"
+                value={formData.siteName}
+                onChange={handleChange}
+                className="w-full bg-[#F0F0F0] p-[10px_12px] rounded-lg outline-none focus:ring-2 focus:ring-[#00B0FF] transition-all"
+              />
+            </div>
 
-          {/* Support Email */}
-          <div style={{ marginBottom: "12px" }}>
-            <label>Support Email</label>
-            <input
-              name="emailSupport"
-              value={formData.emailSupport}
-              onChange={handleChange}
-              style={{
-                width: "100%",
-                padding: "10px 12px",
-                borderRadius: "8px",
-                border: "1px solid #ddd",
-                marginTop: "6px",
-              }}
-            />
+            {/* Support Email */}
+            <div className="w-full md:w-[50%]">
+              <label className="font-semibold block mb-2 text-[#374151]">
+                Support Email
+              </label>
+              <input
+                name="emailSupport"
+                value={formData.emailSupport}
+                onChange={handleChange}
+                className="w-full bg-[#F0F0F0] p-[10px_12px] rounded-lg outline-none focus:ring-2 focus:ring-[#00B0FF] transition-all"
+              />
+            </div>
           </div>
 
           {/* Company Name */}
-          <div style={{ marginBottom: "12px" }}>
-            <label>Company Name</label>
+          <div className="mb-6">
+            <label className="font-semibold block mb-2 text-[#374151]">
+              Company Name
+            </label>
             <input
               name="companyName"
               value={formData.companyName}
               onChange={handleChange}
-              style={{
-                width: "100%",
-                padding: "10px 12px",
-                borderRadius: "8px",
-                border: "1px solid #ddd",
-                marginTop: "6px",
-              }}
+              className="w-full md:w-[calc(50%-12px)] bg-[#F0F0F0] p-[10px_12px] rounded-lg outline-none focus:ring-2 focus:ring-[#00B0FF] focus:shadow-[0_0_8px_rgba(0,176,255,0.3)] transition-all"
             />
           </div>
 
-          {/* ACTION BUTTONS */}
-          <div style={{ marginTop: "20px", display: "flex", gap: "12px" }}>
-            <button
-              type="button"
-              disabled={!isDirty || isSaving}
-              onClick={handleSave}
-              style={{
-                padding: "10px 18px",
-                borderRadius: "10px",
-                border: "none",
-                background: !isDirty || isSaving ? "#d1d5db" : "#16a34a",
-                color: "#fff",
-                fontWeight: 600,
-                cursor: !isDirty || isSaving ? "not-allowed" : "pointer",
-              }}
-            >
-              {isSaving ? "Saving..." : "Save"}
-            </button>
-
+          {/* ACTION BUTTONS (Bottom Bar) */}
+          <div className="md:justify-between md:items-center flex md:flex-row flex-col items-end gap-3 pt-6">
             <button
               type="button"
               disabled={!isDirty || isSaving}
               onClick={handleDiscard}
               style={{
-                padding: "10px 18px",
+                padding: "12px 18px",
                 borderRadius: "10px",
                 border: "1px solid #ddd",
-                background: "#fff",
-                fontWeight: 500,
-                cursor: !isDirty || isSaving ? "not-allowed" : "pointer",
-                opacity: !isDirty || isSaving ? 0.6 : 1,
-                transition: "0.2s",
+                background: "rgb(240,240, 240)",
               }}
+              className="w-full sm:w-[220px] flex items-center justify-center gap-2 font-semibold hover:bg-gray-200 transition-colors disabled:opacity-50"
             >
-              Discard
+              <IoCloseOutline className="text-2xl" />
+              Discard Changes
+            </button>
+
+            <button
+              type="button"
+              disabled={!isDirty || isSaving}
+              onClick={handleSave}
+              style={{
+                padding: "12px 18px",
+                borderRadius: "10px",
+                border: "none",
+                background: "var(--gradient-color)",
+                color: "#fff",
+                opacity: !isDirty || isSaving ? 0.6 : 1,
+              }}
+              className="w-full sm:w-[220px] flex items-center justify-center gap-2 font-semibold hover:bg-gray-200 transition-colors disabled:opacity-50"
+            >
+              <AiOutlineSave className="text-2xl" />
+              {isSaving ? "Saving..." : "Save Changes"}
             </button>
           </div>
         </form>

@@ -259,10 +259,10 @@ function RecentActivities() {
             opacity: isLoadingMore ? 0.6 : 1,
             cursor: isLoadingMore ? "not-allowed" : "pointer",
           }}
-          className="rounded-sm text-white flex items-center gap-2"
+          className="rounded-md text-white flex items-center gap-2 shadow-2xl"
         >
           {isLoadingMore ? "Loading..." : "Load More"}
-          <IoReloadOutline/>
+          <IoReloadOutline />
         </button>
       )}
     </div>

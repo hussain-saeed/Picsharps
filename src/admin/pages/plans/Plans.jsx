@@ -5,6 +5,9 @@ import {
 } from "../../features/core/adminCoreApi";
 import { toast } from "react-toastify";
 import { transformPlansBySlug } from "../../../utils/plansUtils";
+import { IoCheckmarkCircle, IoCloseCircle } from "react-icons/io5"; // أيقونات شكلها مودرن
+import { IoCloseOutline } from "react-icons/io5";
+import { AiOutlineSave } from "react-icons/ai";
 
 function Plans() {
   const prevGroupRef = React.useRef(null);
@@ -134,10 +137,11 @@ function Plans() {
   ============================== */
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h1 style={{ fontSize: "24px", fontWeight: 700, marginBottom: "20px" }}>
-        Plan Management
-      </h1>
+    <div
+      style={{ padding: "30px", border: "1px solid rgba(228, 228, 228, 1)" }}
+      className="bg-white w-full lg:max-w-[700px] rounded-2xl shadow-xl"
+    >
+      <h2 className="text-xl font-semibold mb-4">Plan Management</h2>
 
       {isFetching && <div>Loading...</div>}
       {!isFetching && data?.status !== "success" && (
@@ -146,159 +150,228 @@ function Plans() {
 
       {!isFetching && transformedPlans.length > 0 && (
         <>
-          {/* PLAN GROUPS */}
-          <div style={{ display: "flex", gap: "12px", marginBottom: "20px" }}>
+          {/* 1. PLAN GROUPS (Top Controller) */}
+          <div
+            style={{
+              display: "flex",
+              gap: "6px",
+              marginBottom: "30px", // قللت المسافة شوية عشان السكاشن اللي جاية
+              background: "rgb(240,240, 240)",
+            }}
+            className="sm:w-fit p-1.5 rounded-xl shadow-sm"
+          >
             {transformedPlans.map((group, index) => (
               <button
                 key={group.name}
                 onClick={() => {
                   setSelectedGroupIndex(index);
-                  setSelectedPeriod("monthly"); // 👈 reset period on group change
+                  setSelectedPeriod("monthly");
                 }}
                 disabled={isSaving}
                 style={{
+                  color:
+                    selectedGroupIndex === index
+                      ? "black"
+                      : "rgb(125,125, 125)",
                   padding: "10px 18px",
                   borderRadius: "10px",
-                  border:
+                  background:
                     selectedGroupIndex === index
-                      ? "2px solid #4f46e5"
-                      : "1px solid #ddd",
-                  background: selectedGroupIndex === index ? "#eef2ff" : "#fff",
+                      ? "rgb(250,250, 250)"
+                      : "transparent",
                 }}
+                className="font-semibold w-[50%] sm:min-w-[120px] cursor-pointer transition-all"
               >
                 {group.name}
               </button>
             ))}
           </div>
 
-          {/* FORM */}
+          {/* FORM START */}
           {activePlan && (
-            <form
-              style={{
-                maxWidth: "440px",
-                padding: "24px",
-                borderRadius: "14px",
-                background: "#fff",
-                boxShadow: "0 4px 20px rgba(0,0,0,.05)",
-              }}
-            >
-              {/* Name */}
-              <div style={{ marginBottom: "12px" }}>
-                <label>Name</label>
+            <form onSubmit={(e) => e.preventDefault()}>
+              {/* 2. BASIC INFO SECTION */}
+              <div className="mb-6">
+                <label className="font-semibold block mb-2">Name</label>
                 <input
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
-                  style={{
-                    width: "100%",
-                    padding: "10px 12px",
-                    borderRadius: "8px",
-                    border: "1px solid #ddd",
-                    marginTop: "6px",
-                  }}
+                  className="w-full md:w-[calc(50%-12px)] bg-[#F0F0F0] p-[10px_12px] rounded-lg outline-none focus:ring-2 focus:ring-[#00B0FF] focus:shadow-[0_0_8px_rgba(0,176,255,0.3)] transition-all"
                 />
               </div>
 
-              {/* PERIOD */}
-              <div
-                style={{ display: "flex", gap: "10px", marginBottom: "16px" }}
-              >
-                {["monthly", "yearly"].map((p) => (
-                  <button
-                    key={p}
-                    type="button"
-                    onClick={() => setSelectedPeriod(p)}
-                    style={{
-                      padding: "6px 14px",
-                      borderRadius: "999px",
-                      border:
-                        selectedPeriod === p
-                          ? "2px solid #16a34a"
-                          : "1px solid #ddd",
-                      background: selectedPeriod === p ? "#dcfce7" : "#fff",
-                    }}
-                  >
-                    {p.toUpperCase()}
-                  </button>
-                ))}
-              </div>
-
-              {/* Description */}
-              <div style={{ marginBottom: "12px" }}>
-                <label>Description</label>
-                <input
-                  name="description"
-                  value={formData.description}
-                  onChange={handleChange}
+              {/* 3. PLAN DETAILS BOX (The Grouped Section) */}
+              <div className="bg-white border border-gray-200 rounded-2xl p-6 mb-10">
+                {/* Period Toggle inside the box */}
+                <div
                   style={{
-                    width: "100%",
-                    padding: "10px 12px",
-                    borderRadius: "8px",
-                    border: "1px solid #ddd",
-                    marginTop: "6px",
+                    display: "flex",
+                    gap: "6px",
+                    marginBottom: "30px",
+                    background: "rgb(240,240, 240)",
                   }}
-                />
-              </div>
-
-              {/* Credits */}
-              <div style={{ marginBottom: "12px" }}>
-                <label>Credits Per Period</label>
-                <input
-                  type="number"
-                  name="creditsPerPeriod"
-                  value={formData.creditsPerPeriod}
-                  onChange={handleChange}
-                  style={{
-                    width: "100%",
-                    padding: "10px 12px",
-                    borderRadius: "8px",
-                    border: "1px solid #ddd",
-                    marginTop: "6px",
-                  }}
-                />
-              </div>
-
-              {/* Active */}
-              <label style={{ display: "flex", gap: "8px" }}>
-                <input
-                  type="checkbox"
-                  name="isActive"
-                  checked={formData.isActive}
-                  onChange={handleChange}
-                />
-                Active
-              </label>
-
-              {/* ACTIONS */}
-              <div style={{ marginTop: "20px", display: "flex", gap: "12px" }}>
-                <button
-                  type="button"
-                  disabled={!isDirty || isSaving}
-                  onClick={handleSave}
-                  style={{
-                    padding: "10px 18px",
-                    borderRadius: "10px",
-                    border: "none",
-                    background: "#16a34a",
-                    color: "#fff",
-                    opacity: !isDirty || isSaving ? 0.6 : 1,
-                  }}
+                  className="sm:w-fit p-1.5 rounded-xl"
                 >
-                  {isSaving ? "Saving..." : "Save"}
-                </button>
+                  {["monthly", "yearly"].map((p) => (
+                    <button
+                      key={p}
+                      type="button"
+                      onClick={() => setSelectedPeriod(p)}
+                      disabled={isSaving}
+                      style={{
+                        color:
+                          selectedPeriod === p ? "black" : "rgb(125,125, 125)",
+                        padding: "5px 9px",
+                        borderRadius: "10px",
+                        background:
+                          selectedPeriod === p
+                            ? "rgb(250,250, 250)"
+                            : "transparent",
+                      }}
+                      className="font-semibold w-[50%] sm:min-w-[100px] cursor-pointer transition-all"
+                    >
+                      {p.charAt(0).toUpperCase() + p.slice(1)}
+                    </button>
+                  ))}
+                </div>
 
+                {/* Description & Credits Row */}
+                <div className="flex gap-6 flex-col md:flex-row mb-8">
+                  <div className="w-full md:w-[50%]">
+                    <label className="font-semibold block mb-2">
+                      Description
+                    </label>
+                    <input
+                      name="description"
+                      value={formData.description}
+                      onChange={handleChange}
+                      className="w-full bg-[#F0F0F0] p-[10px_12px] rounded-lg outline-none focus:ring-2 focus:ring-[#00B0FF] transition-all"
+                    />
+                  </div>
+
+                  <div className="w-full md:w-[50%]">
+                    <label className="font-semibold block mb-2">
+                      Credits Per Period
+                    </label>
+                    <input
+                      type="number"
+                      name="creditsPerPeriod"
+                      value={formData.creditsPerPeriod}
+                      onChange={handleChange}
+                      className="w-full bg-[#F0F0F0] p-[10px_12px] rounded-lg outline-none focus:ring-2 focus:ring-[#00B0FF] transition-all"
+                    />
+                  </div>
+                </div>
+
+                {/* Active Toggle inside the box */}
+                <label
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "12px",
+                    cursor: "pointer",
+                  }}
+                  className="w-fit"
+                >
+                  <div style={{ position: "relative" }}>
+                    <input
+                      type="checkbox"
+                      name="isActive"
+                      checked={formData.isActive}
+                      onChange={handleChange}
+                      style={{
+                        opacity: 0,
+                        position: "absolute",
+                        width: "100%",
+                        height: "100%",
+                        cursor: "pointer",
+                        zIndex: 1,
+                      }}
+                    />
+                    <div
+                      style={{
+                        width: "60px",
+                        height: "30px",
+                        backgroundColor: formData.isActive
+                          ? "#4ade80"
+                          : "#fb7185",
+                        borderRadius: "20px",
+                        display: "flex",
+                        alignItems: "center",
+                        padding: "0 5px",
+                        transition: "background-color 0.3s ease",
+                        justifyContent: formData.isActive
+                          ? "flex-end"
+                          : "flex-start",
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: "22px",
+                          height: "22px",
+                          backgroundColor: "white",
+                          borderRadius: "50%",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          transition:
+                            "all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55)",
+                          boxShadow: "0 2px 4px rgba(0,0,0,0.2)",
+                        }}
+                      >
+                        {formData.isActive ? (
+                          <IoCheckmarkCircle
+                            style={{ color: "#4ade80", fontSize: "18px" }}
+                          />
+                        ) : (
+                          <IoCloseCircle
+                            style={{ color: "#fb7185", fontSize: "18px" }}
+                          />
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  <span style={{ fontWeight: "bold", color: "#374151" }}>
+                    {formData.isActive ? "Plan is Active" : "Plan is Inactive"}
+                  </span>
+                </label>
+              </div>
+
+              {/* 4. MAIN ACTIONS (Bottom Bar) */}
+              <div className="md:justify-between md:items-center flex md:flex-row flex-col items-end gap-3 pt-6">
                 <button
                   type="button"
                   disabled={!isDirty || isSaving}
                   onClick={() => setFormData(originalFormData)}
                   style={{
-                    padding: "10px 18px",
+                    padding: "12px 18px",
                     borderRadius: "10px",
                     border: "1px solid #ddd",
-                    background: "#fff",
+                    background: "rgb(240,240, 240)",
                   }}
+                  className="w-full sm:w-[220px] flex items-center justify-center gap-2 font-semibold hover:bg-gray-200 transition-colors disabled:opacity-50"
                 >
-                  Discard
+                  <IoCloseOutline className="text-2xl" />
+                  Discard Changes
+                </button>
+
+                <button
+                  type="button"
+                  disabled={!isDirty || isSaving}
+                  onClick={handleSave}
+                  style={{
+                    padding: "12px 18px",
+                    borderRadius: "10px",
+                    border: "none",
+                    background: "var(--gradient-color)",
+                    color: "#fff",
+                    opacity: !isDirty || isSaving ? 0.6 : 1,
+                  }}
+                  className="w-full sm:w-[220px] flex items-center justify-center gap-2 font-semibold shadow-lg hover:shadow-xl transition-all"
+                >
+                  <AiOutlineSave className="text-2xl" />
+                  {isSaving ? "Saving..." : "Save Changes"}
                 </button>
               </div>
             </form>

@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Button, Menu, MenuItem, Divider } from "@mui/material";
+import { useState, useEffect, useRef } from "react";
+import { RiMore2Fill } from "react-icons/ri";
 
 const UserActionsMenu = ({
   user,
@@ -8,84 +8,85 @@ const UserActionsMenu = ({
   onReactivate,
   onNotify,
 }) => {
-  const [anchorEl, setAnchorEl] = useState(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const menuRef = useRef(null);
 
-  const open = Boolean(anchorEl);
+  // 1. غلق المنيو عند الضغط في أي مكان خارجي
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
 
-  const handleOpen = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [isOpen]);
 
   const handleAction = (cb) => {
-    handleClose();
+    setIsOpen(false); // غلق المنيو عند اختيار أكشن
     cb?.(user);
   };
 
   const isActive = user.status === "Active";
 
   return (
-    <>
-      <Button size="small" variant="outlined" onClick={handleOpen}>
-        Action
-      </Button>
-
-      <Menu
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "right",
-        }}
-        transformOrigin={{
-          vertical: "top",
-          horizontal: "right",
-        }}
+    <div className="relative inline-block text-left" ref={menuRef}>
+      {/* زرار الفتح */}
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="cursor-pointer text-xl p-1 hover:bg-gray-100 rounded-full transition-colors flex items-center"
       >
-        {isActive
-          ? [
-              <MenuItem key="notify" onClick={() => handleAction(onNotify)}>
+        <RiMore2Fill />
+      </button>
+
+      {/* القائمة (المنيو) */}
+      {isOpen && (
+        <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-xl z-50 py-1 overflow-hidden">
+          {isActive ? (
+            <>
+              <button
+                onClick={() => handleAction(onNotify)}
+                className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 transition-colors"
+              >
                 Send notification
-              </MenuItem>,
-
-              <MenuItem key="suspend" onClick={() => handleAction(onSuspend)}>
+              </button>
+              <button
+                onClick={() => handleAction(onSuspend)}
+                className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 transition-colors"
+              >
                 Suspend
-              </MenuItem>,
-
-              <Divider key="d1" />,
-
-              <MenuItem
-                key="delete"
+              </button>
+              <div className="border-t border-gray-100 my-1"></div>
+              <button
                 onClick={() => handleAction(onDelete)}
-                sx={{ color: "error.main" }}
+                className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
               >
                 Delete
-              </MenuItem>,
-            ]
-          : [
-              <MenuItem
-                key="reactivate"
+              </button>
+            </>
+          ) : (
+            <>
+              <button
                 onClick={() => handleAction(onReactivate)}
+                className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 transition-colors"
               >
                 Reactivate
-              </MenuItem>,
-
-              <Divider key="d2" />,
-
-              <MenuItem
-                key="delete"
+              </button>
+              <div className="border-t border-gray-100 my-1"></div>
+              <button
                 onClick={() => handleAction(onDelete)}
-                sx={{ color: "error.main" }}
+                className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
               >
                 Delete
-              </MenuItem>,
-            ]}
-      </Menu>
-    </>
+              </button>
+            </>
+          )}
+        </div>
+      )}
+    </div>
   );
 };
 

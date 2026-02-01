@@ -60,7 +60,7 @@ const formatDate = (dateString) => {
 function UserGrowth() {
   const [period, setPeriod] = useState("90D");
   const [currentPage, setCurrentPage] = useState(1);
-  const [recordsPerPage] = useState(3); // Maximum records to display in view
+  const [recordsPerPage] = useState(5); // Maximum records to display in view
   const { isOpen, openModal, closeModal } = useGeneralModal();
   const [selectedItem, setSelectedItem] = useState(null);
   const handleOpenModal = (item) => {
@@ -548,8 +548,6 @@ function UserGrowth() {
                     </button>
                   </div>
                 )}
-
-                
 
                 {/* Modal Section - Same Layout */}
                 <GeneralModal isOpen={isOpen} onClose={closeModal}>

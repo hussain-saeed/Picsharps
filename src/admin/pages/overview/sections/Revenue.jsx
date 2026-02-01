@@ -55,9 +55,11 @@ function Revenue() {
   };
 
   return (
-    <div style={{ marginTop: 20, padding: 20 }}>
+    <div>
       {/* Title */}
-      <h2 style={{ marginBottom: 30 }}>Revenue by Plan</h2>
+      <h2 className="text-2xl font-semibold text-center -ml-4 bg">
+        Revenue by Plan
+      </h2>
 
       {/* Loading State */}
       {isFetching && (
@@ -85,9 +87,16 @@ function Revenue() {
         <div style={{ display: "flex", flexDirection: "column", gap: 30 }}>
           {/* Pie Chart */}
           <div style={{ width: "100%", height: 400 }}>
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
+            <ResponsiveContainer
+              width="100%"
+              height="100%"
+              accessibilityLayer={false} // أضف هذا السطر
+            >
+              <PieChart
+                accessibilityLayer={false} // أضف هذا السطر
+              >
                 <Pie
+                  accessibilityLayer={false} // أضف هذا السطر
                   data={filteredStats}
                   cx="50%"
                   cy="50%"
@@ -105,10 +114,13 @@ function Revenue() {
                     />
                   ))}
                 </Pie>
-                <Tooltip content={<CustomTooltip />} />
+                <Tooltip
+                  accessibilityLayer={false} // أضف هذا السطر
+                  content={<CustomTooltip />}
+                />
                 <Legend
+                  accessibilityLayer={false} // أضف هذا السطر
                   verticalAlign="bottom"
-                  height={36}
                   formatter={(value, entry) => {
                     const item = filteredStats.find((s) => s.name === value);
                     return (

@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { useGetRecentActivityQuery } from "../../../features/core/adminCoreApi";
+import { BsArrowsFullscreen } from "react-icons/bs";
+import { IoReloadOutline } from "react-icons/io5";
 
 function RecentActivities() {
   const LIMIT = 5;
@@ -92,13 +94,16 @@ function RecentActivities() {
     });
 
   return (
-    <div style={{ marginTop: 30 }}>
+    <div>
       {/* Title */}
-      <h3>Recent Activity</h3>
+      <h2 className="text-xl font-semibold mb-2">Recent Activity</h2>
 
       {/* Last Updated */}
       {lastUpdated && (
-        <div style={{ fontSize: 13, color: "#666", marginBottom: 12 }}>
+        <div
+          style={{ fontSize: 13, marginBottom: 24 }}
+          className="text-gray-500"
+        >
           Last updated: {formatDate(lastUpdated)}
         </div>
       )}
@@ -134,15 +139,17 @@ function RecentActivities() {
                   padding: 12,
                   borderRadius: 8,
                   background: "#fff",
+                  alignItems: "start",
                 }}
               >
                 {/* Avatar */}
                 <div
                   style={{
-                    width: 42,
-                    height: 42,
+                    width: 50,
+                    height: 50,
                     borderRadius: "50%",
-                    background: "#e5e7eb",
+                    background: "var(--gradient-color)",
+                    color: "white",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
@@ -153,26 +160,35 @@ function RecentActivities() {
                 </div>
 
                 {/* Content */}
-                <div style={{ flex: 1 }}>
+                <div style={{ flex: 1 }} className="flex flex-col gap-2">
                   <div
                     style={{
                       display: "flex",
-                      gap: 8,
-                      flexWrap: "wrap",
-                      alignItems: "center",
                       fontWeight: 600,
                     }}
+                    className={`flex flex-col ${item.type === "USER_DELETED" ? "md:flex-row md:items-center" : "sm:flex-row sm:items-center"} justify-start gap-0 xs:gap-1`}
                   >
                     <span>{userInfo.name}</span>
                     {item.type === "USER_DELETED" ? (
-                      <div style={{ fontSize: 12, color: "#888" }}>
+                      <span
+                        style={{
+                          display: "inline-block",
+                          whiteSpace: "nowrap",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                          verticalAlign: "middle",
+                        }}
+                        className="text-[12px] max-w-[150px] xs:max-w-none"
+                      >
                         ({item.metadata.originalEmail})
-                      </div>
+                      </span>
                     ) : (
                       ""
                     )}
 
-                    <span style={{ color: "#555" }}>{item.action}</span>
+                    <span className="text-gray-500 text-sm font-medium">
+                      {item.action}
+                    </span>
                   </div>
 
                   <div
@@ -180,10 +196,9 @@ function RecentActivities() {
                       marginTop: 4,
                       fontSize: 13,
                       color: "#666",
-                      display: "flex",
                       gap: 8,
-                      alignItems: "center",
                     }}
+                    className="flex flex-col sm:flex-row justify-start items-start"
                   >
                     <span>{formatDate(item.time)}</span>
                     <span
@@ -240,11 +255,14 @@ function RecentActivities() {
           style={{
             marginTop: 16,
             padding: "8px 14px",
+            background: "rgba(0, 200, 83, 1)",
             opacity: isLoadingMore ? 0.6 : 1,
             cursor: isLoadingMore ? "not-allowed" : "pointer",
           }}
+          className="rounded-sm text-white flex items-center gap-2"
         >
-          {isLoadingMore ? "Loading..." : "Load more"}
+          {isLoadingMore ? "Loading..." : "Load More"}
+          <IoReloadOutline/>
         </button>
       )}
     </div>

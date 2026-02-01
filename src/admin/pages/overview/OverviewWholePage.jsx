@@ -17,10 +17,10 @@ function OverviewWholePage() {
       <div className="pt-12 pb-16">
         <UserGrowth />
       </div>
-      <FullBleedSection bg="rgb(255, 255, 255)" className="pt-12 sm:pb-18">
+      <FullBleedSection bg="rgb(255, 255, 255)" className="pt-12 pb-16">
         <Revenue />
       </FullBleedSection>
-      <div>
+      <div className="pt-12 pb-6">
         <RecentActivities />
       </div>
     </>

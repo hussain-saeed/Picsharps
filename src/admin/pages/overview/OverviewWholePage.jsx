@@ -11,7 +11,7 @@ function OverviewWholePage() {
       <div className="pb-8">
         <OverviewStatistics />
       </div>
-      <FullBleedSection bg="rgb(255, 255, 255)">
+      <FullBleedSection bg="rgb(255, 255, 255)" className="pt-4 sm:pb-12">
         <Countries />
       </FullBleedSection>
       <div>

@@ -14,6 +14,7 @@ import { FiDollarSign } from "react-icons/fi";
 import { TbReport } from "react-icons/tb";
 import { FaArrowTrendUp } from "react-icons/fa6";
 import { FaArrowTrendDown } from "react-icons/fa6";
+import { FaArrowsRotate } from "react-icons/fa6";
 
 function StatCard({
   title,
@@ -80,13 +81,22 @@ function StatCard({
 function ChangeIndicator({ value, label }) {
   if (value == null) return null;
 
-  const isPositive = value >= 0;
-  const ArrowIcon = isPositive ? FaArrowTrendUp : FaArrowTrendDown;
+  const isPositive = value > 0;
+  const isNegative = !isPositive && value != 0;
+  const ArrowIcon = isPositive
+    ? FaArrowTrendUp
+    : isNegative
+      ? FaArrowTrendDown
+      : FaArrowsRotate;
   const displayValue = isPositive && value > 0 ? `+${value}` : value;
   return (
     <div
       style={{
-        color: isPositive ? "rgba(0, 200, 83, 1)" : "red",
+        color: isPositive
+          ? "rgba(0, 200, 83, 1)"
+          : isNegative
+            ? "red"
+            : "#00B0FF",
         display: "flex",
         alignItems: "center",
         gap: 5,

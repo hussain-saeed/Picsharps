@@ -17,7 +17,6 @@ const UserActionsMenu = ({
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef(null);
 
-  // 1. غلق المنيو عند الضغط في أي مكان خارجي
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
@@ -32,7 +31,7 @@ const UserActionsMenu = ({
   }, [isOpen]);
 
   const handleAction = (cb) => {
-    setIsOpen(false); // غلق المنيو عند اختيار أكشن
+    setIsOpen(false);
     cb?.(user);
   };
 

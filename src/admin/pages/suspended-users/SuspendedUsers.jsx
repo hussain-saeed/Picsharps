@@ -224,13 +224,12 @@ const SuspendedUsers = () => {
                 color: "#666",
               },
               "&.Mui-selected": {
-                backgroundColor: "#00B0FF !important", // استخدام !important لضمان الأولوية
+                backgroundColor: "#00B0FF !important",
                 color: "#fff",
                 "&:hover": {
-                  backgroundColor: "#0090D1", // لون أغمق قليلاً عند الوقوف عليه وهو نشط
+                  backgroundColor: "#0090D1", 
                 },
               },
-              // إضافة حالة الـ focus لضمان عدم تغير اللون بعد النقرة
               "&.Mui-selected.Mui-focusVisible": {
                 backgroundColor: "#00B0FF",
               },

@@ -27,7 +27,7 @@ import useGeneralModal from "../../../hooks/useGeneralModal";
 import GeneralModal from "../../../components/GeneralModal";
 import { LuSquareArrowOutUpRight } from "react-icons/lu";
 import { useRef } from "react";
-import useExportPDF from "../../../hooks/useExportPDF"; // استيراد الهوك الجديد
+import useExportPDF from "../../../hooks/useExportPDF";
 import ShowAsPDF from "../../../components/ShowAsPDF";
 
 function Countries() {
@@ -38,10 +38,9 @@ function Countries() {
     openModal();
   };
   const chartRef = useRef(null);
-  const { downloadPDF: exportToPDF } = useExportPDF(); // استخدام الهوك
+  const { downloadPDF: exportToPDF } = useExportPDF();
 
   const downloadPDF = async () => {
-    // استدعاء اللوجيك المفصول مع تمرير الـ ref
     await exportToPDF(chartRef);
   };
 
@@ -400,7 +399,7 @@ function Countries() {
 
               <div
                 ref={chartRef}
-                style={{ color: "#000000", backgroundColor: "#ffffff" }} // ألوان صريحة هنا
+                style={{ color: "#000000", backgroundColor: "#ffffff" }}
                 className="bg-white p-4 pb-12 sm:p-0"
               >
                 <div
@@ -428,10 +427,10 @@ function Countries() {
                     <ResponsiveContainer
                       width="100%"
                       height="100%"
-                      accessibilityLayer={false} // أضف هذا السطر
+                      accessibilityLayer={false} 
                     >
                       <BarChart
-                        accessibilityLayer={false} // أضف هذا السطر
+                        accessibilityLayer={false} 
                         style={{ outline: "none !important" }}
                         data={processedData.chartData}
                         margin={{
@@ -444,13 +443,13 @@ function Countries() {
                         layout="vertical"
                       >
                         <CartesianGrid
-                          accessibilityLayer={false} // أضف هذا السطر
+                          accessibilityLayer={false}
                           strokeDasharray="3 3"
                           horizontal={true}
                           vertical={false}
                         />
                         <XAxis
-                          accessibilityLayer={false} // أضف هذا السطر
+                          accessibilityLayer={false} 
                           type="number"
                           domain={[0, "dataMax"]}
                           tick={{ fontSize: 12 }}
@@ -462,7 +461,7 @@ function Countries() {
                           }}
                         />
                         <YAxis
-                          accessibilityLayer={false} // أضف هذا السطر
+                          accessibilityLayer={false}
                           type="category"
                           dataKey="countryName"
                           width={80}
@@ -472,7 +471,7 @@ function Countries() {
                         />
                         <Tooltip content={<CustomTooltip />} />
                         <Bar
-                          accessibilityLayer={false} // أضف هذا السطر
+                          accessibilityLayer={false}
                           dataKey="userCount"
                           name="Users"
                           barSize={30}

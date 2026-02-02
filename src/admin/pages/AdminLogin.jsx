@@ -27,8 +27,22 @@ export default function AdminLogin() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-      <div className="w-full max-w-md bg-white rounded-2xl shadow-md p-8">
+    <div className="min-h-screen flex items-center justify-center px-4 relative">
+      {/* طبقة الخلفية: ثابتة (fixed) لضمان عدم وجود فراغات بيضاء */}
+      <div
+        className="fixed inset-0 z-0"
+        style={{
+          backgroundImage: 'url("/public/images/dashboard.jpg")',
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      />
+
+      {/* طبقة الفاميه والبلور */}
+      <div className="fixed inset-0 z-10 bg-black/60 backdrop-blur-md" />
+
+      {/* الفورم: z-20 عشان يظهر فوق الخلفية والفاميه */}
+      <div className="relative z-20 w-full max-w-md bg-white rounded-2xl shadow-md p-8">
         <h1 className="text-2xl font-semibold mb-6 text-gray-800">
           Admin Login
         </h1>
@@ -66,7 +80,7 @@ export default function AdminLogin() {
         <div className="relative mb-6">
           <input
             type={showPassword ? "text" : "password"}
-            placeholder="Enter password"
+            placeholder="Enter Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="
@@ -114,6 +128,7 @@ export default function AdminLogin() {
             transition
             ${loading ? "opacity-50 cursor-not-allowed" : ""}
           `}
+          style={{ background: "var(--gradient-color)" }}
         >
           {loading ? "Loading..." : "Login"}
         </button>

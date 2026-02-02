@@ -5,7 +5,7 @@ import {
 } from "../../features/core/adminCoreApi";
 import { toast } from "react-toastify";
 import { transformPlansBySlug } from "../../../utils/plansUtils";
-import { IoCheckmarkCircle, IoCloseCircle } from "react-icons/io5"; // أيقونات شكلها مودرن
+import { IoCheckmarkCircle, IoCloseCircle } from "react-icons/io5"; 
 import { IoCloseOutline } from "react-icons/io5";
 import { AiOutlineSave } from "react-icons/ai";
 
@@ -56,7 +56,7 @@ function Plans() {
     const groupChanged = prevGroupRef.current !== selectedGroupIndex;
 
     setFormData((prev) => ({
-      name: groupChanged ? currentGroup.name : prev.name, // 👈 فرقنا هنا
+      name: groupChanged ? currentGroup.name : prev.name,
       description: currentPlan.description,
       creditsPerPeriod: currentPlan.creditsPerPeriod,
       isActive: currentPlan.isActive,
@@ -93,10 +93,8 @@ function Plans() {
       return;
     }
 
-    // جهز البودي
     const body = { ...formData };
 
-    // لو الاسم نفس الاسم الأصلي، ما تبعتهوش
     if (formData.name === originalFormData.name) {
       delete body.name;
     }
@@ -155,7 +153,7 @@ function Plans() {
             style={{
               display: "flex",
               gap: "6px",
-              marginBottom: "30px", // قللت المسافة شوية عشان السكاشن اللي جاية
+              marginBottom: "30px", 
               background: "rgb(240,240, 240)",
             }}
             className="sm:w-fit p-1.5 rounded-xl shadow-sm"

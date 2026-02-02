@@ -4,6 +4,7 @@ import RecentActivities from "./sections/RecentActivities";
 import Revenue from "./sections/Revenue";
 import UserGrowth from "./sections/UserGrowth";
 import { FullBleedSection } from "../../components/FullBleedSection";
+import HugeLoader from "../../components/HugeLoader";
 
 function OverviewWholePage() {
   return (

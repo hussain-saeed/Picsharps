@@ -7,7 +7,7 @@ import {
 } from "@mui/material";
 import { toast } from "react-toastify";
 import { useNotifyUserMutation } from "../../../features/core/adminCoreApi";
-import { X } from "lucide-react"; // تأكد من تنزيل lucide-react أو استخدم حرف X عادي
+import { X } from "lucide-react"; 
 
 const SendNotificationModal = ({ open, onClose, user }) => {
   const [subject, setSubject] = useState("");

@@ -4,7 +4,7 @@ import {
   useUpdateSettingsMutation,
 } from "../../features/core/adminCoreApi";
 import { toast } from "react-toastify";
-import { IoCheckmarkCircle, IoCloseCircle } from "react-icons/io5"; // أيقونات شكلها مودرن
+import { IoCheckmarkCircle, IoCloseCircle } from "react-icons/io5"; 
 import { IoCloseOutline } from "react-icons/io5";
 import { AiOutlineSave } from "react-icons/ai";
 

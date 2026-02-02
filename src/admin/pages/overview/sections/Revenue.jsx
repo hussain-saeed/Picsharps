@@ -90,13 +90,13 @@ function Revenue() {
             <ResponsiveContainer
               width="100%"
               height="100%"
-              accessibilityLayer={false} // أضف هذا السطر
+              accessibilityLayer={false}
             >
               <PieChart
-                accessibilityLayer={false} // أضف هذا السطر
+                accessibilityLayer={false}
               >
                 <Pie
-                  accessibilityLayer={false} // أضف هذا السطر
+                  accessibilityLayer={false}
                   data={filteredStats}
                   cx="50%"
                   cy="50%"
@@ -115,11 +115,11 @@ function Revenue() {
                   ))}
                 </Pie>
                 <Tooltip
-                  accessibilityLayer={false} // أضف هذا السطر
+                  accessibilityLayer={false}
                   content={<CustomTooltip />}
                 />
                 <Legend
-                  accessibilityLayer={false} // أضف هذا السطر
+                  accessibilityLayer={false}
                   verticalAlign="bottom"
                   formatter={(value, entry) => {
                     const item = filteredStats.find((s) => s.name === value);

@@ -11,7 +11,7 @@ import {
 } from "recharts";
 import { useGetUserGrowthQuery } from "../../../features/core/adminCoreApi";
 import { useRef } from "react";
-import useExportPDF from "../../../hooks/useExportPDF"; // استيراد الهوك الجديد
+import useExportPDF from "../../../hooks/useExportPDF";
 import ShowAsPDF from "../../../components/ShowAsPDF";
 import useGeneralModal from "../../../hooks/useGeneralModal";
 import GeneralModal from "../../../components/GeneralModal";
@@ -69,10 +69,9 @@ function UserGrowth() {
   };
 
   const chartRef = useRef(null);
-  const { downloadPDF: exportToPDF } = useExportPDF(); // استخدام الهوك
+  const { downloadPDF: exportToPDF } = useExportPDF();
 
   const downloadPDF = async () => {
-    // استدعاء اللوجيك المفصول مع تمرير الـ ref
     await exportToPDF(chartRef);
   };
 
@@ -286,7 +285,7 @@ function UserGrowth() {
                   style={{ height: 400, width: "100%", marginLeft: "-40px" }}
                 >
                   <ResponsiveContainer
-                    width="100%" // سيأخذ الـ 100% من الـ 1200px
+                    width="100%"
                     height="100%"
                     accessibilityLayer={false}
                   >
@@ -412,7 +411,6 @@ function UserGrowth() {
                       <tbody>
                         {currentRecords.map((record, index) => {
                           const globalIndex = indexOfFirstRecord + index;
-                          // افتراض وجود ميثودز لجلب الـ Indicators كما في كودك
                           const activeUsersIndicator = getValueIndicator(
                             record.activeUsers,
                             getPreviousDayValue(globalIndex, "activeUsers"),

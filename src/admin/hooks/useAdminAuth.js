@@ -66,7 +66,7 @@ export const useAdminAuth = () => {
 
       if (res.status === "success") {
         console.log("[LOGIN SUCCESS] redirect → /admin/main");
-        window.location.href = "/admin/main";
+        window.location.href = "/admin8yut91b9e22a/main";
         return true;
       }
 
@@ -93,7 +93,7 @@ export const useAdminAuth = () => {
 
       if (res.status === "success") {
         dispatch(clearAdmin());
-        navigate("/admin/login", { replace: true });
+        navigate("/admin8yut91b9e22a/login", { replace: true });
         return;
       }
 

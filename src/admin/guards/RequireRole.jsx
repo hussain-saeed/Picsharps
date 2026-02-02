@@ -9,7 +9,7 @@ export default function RequireRole({ allowedRoles }) {
   const hasAccess = roles.some((r) => allowedRoles.includes(r));
 
   if (!hasAccess) {
-    return <Navigate to="/admin/main" replace />;
+    return <Navigate to="/admin8yut91b9e22a/main" replace />;
   }
 
   return null;

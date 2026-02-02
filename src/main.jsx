@@ -58,7 +58,7 @@ createRoot(document.getElementById("root")).render(
       <Routes>
         {/* admin portal */}
         <Route
-          path="/admin/*"
+          path="/admin8yut91b9e22a/*"
           element={
             <Provider store={adminStore}>
               <AdminApp />

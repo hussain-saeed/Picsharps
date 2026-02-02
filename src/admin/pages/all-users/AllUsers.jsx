@@ -45,12 +45,11 @@ const STATUS = [
   { label: "Suspended", value: "suspended" },
 ];
 
-// سنقوم بإنشاء مكون مخصص نظيف تماماً
 const SearchInput = styled(InputBase)(({ theme }) => ({
   backgroundColor: "#f5f5f5",
   borderRadius: "8px",
   padding: "2px 32px 2px 42px",
-  height: "40px", // لضمان تساويه في الارتفاع مع Select size="small"
+  height: "40px",
   transition: "0.3s",
   border: "1px solid rgb(235, 235, 235)",
   display: "flex",
@@ -231,7 +230,7 @@ const AllUsers = () => {
                   sx={{
                     border: "1px solid rgb(235, 235, 235)",
                     minWidth: 160,
-                    height: "40px", // توحيد الارتفاع
+                    height: "40px",
                     backgroundColor: "#f5f5f5",
                     borderRadius: "8px",
                     "& .MuiOutlinedInput-notchedOutline": { border: "none" },
@@ -253,7 +252,7 @@ const AllUsers = () => {
                         zoom: {
                           xs: "100%",
                           "@media (min-width: 1024px)": {
-                            zoom: "115.65%", // ده كدة هيبدأ مع lg بتاعة Tailwind بالظبط
+                            zoom: "115.65%",
                           },
                         },
                         marginTop: "4px",
@@ -286,7 +285,7 @@ const AllUsers = () => {
                 sx={{
                   border: "1px solid rgb(235, 235, 235)",
                   minWidth: 160,
-                  height: "40px", // توحيد الارتفاع
+                  height: "40px",
                   backgroundColor: "#f5f5f5",
                   borderRadius: "8px",
                   "& .MuiOutlinedInput-notchedOutline": { border: "none" },
@@ -307,7 +306,7 @@ const AllUsers = () => {
                       zoom: {
                         xs: "100%",
                         "@media (min-width: 1024px)": {
-                          zoom: "116%", // ده كدة هيبدأ مع lg بتاعة Tailwind بالظبط
+                          zoom: "116%",
                         },
                       },
                       marginTop: "4px",
@@ -337,7 +336,7 @@ const AllUsers = () => {
           <button
             disabled={!canApplyFilters || isFetching}
             onClick={handleApplyFilters}
-            style={{ height: "40px", background: "var(--gradient-color)" }} // توحيد الارتفاع مع البقية
+            style={{ height: "40px", background: "var(--gradient-color)" }}
             className="
             flex-1 sm:flex-none
           px-6 py-2 rounded-md
@@ -358,7 +357,7 @@ const AllUsers = () => {
           <button
             disabled={!canResetRemove || isFetching}
             onClick={handleResetRemove}
-            style={{ height: "40px", background: "rgb(240,240, 240)" }} // توحيد الارتفاع مع البقية
+            style={{ height: "40px", background: "rgb(240,240, 240)" }}
             className="
                         flex-1 sm:flex-none
           px-6 py-2 rounded-md
@@ -543,11 +542,8 @@ const AllUsers = () => {
                   backgroundColor: "#f5f5f5",
                   borderRadius: "6px",
                   border: "1px solid #ddd",
-                  // --- إضافة الـ Padding هنا ---
                   padding: "22px 18px",
-                  // ----------------------------
                   "@media (max-width: 600px)": {
-                    // في الموبايل يفضل padding أصغر أو الاعتماد على أبعاد ثابتة
                     padding: "4px 8px",
                     fontSize: "0.8rem",
                     margin: "0 2px",
@@ -572,13 +568,12 @@ const AllUsers = () => {
                   color: "#666",
                 },
                 "&.Mui-selected": {
-                  backgroundColor: "#00B0FF !important", // استخدام !important لضمان الأولوية
+                  backgroundColor: "#00B0FF !important",
                   color: "#fff",
                   "&:hover": {
-                    backgroundColor: "#0090D1", // لون أغمق قليلاً عند الوقوف عليه وهو نشط
+                    backgroundColor: "#0090D1",
                   },
                 },
-                // إضافة حالة الـ focus لضمان عدم تغير اللون بعد النقرة
                 "&.Mui-selected.Mui-focusVisible": {
                   backgroundColor: "#00B0FF",
                 },

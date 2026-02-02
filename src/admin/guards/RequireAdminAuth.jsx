@@ -1,19 +1,31 @@
 import { useSelector } from "react-redux";
 import { Navigate, Outlet } from "react-router-dom";
+import { useState, useEffect } from "react";
+import HugeLoader from "../components/HugeLoader";
 
-// protect admin routes that require authentication
 export default function RequireAdminAuth() {
   const { admin, isLoading } = useSelector((s) => s.adminAuth);
+  const [isDelaying, setIsDelaying] = useState(true);
 
-  console.log("[GUARD] RequireAdminAuth:", { admin, isLoading });
+  useEffect(() => {
+    if (!isLoading) {
+      const timer = setTimeout(() => {
+        setIsDelaying(false);
+      }, 2000);
 
-  if (isLoading) {
-    return <p>Loading admin...</p>;
+      return () => clearTimeout(timer);
+    }
+  }, [isLoading]);
+
+  console.log("[GUARD] RequireAdminAuth:", { admin, isLoading, isDelaying });
+
+  if (isLoading || isDelaying) {
+    return <HugeLoader />;
   }
 
   if (!admin) {
     console.log("[REDIRECT] not logged → /admin/login");
-    return <Navigate to="/admin/login" replace />;
+    return <Navigate to="/admin8yut91b9e22a/login" replace />;
   }
 
   return <Outlet />;

@@ -55,7 +55,7 @@ const UserActionsMenu = ({
             <>
               <button
                 onClick={() => handleAction(onNotify)}
-                className="text-blue-500 flex items-center font-semibold gap-2 w-full text-left px-4 py-3 text-sm hover:bg-blue-50 transition-colors"
+                className="text-blue-500 cursor-pointer flex items-center font-semibold gap-2 w-full text-left px-4 py-3 text-sm hover:bg-blue-50 transition-colors"
                 style={{ borderBottom: "1px solid rgb(230, 230, 230)" }}
               >
                 <MdOutlineEmail className="text-xl" />
@@ -63,7 +63,7 @@ const UserActionsMenu = ({
               </button>
               <button
                 onClick={() => handleAction(onSuspend)}
-                className="text-orange-600 flex items-center font-semibold gap-2 w-full text-left px-4 py-3 text-sm hover:bg-blue-50 transition-colors"
+                className="text-orange-600 flex cursor-pointer items-center font-semibold gap-2 w-full text-left px-4 py-3 text-sm hover:bg-blue-50 transition-colors"
                 style={{ borderBottom: "1px solid rgb(230, 230, 230)" }}
               >
                 <TbHandStop className="text-xl" />
@@ -71,7 +71,7 @@ const UserActionsMenu = ({
               </button>
               <button
                 onClick={() => handleAction(onDelete)}
-                className="text-red-600 flex items-center font-semibold gap-2 w-full text-left px-4 py-4 text-sm hover:bg-blue-50 transition-colors"
+                className="text-red-600 flex items-center cursor-pointer font-semibold gap-2 w-full text-left px-4 py-4 text-sm hover:bg-blue-50 transition-colors"
               >
                 <FaRegTrashAlt className="text-xl" />
                 Delete
@@ -81,7 +81,7 @@ const UserActionsMenu = ({
             <>
               <button
                 onClick={() => handleAction(onReactivate)}
-                className="text-green-500 flex items-center font-semibold gap-2 w-full text-left px-4 py-3 text-sm hover:bg-blue-50 transition-colors"
+                className="text-green-500 flex items-center cursor-pointer font-semibold gap-2 w-full text-left px-4 py-3 text-sm hover:bg-blue-50 transition-colors"
                 style={{ borderBottom: "1px solid rgb(230, 230, 230)" }}
               >
                 <BiLike className="text-xl" />
@@ -89,7 +89,7 @@ const UserActionsMenu = ({
               </button>
               <button
                 onClick={() => handleAction(onDelete)}
-                className="text-red-600 flex items-center font-semibold gap-2 w-full text-left px-4 py-4 text-sm hover:bg-blue-50 transition-colors"
+                className="text-red-600 flex items-center cursor-pointer font-semibold gap-2 w-full text-left px-4 py-4 text-sm hover:bg-blue-50 transition-colors"
               >
                 <FaRegTrashAlt className="text-xl" />
                 Delete

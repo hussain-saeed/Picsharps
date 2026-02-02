@@ -17,14 +17,11 @@ export default function RedirectIfAdmin() {
     }
   }, [isLoading]);
 
-  console.log("[GUARD] RedirectIfAdmin:", { admin, isLoading, isDelaying });
-
   if (isLoading || isDelaying) {
     return <HugeLoader />;
   }
 
   if (admin) {
-    console.log("[REDIRECT] already logged in → /admin/main");
     return <Navigate to="/admin8yut91b9e22a/main" replace />;
   }
 

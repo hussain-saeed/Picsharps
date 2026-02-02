@@ -209,14 +209,6 @@ function UserGrowth() {
     return previousRecord ? previousRecord[fieldName] : null;
   };
 
-  useEffect(() => {
-    if (hasData) {
-      console.log(`get ${period} successfully`);
-      console.log("Growth Data:", data.data);
-      console.log("Processed Data:", processedData);
-    }
-  }, [hasData, period, data, processedData]);
-
   // Reset to first page when period changes
   useEffect(() => {
     setCurrentPage(1);
@@ -462,7 +454,7 @@ function UserGrowth() {
                                 </div>
                               </td>
 
-                              <td className="px-3 py-4 md:hidden">
+                              <td className="px-3 py-4 md:hidden flex items-center justify-end">
                                 <button
                                   onClick={() => handleOpenModal(record)} // تأكد من وجود الميثود لفتح المودال
                                   className="flex items-center gap-1 text-[11px] font-bold text-[#00b0ff] cursor-pointer whitespace-nowrap"

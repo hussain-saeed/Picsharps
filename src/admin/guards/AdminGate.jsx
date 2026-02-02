@@ -17,17 +17,13 @@ export default function AdminGate() {
     }
   }, [isLoading]);
 
-  console.log("[GUARD] AdminGate:", { admin, isLoading, isDelaying });
-
   if (isLoading || isDelaying) {
     return <HugeLoader />;
   }
 
   if (!admin) {
-    console.log("[REDIRECT] /admin → /admin/login");
     return <Navigate to="/admin8yut91b9e22a/login" replace />;
   }
 
-  console.log("[REDIRECT] /admin → /admin/main");
   return <Navigate to="/admin8yut91b9e22a/main" replace />;
 }

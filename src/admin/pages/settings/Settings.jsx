@@ -4,7 +4,7 @@ import {
   useUpdateSettingsMutation,
 } from "../../features/core/adminCoreApi";
 import { toast } from "react-toastify";
-import { IoCheckmarkCircle, IoCloseCircle } from "react-icons/io5"; 
+import { IoCheckmarkCircle, IoCloseCircle } from "react-icons/io5";
 import { IoCloseOutline } from "react-icons/io5";
 import { AiOutlineSave } from "react-icons/ai";
 
@@ -54,13 +54,13 @@ function Settings() {
     try {
       const res = await updateSettings({ body: formData }).unwrap();
       if (res.status === "success") {
-        toast.success("Settings updated successfully");
+        toast.success("Settings updated successfully!");
         setOriginalFormData(formData); // reset dirty
       } else {
-        toast.error("Failed to update settings");
+        toast.error("Failed to update settings!");
       }
     } catch (err) {
-      toast.error("Failed to update settings");
+      toast.error("Failed to update settings!");
     }
   };
 
@@ -75,7 +75,9 @@ function Settings() {
     >
       <div className="mb-10">
         <h2 className="text-xl font-semibold ">General Settings</h2>
-        <p className="text-gray-500">Manage your application's basic information and preferences</p>
+        <p className="text-gray-500">
+          Manage your application's basic information and preferences
+        </p>
       </div>
 
       {/* Loading / Error */}
@@ -138,6 +140,7 @@ function Settings() {
                 borderRadius: "10px",
                 border: "1px solid #ddd",
                 background: "rgb(240,240, 240)",
+                cursor: !isDirty || isSaving ? "not-allowed" : "pointer",
               }}
               className="w-full sm:w-[220px] flex items-center justify-center gap-2 font-semibold hover:bg-gray-200 transition-colors disabled:opacity-50"
             >
@@ -156,11 +159,12 @@ function Settings() {
                 background: "var(--gradient-color)",
                 color: "#fff",
                 opacity: !isDirty || isSaving ? 0.6 : 1,
+                cursor: !isDirty || isSaving ? "not-allowed" : "pointer",
               }}
               className="w-full sm:w-[220px] flex items-center justify-center gap-2 font-semibold hover:bg-gray-200 transition-colors disabled:opacity-50"
             >
               <AiOutlineSave className="text-2xl" />
-              {isSaving ? "Saving..." : "Save Changes"}
+              {isSaving ? "Saving ..." : "Save Changes"}
             </button>
           </div>
         </form>

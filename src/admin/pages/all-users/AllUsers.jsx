@@ -104,12 +104,10 @@ const AllUsers = () => {
     },
     { keepUnusedDataFor: 300 },
   );
-  console.log("Fetched data:", data);
 
   const { data: plansData } = useGetPlansQuery(undefined, {
     refetchOnMountOrArgChange: true,
   });
-  console.log("Fetched Plans Data:", plansData);
 
   const transformedPlans = useMemo(() => {
     if (plansData?.status !== "success") return [];

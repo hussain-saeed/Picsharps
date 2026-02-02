@@ -28,13 +28,13 @@ const DeleteUserModal = ({ open, onClose, user }) => {
       }).unwrap();
 
       if (res.status === "success") {
-        toast.success("User deleted successfully");
+        toast.success("User deleted successfully!");
         handleClose();
       } else {
-        toast.error("Something went wrong");
+        toast.error("Something went wrong!");
       }
     } catch (err) {
-      toast.error("Something went wrong");
+      toast.error("Something went wrong!");
     }
   };
 

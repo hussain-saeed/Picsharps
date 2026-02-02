@@ -5,7 +5,7 @@ import {
 } from "../../features/core/adminCoreApi";
 import { toast } from "react-toastify";
 import { transformPlansBySlug } from "../../../utils/plansUtils";
-import { IoCheckmarkCircle, IoCloseCircle } from "react-icons/io5"; 
+import { IoCheckmarkCircle, IoCloseCircle } from "react-icons/io5";
 import { IoCloseOutline } from "react-icons/io5";
 import { AiOutlineSave } from "react-icons/ai";
 
@@ -15,8 +15,6 @@ function Plans() {
   const { data, isFetching } = useGetPlansQuery(undefined, {
     refetchOnMountOrArgChange: true,
   });
-
-  console.log("Fetched Plans Data:", data);
 
   const [updatePlan, { isLoading: isSaving }] = useUpdatePlanMutation();
 
@@ -89,7 +87,7 @@ function Plans() {
 
   const handleSave = async () => {
     if (!activePlan?.slug) {
-      toast.error("Invalid plan selected");
+      toast.error("Something went wrong!");
       return;
     }
 
@@ -106,13 +104,13 @@ function Plans() {
       }).unwrap();
 
       if (res.status === "success") {
-        toast.success("Plan updated successfully");
+        toast.success("Plan updated successfully!");
         setOriginalFormData(formData);
       } else {
-        toast.error("Something went wrong");
+        toast.error("Something went wrong!");
       }
     } catch (err) {
-      toast.error("Something went wrong");
+      toast.error("Something went wrong!");
     }
   };
 
@@ -153,7 +151,7 @@ function Plans() {
             style={{
               display: "flex",
               gap: "6px",
-              marginBottom: "30px", 
+              marginBottom: "30px",
               background: "rgb(240,240, 240)",
             }}
             className="sm:w-fit p-1.5 rounded-xl shadow-sm"
@@ -347,6 +345,7 @@ function Plans() {
                     borderRadius: "10px",
                     border: "1px solid #ddd",
                     background: "rgb(240,240, 240)",
+                    cursor: !isDirty || isSaving ? "not-allowed" : "pointer",
                   }}
                   className="w-full sm:w-[220px] flex items-center justify-center gap-2 font-semibold hover:bg-gray-200 transition-colors disabled:opacity-50"
                 >
@@ -365,6 +364,7 @@ function Plans() {
                     background: "var(--gradient-color)",
                     color: "#fff",
                     opacity: !isDirty || isSaving ? 0.6 : 1,
+                    cursor: !isDirty || isSaving ? "not-allowed" : "pointer",
                   }}
                   className="w-full sm:w-[220px] flex items-center justify-center gap-2 font-semibold shadow-lg hover:shadow-xl transition-all"
                 >

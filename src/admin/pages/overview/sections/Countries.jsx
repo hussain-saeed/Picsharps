@@ -264,7 +264,7 @@ function Countries() {
                               </div>
                             </td>
 
-                            <td className="px-3 py-4 sm:hidden ">
+                            <td className="px-3 py-4 sm:hidden flex items-center justify-end">
                               <button
                                 onClick={() => handleOpenModal(item)}
                                 className="flex items-center gap-1 text-[11px] font-bold text-[#00b0ff] cursor-pointer whitespace-nowrap"
@@ -423,10 +423,10 @@ function Countries() {
                     <ResponsiveContainer
                       width="100%"
                       height="100%"
-                      accessibilityLayer={false} 
+                      accessibilityLayer={false}
                     >
                       <BarChart
-                        accessibilityLayer={false} 
+                        accessibilityLayer={false}
                         style={{ outline: "none !important" }}
                         data={processedData.chartData}
                         margin={{
@@ -445,7 +445,7 @@ function Countries() {
                           vertical={false}
                         />
                         <XAxis
-                          accessibilityLayer={false} 
+                          accessibilityLayer={false}
                           type="number"
                           domain={[0, "dataMax"]}
                           tick={{ fontSize: 12 }}

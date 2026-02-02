@@ -29,7 +29,6 @@ export const useAdminAuth = () => {
     try {
       const res = await refreshTrigger().unwrap();
 
-      console.log("refreshAdmin res:", res);
       if (res?.status === "success") {
         const roles = res?.data?.user?.roles || [];
 
@@ -62,10 +61,8 @@ export const useAdminAuth = () => {
   const loginAdmin = async ({ email, password }) => {
     try {
       const res = await loginTrigger({ email, password }).unwrap();
-      console.log("loginAdmin res:", res);
 
       if (res.status === "success") {
-        console.log("[LOGIN SUCCESS] redirect → /admin/main");
         window.location.href = "/admin8yut91b9e22a/main";
         return true;
       }
@@ -89,18 +86,15 @@ export const useAdminAuth = () => {
     try {
       const res = await logoutTrigger().unwrap();
 
-      console.log("logoutAdmin res:", res);
-
       if (res.status === "success") {
         dispatch(clearAdmin());
         navigate("/admin8yut91b9e22a/login", { replace: true });
         return;
       }
 
-      toast.error("Logout failed");
+      toast.error("Logout failed!");
     } catch (err) {
-      console.log("logoutAdmin error:", err);
-      toast.error("Logout failed");
+      toast.error("Logout failed!");
     } finally {
       dispatch(setLoading(false));
     }

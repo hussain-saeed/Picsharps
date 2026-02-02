@@ -8,7 +8,7 @@ const GeneralModal = ({ isOpen, onClose, children }) => (
       <button
         onClick={onClose}
         style={{ background: "var(--gradient-color)" }}
-        className="px-4 py-2 text-white text-lg font-semibold rounded-xl mr-4 mb-3.5"
+        className="px-4 py-2 text-white text-lg font-semibold rounded-xl mr-4 mb-3.5 cursor-pointer"
       >
         OK
       </button>

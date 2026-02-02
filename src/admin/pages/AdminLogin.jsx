@@ -104,6 +104,7 @@ export default function AdminLogin() {
               -translate-y-1/2
               text-blue-500
               text-lg
+              cursor-pointer
             "
           >
             {showPassword ? <FaEyeSlash /> : <FaEye />}
@@ -123,11 +124,11 @@ export default function AdminLogin() {
             bg-blue-600
             hover:bg-blue-700
             transition
-            ${loading ? "opacity-50 cursor-not-allowed" : ""}
+            ${loading ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}
           `}
           style={{ background: "var(--gradient-color)" }}
         >
-          {loading ? "Loading..." : "Login"}
+          {loading ? "Loading ..." : "Login"}
         </button>
       </div>
     </div>

@@ -179,7 +179,6 @@ export default function Plans({ transformedPlans }) {
 
     requireLogin(async () => {
       setClickedPlan(passedSlug);
-      console.log(passedSlug);
       setIsCheckoutLoading(true);
 
       try {

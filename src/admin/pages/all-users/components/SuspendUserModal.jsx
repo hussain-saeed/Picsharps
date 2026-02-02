@@ -7,7 +7,7 @@ import {
 } from "@mui/material";
 import { toast } from "react-toastify";
 import { useSuspendUserMutation } from "../../../features/core/adminCoreApi";
-import { X, AlertTriangle } from "lucide-react"; // أيقونة تحذير اختيارية
+import { X, AlertTriangle } from "lucide-react";
 
 const SuspendUserModal = ({ open, onClose, user }) => {
   const [reason, setReason] = useState("");
@@ -36,13 +36,13 @@ const SuspendUserModal = ({ open, onClose, user }) => {
       }).unwrap();
 
       if (res.status === "success") {
-        toast.success("User suspended successfully");
+        toast.success("User suspended successfully!");
         handleClose();
       } else {
-        toast.error("Something went wrong");
+        toast.error("Something went wrong!");
       }
     } catch (err) {
-      toast.error("Something went wrong");
+      toast.error("Something went wrong!");
     } finally {
       setIsLoading(false);
     }

@@ -13,7 +13,6 @@ function Revenue() {
   const { data, isFetching, isError } = useGetRevenueQuery(undefined, {
     refetchOnMountOrArgChange: true,
   });
-  console.log("Revenue data:", data);
 
   const hasData = data?.status === "success" && data.data;
   const stats = hasData ? data.data : null;

@@ -17,6 +17,8 @@ import { TbLayoutSidebarLeftExpand } from "react-icons/tb";
 
 function AdminMainLayout() {
   const { roles } = useSelector((s) => s.adminAuth);
+  const isLoading = useSelector((state) => state.adminAuth.isLoading);
+
   const { logoutAdmin } = useAdminAuth();
   const location = useLocation();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -114,9 +116,13 @@ function AdminMainLayout() {
         <button
           onClick={logoutAdmin}
           className="w-full flex items-center gap-2 px-5 py-3 rounded-lg text-red-500 hover:bg-red-500/10 transition-all -mt-6.5"
+          style={{ cursor: isLoading ? "not-allowed" : "pointer" }}
         >
           <FiLogOut style={{ fontSize: "20px" }} />
-          <span className="text-sm font-medium">Log Out</span>
+          <span className="text-sm font-medium">
+            {" "}
+            {isLoading ? "Logging Out ..." : "Log Out"}
+          </span>
         </button>
       </nav>
     </div>

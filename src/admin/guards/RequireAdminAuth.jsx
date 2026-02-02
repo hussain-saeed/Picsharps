@@ -17,14 +17,11 @@ export default function RequireAdminAuth() {
     }
   }, [isLoading]);
 
-  console.log("[GUARD] RequireAdminAuth:", { admin, isLoading, isDelaying });
-
   if (isLoading || isDelaying) {
     return <HugeLoader />;
   }
 
   if (!admin) {
-    console.log("[REDIRECT] not logged → /admin/login");
     return <Navigate to="/admin8yut91b9e22a/login" replace />;
   }
 

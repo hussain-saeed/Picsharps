@@ -24,7 +24,7 @@ const SendNotificationModal = ({ open, onClose, user }) => {
 
   const handleSend = async () => {
     if (!subject || !message) {
-      return toast.warning("Please fill in all required fields");
+      return;
     }
 
     try {
@@ -34,13 +34,13 @@ const SendNotificationModal = ({ open, onClose, user }) => {
       }).unwrap();
 
       if (res.status === "success") {
-        toast.success("Notification sent successfully");
+        toast.success("Notification sent successfully!");
         handleClose();
       } else {
-        toast.error("Something went wrong");
+        toast.error("Something went wrong!");
       }
     } catch (err) {
-      toast.error("Something went wrong");
+      toast.error("Something went wrong!");
     }
   };
 

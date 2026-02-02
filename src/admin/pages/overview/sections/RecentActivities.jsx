@@ -26,7 +26,6 @@ function RecentActivities() {
 
   // Determine if response is valid based on backend status
   const hasData = data?.status === "success" && Array.isArray(data.data?.data);
-  console.log(data);
 
   // Sync response
   useEffect(() => {

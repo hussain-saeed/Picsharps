@@ -49,10 +49,6 @@ function Pricing() {
         const data = await res.json();
         if (data?.status === "success") {
           setTransformedPlans(transformPlansBySlug(data?.data?.plans));
-          console.log(
-            "Transformed Plans:",
-            transformPlansBySlug(data?.data?.plans),
-          );
         } else {
           setErrorFetchingPlans(true);
         }

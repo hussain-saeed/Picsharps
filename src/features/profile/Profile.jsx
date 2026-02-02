@@ -116,7 +116,6 @@ function Profile() {
         setData(userData);
         setBillings(billingData);
 
-        console.log("User Data:", userData);
         if (userData.status !== "success" || billingData.status !== "success") {
           setError(true);
           redirectTimeout = setTimeout(() => {

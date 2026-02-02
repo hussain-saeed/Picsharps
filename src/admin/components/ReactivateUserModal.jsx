@@ -25,13 +25,13 @@ const ReactivateUserModal = ({ open, onClose, user }) => {
       const res = await reactivateUser(user.id).unwrap();
 
       if (res.status === "success") {
-        toast.success("User reactivated successfully");
+        toast.success("User reactivated successfully!");
         onClose();
       } else {
-        toast.error("Something went wrong");
+        toast.error("Something went wrong!");
       }
     } catch (err) {
-      toast.error("Something went wrong");
+      toast.error("Something went wrong!");
     } finally {
       setIsLoading(false);
     }

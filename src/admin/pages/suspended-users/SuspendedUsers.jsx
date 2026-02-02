@@ -44,8 +44,6 @@ const SuspendedUsers = () => {
     { keepUnusedDataFor: 300 },
   );
 
-  console.log("Fetched data:", data);
-
   // ================= DERIVED DATA =================
   const hasData = data?.status === "success" && Array.isArray(data.data?.users);
   const users = hasData ? data.data.users : [];

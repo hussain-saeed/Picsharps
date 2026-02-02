@@ -519,7 +519,7 @@ const AllUsers = () => {
         {/* ================= PAGINATION ================= */}
         {!isEmpty && pagination && pagination.totalPages > 1 && (
           <div
-            className="bg-white px-3 sm:px-6 py-3 rounded-xl flex flex-row mt-5.5 items-center justify-center lg:justify-end"
+            className="bg-white px-3 sm:px-6 py-6 rounded-xl flex flex-row mt-5.5 items-center justify-center lg:justify-end"
             style={{ border: "1px solid rgb(235, 235, 235)" }}
           >
             {isPageLoading && (
@@ -544,7 +544,7 @@ const AllUsers = () => {
                   borderRadius: "6px",
                   border: "1px solid #ddd",
                   // --- إضافة الـ Padding هنا ---
-                  padding: "20px 18px",
+                  padding: "22px 18px",
                   // ----------------------------
                   "@media (max-width: 600px)": {
                     // في الموبايل يفضل padding أصغر أو الاعتماد على أبعاد ثابتة
@@ -570,6 +570,17 @@ const AllUsers = () => {
                   backgroundColor: "transparent",
                   border: "none",
                   color: "#666",
+                },
+                "&.Mui-selected": {
+                  backgroundColor: "#00B0FF !important", // استخدام !important لضمان الأولوية
+                  color: "#fff",
+                  "&:hover": {
+                    backgroundColor: "#0090D1", // لون أغمق قليلاً عند الوقوف عليه وهو نشط
+                  },
+                },
+                // إضافة حالة الـ focus لضمان عدم تغير اللون بعد النقرة
+                "&.Mui-selected.Mui-focusVisible": {
+                  backgroundColor: "#00B0FF",
                 },
               }}
             />

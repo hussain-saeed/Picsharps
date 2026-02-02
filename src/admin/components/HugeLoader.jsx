@@ -17,7 +17,7 @@ function HugeLoader() {
 
   return (
     <div className="fixed inset-0 z-9999 flex flex-col items-center justify-center -mt-32">
-      <div className="flex flex-col items-center gap-6">
+      <div className="flex flex-col items-center gap-8">
         <motion.div
           animate={{
             scale: [1, 1.05, 1],
@@ -40,7 +40,7 @@ function HugeLoader() {
         <motion.div
           variants={containerVariants}
           animate="animate"
-          className="flex text-3xl md:text-6xl font-extrabold text-[#1B2337] tracking-tight pl-3.5"
+          className="flex text-3xl md:text-6xl font-extrabold text-[#1B2337] tracking-tight"
         >
           {brandName}
         </motion.div>

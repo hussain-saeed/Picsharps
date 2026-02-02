@@ -267,12 +267,9 @@ function UserGrowth() {
       {/* Chart */}
       {hasData && !isFetching && processedData.length > 0 && (
         <>
-          {/* الحاوية الخارجية للتحكم في التمرير */}
           <div className="relative">
-            {/* زر التحميل يرسل الـ ref للفانكشن */}
             <ShowAsPDF onClick={() => downloadPDF(chartRef)} breakP="lg" />
 
-            {/* هذه الحاوية الخارجية تمنع الـ Scroll في الصفحة وتسمح للشارت بالخروج */}
             <div style={{ width: "100%", overflow: "hidden" }}>
               <div
                 ref={chartRef}
@@ -376,7 +373,6 @@ function UserGrowth() {
                     <table className="w-full bg-white table-fixed sm:table-auto">
                       <thead>
                         <tr className="bg-linear-to-r from-[#00c853] to-[#00b0ff]">
-                          {/* عمود التاريخ: يأخذ مساحة أكبر في الموبايل */}
                           <th className="px-3 md:pl-6 py-4 text-left w-2/3 md:w-auto">
                             <div className="flex items-center gap-2 text-white font-semibold text-xs md:text-sm">
                               <LuCalendarDays className="w-5 h-5 hidden md:block" />
@@ -384,7 +380,6 @@ function UserGrowth() {
                             </div>
                           </th>
 
-                          {/* أعمدة البيانات: تختفي في الموبايل وتظهر من sm فأكبر */}
                           <th className="px-5 py-4 text-left hidden md:table-cell">
                             <div className="flex items-center gap-2 text-white font-semibold text-sm">
                               <HiUsers className="w-5 h-5" />
@@ -404,7 +399,6 @@ function UserGrowth() {
                             </div>
                           </th>
 
-                          {/* عمود زر التفاصيل للموبايل فقط */}
                           <th className="px-3 py-4 md:hidden w-1/3"></th>
                         </tr>
                       </thead>
@@ -441,7 +435,6 @@ function UserGrowth() {
                                 </span>
                               </td>
 
-                              {/* البيانات للشاشات الكبيرة */}
                               <td className="px-5 py-4 hidden md:table-cell">
                                 <div
                                   className="flex items-center gap-2 text-md font-medium"
@@ -469,7 +462,6 @@ function UserGrowth() {
                                 </div>
                               </td>
 
-                              {/* زر المودال للموبايل فقط */}
                               <td className="px-3 py-4 md:hidden">
                                 <button
                                   onClick={() => handleOpenModal(record)} // تأكد من وجود الميثود لفتح المودال

@@ -379,15 +379,12 @@ const AllUsers = () => {
         {/* ================= TABLE CONTAINER ================= */}
         {!isEmpty && (
           <div className="overflow-x-auto rounded-xl shadow-lg mt-5 border border-gray-100">
-            {/* أضفنا min-w-max لضمان أن الجدول لا ينضغط أبداً ويحافظ على مساحة محتواه */}
             <table className="w-full min-w-max bg-white table-auto text-left">
               <thead>
                 <tr className="bg-linear-to-r from-[#00c853] to-[#00b0ff] text-white">
-                  {/* User - العمود الأساسي */}
                   <th className="px-4 py-4 font-semibold text-sm hidden md:table-cell">
                     User
                   </th>
-                  {/* باقي الأعمدة مع خاصية الاختفاء التدريجي */}
                   <th className="px-4 py-4 font-semibold text-sm">Email</th>
                   <th className="px-4 py-4 font-semibold text-sm hidden xl:table-cell">
                     Plan
@@ -405,7 +402,6 @@ const AllUsers = () => {
                     Credits
                   </th>
 
-                  {/* Details - يظهر في أي شاشة أصغر من xl ويأخذ مساحة صغيرة جداً (width-1) */}
                   <th className="px-4 py-4 w-1"></th>
                 </tr>
               </thead>
@@ -433,7 +429,6 @@ const AllUsers = () => {
                       </div>
                     </td>
 
-                    {/* Email Cell - أضفنا محددات لمنع التداخل */}
                     <td className="px-4 py-4 text-sm text-gray-600  max-w-[200px]">
                       <div className="truncate" title={u.email}>
                         {u.email}

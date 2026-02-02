@@ -18,7 +18,6 @@ function HugeLoader() {
   return (
     <div className="fixed inset-0 z-9999 flex flex-col items-center justify-center -mt-32">
       <div className="flex flex-col items-center gap-6">
-        {/* انيميشن اللوجو (نبض خفيف) */}
         <motion.div
           animate={{
             scale: [1, 1.05, 1],
@@ -38,7 +37,6 @@ function HugeLoader() {
           />
         </motion.div>
 
-        {/* الكلمة تتحرك بالكامل كقطعة واحدة وبدون بوليتس */}
         <motion.div
           variants={containerVariants}
           animate="animate"

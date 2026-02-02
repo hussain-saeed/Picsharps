@@ -53,14 +53,12 @@ body {
   }
 }
 
-/* أضف هذا في ملف الـ CSS الخاص بالمكون */
 .recharts-rectangle:focus,
 .recharts-bar-rectangle:focus,
 .recharts-wrapper:focus {
   outline: none !important;
 }
 
-/* لإزالة التظليل الافتراضي الذي يظهر عند النقر */
 .recharts-active-dot,
 .recharts-bar-cursor {
   display: none !important;

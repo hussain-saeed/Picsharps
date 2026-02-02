@@ -39,7 +39,6 @@ const UserActionsMenu = ({
 
   return (
     <div className="relative inline-block text-left" ref={menuRef}>
-      {/* زرار الفتح */}
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="cursor-pointer text-xl p-1 hover:bg-gray-100 rounded-full transition-colors flex items-center"
@@ -47,7 +46,6 @@ const UserActionsMenu = ({
         <RiMore2Fill />
       </button>
 
-      {/* القائمة (المنيو) */}
       {isOpen && (
         <div
           style={{ border: "2px solid rgb(230, 230, 230)" }}

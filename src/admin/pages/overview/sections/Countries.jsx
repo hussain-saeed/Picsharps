@@ -192,7 +192,6 @@ function Countries() {
                     <table className="w-full bg-white table-fixed sm:table-auto">
                       <thead>
                         <tr className="bg-linear-to-r from-[#00c853] to-[#00b0ff]">
-                          {/* 2. تقليل الـ padding في الموبايل px-2 بدلاً من pl-6 */}
                           <th className="px-3 sm:pl-6 sm:pr-6 py-4 text-left w-2/3 sm:w-auto">
                             <div className="flex items-center gap-2 text-white font-semibold text-xs sm:text-sm">
                               <IoEarth className="w-5 h-5 hidden sm:block" />
@@ -213,7 +212,6 @@ function Countries() {
                             </div>
                           </th>
 
-                          {/* عمود الزر في الموبايل بعرض محدد وقليل */}
                           <th className="px-3 py-4 sm:hidden w-1/3"></th>
                         </tr>
                       </thead>
@@ -240,7 +238,6 @@ function Countries() {
                                     />
                                   </div>
                                 </div>
-                                {/* تصغير الخط قليلاً في الموبايل text-[13px] */}
                                 <span className="text-[13px] sm:text-sm font-semibold text-gray-800 truncate">
                                   {item.countryName}
                                 </span>
@@ -282,7 +279,6 @@ function Countries() {
                     </table>
                   </div>
 
-                  {/* المودال */}
                   <GeneralModal isOpen={isOpen} onClose={closeModal}>
                     {selectedItem && (
                       <div className="text-left">

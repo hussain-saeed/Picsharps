@@ -1,5 +1,10 @@
 import { useState, useEffect, useRef } from "react";
 import { RiMore2Fill } from "react-icons/ri";
+import { CiMail } from "react-icons/ci";
+import { TbHandStop } from "react-icons/tb";
+import { FaRegTrashAlt } from "react-icons/fa";
+import { MdOutlineEmail } from "react-icons/md";
+import { BiLike } from "react-icons/bi";
 
 const UserActionsMenu = ({
   user,
@@ -7,6 +12,7 @@ const UserActionsMenu = ({
   onSuspend,
   onReactivate,
   onNotify,
+  index,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef(null);
@@ -44,26 +50,33 @@ const UserActionsMenu = ({
 
       {/* القائمة (المنيو) */}
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-xl z-50 py-1 overflow-hidden">
+        <div
+          style={{ border: "2px solid rgb(230, 230, 230)" }}
+          className={`absolute top-7 right-3 w-48 bg-white rounded-xl shadow-2xl z-50 overflow-hidden`}
+        >
           {isActive ? (
             <>
               <button
                 onClick={() => handleAction(onNotify)}
-                className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 transition-colors"
+                className="text-blue-500 flex items-center font-semibold gap-2 w-full text-left px-4 py-3 text-sm hover:bg-blue-50 transition-colors"
+                style={{ borderBottom: "1px solid rgb(230, 230, 230)" }}
               >
-                Send notification
+                <MdOutlineEmail className="text-xl" />
+                Send Notification
               </button>
               <button
                 onClick={() => handleAction(onSuspend)}
-                className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 transition-colors"
+                className="text-orange-600 flex items-center font-semibold gap-2 w-full text-left px-4 py-3 text-sm hover:bg-blue-50 transition-colors"
+                style={{ borderBottom: "1px solid rgb(230, 230, 230)" }}
               >
+                <TbHandStop className="text-xl" />
                 Suspend
               </button>
-              <div className="border-t border-gray-100 my-1"></div>
               <button
                 onClick={() => handleAction(onDelete)}
-                className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                className="text-red-600 flex items-center font-semibold gap-2 w-full text-left px-4 py-4 text-sm hover:bg-blue-50 transition-colors"
               >
+                <FaRegTrashAlt className="text-xl" />
                 Delete
               </button>
             </>
@@ -71,15 +84,17 @@ const UserActionsMenu = ({
             <>
               <button
                 onClick={() => handleAction(onReactivate)}
-                className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 transition-colors"
+                className="text-green-500 flex items-center font-semibold gap-2 w-full text-left px-4 py-3 text-sm hover:bg-blue-50 transition-colors"
+                style={{ borderBottom: "1px solid rgb(230, 230, 230)" }}
               >
+                <BiLike className="text-xl" />
                 Reactivate
               </button>
-              <div className="border-t border-gray-100 my-1"></div>
               <button
                 onClick={() => handleAction(onDelete)}
-                className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                className="text-red-600 flex items-center font-semibold gap-2 w-full text-left px-4 py-4 text-sm hover:bg-blue-50 transition-colors"
               >
+                <FaRegTrashAlt className="text-xl" />
                 Delete
               </button>
             </>

@@ -406,13 +406,8 @@ const AllUsers = () => {
                     Credits
                   </th>
 
-                  {/* Actions - يظهر فقط في الشاشات الكبيرة جداً */}
-                  <th className="px-4 py-4 font-semibold text-sm hidden xl:table-cell">
-                    Actions
-                  </th>
-
                   {/* Details - يظهر في أي شاشة أصغر من xl ويأخذ مساحة صغيرة جداً (width-1) */}
-                  <th className="px-4 py-4 xl:hidden w-1"></th>
+                  <th className="px-4 py-4 w-1"></th>
                 </tr>
               </thead>
 
@@ -479,7 +474,7 @@ const AllUsers = () => {
                         className={`px-3 py-1.5 rounded-full text-[13px] font-semibold whitespace-nowrap ${
                           u.status === "Active"
                             ? "bg-green-100 text-green-600"
-                            : "bg-red-100 text-red-600"
+                            : "bg-orange-100 text-orange-600"
                         }`}
                       >
                         {u.status}
@@ -501,39 +496,16 @@ const AllUsers = () => {
                       {u.credits}
                     </td>
 
-                    {/* Desktop Actions */}
-                    <td className="px-4 py-4 hidden xl:table-cell text-center w-1">
-                      <UserActionsMenu
-                        user={u}
-                        onDelete={(user) => {
-                          setSelectedUser(user);
-                          setOpenDelete(true);
-                        }}
-                        onSuspend={(user) => {
-                          setSelectedUser(user);
-                          setOpenSuspend(true);
-                        }}
-                        onReactivate={(user) => {
-                          setSelectedUser(user);
-                          setOpenReactivate(true);
-                        }}
-                        onNotify={(user) => {
-                          setSelectedUser(user);
-                          setOpenNotify(true);
-                        }}
-                      />
-                    </td>
-
                     {/* Mobile/Tablet Details Button */}
-                    <td className="px-4 py-4 xl:hidden text-right w-1">
+                    <td className="px-4 py-4 text-right w-1">
                       <button
                         onClick={() => {
                           setSelectedUser(u);
                           setOpenDetailsModal(true);
                         }}
-                        className="inline-flex items-center gap-1 text-[11px] font-bold text-[#00b0ff] cursor-pointer hover:underline whitespace-nowrap"
+                        className="inline-flex items-center gap-1 text-[13px] font-bold text-[#00b0ff] cursor-pointer hover:underline whitespace-nowrap"
                       >
-                        Details
+                        Actions
                         <LuSquareArrowOutUpRight className="shrink-0" />
                       </button>
                     </td>
@@ -620,7 +592,7 @@ const AllUsers = () => {
                     className={`px-3 py-1.5 rounded-full text-[11px] font-semibold whitespace-nowrap ${
                       selectedUser.status === "Active"
                         ? "bg-green-100 text-green-600"
-                        : "bg-red-100 text-red-600"
+                        : "bg-orange-100 text-orange-600"
                     }`}
                   >
                     {selectedUser.status}

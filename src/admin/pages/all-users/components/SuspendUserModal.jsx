@@ -4,13 +4,10 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  IconButton,
-  TextField,
-  Button,
-  Typography,
 } from "@mui/material";
 import { toast } from "react-toastify";
 import { useSuspendUserMutation } from "../../../features/core/adminCoreApi";
+import { X, AlertTriangle } from "lucide-react"; // أيقونة تحذير اختيارية
 
 const SuspendUserModal = ({ open, onClose, user }) => {
   const [reason, setReason] = useState("");
@@ -29,6 +26,7 @@ const SuspendUserModal = ({ open, onClose, user }) => {
 
   const handleSuspend = async () => {
     if (!user?.id) return;
+    if (!reason) return toast.warning("Please provide a suspension reason");
 
     setIsLoading(true);
     try {
@@ -53,74 +51,100 @@ const SuspendUserModal = ({ open, onClose, user }) => {
   return (
     <Dialog
       open={open}
-      onClose={() => {}}
+      onClose={handleClose}
       disableEscapeKeyDown
       fullWidth
       maxWidth="sm"
+      PaperProps={{
+        style: { borderRadius: "18px", padding: "12px" },
+      }}
     >
-      <DialogTitle>
-        Suspend User
-        <IconButton
+      {/* Header */}
+      <DialogTitle className="flex justify-between items-start pb-4 gap-12">
+        <span className="text-2xl font-medium">Suspend Account</span>
+        <button
           onClick={handleClose}
           disabled={isLoading}
-          sx={{
-            position: "absolute",
-            right: 8,
-            top: 8,
-            cursor: isLoading ? "not-allowed" : "pointer",
-          }}
+          className="p-1 rounded-full hover:bg-gray-100 transition-colors disabled:opacity-50"
         >
-          X
-        </IconButton>
+          <X size={20} className="text-gray-500" />
+        </button>
       </DialogTitle>
 
-      <DialogContent>
-        <Typography fontWeight={600}>{user?.name}</Typography>
-        <Typography variant="body2" mb={2}>
-          {user?.email}
-        </Typography>
+      <DialogContent className="mt-2">
+        {/* Warning Message */}
+        <div className="flex gap-3 py-4 px-6 mb-6 rounded-xl bg-[#FFFBEB] border border-[#FEF3C7]">
+          <p className="text-sm leading-relaxed">
+            You are about to suspend <strong>{user?.name}’s</strong> account.
+            They will not be able to login until reactivated.
+          </p>
+        </div>
 
-        <TextField
-          fullWidth
-          label="Reason"
-          value={reason}
-          onChange={(e) => setReason(e.target.value)}
-          sx={{ mb: 2 }}
-          disabled={isLoading}
-        />
+        {/* User Info Card */}
+        <div className="bg-[#F8F9FA] p-6 rounded-lg mb-8 border border-gray-100">
+          <p className="font-semibold text-gray-800 leading-tight">
+            {user?.name}
+          </p>
+          <p className="text-sm text-gray-500">{user?.email}</p>
+        </div>
 
-        <TextField
-          fullWidth
-          label="Notes"
-          multiline
-          rows={3}
-          value={notes}
-          onChange={(e) => setNotes(e.target.value)}
-          disabled={isLoading}
-        />
+        {/* Suspension Reason Input */}
+        <div className="mb-6">
+          <label className="font-medium block mb-2 text-gray-700">
+            Suspension Reason <span className="text-red-500">*</span>
+          </label>
+          <input
+            type="text"
+            placeholder="e.g., Policy violation, Suspicious activity ..."
+            value={reason}
+            onChange={(e) => setReason(e.target.value)}
+            disabled={isLoading}
+            className="w-full p-[10px_12px] rounded-lg outline-none focus:ring-2 focus:ring-[#00B0FF] transition-all disabled:opacity-60"
+            style={{ border: "1px solid rgb(225, 225, 225)" }}
+          />
+        </div>
+
+        {/* Additional Notes Input */}
+        <div className="mb-1">
+          <label className="font-medium block mb-2 text-gray-700">
+            Additional Notes <span className="text-red-500">*</span>
+          </label>
+          <textarea
+            placeholder="Add any additional details ..."
+            rows={4}
+            value={notes}
+            onChange={(e) => setNotes(e.target.value)}
+            disabled={isLoading}
+            className="w-full p-[10px_12px] rounded-lg outline-none focus:ring-2 focus:ring-[#00B0FF] transition-all resize-none disabled:opacity-60"
+            style={{ border: "1px solid rgb(225, 225, 225)" }}
+          />
+        </div>
       </DialogContent>
 
-      <DialogActions>
-        <Button
+      <DialogActions className="gap-1 flex">
+        <button
           onClick={handleClose}
           disabled={isLoading}
-          sx={{ cursor: isLoading ? "not-allowed" : "pointer" }}
+          className="w-[50%] sm:w-fit px-5 py-2 bg-gray-200 rounded-lg font-medium text-gray-600 disabled:opacity-50"
         >
           Cancel
-        </Button>
+        </button>
 
-        <Button
-          color="warning"
-          variant="contained"
+        <button
           onClick={handleSuspend}
-          disabled={isLoading}
-          sx={{
-            opacity: isLoading ? 0.6 : 1,
-            cursor: isLoading ? "not-allowed" : "pointer",
-          }}
+          disabled={isLoading || !reason}
+          className="w-[50%] sm:w-fit px-6 py-2 rounded-lg font-semibold text-white transition-all shadow-sm active:scale-95 disabled:opacity-50 disabled:pointer-events-none"
+          style={{ background: "orange" }}
         >
-          {isLoading ? "LOADING" : "Suspend"}
-        </Button>
+          {isLoading ? (
+            <span className="flex items-center gap-2">
+              <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+              Suspending...
+            </span>
+          ) : (
+            "Suspend"
+          )}
+        </button>
       </DialogActions>
     </Dialog>
   );

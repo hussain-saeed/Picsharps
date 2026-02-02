@@ -4,12 +4,10 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  IconButton,
-  Button,
-  Typography,
 } from "@mui/material";
 import { toast } from "react-toastify";
 import { useReactivateUserMutation } from "../features/core/adminCoreApi";
+import { X } from "lucide-react";
 
 const ReactivateUserModal = ({ open, onClose, user }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -42,53 +40,70 @@ const ReactivateUserModal = ({ open, onClose, user }) => {
   return (
     <Dialog
       open={open}
-      onClose={() => {}}
+      onClose={handleClose}
       disableEscapeKeyDown
       fullWidth
-      maxWidth="xs"
+      maxWidth="sm"
+      PaperProps={{
+        style: { borderRadius: "18px", padding: "12px" },
+      }}
     >
-      <DialogTitle>
-        Reactivate User
-        <IconButton
+      {/* Header */}
+      <DialogTitle className="flex justify-between items-start pb-4 gap-12">
+        <span className="text-2xl font-medium text-gray-800">
+          Reactivate User
+        </span>
+        <button
           onClick={handleClose}
           disabled={isLoading}
-          sx={{
-            position: "absolute",
-            right: 8,
-            top: 8,
-            cursor: isLoading ? "not-allowed" : "pointer",
-          }}
+          className="p-1 rounded-full hover:bg-gray-100 transition-colors disabled:opacity-50"
         >
-          X
-        </IconButton>
+          <X size={20} className="text-gray-500" />
+        </button>
       </DialogTitle>
 
-      <DialogContent>
-        <Typography fontWeight={600}>{user?.name}</Typography>
-        <Typography variant="body2">{user?.email}</Typography>
+      <DialogContent className="mt-2">
+        {/* Info Message */}
+        <div className="p-4 mb-6 rounded-xl bg-blue-50 border border-blue-100 text-blue-700">
+          <p className="text-sm leading-relaxed">
+            You are about to reactivate <strong>{user?.name}’s</strong> account.
+            They will regain full access to their account immediately.
+          </p>
+        </div>
+
+        {/* User Info Card */}
+        <div className="bg-[#F8F9FA] p-6 rounded-lg mb-4 border border-gray-100">
+          <p className="font-semibold text-gray-800 leading-tight">
+            {user?.name}
+          </p>
+          <p className="text-sm text-gray-500">{user?.email}</p>
+        </div>
       </DialogContent>
 
-      <DialogActions>
-        <Button
+      <DialogActions className="gap-1 flex">
+        <button
           onClick={handleClose}
           disabled={isLoading}
-          sx={{ cursor: isLoading ? "not-allowed" : "pointer" }}
+          className="w-[50%] sm:w-fit px-5 py-2 bg-gray-200 rounded-lg font-medium text-gray-600 disabled:opacity-50"
         >
           Cancel
-        </Button>
+        </button>
 
-        <Button
-          color="success"
-          variant="contained"
+        <button
           onClick={handleReactivate}
           disabled={isLoading}
-          sx={{
-            opacity: isLoading ? 0.6 : 1,
-            cursor: isLoading ? "not-allowed" : "pointer",
-          }}
+          className="w-[50%] sm:w-fit px-6 py-2 rounded-lg font-semibold text-white transition-all shadow-sm active:scale-95 disabled:opacity-50 disabled:pointer-events-none"
+          style={{ background: "var(--gradient-color)" }}
         >
-          {isLoading ? "LOADING" : "Reactivate"}
-        </Button>
+          {isLoading ? (
+            <span className="flex items-center gap-2">
+              <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+              Activating...
+            </span>
+          ) : (
+            "Reactivate"
+          )}
+        </button>
       </DialogActions>
     </Dialog>
   );

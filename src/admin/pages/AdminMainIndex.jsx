@@ -53,7 +53,7 @@ export default function AdminMainIndex() {
       className="bg-white w-full sm:w-fit rounded-2xl"
     >
       {/* Welcome Card */}
-      <h1 className="text-2xl md:text-3xl font-bold text-gray-800 mb-2 text-center sm:text-left">
+      <h1 className="text-2xl md:text-3xl font-bold text-gray-800 mb-2 text-left">
         Welcome,{" "}
         <span
           style={{
@@ -66,7 +66,7 @@ export default function AdminMainIndex() {
         </span>
       </h1>
 
-      <p className="text-gray-600 text-md md:text-lg mb-6 text-center sm:text-left truncate">
+      <p className="text-gray-600 text-md md:text-lg mb-6 text-left truncate">
         {email}
       </p>
 

@@ -28,7 +28,7 @@ function HugeLoader() {
             repeat: Infinity,
             ease: "easeInOut",
           }}
-          className="w-24 h-24 md:w-48 md:h-48"
+          className="w-27 h-27"
         >
           <img
             src="/images/logo.svg"
@@ -40,7 +40,7 @@ function HugeLoader() {
         <motion.div
           variants={containerVariants}
           animate="animate"
-          className="flex text-3xl md:text-6xl font-extrabold text-[#1B2337] tracking-tight"
+          className="flex text-4xl font-extrabold text-[#1B2337] tracking-tight"
         >
           {brandName}
         </motion.div>

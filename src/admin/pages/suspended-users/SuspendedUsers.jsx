@@ -19,6 +19,8 @@ import ReactivateUserModal from "../../components/ReactivateUserModal";
 import { LuSquareArrowOutUpRight } from "react-icons/lu";
 import useGeneralModal from "../../hooks/useGeneralModal";
 import GeneralModal from "../../components/GeneralModal";
+import { LoadingDots } from "../../components/LoadingDots";
+import Spinner from "../../../components/Spinner";
 
 const SuspendedUsers = () => {
   // ================= STATE =================
@@ -70,9 +72,14 @@ const SuspendedUsers = () => {
   // ================= RENDER =================
   if (isInitialLoading) {
     return (
-      <Box mt={4}>
-        <Typography>Loading...</Typography>
-      </Box>
+      <div className="inset-0 flex justify-center pt-40">
+        <LoadingDots
+          loadingSize="2rem"
+          loadingWeight="600"
+          dotsSize="2.5rem"
+          dotsWeight="bold"
+        />
+      </div>
     );
   }
 
@@ -171,69 +178,66 @@ const SuspendedUsers = () => {
 
       {/* ================= PAGINATION ================= */}
       {!isEmpty && pagination && pagination.totalPages > 1 && (
-        <div
-          className="bg-white px-3 sm:px-6 py-6 rounded-xl flex flex-row mt-5.5 items-center justify-center lg:justify-end"
-          style={{ border: "1px solid rgb(235, 235, 235)" }}
-        >
-          {isPageLoading && (
-            <Typography variant="body2" mr={2}>
-              Loading...
-            </Typography>
-          )}
-          <Pagination
-            count={pagination.totalPages}
-            page={page}
-            onChange={handleChangePage}
-            siblingCount={0}
-            boundaryCount={1}
-            showFirstButton
-            showLastButton
-            disabled={isFetching}
-            sx={{
-              "& .MuiPaginationItem-root": {
-                fontWeight: "bold",
-                fontSize: "18px",
-                backgroundColor: "#f5f5f5",
-                borderRadius: "6px",
-                border: "1px solid #ddd",
-                padding: "20px 18px",
-                "@media (max-width: 600px)": {
-                  padding: "4px 8px",
-                  fontSize: "0.8rem",
-                  margin: "0 2px",
-                },
-                "&.Mui-selected": {
-                  backgroundColor: "#00B0FF",
-                  color: "#fff",
-                },
-              },
-              "@media (max-width: 600px)": {
-                "& .MuiPaginationItem-firstButton, & .MuiPaginationItem-lastButton":
-                  {
-                    display: "none",
+        <>
+          <div
+            className="bg-white mb-5 px-3 sm:px-6 py-6 rounded-xl flex flex-row mt-5.5 items-center justify-center lg:justify-end"
+            style={{ border: "1px solid rgb(235, 235, 235)" }}
+          >
+            <Pagination
+              count={pagination.totalPages}
+              page={page}
+              onChange={handleChangePage}
+              siblingCount={0}
+              boundaryCount={1}
+              showFirstButton
+              showLastButton
+              disabled={isFetching}
+              sx={{
+                  "& .MuiPaginationItem-root": {
+                    fontWeight: "bold",
+                    fontSize: "18px",
+                    backgroundColor: "#f5f5f5",
+                    borderRadius: "6px",
+                    border: "1px solid #ddd",
+                    padding: "22px 18px",
+                    "@media (max-width: 600px)": {
+                      padding: "4px 8px",
+                      fontSize: "0.8rem",
+                      margin: "0 2px",
+                    },
+                    "&.Mui-selected": {
+                      backgroundColor: "#00B0FF",
+                      color: "#fff",
+                    },
                   },
-                "& .MuiPaginationItem-previousNext": {
-                  display: "none",
-                },
-              },
-              "& .MuiPaginationItem-ellipsis": {
-                backgroundColor: "transparent",
-                border: "none",
-                color: "#666",
-              },
-              "&.Mui-selected": {
-                backgroundColor: "#00B0FF !important",
-                color: "#fff",
-                "&:hover": {
-                  backgroundColor: "#0090D1", 
-                },
-              },
-              "&.Mui-selected.Mui-focusVisible": {
-                backgroundColor: "#00B0FF",
-              },
-            }}
-          />
-        </div>
+                  "@media (max-width: 600px)": {
+                    "& .MuiPaginationItem-firstButton, & .MuiPaginationItem-lastButton":
+                      {
+                        display: "none",
+                      },
+                    "& .MuiPaginationItem-previousNext": {
+                      display: "none",
+                    },
+                  },
+                  "& .MuiPaginationItem-ellipsis": {
+                    backgroundColor: "transparent",
+                    border: "none",
+                    color: "#666",
+                  },
+                  "&.Mui-selected": {
+                    backgroundColor: "#00B0FF !important",
+                    color: "#fff",
+                  },
+                  "&.Mui-selected.Mui-focusVisible": {
+                    backgroundColor: "#00B0FF",
+                  },
+                }}
+            />
+          </div>
+          <div className="flex justify-end min-h-[35px]">
+            {isPageLoading && <Spinner />}
+          </div>
+        </>
       )}
 
       {/* ================= MOBILE DETAILS MODAL ================= */}

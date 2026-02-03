@@ -71,7 +71,7 @@ const UserActionsMenu = ({
               </button>
               <button
                 onClick={() => handleAction(onDelete)}
-                className="text-red-600 flex items-center cursor-pointer font-semibold gap-2 w-full text-left px-4 py-4 text-sm hover:bg-blue-50 transition-colors"
+                className="text-red-600 flex items-center cursor-pointer font-semibold gap-2 w-full text-left px-4 py-3 text-sm hover:bg-blue-50 transition-colors"
               >
                 <FaRegTrashAlt className="text-xl" />
                 Delete
@@ -89,7 +89,7 @@ const UserActionsMenu = ({
               </button>
               <button
                 onClick={() => handleAction(onDelete)}
-                className="text-red-600 flex items-center cursor-pointer font-semibold gap-2 w-full text-left px-4 py-4 text-sm hover:bg-blue-50 transition-colors"
+                className="text-red-600 flex items-center cursor-pointer font-semibold gap-2 w-full text-left px-4 py-3 text-sm hover:bg-blue-50 transition-colors"
               >
                 <FaRegTrashAlt className="text-xl" />
                 Delete

@@ -38,7 +38,7 @@ function Countries({ markAsDone }) {
     openModal();
   };
   const chartRef = useRef(null);
-  const { downloadPDF: exportToPDF } = useExportPDF();
+  const { downloadPDF: exportToPDF, isLoading } = useExportPDF();
 
   const downloadPDF = async () => {
     await exportToPDF(chartRef);
@@ -408,7 +408,7 @@ function Countries({ markAsDone }) {
             </div>
 
             <div className="relative">
-              <ShowAsPDF onClick={downloadPDF} />
+              <ShowAsPDF onClick={downloadPDF} isLoading={isLoading} />
 
               <div
                 ref={chartRef}

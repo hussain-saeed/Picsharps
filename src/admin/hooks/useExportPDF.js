@@ -1,11 +1,16 @@
 import { jsPDF } from "jspdf";
 import { toPng } from "html-to-image";
+import { useState } from "react";
 
 const useExportPDF = () => {
+  const [isLoading, setIsLoading] = useState(false);
+
   const downloadPDF = async (ref) => {
-    if (ref.current === null) return;
+    if (!ref?.current) return;
 
     try {
+      setIsLoading(true);
+
       const dataUrl = await toPng(ref.current, {
         cacheBust: true,
         backgroundColor: "#ffffff",
@@ -20,10 +25,12 @@ const useExportPDF = () => {
       window.open(pdf.output("bloburl"), "_blank");
     } catch (err) {
       console.error("oops, something went wrong!", err);
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  return { downloadPDF };
+  return { downloadPDF, isLoading };
 };
 
 export default useExportPDF;

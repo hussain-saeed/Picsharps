@@ -69,7 +69,7 @@ function UserGrowth({ markAsDone }) {
   };
 
   const chartRef = useRef(null);
-  const { downloadPDF: exportToPDF } = useExportPDF();
+  const { downloadPDF: exportToPDF, isLoading } = useExportPDF();
 
   const downloadPDF = async () => {
     await exportToPDF(chartRef);
@@ -277,7 +277,11 @@ function UserGrowth({ markAsDone }) {
       {hasData && !isFetching && processedData.length > 0 && (
         <>
           <div className="relative">
-            <ShowAsPDF onClick={() => downloadPDF(chartRef)} breakP="lg" />
+            <ShowAsPDF
+              onClick={() => downloadPDF(chartRef)}
+              breakP="lg"
+              isLoading={isLoading}
+            />
 
             <div style={{ width: "100%", overflow: "hidden" }}>
               <div

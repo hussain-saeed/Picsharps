@@ -1,15 +1,22 @@
 import { ImFilePdf } from "react-icons/im";
 
-function ShowAsPDF({ onClick, breakP = "sm" }) {
+function ShowAsPDF({ onClick, breakP = "sm", isLoading }) {
   return (
     <>
       <button
+        disable={isLoading}
         style={{ background: "var(--gradient-color)" }}
         onClick={onClick}
-        className={`text-white absolute bottom-7 font-semibold py-3 px-6 rounded-lg shadow-lg flex items-center justify-center gap-2 z-21 ${breakP}:hidden`}
+        className={`text-white absolute bottom-7 font-semibold py-3 px-6 rounded-lg shadow-lg flex items-center justify-center gap-2 z-21 ${breakP}:hidden ${isLoading ? "opacity-80 cursor-not-allowed" : "opacity-100 cursor-pointer"}`}
       >
-        <span>Show as PDF</span>
-        <ImFilePdf style={{ fontSize: "24px" }} />
+        {isLoading ? (
+          "Loading ..."
+        ) : (
+          <>
+            <span>Show as PDF</span>
+            <ImFilePdf style={{ fontSize: "24px" }} />
+          </>
+        )}
       </button>
       <div
         className={`block ${breakP}:hidden absolute min-w-[2000px] h-full z-20 -left-10 bg-black/50 backdrop-blur-sm border-white/10`}

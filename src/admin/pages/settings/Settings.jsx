@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import { IoCheckmarkCircle, IoCloseCircle } from "react-icons/io5";
 import { IoCloseOutline } from "react-icons/io5";
 import { AiOutlineSave } from "react-icons/ai";
+import { LoadingDots } from "../../components/LoadingDots";
 
 function Settings() {
   // ================= QUERIES =================
@@ -71,7 +72,7 @@ function Settings() {
   return (
     <div
       style={{ padding: "30px", border: "1px solid rgba(228, 228, 228, 1)" }}
-      className="bg-white w-full lg:max-w-[700px] rounded-2xl shadow-xl"
+      className="bg-white w-full lg:max-w-[700px] rounded-2xl shadow-xl min-h-[430px]"
     >
       <div className="mb-10">
         <h2 className="text-xl font-semibold ">General Settings</h2>
@@ -79,9 +80,16 @@ function Settings() {
           Manage your application's basic information and preferences
         </p>
       </div>
-
       {/* Loading / Error */}
-      {isFetching && <div>Loading settings...</div>}
+      {isFetching && (
+        <LoadingDots
+          loadingSize="20px"
+          loadingWeight="500"
+          dotsSize="25px"
+          dotsWeight="600"
+          gap="4px"
+        />
+      )}{" "}
       {isError && <div>Error fetching settings</div>}
       {!isFetching && !isError && !hasData && (
         <div>Error fetching settings</div>

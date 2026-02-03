@@ -434,7 +434,7 @@ const AllUsers = () => {
                       </div>
                     </td>
 
-                    <td className="px-4 py-4 text-sm text-gray-600  max-w-[200px]">
+                    <td className="px-4 py-4 text-sm text-gray-600 max-w-[200px]">
                       <div className="truncate" title={u.email}>
                         {u.email}
                       </div>

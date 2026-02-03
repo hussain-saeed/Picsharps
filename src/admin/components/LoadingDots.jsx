@@ -4,6 +4,7 @@ export const LoadingDots = ({
   loadingWeight = "normal",
   dotsSize = "1.5rem",
   dotsWeight = "bold",
+  gap = "8px",
 }) => {
   return (
     <div className={className}>
@@ -26,8 +27,9 @@ export const LoadingDots = ({
           fontSize: loadingSize,
           fontWeight: loadingWeight,
           verticalAlign: "middle",
+          gap: gap,
         }}
-        className="flex items-center gap-2"
+        className="flex items-center"
       >
         Loading
         <div className="mb-2">

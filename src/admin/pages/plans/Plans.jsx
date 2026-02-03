@@ -8,6 +8,7 @@ import { transformPlansBySlug } from "../../../utils/plansUtils";
 import { IoCheckmarkCircle, IoCloseCircle } from "react-icons/io5";
 import { IoCloseOutline } from "react-icons/io5";
 import { AiOutlineSave } from "react-icons/ai";
+import { LoadingDots } from "../../components/LoadingDots";
 
 function Plans() {
   const prevGroupRef = React.useRef(null);
@@ -135,11 +136,19 @@ function Plans() {
   return (
     <div
       style={{ padding: "30px", border: "1px solid rgba(228, 228, 228, 1)" }}
-      className="bg-white w-full lg:max-w-[700px] rounded-2xl shadow-xl"
+      className="bg-white w-full lg:max-w-[700px] rounded-2xl shadow-xl min-h-[671px]"
     >
       <h2 className="text-xl font-semibold mb-4">Plan Management</h2>
 
-      {isFetching && <div>Loading...</div>}
+      {isFetching && (
+        <LoadingDots
+          loadingSize="20px"
+          loadingWeight="500"
+          dotsSize="25px"
+          dotsWeight="600"
+          gap="4px"
+        />
+      )}
       {!isFetching && data?.status !== "success" && (
         <div>Error fetching plans</div>
       )}

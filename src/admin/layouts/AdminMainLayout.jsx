@@ -67,10 +67,13 @@ function AdminMainLayout() {
   const SidebarContent = ({ closeSidebar }) => (
     <div className="flex flex-col min-h-screen py-6 text-white overflow-y-auto overflow-x-hidden custom-scrollbar">
       <div className="px-7.5 mb-8 flex flex-col shrink-0">
-        <div className="text-2xl font-semibold tracking-tight flex items-center gap-2 mb-4">
+        <NavLink
+          className="text-2xl font-semibold tracking-tight flex items-center gap-2 mb-4"
+          to="/admin8yut91b9e22a/main"
+        >
           <img src="/images/logo.png" alt="logo" />
           <span>Picsharps</span>
-        </div>
+        </NavLink>
         <span className="text-xs text-gray-500 tracking-[0.2em] font-medium">
           Admin Dashboard
         </span>
@@ -148,9 +151,12 @@ function AdminMainLayout() {
                     <HiMenuAlt2 />
                   </button>
                   <h2 className="text-2xl font-bold text-black">
-                    {activeLink?.name || "Welcome Page"}
+                    {activeLink?.name || ""}
                   </h2>
-                  <div className="items-center gap-4 hidden sm:flex">
+                  <NavLink
+                    className="items-center gap-3 hidden sm:flex"
+                    to="/admin8yut91b9e22a/main"
+                  >
                     <div
                       className="w-10 h-10 rounded-full flex items-center justify-center text-white text-2xl"
                       style={{ background: "var(--gradient-color)" }}
@@ -158,7 +164,7 @@ function AdminMainLayout() {
                       <LiaUser />
                     </div>
                     <p className="font-semibold text-black">Admin user</p>
-                  </div>
+                  </NavLink>
                 </div>
               </FullBleedSection>
             </main>

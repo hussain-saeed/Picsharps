@@ -28,7 +28,7 @@ export const useAdminAuth = () => {
 
     try {
       const res = await refreshTrigger().unwrap();
-
+console.log(res)
       if (res?.status === "success") {
         const roles = res?.data?.user?.roles || [];
 

@@ -477,7 +477,7 @@ function UserGrowth({ markAsDone }) {
 
                               <td className="px-3 py-4 md:hidden flex items-center justify-end">
                                 <button
-                                  onClick={() => handleOpenModal(record)} // تأكد من وجود الميثود لفتح المودال
+                                  onClick={() => handleOpenModal(record)}
                                   className="flex items-center gap-1 text-[11px] font-bold text-[#00b0ff] cursor-pointer whitespace-nowrap"
                                 >
                                   Details

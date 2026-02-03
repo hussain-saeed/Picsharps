@@ -1,6 +1,7 @@
 import { jsPDF } from "jspdf";
 import { toPng } from "html-to-image";
 import { useState } from "react";
+import { toast } from "react-toastify";
 
 const useExportPDF = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -24,7 +25,7 @@ const useExportPDF = () => {
 
       window.open(pdf.output("bloburl"), "_blank");
     } catch (err) {
-      console.error("oops, something went wrong!", err);
+      toast.error("Something went wrong!");
     } finally {
       setIsLoading(false);
     }

@@ -16,7 +16,6 @@ export default function AdminMainIndex() {
 
   const [currentTime, setCurrentTime] = useState(new Date());
 
-  // تحديث الوقت كل ثانية
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentTime(new Date());
@@ -25,7 +24,6 @@ export default function AdminMainIndex() {
     return () => clearInterval(timer);
   }, []);
 
-  // تحويل كود الدولة لاسم الدولة
   let countryName = "Unknown";
   if (admin.lastLogInCountry && admin.lastLogInCountry.length === 2) {
     try {
@@ -42,9 +40,9 @@ export default function AdminMainIndex() {
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowFlag(true);
-    }, 1000); // يظهر بعد 2 ثانية
+    }, 1000);
 
-    return () => clearTimeout(timer); // تنظيف التايمر لما الكومبوننت يتشال
+    return () => clearTimeout(timer);
   }, []);
 
   return (
@@ -90,7 +88,6 @@ export default function AdminMainIndex() {
           </p>
         </div>
 
-        {/* Time (يتحدث كل ثانية) */}
         <div>
           <p className="text-sm text-gray-500 flex gap-1">
             <TfiTimer style={{ marginTop: "1px", fontSize: "16px" }} />
@@ -102,7 +99,7 @@ export default function AdminMainIndex() {
               minute: "2-digit",
               second: "2-digit",
               hour12: true,
-              timeZoneName: "short", // اختياري: يضيف الـ timezone مثل EET
+              timeZoneName: "short",
             })}
           </p>
         </div>
@@ -125,7 +122,7 @@ export default function AdminMainIndex() {
                   alt={countryName}
                   className="w-full h-full object-cover"
                   onError={(e) => {
-                    e.target.src = "https://flagsapi.com/XX/flat/64.png"; // fallback
+                    e.target.src = "https://flagsapi.com/XX/flat/64.png";
                     e.target.alt = "Unknown";
                   }}
                 />

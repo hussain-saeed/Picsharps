@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import {
   BarChart,
   Bar,
@@ -30,7 +30,7 @@ import { useRef } from "react";
 import useExportPDF from "../../../hooks/useExportPDF";
 import ShowAsPDF from "../../../components/ShowAsPDF";
 
-function Countries() {
+function Countries({ markAsDone }) {
   const { isOpen, openModal, closeModal } = useGeneralModal();
   const [selectedItem, setSelectedItem] = useState(null);
   const handleOpenModal = (item) => {
@@ -47,6 +47,23 @@ function Countries() {
   const { data, isFetching, isError } = useGetCountriesQuery(undefined, {
     refetchOnMountOrArgChange: true,
   });
+
+  useEffect(() => {
+    let timeoutId;
+
+    markAsDone(false);
+
+    if (!isFetching) {
+      markAsDone(true);
+    } else {
+      timeoutId = setTimeout(() => markAsDone(true), 10000);
+    }
+
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId);
+      markAsDone(false);
+    };
+  }, [isFetching]);
 
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);

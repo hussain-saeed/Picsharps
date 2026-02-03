@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   PieChart,
   Pie,
@@ -9,10 +9,27 @@ import {
 } from "recharts";
 import { useGetRevenueQuery } from "../../../features/core/adminCoreApi";
 
-function Revenue() {
+function Revenue({ markAsDone }) {
   const { data, isFetching, isError } = useGetRevenueQuery(undefined, {
     refetchOnMountOrArgChange: true,
   });
+
+useEffect(() => {
+  let timeoutId;
+
+  markAsDone(false); 
+
+  if (!isFetching) {
+    markAsDone(true);
+  } else {
+    timeoutId = setTimeout(() => markAsDone(true), 10000);
+  }
+
+  return () => {
+    if (timeoutId) clearTimeout(timeoutId);
+    markAsDone(false);
+  };
+}, [isFetching]);
 
   const hasData = data?.status === "success" && data.data;
   const stats = hasData ? data.data : null;
@@ -91,9 +108,7 @@ function Revenue() {
               height="100%"
               accessibilityLayer={false}
             >
-              <PieChart
-                accessibilityLayer={false}
-              >
+              <PieChart accessibilityLayer={false}>
                 <Pie
                   accessibilityLayer={false}
                   data={filteredStats}

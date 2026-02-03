@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useGetOverviewStatisticsQuery } from "../../../features/core/adminCoreApi";
 import {
   FaUser,
@@ -116,13 +116,30 @@ function ChangeIndicator({ value, label }) {
   );
 }
 
-function OverviewStatistics() {
+function OverviewStatistics({ markAsDone }) {
   const { data, isFetching, isError } = useGetOverviewStatisticsQuery(
     undefined,
     {
       refetchOnMountOrArgChange: true,
     },
   );
+
+  useEffect(() => {
+    let timeoutId;
+
+    markAsDone(false);
+
+    if (!isFetching) {
+      markAsDone(true);
+    } else {
+      timeoutId = setTimeout(() => markAsDone(true), 10000);
+    }
+
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId);
+      markAsDone(false);
+    };
+  }, [isFetching]);
 
   const hasData = data?.status === "success" && data.data;
 

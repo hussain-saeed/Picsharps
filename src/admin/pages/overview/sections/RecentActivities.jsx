@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useGetRecentActivityQuery } from "../../../features/core/adminCoreApi";
 import { BsArrowsFullscreen } from "react-icons/bs";
 import { IoReloadOutline } from "react-icons/io5";
 
-function RecentActivities() {
+function RecentActivities({ markAsDone }) {
   const LIMIT = 5;
 
   const [cursor, setCursor] = useState(undefined);
@@ -15,6 +15,23 @@ function RecentActivities() {
     { limit: LIMIT, cursor },
     { refetchOnMountOrArgChange: true },
   );
+
+useEffect(() => {
+  let timeoutId;
+
+  markAsDone(false); 
+
+  if (!isFetching) {
+    markAsDone(true);
+  } else {
+    timeoutId = setTimeout(() => markAsDone(true), 10000);
+  }
+
+  return () => {
+    if (timeoutId) clearTimeout(timeoutId);
+    markAsDone(false);
+  };
+}, [isFetching]);
 
   // Reset on mount
   useEffect(() => {
@@ -258,7 +275,7 @@ function RecentActivities() {
             opacity: isLoadingMore ? 0.6 : 1,
             cursor: isLoadingMore ? "not-allowed" : "pointer",
           }}
-          className="rounded-md text-white flex items-center gap-2 shadow-2xl"
+          className="rounded-md text-white flex items-center gap-2"
         >
           {isLoadingMore ? "Loading..." : "Load More"}
           <IoReloadOutline />

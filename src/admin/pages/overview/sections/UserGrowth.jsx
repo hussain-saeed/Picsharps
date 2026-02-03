@@ -57,7 +57,7 @@ const formatDate = (dateString) => {
   });
 };
 
-function UserGrowth() {
+function UserGrowth({ markAsDone }) {
   const [period, setPeriod] = useState("90D");
   const [currentPage, setCurrentPage] = useState(1);
   const [recordsPerPage] = useState(5); // Maximum records to display in view
@@ -81,6 +81,23 @@ function UserGrowth() {
       refetchOnMountOrArgChange: true,
     },
   );
+
+  useEffect(() => {
+    let timeoutId;
+
+    markAsDone(false);
+
+    if (!isFetching) {
+      markAsDone(true);
+    } else {
+      timeoutId = setTimeout(() => markAsDone(true), 10000);
+    }
+
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId);
+      markAsDone(false);
+    };
+  }, [isFetching]);
 
   const hasData = data?.status === "success";
   const rawData = data?.data || [];

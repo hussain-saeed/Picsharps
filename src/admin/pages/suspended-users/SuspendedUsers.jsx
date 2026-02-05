@@ -193,45 +193,45 @@ const SuspendedUsers = () => {
               showLastButton
               disabled={isFetching}
               sx={{
-                  "& .MuiPaginationItem-root": {
-                    fontWeight: "bold",
-                    fontSize: "18px",
-                    backgroundColor: "#f5f5f5",
-                    borderRadius: "6px",
-                    border: "1px solid #ddd",
-                    padding: "22px 18px",
-                    "@media (max-width: 600px)": {
-                      padding: "4px 8px",
-                      fontSize: "0.8rem",
-                      margin: "0 2px",
-                    },
-                    "&.Mui-selected": {
-                      backgroundColor: "#00B0FF",
-                      color: "#fff",
-                    },
-                  },
+                "& .MuiPaginationItem-root": {
+                  fontWeight: "bold",
+                  fontSize: "18px",
+                  backgroundColor: "#f5f5f5",
+                  borderRadius: "6px",
+                  border: "1px solid #ddd",
+                  padding: "22px 18px",
                   "@media (max-width: 600px)": {
-                    "& .MuiPaginationItem-firstButton, & .MuiPaginationItem-lastButton":
-                      {
-                        display: "none",
-                      },
-                    "& .MuiPaginationItem-previousNext": {
-                      display: "none",
-                    },
-                  },
-                  "& .MuiPaginationItem-ellipsis": {
-                    backgroundColor: "transparent",
-                    border: "none",
-                    color: "#666",
+                    padding: "4px 8px",
+                    fontSize: "0.8rem",
+                    margin: "0 2px",
                   },
                   "&.Mui-selected": {
-                    backgroundColor: "#00B0FF !important",
+                    backgroundColor: "#00B0FF",
                     color: "#fff",
                   },
-                  "&.Mui-selected.Mui-focusVisible": {
-                    backgroundColor: "#00B0FF",
+                },
+                "@media (max-width: 600px)": {
+                  "& .MuiPaginationItem-firstButton, & .MuiPaginationItem-lastButton":
+                    {
+                      display: "none",
+                    },
+                  "& .MuiPaginationItem-previousNext": {
+                    display: "none",
                   },
-                }}
+                },
+                "& .MuiPaginationItem-ellipsis": {
+                  backgroundColor: "transparent",
+                  border: "none",
+                  color: "#666",
+                },
+                "&.Mui-selected": {
+                  backgroundColor: "#00B0FF !important",
+                  color: "#fff",
+                },
+                "&.Mui-selected.Mui-focusVisible": {
+                  backgroundColor: "#00B0FF",
+                },
+              }}
             />
           </div>
           <div className="flex justify-end min-h-[35px]">
@@ -315,9 +315,20 @@ const SuspendedUsers = () => {
 
       {/* ================= EMPTY STATE ================= */}
       {isEmpty && (
-        <Box mt={4}>
-          <Typography>No users found.</Typography>
-        </Box>
+        <div className="flex flex-col justify-center items-center">
+          <img
+            src={"/images/no-users.png"}
+            alt="no users"
+            className="w-150"
+          />
+
+          <div
+            className="text-[20px] sm:text-[25px]"
+            style={{ fontWeight: "600" }}
+          >
+            No records to display yet!
+          </div>
+        </div>
       )}
     </Box>
   );

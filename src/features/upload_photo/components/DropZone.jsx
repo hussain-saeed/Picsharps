@@ -580,7 +580,7 @@ const DropZone = () => {
     URL.revokeObjectURL(link.href);
   };
 
-  const saveResult = async () => {
+  const saveResultTwice = async () => {
     setIsDownloading(true);
     const downloadPromise = downloadImage(
       processedImage,
@@ -622,6 +622,15 @@ const DropZone = () => {
       );
     }
     setIsDownloading(false);
+  };
+
+  const saveResultLocally = async () => {
+    setIsDownloading(true);
+    try {
+      await downloadImage(processedImage, `${currentTool}-result.png`);
+    } finally {
+      setIsDownloading(false);
+    }
   };
 
   const goToTool = (toolPath) => {
@@ -1783,37 +1792,36 @@ const DropZone = () => {
                 }}
               >
                 {/* Download button for processed image */}
-                {accessToken ? (
-                  <button
-                    dir={isRTL ? "rtl" : "ltr"}
-                    onClick={() => {
-                      isDownloading === true ? null : saveResult();
-                    }}
-                    disabled={isDownloading === true}
-                    style={{
-                      cursor:
-                        isDownloading === true ? "not-allowed" : "pointer",
-                      opacity: isDownloading === true ? "0.5" : "1",
-                      padding: "10px 18px",
-                      background: "var(--gradient-color)",
-                      color: "white",
-                      border: "none",
-                      borderRadius: "5px",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "8px",
-                      fontSize: "15px",
-                      fontWeight: 500,
-                    }}
-                  >
-                    <Download size={18} />
-                    {isDownloading === true
-                      ? t["Loading ..."]
-                      : t["Download Result"]}
-                  </button>
-                ) : (
-                  ""
-                )}
+                <button
+                  dir={isRTL ? "rtl" : "ltr"}
+                  onClick={() => {
+                    isDownloading === true
+                      ? null
+                      : accessToken
+                        ? saveResultTwice()
+                        : saveResultLocally();
+                  }}
+                  disabled={isDownloading === true}
+                  style={{
+                    cursor: isDownloading === true ? "not-allowed" : "pointer",
+                    opacity: isDownloading === true ? "0.5" : "1",
+                    padding: "10px 18px",
+                    background: "var(--gradient-color)",
+                    color: "white",
+                    border: "none",
+                    borderRadius: "5px",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "8px",
+                    fontSize: "15px",
+                    fontWeight: 500,
+                  }}
+                >
+                  <Download size={18} />
+                  {isDownloading === true
+                    ? t["Loading ..."]
+                    : t["Download Result"]}
+                </button>
 
                 {/* Tool selection dropdown for chaining operations */}
                 {availableTools.length > 0 ? (

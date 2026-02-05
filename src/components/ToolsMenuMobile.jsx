@@ -32,7 +32,7 @@ function ToolsMenuMobile({ setActiveView }) {
       image: "/images/background-99.png",
       links: [
         { name: t["Remove Background"], to: "/remove-background" },
-        { name: t["Object Removal"], to: "/object-removal" },
+        {/* name: t["Object Removal"], to: "/object-removal" */},
         { name: t["Blur Image"], to: "/blur-image" },
       ],
     },

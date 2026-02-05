@@ -34,12 +34,16 @@ function Quick() {
       title: t["Remove Backgrounds"],
       description: t["Remove backgrounds instantly with powerful AI"],
     },
+
+    /*
     {
       link: "/object-removal",
       image: "/images/remove-object.png",
       title: t["Remove Object from Photo"],
       description: t["Erase unwanted objects seamlessly in seconds"],
     },
+    */
+   
     {
       link: "/ai-image-enhancer",
       image: "/images/ai-image-enhancer.png",

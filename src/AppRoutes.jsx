@@ -29,8 +29,8 @@ const data = [
   "oil-paint-effect",
   "adjust-image",
   "crop-image",
-  "object-removal",
   "create-collage",
+  // "object-removal",
 ];
 
 export default function AppRoutes() {

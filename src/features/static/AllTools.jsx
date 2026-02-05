@@ -74,7 +74,7 @@ function AllTools() {
 
           <div className="mt-10">
             <PresentService
-              isTextFirst={true}
+              isTextFirst={false}
               before="/images/remove-bg-3.png"
               after="/images/remove-bg-4.png"
               aspectRatio="12/8"
@@ -91,7 +91,7 @@ function AllTools() {
             />
           </div>
 
-          <div className="mt-20">
+          {/*<div className="mt-20">
             <PresentService
               isTextFirst={false}
               before="/images/remove-object-2.png"
@@ -108,7 +108,7 @@ function AllTools() {
               linkTo="/object-removal"
               innerLinkText={t["Try it Now"]}
             />
-          </div>
+          </div>*/}
 
           {/* <div className="mt-20">
             <PresentService

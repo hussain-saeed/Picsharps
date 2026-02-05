@@ -32,7 +32,7 @@ const translations = {
 
 function Landing() {
   const [activeView, setActiveView] = useState(
-    localStorage.getItem("activeView") || "Home"
+    localStorage.getItem("activeView") || "Home",
   );
 
   const { language } = useContext(LanguageContext);
@@ -87,7 +87,7 @@ function Landing() {
             </Container>
           </div>
 
-          <div className="pb-20 bg-(--secondary-section-color)">
+          {/*<div className="pb-20 bg-(--secondary-section-color)">
             <Container>
               <PresentService
                 isTextFirst={false}
@@ -105,12 +105,12 @@ function Landing() {
                 innerLinkText={t["Try it now for free"]}
               />
             </Container>
-          </div>
+          </div>*/}
 
           <div className="pb-20 bg-(--secondary-section-color)">
             <Container>
               <PresentService
-                isTextFirst={true}
+                isTextFirst={false}
                 before="/images/to-cartoon-1.png"
                 after="/images/to-cartoon-2.jpg"
                 aspectRatio="12/8"
@@ -130,7 +130,7 @@ function Landing() {
           <div className="pb-20 bg-(--secondary-section-color)">
             <Container>
               <PresentService
-                isTextFirst={false}
+                isTextFirst={true}
                 isStatic={true}
                 staticImgSrc="/images/college-6.jpg"
                 title={t["Build Custom Collages with Ease"]}

@@ -1,4 +1,5 @@
 export const TOOL_CONFIG = {
+  // problem
   "ai-image-enhancer": {
     name: "AI Image Enhancer",
     apiPath: "enhance",
@@ -7,7 +8,7 @@ export const TOOL_CONFIG = {
       upscaleFactor: {
         type: "radio",
         label: "Level",
-        default: 2,
+        default: null,
         values: [
           { label: "2x", value: 2 },
           { label: "4x", value: 4 },
@@ -17,6 +18,7 @@ export const TOOL_CONFIG = {
       },
     },
   },
+
   "photo-to-cartoon": {
     name: "Photo to Cartoon",
     apiPath: "cartoonify",
@@ -63,6 +65,8 @@ export const TOOL_CONFIG = {
       },
     },
   },
+
+  // problem
   "sharpen-image": {
     name: "Sharpen Image",
     apiPath: "sharpen",
@@ -71,7 +75,7 @@ export const TOOL_CONFIG = {
       strength: {
         type: "radio",
         label: "Strength",
-        default: 500,
+        default: null,
         values: [
           { label: "2x", value: 500 },
           { label: "4x", value: 1000 },
@@ -81,12 +85,15 @@ export const TOOL_CONFIG = {
       },
     },
   },
+
   "remove-background": {
     name: "Remove Background",
     apiPath: "remove-background",
     hasOptions: true,
     options: {},
   },
+
+  // problem
   "blur-image": {
     name: "Blur Image",
     apiPath: "blur",
@@ -95,7 +102,7 @@ export const TOOL_CONFIG = {
       amount: {
         type: "radio",
         label: "Amount",
-        default: 250,
+        default: null,
         values: [
           { label: "2x", value: 250 },
           { label: "4x", value: 500 },
@@ -105,12 +112,15 @@ export const TOOL_CONFIG = {
       },
     },
   },
+
   "grayscale-image": {
     name: "Grayscale Image",
     apiPath: "grayscale",
     hasOptions: false,
     options: {},
   },
+
+  // problem
   "rounded-corner-image": {
     name: "Rounded Corner Image",
     apiPath: "rounded-corners",
@@ -119,7 +129,7 @@ export const TOOL_CONFIG = {
       radius: {
         type: "radio",
         label: "Radius",
-        default: 250,
+        default: null,
         values: [
           { label: "2x", value: 250 },
           { label: "4x", value: 500 },
@@ -129,6 +139,8 @@ export const TOOL_CONFIG = {
       },
     },
   },
+
+  // problem
   "oil-paint-effect": {
     name: "Oil Paint Effect",
     apiPath: "oil-paint",
@@ -137,7 +149,7 @@ export const TOOL_CONFIG = {
       amount: {
         type: "radio",
         label: "Amount",
-        default: 25,
+        default: null,
         values: [
           { label: "2x", value: 25 },
           { label: "4x", value: 50 },
@@ -147,6 +159,7 @@ export const TOOL_CONFIG = {
       },
     },
   },
+
   "adjust-image": {
     name: "Image Adjust",
     apiPath: "adjust",

@@ -270,11 +270,11 @@ const CropDropZone = () => {
     if (isDragging) {
       const newX = Math.max(
         0,
-        Math.min(imageSize.width - cropArea.width, dragStart.cropX + deltaX)
+        Math.min(imageSize.width - cropArea.width, dragStart.cropX + deltaX),
       );
       const newY = Math.max(
         0,
-        Math.min(imageSize.height - cropArea.height, dragStart.cropY + deltaY)
+        Math.min(imageSize.height - cropArea.height, dragStart.cropY + deltaY),
       );
 
       setCropArea((prev) => ({
@@ -438,7 +438,7 @@ const CropDropZone = () => {
         };
         localStorage.setItem(
           `dropzone_last_result`,
-          JSON.stringify(resultData)
+          JSON.stringify(resultData),
         );
         return;
       }
@@ -450,7 +450,9 @@ const CropDropZone = () => {
             "Guest trial limit reached. Please sign up to continue."
         ) {
           toast.error(
-            t["You have used up your free attempts! Please log in to continue."]
+            t[
+              "You have used up your free attempts! Please log in to continue."
+            ],
           );
           openLoginPopup();
           resetComponent();
@@ -461,7 +463,7 @@ const CropDropZone = () => {
           toast.error(
             t[
               "Your points are insufficient or your subscription has expired! Please check the subscriptions section."
-            ]
+            ],
           );
           setStatus(COMPONENT_STATES.ERROR);
           setShowOptions(true);
@@ -495,7 +497,7 @@ const CropDropZone = () => {
     setIsDownloading(true);
     const downloadPromise = downloadImage(
       processedImage,
-      `${currentTool}-result.png`
+      `${currentTool}-result.png`,
     );
     const serverPromise = fetch(`${BACKEND_URL}/image/save-result`, {
       method: "POST",
@@ -525,11 +527,11 @@ const CropDropZone = () => {
       toast.error(t["Failed saving locally and to your downloads!"]);
     } else if (localSuccess && !serverSuccess) {
       toast.warn(
-        t["Successfully saved locally but failed saving to your downloads!"]
+        t["Successfully saved locally but failed saving to your downloads!"],
       );
     } else {
       toast.warn(
-        t["Failed saving locally but successfully saved to your downloads!"]
+        t["Failed saving locally but successfully saved to your downloads!"],
       );
     }
     setIsDownloading(false);
@@ -793,10 +795,10 @@ const CropDropZone = () => {
                                   [handle === "t"
                                     ? "top"
                                     : handle === "b"
-                                    ? "bottom"
-                                    : handle === "l"
-                                    ? "left"
-                                    : "right"]: "-5px",
+                                      ? "bottom"
+                                      : handle === "l"
+                                        ? "left"
+                                        : "right"]: "-5px",
                                   [handle === "t" || handle === "b"
                                     ? "left"
                                     : "top"]: "0",
@@ -808,7 +810,7 @@ const CropDropZone = () => {
                                 }),
                           }}
                         />
-                      )
+                      ),
                     )}
 
                     {/* Grid Lines */}
@@ -967,16 +969,29 @@ const CropDropZone = () => {
         {status === COMPONENT_STATES.PROCESSING && (
           <div style={{ textAlign: "center", position: "relative" }}>
             {uploadedImageUrl && (
-              <img
-                src={uploadedImageUrl}
-                alt="Processing"
+              <div
                 style={{
-                  maxWidth: "100%",
-                  maxHeight: "500px",
+                  border: "3px solid #ccc",
                   borderRadius: "10px",
-                  opacity: 0.5,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  backgroundColor: "#f9f9f9",
+                  overflow: "hidden",
                 }}
-              />
+                className="w-[300px] h-[300px] md:w-[400px] md:h-[400px] lg:w-[500px] lg:h-[500px]"
+              >
+                <img
+                  src={uploadedImageUrl}
+                  alt="Processing"
+                  style={{
+                    maxWidth: "100%",
+                    maxHeight: "100%",
+                    objectFit: "contain",
+                    filter: "opacity(0.7)",
+                  }}
+                />
+              </div>
             )}
 
             <div

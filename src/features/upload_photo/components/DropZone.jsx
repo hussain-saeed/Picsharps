@@ -295,7 +295,7 @@ const DropZone = () => {
         toolResult = await enhanceImage({
           sourceImageId,
           imageUrl: uploadedImageUrl,
-          upscaleFactor: options.upscaleFactor, // Enhancement level
+          upscaleFactor: options.upscaleFactor || 2, // Enhancement level
           accessToken,
           customMsg:
             t[
@@ -368,7 +368,7 @@ const DropZone = () => {
         toolResult = await sharpenImage({
           sourceImageId,
           imageUrl: uploadedImageUrl,
-          strength: options.strength, // Sharpening intensity
+          strength: options.strength || 500, // Sharpening intensity
           accessToken,
           customMsg:
             t[
@@ -419,7 +419,7 @@ const DropZone = () => {
         toolResult = await blurImage({
           sourceImageId,
           imageUrl: uploadedImageUrl,
-          amount: options.amount, // Enhancement level
+          amount: options.amount || 250, // Enhancement level
           accessToken,
           customMsg:
             t[
@@ -462,7 +462,7 @@ const DropZone = () => {
         toolResult = await roundedCornerImage({
           sourceImageId,
           imageUrl: uploadedImageUrl,
-          radius: options.radius,
+          radius: options.radius || 250,
           accessToken,
           customMsg:
             t[
@@ -484,7 +484,7 @@ const DropZone = () => {
         toolResult = await oilPaintEffect({
           sourceImageId,
           imageUrl: uploadedImageUrl,
-          amount: options.amount,
+          amount: options.amount || 25,
           accessToken,
           customMsg:
             t[

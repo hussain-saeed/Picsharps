@@ -33,6 +33,7 @@ export const AuthProvider = ({ children }) => {
   const [accessToken, setAccessToken] = useState(null);
   const [isPopupActionLoading, setIsPopupActionLoading] = useState(false);
   const [loggingOut, setLoggingOut] = useState(false);
+  const [isOnFreePlan, setIsOnFreePlan] = useState(true);
 
   // 2) Token Management (refresh token)
   const refreshToken = async () => {
@@ -45,6 +46,7 @@ export const AuthProvider = ({ children }) => {
       });
 
       const data = await res.json();
+      console.log(data);
       if (data?.status === "success") {
         if (
           data?.data?.user?.roles?.length === 0 ||
@@ -53,6 +55,11 @@ export const AuthProvider = ({ children }) => {
         ) {
           setAccessToken(data.accessToken);
           setUserData(data.data.user || null);
+          console.log(data?.data?.user?.subscriptions.length);
+
+          if (data?.data?.user?.subscriptions.length !== 0) {
+            setIsOnFreePlan(false);
+          }
         } else {
           toast.error(t["Something Went Wrong!"]);
           setUserData(null);
@@ -335,6 +342,7 @@ export const AuthProvider = ({ children }) => {
         userData,
         isLoadingUserData,
         accessToken,
+        isOnFreePlan,
 
         // Token
         refreshToken,

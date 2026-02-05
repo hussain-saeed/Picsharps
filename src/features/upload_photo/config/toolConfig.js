@@ -7,7 +7,7 @@ export const TOOL_CONFIG = {
       upscaleFactor: {
         type: "radio",
         label: "Level",
-        default: null,
+        default: 2,
         values: [
           { label: "2x", value: 2 },
           { label: "4x", value: 4 },
@@ -71,7 +71,7 @@ export const TOOL_CONFIG = {
       strength: {
         type: "radio",
         label: "Strength",
-        default: null,
+        default: 500,
         values: [
           { label: "2x", value: 500 },
           { label: "4x", value: 1000 },
@@ -95,7 +95,7 @@ export const TOOL_CONFIG = {
       amount: {
         type: "radio",
         label: "Amount",
-        default: null,
+        default: 250,
         values: [
           { label: "2x", value: 250 },
           { label: "4x", value: 500 },
@@ -119,7 +119,7 @@ export const TOOL_CONFIG = {
       radius: {
         type: "radio",
         label: "Radius",
-        default: null,
+        default: 250,
         values: [
           { label: "2x", value: 250 },
           { label: "4x", value: 500 },
@@ -137,7 +137,7 @@ export const TOOL_CONFIG = {
       amount: {
         type: "radio",
         label: "Amount",
-        default: null,
+        default: 25,
         values: [
           { label: "2x", value: 25 },
           { label: "4x", value: 50 },

@@ -161,7 +161,7 @@ function UploadPhoto() {
   useEffect(() => {
     const currentPath = location.pathname.replace("/", "");
     const matchedService = toolsData.find((toolData) =>
-      currentPath.includes(toolData.path)
+      currentPath.includes(toolData.path),
     );
 
     if (matchedService) {
@@ -190,7 +190,7 @@ function UploadPhoto() {
             }}
             className={`${
               ["/remove-background", "/change-background"].includes(
-                location.pathname
+                location.pathname,
               )
                 ? "text-[39px] sm:text-[48px]"
                 : "text-[48px]"

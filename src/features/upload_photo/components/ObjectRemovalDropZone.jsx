@@ -245,7 +245,7 @@ const ObjectRemovalTool = () => {
     const ctx = canvas.getContext("2d");
     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
     const hasDrawing = imageData.data.some(
-      (pixel, i) => pixel !== 0 && (i + 1) % 4 !== 0
+      (pixel, i) => pixel !== 0 && (i + 1) % 4 !== 0,
     ); // Ignore alpha
 
     if (!hasDrawing) {
@@ -302,7 +302,9 @@ const ObjectRemovalTool = () => {
             "Guest trial limit reached. Please sign up to continue."
         ) {
           toast.error(
-            t["You have used up your free attempts! Please log in to continue."]
+            t[
+              "You have used up your free attempts! Please log in to continue."
+            ],
           );
           openLoginPopup();
           navigate("/");
@@ -312,7 +314,7 @@ const ObjectRemovalTool = () => {
           toast.error(
             t[
               "Your points are insufficient or your subscription has expired! Please check the subscriptions section."
-            ]
+            ],
           );
           setStatus(COMPONENT_STATES.ERROR);
           return;
@@ -339,11 +341,11 @@ const ObjectRemovalTool = () => {
     URL.revokeObjectURL(link.href);
   };
 
-  const saveResult = async () => {
+  const saveResultTwice = async () => {
     setIsDownloading(true);
     const downloadPromise = downloadImage(
       processedImage,
-      `object-removal-result.png`
+      `processed-result.png`,
     );
     const serverPromise = fetch(`${BACKEND_URL}/image/save-result`, {
       method: "POST",
@@ -373,14 +375,23 @@ const ObjectRemovalTool = () => {
       toast.error(t["Failed saving locally and to your downloads!"]);
     } else if (localSuccess && !serverSuccess) {
       toast.warn(
-        t["Successfully saved locally but failed saving to your downloads!"]
+        t["Successfully saved locally but failed saving to your downloads!"],
       );
     } else {
       toast.warn(
-        t["Failed saving locally but successfully saved to your downloads!"]
+        t["Failed saving locally but successfully saved to your downloads!"],
       );
     }
     setIsDownloading(false);
+  };
+
+  const saveResultLocally = async () => {
+    setIsDownloading(true);
+    try {
+      await downloadImage(processedImage, `processed-result.png`);
+    } finally {
+      setIsDownloading(false);
+    }
   };
 
   return (
@@ -714,36 +725,34 @@ const ObjectRemovalTool = () => {
               </>
             )}
 
-            {accessToken ? (
-              <button
-                dir={isRTL ? "rtl" : "ltr"}
-                onClick={() => {
-                  isDownloading === true ? null : saveResult();
-                }}
-                disabled={isDownloading === true}
-                style={{
-                  cursor: isDownloading === true ? "not-allowed" : "pointer",
-                  opacity: isDownloading === true ? "0.5" : "1",
-                  padding: "10px 18px",
-                  background: "var(--gradient-color)",
-                  color: "white",
-                  border: "none",
-                  borderRadius: "5px",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "8px",
-                  fontSize: "15px",
-                  fontWeight: 500,
-                }}
-              >
-                <Download size={18} />
-                {isDownloading === true
-                  ? t["Loading ..."]
-                  : t["Download Result"]}
-              </button>
-            ) : (
-              ""
-            )}
+            <button
+              dir={isRTL ? "rtl" : "ltr"}
+              onClick={() => {
+                isDownloading === true
+                  ? null
+                  : accessToken
+                    ? saveResultTwice()
+                    : saveResultLocally();
+              }}
+              disabled={isDownloading === true}
+              style={{
+                cursor: isDownloading === true ? "not-allowed" : "pointer",
+                opacity: isDownloading === true ? "0.5" : "1",
+                padding: "10px 18px",
+                background: "var(--gradient-color)",
+                color: "white",
+                border: "none",
+                borderRadius: "5px",
+                display: "flex",
+                alignItems: "center",
+                gap: "8px",
+                fontSize: "15px",
+                fontWeight: 500,
+              }}
+            >
+              <Download size={18} />
+              {isDownloading === true ? t["Loading ..."] : t["Download Result"]}
+            </button>
 
             <button
               onClick={resetToInitialState}

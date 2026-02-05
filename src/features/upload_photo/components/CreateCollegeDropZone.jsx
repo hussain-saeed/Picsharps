@@ -61,7 +61,7 @@ const CollageMaker = () => {
   const t = translations[language] || translations["English"];
 
   const [selectedSlotCount, setSelectedSlotCount] = useState(
-    templates[0].slotCount
+    templates[0].slotCount,
   );
   const [selectedTemplate, setSelectedTemplate] = useState(null);
   const [uploadedImages, setUploadedImages] = useState([]);
@@ -71,7 +71,7 @@ const CollageMaker = () => {
   const [isDownloading, setIsDownloading] = useState(false);
 
   const currentTemplates = templates.find(
-    (t) => t.slotCount === selectedSlotCount
+    (t) => t.slotCount === selectedSlotCount,
   );
 
   const handleSlotCountChange = (e) => {
@@ -114,7 +114,7 @@ const CollageMaker = () => {
 
       setUploadedImages((prev) => [...prev, ...newImages]);
     },
-    [uploadedImages, selectedSlotCount]
+    [uploadedImages, selectedSlotCount],
   );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -156,7 +156,7 @@ const CollageMaker = () => {
           },
           body: formData,
           credentials: "include",
-        }
+        },
       );
 
       const data = await res.json();
@@ -173,7 +173,9 @@ const CollageMaker = () => {
             "Guest trial limit reached. Please sign up to continue."
         ) {
           toast.error(
-            t["You have used up your free attempts! Please log in to continue."]
+            t[
+              "You have used up your free attempts! Please log in to continue."
+            ],
           );
           openLoginPopup();
           navigate("/");
@@ -183,7 +185,7 @@ const CollageMaker = () => {
           toast.error(
             t[
               "Your points are insufficient or your subscription has expired! Please check the subscriptions section."
-            ]
+            ],
           );
           return;
         }
@@ -464,35 +466,32 @@ const CollageMaker = () => {
               style={{ maxHeight: "500px" }}
             />
           </div>
-          {accessToken ? (
-            <button
-              dir={isRTL ? "rtl" : "ltr"}
-              onClick={() => {
-                isDownloading === true ? null : saveResult();
-              }}
-              disabled={isDownloading === true}
-              style={{
-                cursor: isDownloading === true ? "not-allowed" : "pointer",
-                opacity: isDownloading === true ? "0.5" : "1",
-                padding: "10px 18px",
-                background: "var(--gradient-color)",
-                color: "white",
-                border: "none",
-                borderRadius: "5px",
-                display: "flex",
-                alignItems: "center",
-                gap: "8px",
-                fontSize: "15px",
-                fontWeight: 500,
-              }}
-              className="mt-8 mx-auto"
-            >
-              <Download size={18} />
-              {isDownloading === true ? t["Loading ..."] : t["Download Result"]}
-            </button>
-          ) : (
-            ""
-          )}
+
+          <button
+            dir={isRTL ? "rtl" : "ltr"}
+            onClick={() => {
+              isDownloading === true ? null : saveResult();
+            }}
+            disabled={isDownloading === true}
+            style={{
+              cursor: isDownloading === true ? "not-allowed" : "pointer",
+              opacity: isDownloading === true ? "0.5" : "1",
+              padding: "10px 18px",
+              background: "var(--gradient-color)",
+              color: "white",
+              border: "none",
+              borderRadius: "5px",
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+              fontSize: "15px",
+              fontWeight: 500,
+            }}
+            className="mt-8 mx-auto"
+          >
+            <Download size={18} />
+            {isDownloading === true ? t["Loading ..."] : t["Download Result"]}
+          </button>
         </div>
       )}
     </div>

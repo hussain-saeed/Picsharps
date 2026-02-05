@@ -66,7 +66,7 @@ function AdminMainLayout() {
 
   const SidebarContent = ({ closeSidebar }) => (
     <div className="flex flex-col min-h-screen py-6 text-white overflow-y-auto overflow-x-hidden custom-scrollbar">
-      <div className="px-7.5 mb-8 flex flex-col shrink-0">
+      <div className="px-7.5 mb-7 flex flex-col shrink-0">
         <NavLink
           className="text-2xl font-semibold tracking-tight flex items-center gap-2 mb-4"
           to="/admin8yut91b9e22a/main"
@@ -77,6 +77,9 @@ function AdminMainLayout() {
         <span className="text-xs text-gray-500 tracking-[0.2em] font-medium">
           Admin Dashboard
         </span>
+        <div className="text-gray-600" style={{ fontSize: "10px" }}>
+          v2 - Feb 3 2026 at 05:35 AM
+        </div>
       </div>
 
       <div className="pl-4 pr-7 mb-8">

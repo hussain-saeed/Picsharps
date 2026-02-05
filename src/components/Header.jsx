@@ -147,7 +147,7 @@ export default function Header({ setActiveView }) {
                   position: "absolute",
                   bottom: "-30px",
                   width: "105%",
-                  height: "4px",
+                  height: "5px",
                   borderTopLeftRadius: "5px",
                   borderTopRightRadius: "5px",
                   background: "var(--gradient-color)",

@@ -889,366 +889,82 @@ const DropZone = () => {
                     >
                       {showOptions && toolConfig.hasOptions && (
                         <>
-                          {accessToken && !isOnFreePlan && (
-                            <h4
-                              style={{
-                                marginBottom: "12px",
-                                color: "#333",
-                                textAlign: "start",
-                              }}
-                            >
-                              {/* Dynamic title based on current tool */}
-                              {currentTool === TOOL_TYPES.ENHANCE
-                                ? t["Level"]
-                                : currentTool === TOOL_TYPES.SHARPEN
-                                  ? t["Strength"]
-                                  : currentTool === TOOL_TYPES.BLUR
-                                    ? t["Amount"]
-                                    : currentTool === TOOL_TYPES.ROUNDED
-                                      ? t["Radius"]
-                                      : currentTool === TOOL_TYPES.OILING
-                                        ? t["Amount"]
-                                        : ""}
-                            </h4>
-                          )}
-
-                          {
-                            // الشروط الخارجية: أي أداة متحققة ي render ال div الخارجي
-                            ((currentTool === TOOL_TYPES.ENHANCE &&
-                              accessToken &&
-                              !isOnFreePlan) ||
-                              currentTool === TOOL_TYPES.RESIZE ||
-                              (currentTool === TOOL_TYPES.SHARPEN &&
-                                accessToken &&
-                                !isOnFreePlan) ||
-                              (currentTool === TOOL_TYPES.REMOVE &&
-                                accessToken &&
-                                !isOnFreePlan) ||
-                              (currentTool === TOOL_TYPES.BLUR &&
-                                accessToken &&
-                                !isOnFreePlan) ||
-                              (currentTool === TOOL_TYPES.ROUNDED &&
-                                accessToken &&
-                                !isOnFreePlan) ||
-                              (currentTool === TOOL_TYPES.OILING &&
-                                accessToken &&
-                                !isOnFreePlan) ||
-                              currentTool === TOOL_TYPES.ADJUST) && (
-                              <div
+                          {accessToken &&
+                            !isOnFreePlan &&
+                            currentTool !== TOOL_TYPES.REMOVE &&
+                            currentTool !== TOOL_TYPES.ADJUST &&
+                            currentTool !== TOOL_TYPES.RESIZE && (
+                              <h4
                                 style={{
-                                  display: "flex",
-                                  flexDirection: "column",
-                                  gap: "15px",
-                                  backgroundColor: "red",
-                                  marginBottom: "0 !important",
+                                  marginBottom: "12px",
+                                  color: "#333",
+                                  textAlign: "start",
                                 }}
                               >
-                                {/* Enhancement tool options */}
-                                {currentTool === TOOL_TYPES.ENHANCE &&
-                                  accessToken &&
-                                  !isOnFreePlan && (
-                                    <div
-                                      style={{
-                                        display: "flex",
-                                        flexDirection: "column",
-                                        gap: "10px",
-                                      }}
-                                    >
-                                      {toolConfig.options.upscaleFactor.values.map(
-                                        (option) => {
-                                          const isSelected =
-                                            options.upscaleFactor ===
-                                            option.value;
+                                {/* Dynamic title based on current tool */}
+                                {currentTool === TOOL_TYPES.ENHANCE
+                                  ? t["Level"]
+                                  : currentTool === TOOL_TYPES.SHARPEN
+                                    ? t["Strength"]
+                                    : currentTool === TOOL_TYPES.BLUR
+                                      ? t["Amount"]
+                                      : currentTool === TOOL_TYPES.ROUNDED
+                                        ? t["Radius"]
+                                        : currentTool === TOOL_TYPES.OILING
+                                          ? t["Amount"]
+                                          : ""}
+                              </h4>
+                            )}
 
-                                          return (
-                                            <label
-                                              key={option.value}
-                                              style={{
-                                                display: "flex",
-                                                alignItems: "center",
-                                                gap: "10px",
-                                                padding: "10px 14px",
-                                                borderRadius: "8px",
-                                                border: isSelected
-                                                  ? "2px solid #00c853"
-                                                  : "1px solid #ccc",
-                                                cursor: "pointer",
-                                                userSelect: "none",
-                                                width: "120px",
-                                              }}
-                                            >
-                                              <input
-                                                type="radio"
-                                                name="upscaleFactor"
-                                                value={option.value}
-                                                checked={isSelected}
-                                                onChange={(e) =>
-                                                  handleOptionChange(
-                                                    "upscaleFactor",
-                                                    parseInt(e.target.value),
-                                                  )
-                                                }
-                                                disabled={
-                                                  status ===
-                                                  COMPONENT_STATES.PROCESSING
-                                                }
-                                                style={{
-                                                  width: "16px",
-                                                  height: "16px",
-                                                  cursor: "pointer",
-                                                }}
-                                              />
-                                              <span
-                                                style={{
-                                                  fontWeight: 500,
-                                                  color: "#333",
-                                                }}
-                                              >
-                                                {option.label}
-                                              </span>
-                                            </label>
-                                          );
-                                        },
-                                      )}
-                                    </div>
-                                  )}
-
-                                {/* Resize tool options */}
-                                {currentTool === TOOL_TYPES.RESIZE && (
-                                  <>
-                                    <div style={{ textAlign: "left" }}>
-                                      <TextField
-                                        label="Width (px)"
-                                        type="number"
-                                        size="small"
-                                        fullWidth
-                                        placeholder="e.g. 600"
-                                        value={options.width}
-                                        onChange={(e) =>
-                                          handleOptionChange(
-                                            "width",
-                                            parseInt(e.target.value) || 5,
-                                          )
-                                        }
-                                        disabled={
-                                          status === COMPONENT_STATES.PROCESSING
-                                        }
-                                        InputProps={{ inputProps: { min: 5 } }}
-                                        sx={{ marginTop: "5px" }}
-                                      />
-                                    </div>
-
-                                    <div
-                                      style={{
-                                        textAlign: "left",
-                                        marginTop: "10px",
-                                      }}
-                                    >
-                                      <TextField
-                                        label="Height (px)"
-                                        type="number"
-                                        size="small"
-                                        fullWidth
-                                        placeholder="e.g. 600"
-                                        value={options.height}
-                                        onChange={(e) =>
-                                          handleOptionChange(
-                                            "height",
-                                            parseInt(e.target.value) || 5,
-                                          )
-                                        }
-                                        disabled={
-                                          status === COMPONENT_STATES.PROCESSING
-                                        }
-                                        InputProps={{ inputProps: { min: 5 } }}
-                                      />
-                                    </div>
-
-                                    <div
-                                      style={{ display: "flex", gap: "10px" }}
-                                    >
-                                      {toolConfig.options.mode.values.map(
-                                        (option) => {
-                                          const isSelected =
-                                            options.mode === option.value;
-
-                                          return (
-                                            <label
-                                              key={option.value}
-                                              style={{
-                                                display: "flex",
-                                                alignItems: "center",
-                                                gap: "10px",
-                                                padding: "10px 14px",
-                                                borderRadius: "8px",
-                                                border: isSelected
-                                                  ? "2px solid #00c853"
-                                                  : "1px solid #ccc",
-                                                cursor: "pointer",
-                                                userSelect: "none",
-                                              }}
-                                            >
-                                              <Radio
-                                                name="mode"
-                                                value={option.value}
-                                                checked={isSelected}
-                                                onChange={(e) =>
-                                                  handleOptionChange(
-                                                    "mode",
-                                                    e.target.value,
-                                                  )
-                                                }
-                                                disabled={
-                                                  status ===
-                                                  COMPONENT_STATES.PROCESSING
-                                                }
-                                                sx={{
-                                                  padding: 0,
-                                                  "& .MuiSvgIcon-root": {
-                                                    fontSize: 16,
-                                                  },
-                                                }}
-                                              />
-                                              <span
-                                                style={{
-                                                  fontWeight: 500,
-                                                  color: "#333",
-                                                }}
-                                              >
-                                                {t[option.label]}
-                                              </span>
-                                            </label>
-                                          );
-                                        },
-                                      )}
-                                    </div>
-
-                                    <button
-                                      onClick={processImage}
-                                      disabled={
-                                        status === COMPONENT_STATES.PROCESSING
-                                      }
-                                      style={{
-                                        padding: "10px 18px",
-                                        background: "var(--gradient-color)",
-                                        color: "white",
-                                        border: "none",
-                                        borderRadius: "5px",
-                                        cursor: "pointer",
-                                        display: "flex",
-                                        alignItems: "center",
-                                        gap: "8px",
-                                        fontSize: "16px",
-                                        width: "fit-content",
-                                      }}
-                                    >
-                                      {isRTL ? (
-                                        <Play
-                                          size={18}
-                                          style={{
-                                            transform: "rotate(180deg)",
-                                          }}
-                                        />
-                                      ) : (
-                                        <Play size={18} />
-                                      )}
-                                      {t["Start Processing"]}
-                                    </button>
-                                  </>
-                                )}
-
-                                {/* Sharpen tool options */}
-                                {currentTool === TOOL_TYPES.SHARPEN &&
-                                  accessToken &&
-                                  !isOnFreePlan && (
-                                    <div
-                                      style={{
-                                        display: "flex",
-                                        flexDirection: "column",
-                                        gap: "10px",
-                                      }}
-                                    >
-                                      {toolConfig.options.strength.values.map(
-                                        (option) => {
-                                          const isSelected =
-                                            options.strength === option.value;
-
-                                          return (
-                                            <label
-                                              key={option.value}
-                                              style={{
-                                                display: "flex",
-                                                alignItems: "center",
-                                                gap: "10px",
-                                                padding: "10px 14px",
-                                                borderRadius: "8px",
-                                                border: isSelected
-                                                  ? "2px solid #00c853"
-                                                  : "1px solid #ccc",
-                                                cursor: "pointer",
-                                                userSelect: "none",
-                                                width: "120px",
-                                              }}
-                                            >
-                                              <input
-                                                type="radio"
-                                                name="strength"
-                                                value={option.value}
-                                                checked={isSelected}
-                                                onChange={(e) =>
-                                                  handleOptionChange(
-                                                    "strength",
-                                                    parseInt(e.target.value),
-                                                  )
-                                                }
-                                                disabled={
-                                                  status ===
-                                                  COMPONENT_STATES.PROCESSING
-                                                }
-                                                style={{
-                                                  width: "16px",
-                                                  height: "16px",
-                                                  cursor: "pointer",
-                                                }}
-                                              />
-                                              <span
-                                                style={{
-                                                  fontWeight: 500,
-                                                  color: "#333",
-                                                }}
-                                              >
-                                                {option.label}
-                                              </span>
-                                            </label>
-                                          );
-                                        },
-                                      )}
-                                    </div>
-                                  )}
-
-                                {/* Background removal tool options */}
-                                {currentTool === TOOL_TYPES.REMOVE &&
-                                  accessToken &&
-                                  !isOnFreePlan && (
-                                    <div
-                                      style={{
-                                        display: "flex",
-                                        flexDirection: "column",
-                                        gap: "10px",
-                                      }}
-                                    >
-                                      {[
-                                        {
-                                          value: "transparent",
-                                          label: t["Transparent"],
-                                        },
-                                        { value: "color", label: t["Color"] },
-                                      ].map((option) => {
+                          {((currentTool === TOOL_TYPES.ENHANCE &&
+                            accessToken &&
+                            !isOnFreePlan) ||
+                            currentTool === TOOL_TYPES.RESIZE ||
+                            (currentTool === TOOL_TYPES.SHARPEN &&
+                              accessToken &&
+                              !isOnFreePlan) ||
+                            (currentTool === TOOL_TYPES.REMOVE &&
+                              accessToken &&
+                              !isOnFreePlan) ||
+                            (currentTool === TOOL_TYPES.BLUR &&
+                              accessToken &&
+                              !isOnFreePlan) ||
+                            (currentTool === TOOL_TYPES.ROUNDED &&
+                              accessToken &&
+                              !isOnFreePlan) ||
+                            (currentTool === TOOL_TYPES.OILING &&
+                              accessToken &&
+                              !isOnFreePlan) ||
+                            currentTool === TOOL_TYPES.ADJUST) && (
+                            <div
+                              style={{
+                                display: "flex",
+                                flexDirection: "column",
+                                gap: "15px",
+                                marginTop:
+                                  currentTool !== TOOL_TYPES.ADJUST &&
+                                  currentTool !== TOOL_TYPES.RESIZE &&
+                                  currentTool !== TOOL_TYPES.REMOVE
+                                    ? "-26px"
+                                    : "7px",
+                              }}
+                            >
+                              {/* Enhancement tool options */}
+                              {currentTool === TOOL_TYPES.ENHANCE &&
+                                accessToken &&
+                                !isOnFreePlan && (
+                                  <div
+                                    style={{
+                                      display: "flex",
+                                      flexDirection: "column",
+                                      gap: "10px",
+                                    }}
+                                  >
+                                    {toolConfig.options.upscaleFactor.values.map(
+                                      (option) => {
                                         const isSelected =
-                                          !options.bgColor ||
-                                          options.bgColor === "transparent"
-                                            ? option.value === "transparent"
-                                            : option.value === "color";
+                                          options.upscaleFactor ===
+                                          option.value;
 
                                         return (
                                           <label
@@ -1264,23 +980,20 @@ const DropZone = () => {
                                                 : "1px solid #ccc",
                                               cursor: "pointer",
                                               userSelect: "none",
-                                              width: "185px",
+                                              width: "120px",
                                             }}
                                           >
                                             <input
                                               type="radio"
-                                              name="bgColorType"
+                                              name="upscaleFactor"
                                               value={option.value}
                                               checked={isSelected}
-                                              onChange={(e) => {
-                                                const value = e.target.value;
+                                              onChange={(e) =>
                                                 handleOptionChange(
-                                                  "bgColor",
-                                                  value === "transparent"
-                                                    ? "transparent"
-                                                    : "#ffffff",
-                                                );
-                                              }}
+                                                  "upscaleFactor",
+                                                  parseInt(e.target.value),
+                                                )
+                                              }
                                               disabled={
                                                 status ===
                                                 COMPONENT_STATES.PROCESSING
@@ -1301,309 +1014,599 @@ const DropZone = () => {
                                             </span>
                                           </label>
                                         );
-                                      })}
+                                      },
+                                    )}
+                                  </div>
+                                )}
 
-                                      {options.bgColor &&
-                                        options.bgColor !== "transparent" && (
-                                          <div style={{ marginTop: "10px" }}>
-                                            <SketchPicker
-                                              color={options.bgColor}
-                                              onChangeComplete={(color) =>
-                                                handleOptionChange(
-                                                  "bgColor",
-                                                  color.hex,
-                                                )
-                                              }
-                                            />
-                                          </div>
-                                        )}
+                              {/* Resize tool options */}
+                              {currentTool === TOOL_TYPES.RESIZE && (
+                                <>
+                                  <div style={{ textAlign: "left" }}>
+                                    <TextField
+                                      label="Width (px)"
+                                      type="number"
+                                      size="small"
+                                      fullWidth
+                                      placeholder="e.g. 600"
+                                      value={options.width}
+                                      onChange={(e) =>
+                                        handleOptionChange(
+                                          "width",
+                                          parseInt(e.target.value) || 5,
+                                        )
+                                      }
+                                      disabled={
+                                        status === COMPONENT_STATES.PROCESSING
+                                      }
+                                      InputProps={{ inputProps: { min: 5 } }}
+                                      sx={{ marginTop: "5px" }}
+                                    />
+                                  </div>
 
-                                      <button
-                                        onClick={processImage}
-                                        disabled={
-                                          status === COMPONENT_STATES.PROCESSING
-                                        }
-                                        style={{
-                                          padding: "10px 18px",
-                                          background: "var(--gradient-color)",
-                                          color: "white",
-                                          border: "none",
-                                          borderRadius: "5px",
-                                          cursor: "pointer",
-                                          display: "flex",
-                                          alignItems: "center",
-                                          gap: "8px",
-                                          fontSize: "15px",
-                                          fontWeight: 500,
-                                          width: "fit-content",
-                                          marginTop: "10px",
-                                        }}
-                                      >
-                                        {isRTL ? (
-                                          <Play
-                                            size={18}
-                                            style={{
-                                              transform: "rotate(180deg)",
-                                            }}
-                                          />
-                                        ) : (
-                                          <Play size={18} />
-                                        )}
-                                        {t["Start Processing"]}
-                                      </button>
-                                    </div>
-                                  )}
+                                  <div
+                                    style={{
+                                      textAlign: "left",
+                                      marginTop: "10px",
+                                    }}
+                                  >
+                                    <TextField
+                                      label="Height (px)"
+                                      type="number"
+                                      size="small"
+                                      fullWidth
+                                      placeholder="e.g. 600"
+                                      value={options.height}
+                                      onChange={(e) =>
+                                        handleOptionChange(
+                                          "height",
+                                          parseInt(e.target.value) || 5,
+                                        )
+                                      }
+                                      disabled={
+                                        status === COMPONENT_STATES.PROCESSING
+                                      }
+                                      InputProps={{ inputProps: { min: 5 } }}
+                                    />
+                                  </div>
 
-                                {/* Blur tool options */}
-                                {currentTool === TOOL_TYPES.BLUR &&
-                                  accessToken &&
-                                  !isOnFreePlan && (
-                                    <div
-                                      style={{
-                                        display: "flex",
-                                        flexDirection: "column",
-                                        gap: "10px",
-                                      }}
-                                    >
-                                      {toolConfig.options.amount.values.map(
-                                        (option) => {
-                                          const isSelected =
-                                            options.amount === option.value;
-
-                                          return (
-                                            <label
-                                              key={option.value}
-                                              style={{
-                                                display: "flex",
-                                                alignItems: "center",
-                                                gap: "10px",
-                                                padding: "10px 14px",
-                                                borderRadius: "8px",
-                                                border: isSelected
-                                                  ? "2px solid #00c853"
-                                                  : "1px solid #ccc",
-                                                cursor: "pointer",
-                                                userSelect: "none",
-                                                width: "120px",
-                                              }}
-                                            >
-                                              <input
-                                                type="radio"
-                                                name="amount"
-                                                value={option.value}
-                                                checked={isSelected}
-                                                onChange={(e) =>
-                                                  handleOptionChange(
-                                                    "amount",
-                                                    parseInt(e.target.value),
-                                                  )
-                                                }
-                                                disabled={
-                                                  status ===
-                                                  COMPONENT_STATES.PROCESSING
-                                                }
-                                                style={{
-                                                  width: "16px",
-                                                  height: "16px",
-                                                  cursor: "pointer",
-                                                }}
-                                              />
-                                              <span
-                                                style={{
-                                                  fontWeight: 500,
-                                                  color: "#333",
-                                                }}
-                                              >
-                                                {option.label}
-                                              </span>
-                                            </label>
-                                          );
-                                        },
-                                      )}
-                                    </div>
-                                  )}
-
-                                {/* Rounded tool options */}
-                                {currentTool === TOOL_TYPES.ROUNDED &&
-                                  accessToken &&
-                                  !isOnFreePlan && (
-                                    <div
-                                      style={{
-                                        display: "flex",
-                                        flexDirection: "column",
-                                        gap: "10px",
-                                      }}
-                                    >
-                                      {toolConfig.options.radius.values.map(
-                                        (option) => {
-                                          const isSelected =
-                                            options.radius === option.value;
-
-                                          return (
-                                            <label
-                                              key={option.value}
-                                              style={{
-                                                display: "flex",
-                                                alignItems: "center",
-                                                gap: "10px",
-                                                padding: "10px 14px",
-                                                borderRadius: "8px",
-                                                border: isSelected
-                                                  ? "2px solid #00c853"
-                                                  : "1px solid #ccc",
-                                                cursor: "pointer",
-                                                userSelect: "none",
-                                                width: "120px",
-                                              }}
-                                            >
-                                              <input
-                                                type="radio"
-                                                name="radius"
-                                                value={option.value}
-                                                checked={isSelected}
-                                                onChange={(e) =>
-                                                  handleOptionChange(
-                                                    "radius",
-                                                    parseInt(e.target.value),
-                                                  )
-                                                }
-                                                disabled={
-                                                  status ===
-                                                  COMPONENT_STATES.PROCESSING
-                                                }
-                                                style={{
-                                                  width: "16px",
-                                                  height: "16px",
-                                                  cursor: "pointer",
-                                                }}
-                                              />
-                                              <span
-                                                style={{
-                                                  fontWeight: 500,
-                                                  color: "#333",
-                                                }}
-                                              >
-                                                {option.label}
-                                              </span>
-                                            </label>
-                                          );
-                                        },
-                                      )}
-                                    </div>
-                                  )}
-
-                                {/* Oiling tool options */}
-                                {currentTool === TOOL_TYPES.OILING &&
-                                  accessToken &&
-                                  !isOnFreePlan && (
-                                    <div
-                                      style={{
-                                        display: "flex",
-                                        flexDirection: "column",
-                                        gap: "10px",
-                                      }}
-                                    >
-                                      {toolConfig.options.amount.values.map(
-                                        (option) => {
-                                          const isSelected =
-                                            options.amount === option.value;
-
-                                          return (
-                                            <label
-                                              key={option.value}
-                                              style={{
-                                                display: "flex",
-                                                alignItems: "center",
-                                                gap: "10px",
-                                                padding: "10px 14px",
-                                                borderRadius: "8px",
-                                                border: isSelected
-                                                  ? "2px solid #00c853"
-                                                  : "1px solid #ccc",
-                                                cursor: "pointer",
-                                                userSelect: "none",
-                                                width: "120px",
-                                              }}
-                                            >
-                                              <input
-                                                type="radio"
-                                                name="amount"
-                                                value={option.value}
-                                                checked={isSelected}
-                                                onChange={(e) =>
-                                                  handleOptionChange(
-                                                    "amount",
-                                                    parseInt(e.target.value),
-                                                  )
-                                                }
-                                                disabled={
-                                                  status ===
-                                                  COMPONENT_STATES.PROCESSING
-                                                }
-                                                style={{
-                                                  width: "16px",
-                                                  height: "16px",
-                                                  cursor: "pointer",
-                                                }}
-                                              />
-                                              <span
-                                                style={{
-                                                  fontWeight: 500,
-                                                  color: "#333",
-                                                }}
-                                              >
-                                                {option.label}
-                                              </span>
-                                            </label>
-                                          );
-                                        },
-                                      )}
-                                    </div>
-                                  )}
-
-                                {/* Adjust tool options */}
-                                {currentTool === TOOL_TYPES.ADJUST && (
-                                  <div className="w-[200px]">
-                                    {Object.entries(toolConfig.options).map(
-                                      ([key, config]) => {
-                                        const flipValue = (val) =>
-                                          isRTL
-                                            ? config.max + config.min - val
-                                            : val;
+                                  <div style={{ display: "flex", gap: "10px" }}>
+                                    {toolConfig.options.mode.values.map(
+                                      (option) => {
+                                        const isSelected =
+                                          options.mode === option.value;
 
                                         return (
-                                          <OptionSlider
-                                            key={key}
-                                            label={t[config.label]}
-                                            value={flipValue(options[key])}
-                                            min={config.min}
-                                            max={config.max}
-                                            step={config.step}
-                                            disabled={
-                                              status ===
-                                              COMPONENT_STATES.PROCESSING
-                                            }
-                                            onPreviewChange={(val) =>
-                                              handleOptionChange(
-                                                key,
-                                                flipValue(val),
-                                              )
-                                            }
-                                            onCommitChange={(val) =>
-                                              handleOptionChange(
-                                                key,
-                                                flipValue(val),
-                                              )
-                                            }
-                                          />
+                                          <label
+                                            key={option.value}
+                                            style={{
+                                              display: "flex",
+                                              alignItems: "center",
+                                              gap: "10px",
+                                              padding: "10px 14px",
+                                              borderRadius: "8px",
+                                              border: isSelected
+                                                ? "2px solid #00c853"
+                                                : "1px solid #ccc",
+                                              cursor: "pointer",
+                                              userSelect: "none",
+                                            }}
+                                          >
+                                            <Radio
+                                              name="mode"
+                                              value={option.value}
+                                              checked={isSelected}
+                                              onChange={(e) =>
+                                                handleOptionChange(
+                                                  "mode",
+                                                  e.target.value,
+                                                )
+                                              }
+                                              disabled={
+                                                status ===
+                                                COMPONENT_STATES.PROCESSING
+                                              }
+                                              sx={{
+                                                padding: 0,
+                                                "& .MuiSvgIcon-root": {
+                                                  fontSize: 16,
+                                                },
+                                              }}
+                                            />
+                                            <span
+                                              style={{
+                                                fontWeight: 500,
+                                                color: "#333",
+                                              }}
+                                            >
+                                              {t[option.label]}
+                                            </span>
+                                          </label>
+                                        );
+                                      },
+                                    )}
+                                  </div>
+
+                                  <button
+                                    onClick={processImage}
+                                    disabled={
+                                      status === COMPONENT_STATES.PROCESSING
+                                    }
+                                    style={{
+                                      padding: "10px 18px",
+                                      background: "var(--gradient-color)",
+                                      color: "white",
+                                      border: "none",
+                                      borderRadius: "5px",
+                                      cursor: "pointer",
+                                      display: "flex",
+                                      alignItems: "center",
+                                      gap: "8px",
+                                      fontSize: "16px",
+                                      width: "fit-content",
+                                    }}
+                                  >
+                                    {isRTL ? (
+                                      <Play
+                                        size={18}
+                                        style={{
+                                          transform: "rotate(180deg)",
+                                        }}
+                                      />
+                                    ) : (
+                                      <Play size={18} />
+                                    )}
+                                    {t["Start Processing"]}
+                                  </button>
+                                </>
+                              )}
+
+                              {/* Sharpen tool options */}
+                              {currentTool === TOOL_TYPES.SHARPEN &&
+                                accessToken &&
+                                !isOnFreePlan && (
+                                  <div
+                                    style={{
+                                      display: "flex",
+                                      flexDirection: "column",
+                                      gap: "10px",
+                                    }}
+                                  >
+                                    {toolConfig.options.strength.values.map(
+                                      (option) => {
+                                        const isSelected =
+                                          options.strength === option.value;
+
+                                        return (
+                                          <label
+                                            key={option.value}
+                                            style={{
+                                              display: "flex",
+                                              alignItems: "center",
+                                              gap: "10px",
+                                              padding: "10px 14px",
+                                              borderRadius: "8px",
+                                              border: isSelected
+                                                ? "2px solid #00c853"
+                                                : "1px solid #ccc",
+                                              cursor: "pointer",
+                                              userSelect: "none",
+                                              width: "120px",
+                                            }}
+                                          >
+                                            <input
+                                              type="radio"
+                                              name="strength"
+                                              value={option.value}
+                                              checked={isSelected}
+                                              onChange={(e) =>
+                                                handleOptionChange(
+                                                  "strength",
+                                                  parseInt(e.target.value),
+                                                )
+                                              }
+                                              disabled={
+                                                status ===
+                                                COMPONENT_STATES.PROCESSING
+                                              }
+                                              style={{
+                                                width: "16px",
+                                                height: "16px",
+                                                cursor: "pointer",
+                                              }}
+                                            />
+                                            <span
+                                              style={{
+                                                fontWeight: 500,
+                                                color: "#333",
+                                              }}
+                                            >
+                                              {option.label}
+                                            </span>
+                                          </label>
                                         );
                                       },
                                     )}
                                   </div>
                                 )}
-                              </div>
-                            )
-                          }
+
+                              {/* Background removal tool options */}
+                              {currentTool === TOOL_TYPES.REMOVE &&
+                                accessToken &&
+                                !isOnFreePlan && (
+                                  <div
+                                    style={{
+                                      display: "flex",
+                                      flexDirection: "column",
+                                      gap: "10px",
+                                    }}
+                                  >
+                                    {[
+                                      {
+                                        value: "transparent",
+                                        label: t["Transparent"],
+                                      },
+                                      { value: "color", label: t["Color"] },
+                                    ].map((option) => {
+                                      const isSelected =
+                                        !options.bgColor ||
+                                        options.bgColor === "transparent"
+                                          ? option.value === "transparent"
+                                          : option.value === "color";
+
+                                      return (
+                                        <label
+                                          key={option.value}
+                                          style={{
+                                            display: "flex",
+                                            alignItems: "center",
+                                            gap: "10px",
+                                            padding: "10px 14px",
+                                            borderRadius: "8px",
+                                            border: isSelected
+                                              ? "2px solid #00c853"
+                                              : "1px solid #ccc",
+                                            cursor: "pointer",
+                                            userSelect: "none",
+                                            width: "185px",
+                                          }}
+                                        >
+                                          <input
+                                            type="radio"
+                                            name="bgColorType"
+                                            value={option.value}
+                                            checked={isSelected}
+                                            onChange={(e) => {
+                                              const value = e.target.value;
+                                              handleOptionChange(
+                                                "bgColor",
+                                                value === "transparent"
+                                                  ? "transparent"
+                                                  : "#ffffff",
+                                              );
+                                            }}
+                                            disabled={
+                                              status ===
+                                              COMPONENT_STATES.PROCESSING
+                                            }
+                                            style={{
+                                              width: "16px",
+                                              height: "16px",
+                                              cursor: "pointer",
+                                            }}
+                                          />
+                                          <span
+                                            style={{
+                                              fontWeight: 500,
+                                              color: "#333",
+                                            }}
+                                          >
+                                            {option.label}
+                                          </span>
+                                        </label>
+                                      );
+                                    })}
+
+                                    {options.bgColor &&
+                                      options.bgColor !== "transparent" && (
+                                        <div style={{ marginTop: "10px" }}>
+                                          <SketchPicker
+                                            color={options.bgColor}
+                                            onChangeComplete={(color) =>
+                                              handleOptionChange(
+                                                "bgColor",
+                                                color.hex,
+                                              )
+                                            }
+                                          />
+                                        </div>
+                                      )}
+
+                                    <button
+                                      onClick={processImage}
+                                      disabled={
+                                        status === COMPONENT_STATES.PROCESSING
+                                      }
+                                      style={{
+                                        padding: "10px 18px",
+                                        background: "var(--gradient-color)",
+                                        color: "white",
+                                        border: "none",
+                                        borderRadius: "5px",
+                                        cursor: "pointer",
+                                        display: "flex",
+                                        alignItems: "center",
+                                        gap: "8px",
+                                        fontSize: "15px",
+                                        fontWeight: 500,
+                                        width: "fit-content",
+                                        marginTop: "10px",
+                                      }}
+                                    >
+                                      {isRTL ? (
+                                        <Play
+                                          size={18}
+                                          style={{
+                                            transform: "rotate(180deg)",
+                                          }}
+                                        />
+                                      ) : (
+                                        <Play size={18} />
+                                      )}
+                                      {t["Start Processing"]}
+                                    </button>
+                                  </div>
+                                )}
+
+                              {/* Blur tool options */}
+                              {currentTool === TOOL_TYPES.BLUR &&
+                                accessToken &&
+                                !isOnFreePlan && (
+                                  <div
+                                    style={{
+                                      display: "flex",
+                                      flexDirection: "column",
+                                      gap: "10px",
+                                    }}
+                                  >
+                                    {toolConfig.options.amount.values.map(
+                                      (option) => {
+                                        const isSelected =
+                                          options.amount === option.value;
+
+                                        return (
+                                          <label
+                                            key={option.value}
+                                            style={{
+                                              display: "flex",
+                                              alignItems: "center",
+                                              gap: "10px",
+                                              padding: "10px 14px",
+                                              borderRadius: "8px",
+                                              border: isSelected
+                                                ? "2px solid #00c853"
+                                                : "1px solid #ccc",
+                                              cursor: "pointer",
+                                              userSelect: "none",
+                                              width: "120px",
+                                            }}
+                                          >
+                                            <input
+                                              type="radio"
+                                              name="amount"
+                                              value={option.value}
+                                              checked={isSelected}
+                                              onChange={(e) =>
+                                                handleOptionChange(
+                                                  "amount",
+                                                  parseInt(e.target.value),
+                                                )
+                                              }
+                                              disabled={
+                                                status ===
+                                                COMPONENT_STATES.PROCESSING
+                                              }
+                                              style={{
+                                                width: "16px",
+                                                height: "16px",
+                                                cursor: "pointer",
+                                              }}
+                                            />
+                                            <span
+                                              style={{
+                                                fontWeight: 500,
+                                                color: "#333",
+                                              }}
+                                            >
+                                              {option.label}
+                                            </span>
+                                          </label>
+                                        );
+                                      },
+                                    )}
+                                  </div>
+                                )}
+
+                              {/* Rounded tool options */}
+                              {currentTool === TOOL_TYPES.ROUNDED &&
+                                accessToken &&
+                                !isOnFreePlan && (
+                                  <div
+                                    style={{
+                                      display: "flex",
+                                      flexDirection: "column",
+                                      gap: "10px",
+                                    }}
+                                  >
+                                    {toolConfig.options.radius.values.map(
+                                      (option) => {
+                                        const isSelected =
+                                          options.radius === option.value;
+
+                                        return (
+                                          <label
+                                            key={option.value}
+                                            style={{
+                                              display: "flex",
+                                              alignItems: "center",
+                                              gap: "10px",
+                                              padding: "10px 14px",
+                                              borderRadius: "8px",
+                                              border: isSelected
+                                                ? "2px solid #00c853"
+                                                : "1px solid #ccc",
+                                              cursor: "pointer",
+                                              userSelect: "none",
+                                              width: "120px",
+                                            }}
+                                          >
+                                            <input
+                                              type="radio"
+                                              name="radius"
+                                              value={option.value}
+                                              checked={isSelected}
+                                              onChange={(e) =>
+                                                handleOptionChange(
+                                                  "radius",
+                                                  parseInt(e.target.value),
+                                                )
+                                              }
+                                              disabled={
+                                                status ===
+                                                COMPONENT_STATES.PROCESSING
+                                              }
+                                              style={{
+                                                width: "16px",
+                                                height: "16px",
+                                                cursor: "pointer",
+                                              }}
+                                            />
+                                            <span
+                                              style={{
+                                                fontWeight: 500,
+                                                color: "#333",
+                                              }}
+                                            >
+                                              {option.label}
+                                            </span>
+                                          </label>
+                                        );
+                                      },
+                                    )}
+                                  </div>
+                                )}
+
+                              {/* Oiling tool options */}
+                              {currentTool === TOOL_TYPES.OILING &&
+                                accessToken &&
+                                !isOnFreePlan && (
+                                  <div
+                                    style={{
+                                      display: "flex",
+                                      flexDirection: "column",
+                                      gap: "10px",
+                                    }}
+                                  >
+                                    {toolConfig.options.amount.values.map(
+                                      (option) => {
+                                        const isSelected =
+                                          options.amount === option.value;
+
+                                        return (
+                                          <label
+                                            key={option.value}
+                                            style={{
+                                              display: "flex",
+                                              alignItems: "center",
+                                              gap: "10px",
+                                              padding: "10px 14px",
+                                              borderRadius: "8px",
+                                              border: isSelected
+                                                ? "2px solid #00c853"
+                                                : "1px solid #ccc",
+                                              cursor: "pointer",
+                                              userSelect: "none",
+                                              width: "120px",
+                                            }}
+                                          >
+                                            <input
+                                              type="radio"
+                                              name="amount"
+                                              value={option.value}
+                                              checked={isSelected}
+                                              onChange={(e) =>
+                                                handleOptionChange(
+                                                  "amount",
+                                                  parseInt(e.target.value),
+                                                )
+                                              }
+                                              disabled={
+                                                status ===
+                                                COMPONENT_STATES.PROCESSING
+                                              }
+                                              style={{
+                                                width: "16px",
+                                                height: "16px",
+                                                cursor: "pointer",
+                                              }}
+                                            />
+                                            <span
+                                              style={{
+                                                fontWeight: 500,
+                                                color: "#333",
+                                              }}
+                                            >
+                                              {option.label}
+                                            </span>
+                                          </label>
+                                        );
+                                      },
+                                    )}
+                                  </div>
+                                )}
+
+                              {/* Adjust tool options */}
+                              {currentTool === TOOL_TYPES.ADJUST && (
+                                <div className="w-[200px]">
+                                  {Object.entries(toolConfig.options).map(
+                                    ([key, config]) => {
+                                      const flipValue = (val) =>
+                                        isRTL
+                                          ? config.max + config.min - val
+                                          : val;
+
+                                      return (
+                                        <OptionSlider
+                                          key={key}
+                                          label={t[config.label]}
+                                          value={flipValue(options[key])}
+                                          min={config.min}
+                                          max={config.max}
+                                          step={config.step}
+                                          disabled={
+                                            status ===
+                                            COMPONENT_STATES.PROCESSING
+                                          }
+                                          onPreviewChange={(val) =>
+                                            handleOptionChange(
+                                              key,
+                                              flipValue(val),
+                                            )
+                                          }
+                                          onCommitChange={(val) =>
+                                            handleOptionChange(
+                                              key,
+                                              flipValue(val),
+                                            )
+                                          }
+                                        />
+                                      );
+                                    },
+                                  )}
+                                </div>
+                              )}
+                            </div>
+                          )}
                         </>
                       )}
 

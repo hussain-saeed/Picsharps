@@ -236,7 +236,7 @@ const DropZone = () => {
         // Make upload request to image processing API
         const uploadRes = await fetch(`${BACKEND_URL}/image/upload`, {
           method: "POST",
-          body: formData, // Send FormData with file
+          body: formData,
         });
 
         // Parse response JSON

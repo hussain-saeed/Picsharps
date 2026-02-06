@@ -46,7 +46,6 @@ export const AuthProvider = ({ children }) => {
       });
 
       const data = await res.json();
-      console.log(data);
       if (data?.status === "success") {
         if (
           data?.data?.user?.roles?.length === 0 ||
@@ -55,7 +54,6 @@ export const AuthProvider = ({ children }) => {
         ) {
           setAccessToken(data.accessToken);
           setUserData(data.data.user || null);
-          console.log(data?.data?.user?.subscriptions.length);
 
           if (data?.data?.user?.subscriptions.length !== 0) {
             setIsOnFreePlan(false);

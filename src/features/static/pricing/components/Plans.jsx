@@ -61,15 +61,24 @@ export default function Plans({ transformedPlans }) {
       desc: "Perfect for trying out our tools",
 
       features: [
-        { text: "10 images per month", active: true },
-        { text: "Standard quality output", active: true },
-        { text: "All tools access", active: true },
-        { text: "Watermark on downloads", active: true },
-        { text: "HD/4K quality", active: false },
-        { text: "Priority processing", active: false },
-        { text: "Commercial use", active: false },
-        { text: "Download history (7 days only)", active: false },
-        { text: "No watermark", active: false },
+        {
+          text: "Full access to Adjust, Resize, and Collage options.",
+          active: true,
+        },
+        { text: "Access to Cartoon and Grayscale effects.", active: true },
+        { text: "Transparent background removal support.", active: true },
+        {
+          text: "Basic level for enhancement-based tools.",
+          active: true,
+        },
+        {
+          text: "Full access to Remove Background color options.",
+          active: false,
+        },
+        { text: "Full access to AI Enhancer levels.", active: false },
+        { text: "Full access to Blur options.", active: false },
+        { text: "Full access to Oil Paint options.", active: false },
+        { text: "Full access to Rounded Corner options.", active: false },
       ],
 
       buttonBg: "",
@@ -107,16 +116,29 @@ export default function Plans({ transformedPlans }) {
       desc: "Best for creators and professionals",
 
       features: [
-        { text: "100 images per month", active: true },
-        { text: "HD quality output", active: true },
-        { text: "All tools access", active: true },
-        { text: "No watermark", active: true },
-        { text: "Priority processing", active: true },
-        { text: "30-day download history", active: true },
-        { text: "Commercial use allowed", active: true },
-        { text: "Email support", active: true },
-        { text: "4K quality", active: false },
-        { text: "API access", active: false },
+        {
+          text: "Full access to Adjust, Resize, and Collage options.",
+          active: true,
+        },
+        { text: "Access to Cartoon and Grayscale effects.", active: true },
+        { text: "Transparent background removal support.", active: true },
+        {
+          text: "Basic level for enhancement-based tools.",
+          active: true,
+        },
+        {
+          text: "Full access to Remove Background color options.",
+          active: true,
+        },
+        { text: "Full access to AI Enhancer levels.", active: true },
+        { text: "Full access to Blur options.", active: true },
+        { text: "Full access to Oil Paint options.", active: true },
+        { text: "Full access to Rounded Corner options.", active: true },
+        {
+          text: "Lower cost per credit compared to entry plans",
+          active: false,
+        },
+        { text: "Highest credit-to-price ratio available", active: false },
       ],
 
       buttonBg: "var(--gradient-color-2)",
@@ -150,23 +172,34 @@ export default function Plans({ transformedPlans }) {
 
       smallText: t["Billed monthly"],
       smallTextYearly: t["$179.88 /year"],
-      smallTextYearlyPlus: `(${t["Save 20%"]})`,
+      smallTextYearlyPlus: `(${t["Save 25%"]})`,
       desc: "For power users and businesses",
 
       features: [
-        { text: "Unlimited images", active: true },
-        { text: "4K quality output", active: true },
-        { text: "All tools access (including future tools)", active: true },
-        { text: "No watermark", active: true },
-        { text: "Fastest priority processing", active: true },
-        { text: "Unlimited download history", active: true },
-        { text: "Commercial use allowed", active: true },
-        { text: "Priority email support", active: true },
-        { text: "API access (coming soon)", active: true },
-        { text: "Bulk processing", active: true },
-        { text: "Team collaboration (coming soon)", active: true },
+        {
+          text: "Full access to Adjust, Resize, and Collage options.",
+          active: true,
+        },
+        { text: "Access to Cartoon and Grayscale effects.", active: true },
+        { text: "Transparent background removal support.", active: true },
+        {
+          text: "Basic level for enhancement-based tools.",
+          active: true,
+        },
+        {
+          text: "Full access to Remove Background color options.",
+          active: true,
+        },
+        { text: "Full access to AI Enhancer levels.", active: true },
+        { text: "Full access to Blur options.", active: true },
+        { text: "Full access to Oil Paint options.", active: true },
+        { text: "Full access to Rounded Corner options.", active: true },
+        {
+          text: "Lower cost per credit compared to entry plans",
+          active: true,
+        },
+        { text: "Highest credit-to-price ratio available", active: true },
       ],
-
       buttonBg: "rgba(0, 200, 83, 1)",
       buttonColor: "white",
       buttonText: `${t["Start Plan"]} ${transformedPlans[1]?.name}`,
@@ -283,7 +316,7 @@ export default function Plans({ transformedPlans }) {
               borderRadius: "20px",
             }}
           >
-            {t["Save 20%"]}
+            {t["Save up to 25%"]}
           </span>
         )}
       </div>

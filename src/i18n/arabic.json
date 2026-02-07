@@ -569,7 +569,9 @@
 
   "##########comment-551##########": "rest pricing page",
   "Something went wrong while loading the plans!": "حدث خطأ أثناء تحميل الخطط!",
+  "Save up to 25%": "وفر حتى 25%",
   "Save 20%": "وفّر 20%",
+  "Save 25%": "وفّر 25%",
   "Free Forever": "مجاني إلى الأبد",
   "Free": "مجاني",
   "Forever free": "مجاني دائمًا",
@@ -635,5 +637,16 @@
   "No images yet!": "لا توجد صور بعد!",
   "credits": "نقطة",
   "Account suspended!": "تم إيقاف الحساب!",
-  "This plan is temporarily unavailable for the selected subscription period!": "هذه الخطة غير متاحة مؤقتًا لفترة الاشتراك المحددة!"
+  "This plan is temporarily unavailable for the selected subscription period!": "هذه الخطة غير متاحة مؤقتًا لفترة الاشتراك المحددة!",
+  "Full access to Adjust, Resize, and Collage options.": "وصول كامل إلى خيارات التعديل، تغيير الحجم.",
+  "Access to Cartoon and Grayscale effects.": "إمكانية استخدام تأثيرات الكرتون والتدرج الرمادي.",
+  "Transparent background removal support.": "دعم إزالة الخلفية الشفافة.",
+  "Basic level for enhancement-based tools.": "المستوى الأساسي لأدوات التحسين.",
+  "Full access to Remove Background color options.": "وصول كامل إلى خيارات إزالة لون الخلفية.",
+  "Full access to AI Enhancer levels.": "وصول كامل إلى مستويات تحسين الصور بالذكاء الاصطناعي.",
+  "Full access to Blur options.": "وصول كامل إلى خيارات التمويه.",
+  "Full access to Oil Paint options.": "وصول كامل إلى خيارات تأثير الرسم الزيتي.",
+  "Full access to Rounded Corner options.": "وصول كامل إلى خيارات الزوايا الدائرية.",
+  "Lower cost per credit compared to entry plans": "تكلفة أقل لكل رصيد مقارنة بالخطط الأساسية.",
+  "Highest credit-to-price ratio available": "أعلى نسبة رصيد مقابل السعر متاحة."
 }

@@ -569,7 +569,9 @@
 
   "##########comment-551##########": "rest pricing page",
   "Something went wrong while loading the plans!": "Terjadi kesalahan saat memuat paket!",
+  "Save up to 25%": "Hemat hingga 25%",
   "Save 20%": "Hemat 20%",
+  "Save 25%": "Hemat 25%",
   "Free Forever": "Gratis",
   "Free": "Gratis",
   "Forever free": "Gratis selamanya",
@@ -635,5 +637,16 @@
   "No images yet!": "Belum ada gambar!",
   "credits": "kredit",
   "Account suspended!": "Akun ditangguhkan!",
-  "This plan is temporarily unavailable for the selected subscription period!": "Paket ini sementara tidak tersedia untuk periode langganan yang dipilih!"
+  "This plan is temporarily unavailable for the selected subscription period!": "Paket ini sementara tidak tersedia untuk periode langganan yang dipilih!",
+  "Full access to Adjust, Resize, and Collage options.": "Akses penuh ke opsi penyesuaian, ubah ukuran, dan kolase.",
+  "Access to Cartoon and Grayscale effects.": "Akses ke efek kartun dan grayscale.",
+  "Transparent background removal support.": "Dukungan penghapusan latar belakang transparan.",
+  "Basic level for enhancement-based tools.": "Tingkat dasar untuk alat peningkatan.",
+  "Full access to Remove Background color options.": "Akses penuh ke opsi penghapusan warna latar belakang.",
+  "Full access to AI Enhancer levels.": "Akses penuh ke level AI Enhancer.",
+  "Full access to Blur options.": "Akses penuh ke opsi blur.",
+  "Full access to Oil Paint options.": "Akses penuh ke opsi lukisan minyak.",
+  "Full access to Rounded Corner options.": "Akses penuh ke opsi sudut membulat.",
+  "Lower cost per credit compared to entry plans": "Biaya per kredit lebih rendah dibandingkan paket awal.",
+  "Highest credit-to-price ratio available": "Rasio kredit terhadap harga tertinggi yang tersedia."
 }

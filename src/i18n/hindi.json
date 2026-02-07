@@ -569,7 +569,9 @@
 
   "##########comment-551##########": "rest pricing page",
   "Something went wrong while loading the plans!": "प्लान लोड करते समय कुछ गलत हो गया!",
+  "Save up to 25%": "25% तक बचाएँ",
   "Save 20%": "20% बचाएं",
+  "Save 25%": "25% बचाएं",
   "Free Forever": "मुफ़्त",
   "Free": "मुफ़्त",
   "Forever free": "हमेशा मुफ़्त",
@@ -635,5 +637,16 @@
   "No images yet!": "अभी तक कोई छवि नहीं!",
   "credits": "क्रेडिट्स",
   "Account suspended!": "खाता निलंबित कर दिया गया है!",
-  "This plan is temporarily unavailable for the selected subscription period!": "चुनी गई सदस्यता अवधि के लिए यह प्लान अस्थायी रूप से उपलब्ध नहीं है!"
+  "This plan is temporarily unavailable for the selected subscription period!": "चुनी गई सदस्यता अवधि के लिए यह प्लान अस्थायी रूप से उपलब्ध नहीं है!",
+  "Full access to Adjust, Resize, and Collage options.": "समायोजन, आकार बदलने और कोलाज विकल्पों तक पूर्ण पहुंच।",
+  "Access to Cartoon and Grayscale effects.": "कार्टून और ग्रेस्केल प्रभावों तक पहुंच।",
+  "Transparent background removal support.": "पारदर्शी पृष्ठभूमि हटाने का समर्थन।",
+  "Basic level for enhancement-based tools.": "सुधार-आधारित टूल्स के लिए बुनियादी स्तर।",
+  "Full access to Remove Background color options.": "पृष्ठभूमि रंग हटाने के विकल्पों तक पूर्ण पहुंच।",
+  "Full access to AI Enhancer levels.": "AI इमेज एन्हांसर स्तरों तक पूर्ण पहुंच।",
+  "Full access to Blur options.": "ब्लर विकल्पों तक पूर्ण पहुंच।",
+  "Full access to Oil Paint options.": "ऑयल पेंट विकल्पों तक पूर्ण पहुंच।",
+  "Full access to Rounded Corner options.": "गोल कोनों के विकल्पों तक पूर्ण पहुंच।",
+  "Lower cost per credit compared to entry plans": "एंट्री प्लान की तुलना में प्रति क्रेडिट कम लागत।",
+  "Highest credit-to-price ratio available": "सबसे अधिक क्रेडिट-से-कीमत अनुपात उपलब्ध।"
 }

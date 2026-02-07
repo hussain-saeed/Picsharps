@@ -569,7 +569,9 @@
 
   "##########comment-551##########": "rest pricing page",
   "Something went wrong while loading the plans!": "Algo deu errado ao carregar os planos!",
+  "Save up to 25%": "Economize até 25%",
   "Save 20%": "Economize 20%",
+  "Save 25%": "Economize 25%",
   "Free Forever": "Grátis",
   "Free": "Grátis",
   "Forever free": "Grátis para sempre",
@@ -635,5 +637,16 @@
   "No images yet!": "Ainda não há imagens!",
   "credits": "créditos",
   "Account suspended!": "Conta suspensa!",
-  "This plan is temporarily unavailable for the selected subscription period!": "Este plano está temporariamente indisponível para o período de assinatura selecionado!"
+  "This plan is temporarily unavailable for the selected subscription period!": "Este plano está temporariamente indisponível para o período de assinatura selecionado!",
+  "Full access to Adjust, Resize, and Collage options.": "Acesso total às opções de ajuste, redimensionamento e colagem.",
+  "Access to Cartoon and Grayscale effects.": "Acesso aos efeitos de desenho animado e escala de cinza.",
+  "Transparent background removal support.": "Suporte para remoção de fundo transparente.",
+  "Basic level for enhancement-based tools.": "Nível básico para ferramentas de aprimoramento.",
+  "Full access to Remove Background color options.": "Acesso total às opções de remoção de cor de fundo.",
+  "Full access to AI Enhancer levels.": "Acesso total aos níveis do aprimorador por IA.",
+  "Full access to Blur options.": "Acesso total às opções de desfoque.",
+  "Full access to Oil Paint options.": "Acesso total às opções de pintura a óleo.",
+  "Full access to Rounded Corner options.": "Acesso total às opções de cantos arredondados.",
+  "Lower cost per credit compared to entry plans": "Custo por crédito menor em comparação aos planos iniciais.",
+  "Highest credit-to-price ratio available": "A maior proporção de créditos por preço disponível."
 }

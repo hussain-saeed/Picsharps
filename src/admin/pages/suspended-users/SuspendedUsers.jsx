@@ -85,9 +85,9 @@ const SuspendedUsers = () => {
 
   if (isError || !hasData) {
     return (
-      <Box mt={4}>
-        <Typography color="error">Something went wrong.</Typography>
-      </Box>
+      <p className="text-[20px] font-semibold text-red-600 text-center pt-45">
+        Something went wrong!
+      </p>
     );
   }
 
@@ -316,11 +316,7 @@ const SuspendedUsers = () => {
       {/* ================= EMPTY STATE ================= */}
       {isEmpty && (
         <div className="flex flex-col justify-center items-center">
-          <img
-            src={"/images/no-users.png"}
-            alt="no users"
-            className="w-150"
-          />
+          <img src={"/images/no-users.png"} alt="no users" className="w-150" />
 
           <div
             className="text-[20px] sm:text-[25px]"

@@ -52,6 +52,21 @@ function Settings() {
   };
 
   const handleSave = async () => {
+    if (!formData.siteName || formData.siteName.trim() === "") {
+      toast.error("Site Name can't be blank!");
+      return;
+    }
+
+    if (!formData.emailSupport || formData.emailSupport.trim() === "") {
+      toast.error("Support Email can't be blank!");
+      return;
+    }
+
+    if (!formData.companyName || formData.companyName.trim() === "") {
+      toast.error("Company Name can't be blank!");
+      return;
+    }
+
     try {
       const res = await updateSettings({ body: formData }).unwrap();
       if (res.status === "success") {
@@ -90,9 +105,15 @@ function Settings() {
           gap="4px"
         />
       )}{" "}
-      {isError && <div>Error fetching settings</div>}
+      {isError && (
+        <p className="text-[20px] font-semibold text-red-600 pt-2.5">
+          Something went wrong!
+        </p>
+      )}
       {!isFetching && !isError && !hasData && (
-        <div>Error fetching settings</div>
+        <p className="text-[20px] font-semibold text-red-600 pt-2.5">
+          Something went wrong!
+        </p>
       )}
       {/* Form */}
       {!isFetching && hasData && (

@@ -92,6 +92,21 @@ function Plans() {
       return;
     }
 
+    if (!formData.name || formData.name.trim() === "") {
+      toast.error("Name can't be blank!");
+      return;
+    }
+
+    if (!formData.description || formData.description.trim() === "") {
+      toast.error("Description can't be blank!");
+      return;
+    }
+
+    if (formData.creditsPerPeriod === "" || formData.creditsPerPeriod < 0) {
+      toast.error("Credits must be 0 or more!");
+      return;
+    }
+
     const body = { ...formData };
 
     if (formData.name === originalFormData.name) {
@@ -150,7 +165,9 @@ function Plans() {
         />
       )}
       {!isFetching && data?.status !== "success" && (
-        <div>Error fetching plans</div>
+        <p className="text-[20px] font-semibold text-red-600 pt-2.5">
+          Something went wrong!
+        </p>
       )}
 
       {!isFetching && transformedPlans.length > 0 && (

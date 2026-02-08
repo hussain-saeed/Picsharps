@@ -172,15 +172,13 @@ function Plans() {
 
       {!isFetching && transformedPlans.length > 0 && (
         <>
-          {/* 1. PLAN GROUPS (Top Controller) */}
           <div
             style={{
-              display: "flex",
-              gap: "6px",
+              gridTemplateColumns: "1fr 1fr",
               marginBottom: "30px",
               background: "rgb(240,240, 240)",
             }}
-            className="sm:w-fit p-1.5 rounded-xl shadow-sm"
+            className="p-1.5 rounded-xl shadow-sm flex flex-wrap sm:inline-grid"
           >
             {transformedPlans.map((group, index) => (
               <button
@@ -195,14 +193,14 @@ function Plans() {
                     selectedGroupIndex === index
                       ? "black"
                       : "rgb(125,125, 125)",
-                  padding: "10px 18px",
+                  padding: "8px 18px",
                   borderRadius: "10px",
                   background:
                     selectedGroupIndex === index
                       ? "rgb(250,250, 250)"
                       : "transparent",
                 }}
-                className="font-semibold w-[50%] sm:min-w-[120px] cursor-pointer transition-all"
+                className="font-semibold whitespace-nowrap w-full cursor-pointer transition-all"
               >
                 {group.name}
               </button>

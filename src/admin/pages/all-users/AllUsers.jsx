@@ -452,7 +452,9 @@ const AllUsers = () => {
                               ? "#00B0FF"
                               : u.currentPlan === "Premium"
                                 ? "rgba(0, 200, 83, 1)"
-                                : "",
+                                : u.currentPlan === "Free"
+                                  ? ""
+                                  : "#B500B2",
                           color:
                             u.currentPlan === "Free"
                               ? "rgb(150, 150, 150)"

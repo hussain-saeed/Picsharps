@@ -31,7 +31,7 @@ export default function AdminLogin() {
       <div
         className="fixed inset-0 z-0"
         style={{
-          backgroundImage: 'url("/public/images/dashboard.jpg")',
+          backgroundImage: 'url("/images/dashboard.jpg")',
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}

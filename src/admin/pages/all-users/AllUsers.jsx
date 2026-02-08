@@ -191,9 +191,9 @@ const AllUsers = () => {
 
   if (isError || !hasData) {
     return (
-      <Box mt={4}>
-        <Typography color="error">Something went wrong.</Typography>
-      </Box>
+      <p className="text-[20px] font-semibold text-red-600 text-center pt-45">
+        Something went wrong!
+      </p>
     );
   }
 
@@ -689,9 +689,20 @@ const AllUsers = () => {
       </>
       {/* ================= EMPTY STATE ================= */}
       {isEmpty && (
-        <Box mt={4}>
-          <Typography>No users found.</Typography>
-        </Box>
+        <div className="flex flex-col justify-center items-center pt-8">
+          <img
+            src={"/images/no-search-match.png"}
+            alt="no match"
+            className="w-150"
+          />
+
+          <div
+            className="text-[20px] sm:text-[25px] pt-6"
+            style={{ fontWeight: "600" }}
+          >
+            Nothing matches your search!
+          </div>
+        </div>
       )}
     </Box>
   );

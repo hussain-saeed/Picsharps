@@ -29,6 +29,7 @@ import { LuSquareArrowOutUpRight } from "react-icons/lu";
 import { useRef } from "react";
 import useExportPDF from "../../../hooks/useExportPDF";
 import ShowAsPDF from "../../../components/ShowAsPDF";
+import { LoadingDots } from "../../../components/LoadingDots";
 
 function Countries({ markAsDone }) {
   const { isOpen, openModal, closeModal } = useGeneralModal();
@@ -163,14 +164,20 @@ function Countries({ markAsDone }) {
   const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8884d8"];
 
   return (
-    <div className="">
+    <div>
       {/* Title */}
       <h2 className="text-xl font-semibold">Geographic Analytics</h2>
 
       {/* Loading State */}
       {isFetching && (
-        <div style={{ textAlign: "center", padding: "40px" }}>
-          Loading statistics...
+        <div className="min-h-[492px]">
+          <LoadingDots
+            loadingSize="20px"
+            loadingWeight="500"
+            dotsSize="25px"
+            dotsWeight="600"
+            gap="4px"
+          />
         </div>
       )}
 

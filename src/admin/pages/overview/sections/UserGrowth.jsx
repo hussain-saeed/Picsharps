@@ -24,6 +24,7 @@ import { FiChevronLeft } from "react-icons/fi";
 import { FiChevronRight } from "react-icons/fi";
 import { IoMdTrendingDown } from "react-icons/io";
 import { IoMdTrendingUp } from "react-icons/io";
+import { LoadingDots } from "../../../components/LoadingDots";
 
 const PERIODS = ["7D", "30D", "90D", "1Y"];
 
@@ -232,7 +233,7 @@ function UserGrowth({ markAsDone }) {
   }, [period]);
 
   return (
-    <div className>
+    <div>
       <h2 className="text-xl font-semibold mb-4">User Growth</h2>
 
       {/* Period Buttons */}
@@ -267,7 +268,17 @@ function UserGrowth({ markAsDone }) {
       </div>
 
       {/* Loading and Error States */}
-      {isFetching && <div>Loading user growth...</div>}
+      {isFetching && (
+        <div className="min-h-[848px]">
+          <LoadingDots
+            loadingSize="20px"
+            loadingWeight="500"
+            dotsSize="25px"
+            dotsWeight="600"
+            gap="4px"
+          />
+        </div>
+      )}
 
       {isError && !isFetching && (
         <div>Something went wrong while fetching growth data.</div>

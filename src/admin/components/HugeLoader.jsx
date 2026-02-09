@@ -2,8 +2,6 @@ import React from "react";
 import { motion } from "framer-motion";
 
 function HugeLoader() {
-  const brandName = "Picsharps";
-
   const containerVariants = {
     animate: {
       y: [0, -12, 0],
@@ -42,7 +40,7 @@ function HugeLoader() {
           animate="animate"
           className="flex text-4xl font-extrabold text-[#1B2337] tracking-tight"
         >
-          {brandName}
+          Picsharps
         </motion.div>
       </div>
     </div>

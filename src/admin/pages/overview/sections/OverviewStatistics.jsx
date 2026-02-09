@@ -15,6 +15,7 @@ import { TbReport } from "react-icons/tb";
 import { FaArrowTrendUp } from "react-icons/fa6";
 import { FaArrowTrendDown } from "react-icons/fa6";
 import { FaArrowsRotate } from "react-icons/fa6";
+import { LoadingDots } from "../../../components/LoadingDots";
 
 function StatCard({
   title,
@@ -145,7 +146,18 @@ function OverviewStatistics({ markAsDone }) {
 
   const stats = hasData ? data.data : null;
 
-  if (isFetching) return <div>Loading statistics...</div>;
+  if (isFetching)
+    return (
+      <div className="min-h-[246px]">
+        <LoadingDots
+          loadingSize="20px"
+          loadingWeight="500"
+          dotsSize="25px"
+          dotsWeight="600"
+          gap="4px"
+        />
+      </div>
+    );
   if (isError || !hasData)
     return <div>Something went wrong while fetching statistics.</div>;
   if (hasData && !stats) return <div>No data yet</div>;

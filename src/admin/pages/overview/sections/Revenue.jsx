@@ -8,28 +8,29 @@ import {
   Tooltip,
 } from "recharts";
 import { useGetRevenueQuery } from "../../../features/core/adminCoreApi";
+import { LoadingDots } from "../../../components/LoadingDots";
 
 function Revenue({ markAsDone }) {
   const { data, isFetching, isError } = useGetRevenueQuery(undefined, {
     refetchOnMountOrArgChange: true,
   });
 
-useEffect(() => {
-  let timeoutId;
+  useEffect(() => {
+    let timeoutId;
 
-  markAsDone(false); 
-
-  if (!isFetching) {
-    markAsDone(true);
-  } else {
-    timeoutId = setTimeout(() => markAsDone(true), 10000);
-  }
-
-  return () => {
-    if (timeoutId) clearTimeout(timeoutId);
     markAsDone(false);
-  };
-}, [isFetching]);
+
+    if (!isFetching) {
+      markAsDone(true);
+    } else {
+      timeoutId = setTimeout(() => markAsDone(true), 10000);
+    }
+
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId);
+      markAsDone(false);
+    };
+  }, [isFetching]);
 
   const hasData = data?.status === "success" && data.data;
   const stats = hasData ? data.data : null;
@@ -79,8 +80,14 @@ useEffect(() => {
 
       {/* Loading State */}
       {isFetching && (
-        <div style={{ textAlign: "center", padding: "40px" }}>
-          Loading statistics...
+        <div className="min-h-[400px] flex justify-center pt-5">
+          <LoadingDots
+            loadingSize="20px"
+            loadingWeight="500"
+            dotsSize="25px"
+            dotsWeight="600"
+            gap="4px"
+          />
         </div>
       )}
 

@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { useGetRecentActivityQuery } from "../../../features/core/adminCoreApi";
 import { BsArrowsFullscreen } from "react-icons/bs";
 import { IoReloadOutline } from "react-icons/io5";
+import { LoadingDots } from "../../../components/LoadingDots";
 
 function RecentActivities({ markAsDone }) {
   const LIMIT = 5;
@@ -16,22 +17,22 @@ function RecentActivities({ markAsDone }) {
     { refetchOnMountOrArgChange: true },
   );
 
-useEffect(() => {
-  let timeoutId;
+  useEffect(() => {
+    let timeoutId;
 
-  markAsDone(false); 
-
-  if (!isFetching) {
-    markAsDone(true);
-  } else {
-    timeoutId = setTimeout(() => markAsDone(true), 10000);
-  }
-
-  return () => {
-    if (timeoutId) clearTimeout(timeoutId);
     markAsDone(false);
-  };
-}, [isFetching]);
+
+    if (!isFetching) {
+      markAsDone(true);
+    } else {
+      timeoutId = setTimeout(() => markAsDone(true), 10000);
+    }
+
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId);
+      markAsDone(false);
+    };
+  }, [isFetching]);
 
   // Reset on mount
   useEffect(() => {
@@ -114,6 +115,18 @@ useEffect(() => {
       {/* Title */}
       <h2 className="text-xl font-semibold mb-2">Recent Activity</h2>
 
+      {isInitialLoading && (
+        <div className="min-h-[550px]">
+          <LoadingDots
+            loadingSize="20px"
+            loadingWeight="500"
+            dotsSize="25px"
+            dotsWeight="600"
+            gap="4px"
+          />
+        </div>
+      )}
+
       {/* Last Updated */}
       {lastUpdated && (
         <div
@@ -125,7 +138,6 @@ useEffect(() => {
       )}
 
       {/* Loading */}
-      {isInitialLoading && <div>Loading recent activities...</div>}
 
       {/* Error */}
       {(!hasData || isError) && !isInitialLoading && (
@@ -277,7 +289,7 @@ useEffect(() => {
           }}
           className="rounded-md text-white flex items-center gap-2"
         >
-          {isLoadingMore ? "Loading..." : "Load More"}
+          {isLoadingMore ? "Loading ..." : "Load More"}
           <IoReloadOutline />
         </button>
       )}

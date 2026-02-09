@@ -8,7 +8,6 @@ function AdminNotFound() {
     "/images/not-found-admin-2.png",
   ];
 
-  // اختيار صورة عشوائية مرة واحدة عند الرندر
   const randomImage = useMemo(() => {
     const index = Math.floor(Math.random() * images.length);
     return images[index];

@@ -4,6 +4,7 @@ import Footer from "../../components/Footer";
 import { Link } from "react-router-dom";
 import { useContext } from "react";
 import { LanguageContext } from "/src/context/LanguageContext";
+import { ViewContext } from "../../context/ViewContext";
 
 import English from "/src/i18n/english.json";
 import Arabic from "/src/i18n/arabic.json";
@@ -25,6 +26,7 @@ const translations = {
 
 function NotFound() {
   const { language, direction } = useContext(LanguageContext);
+  const { goToHome } = useContext(ViewContext);
   const isRTL = direction === "rtl";
   const t = translations[language] || translations["English"];
 
@@ -49,9 +51,7 @@ function NotFound() {
             style={{
               fontWeight: "900",
             }}
-            onClick={() => {
-              localStorage.setItem("activeView", "Home");
-            }}
+            onClick={goToHome}
           >
             {t["Back to Home"]}
           </Link>

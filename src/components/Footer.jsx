@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import Container from "../components/Container";
 import ChangeLanguage from "./ChangeLanguage";
 import { LanguageContext } from "../context/LanguageContext";
+import { ViewContext } from "../context/ViewContext";
 
 import English from "/src/i18n/english.json";
 import Arabic from "/src/i18n/arabic.json";
@@ -22,8 +23,9 @@ const translations = {
   Indonesian,
 };
 
-function Footer({ setActiveView }) {
+function Footer() {
   const { language, direction } = useContext(LanguageContext);
+  const { goToHome } = useContext(ViewContext);
   const isRTL = direction === "rtl";
   const t = translations[language] || translations["English"];
 
@@ -66,21 +68,14 @@ function Footer({ setActiveView }) {
           <div
             className={`flex lg:w-[45%] flex-col gap-2 ${
               isRTL ? "items-end" : "items-start"
-            } items-end`}
+            }`}
           >
             <Link
               to="/"
               className={`flex items-center gap-2.5 ${
                 isRTL ? "flex-row-reverse text-right" : "text-left"
               }`}
-              onClick={() => {
-                localStorage.setItem("activeView", "Home");
-                setActiveView("Home");
-                window.scrollTo({
-                  top: 0,
-                  behavior: "smooth",
-                });
-              }}
+              onClick={goToHome}
             >
               <img src="/images/logo.png" alt="Logo" />
               <span

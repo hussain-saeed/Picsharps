@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext } from "react";
 import Container from "../../../components/Container";
 import Header from "../../../components/Header";
 import ToolsMenuMobile from "../../../components/ToolsMenuMobile";
@@ -9,8 +9,8 @@ import { Link } from "react-router-dom";
 import How from "./sections/How";
 import Ready from "./sections/Ready";
 import Footer from "../../../components/Footer";
-import { useContext } from "react";
 import { LanguageContext } from "/src/context/LanguageContext";
+import { ViewContext } from "../../../context/ViewContext";
 
 import English from "/src/i18n/english.json";
 import Arabic from "/src/i18n/arabic.json";
@@ -31,18 +31,15 @@ const translations = {
 };
 
 function Landing() {
-  const [activeView, setActiveView] = useState(
-    localStorage.getItem("activeView") || "Home",
-  );
-
+  const { activeView } = useContext(ViewContext);
   const { language } = useContext(LanguageContext);
   const t = translations[language] || translations["English"];
 
   return (
     <>
-      <Header setActiveView={setActiveView} />
+      <Header />
 
-      {activeView === "Home" && (
+      {(activeView === "Home" || !["Home", "Tools"].includes(activeView)) && (
         <>
           <Hero />
           <Quick />
@@ -86,26 +83,6 @@ function Landing() {
               />
             </Container>
           </div>
-
-          {/*<div className="pb-20 bg-(--secondary-section-color)">
-            <Container>
-              <PresentService
-                isTextFirst={false}
-                before="/images/remove-object-2.png"
-                after="/images/remove-object-3.png"
-                aspectRatio="12/8"
-                fit="fill"
-                title={t["Remove Unwanted Objects"]}
-                description={
-                  t[
-                    "Clean up your photos in seconds with our smart AI object remover. Whether it's a stray person, a distracting item, or background clutter—just highlight it and let the magic happen. Your image stays flawless, your focus stays sharp."
-                  ]
-                }
-                linkTo="/object-removal"
-                innerLinkText={t["Try it now for free"]}
-              />
-            </Container>
-          </div>*/}
 
           <div className="pb-20 bg-(--secondary-section-color)">
             <Container>
@@ -164,11 +141,9 @@ function Landing() {
         </>
       )}
 
-      {activeView === "Tools" && (
-        <ToolsMenuMobile setActiveView={setActiveView} />
-      )}
+      {activeView === "Tools" && <ToolsMenuMobile />}
 
-      <Footer setActiveView={setActiveView} />
+      <Footer />
     </>
   );
 }

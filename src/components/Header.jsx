@@ -10,6 +10,7 @@ import { useAuth } from "../features/auth/AuthProvider";
 import { RxAvatar } from "react-icons/rx";
 import { FaUser } from "react-icons/fa";
 import Spinner from "./Spinner";
+import { ViewContext } from "../context/ViewContext";
 
 import English from "/src/i18n/english.json";
 import Arabic from "/src/i18n/arabic.json";
@@ -29,10 +30,12 @@ const translations = {
   Indonesian,
 };
 
-export default function Header({ setActiveView }) {
+export default function Header() {
   const { language, direction } = useContext(LanguageContext);
   const { isVisible, setIsVisible } = useOverlay();
   const location = useLocation();
+  const { userData, isLoadingUserData, openLoginPopup } = useAuth();
+  const { setActiveView, goToHome } = useContext(ViewContext);
 
   const [menuOpen, setMenuOpen] = useState(false);
   const [toolsMenuOpen, setToolsMenuOpen] = useState(false);
@@ -41,14 +44,12 @@ export default function Header({ setActiveView }) {
   const t = translations[language] || translations["English"];
   const isRTL = direction === "rtl";
 
-  const { userData, isLoadingUserData, openLoginPopup } = useAuth();
-
   const handleHeaderClick = () => {
-    if (toolsMenuOpen === true) {
+    if (toolsMenuOpen) {
       setToolsMenuOpen(false);
       setIsVisible(false);
     }
-    if (menuOpen === true) {
+    if (menuOpen) {
       setMenuOpen(false);
       setIsVisible(false);
     }
@@ -62,11 +63,11 @@ export default function Header({ setActiveView }) {
   };
 
   const handleChangeView = (label) => {
-    const view = label === t.Home ? "Home" : label === t.Tools ? "Tools" : null;
-    if (view) {
-      localStorage.setItem("activeView", view);
-      setActiveView(view);
-    }
+    let targetView = "Home";
+    if (label === t.Tools) targetView = "Tools";
+    setActiveView(targetView);
+    setMenuOpen(false);
+    setIsVisible(false);
   };
 
   useEffect(() => {
@@ -100,17 +101,10 @@ export default function Header({ setActiveView }) {
       >
         <Link
           to="/"
+          onClick={goToHome}
           className={`flex items-center gap-2.5 ${
             isRTL ? "flex-row-reverse" : ""
           }`}
-          onClick={() => {
-            localStorage.setItem("activeView", "Home");
-            setActiveView("Home");
-            window.scrollTo({
-              top: 0,
-              behavior: "smooth",
-            });
-          }}
         >
           <img src="/images/logo.png" alt="Logo" />
           <span
@@ -137,7 +131,10 @@ export default function Header({ setActiveView }) {
               className={`flex items-center gap-1.5 relative ${
                 isRTL ? "flex-row-reverse" : ""
               } cursor-pointer`}
-              onClick={() => handleNavClick(label)}
+              onClick={() => {
+                handleNavClick(label);
+                if (label === t.Home) setActiveView("Home");
+              }}
             >
               <img src={`/images/${img}.png`} alt={label} />
               <span>{label}</span>
@@ -258,7 +255,6 @@ export default function Header({ setActiveView }) {
             {userData ? (
               <Link
                 to="/profile"
-                style={{}}
                 className="mt-2.5 flex gap-1"
                 dir={isRTL ? "rtl" : "ltr"}
               >

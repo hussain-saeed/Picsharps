@@ -151,7 +151,7 @@ function Profile() {
           background:
             "linear-gradient(180deg, rgba(223, 242, 255, 0.2) 0%, rgba(255, 255, 255, 1) 100%)",
         }}
-        className="pt-0 lg:pt-40 pb-[140px]"
+        className="pt-0 lg:pt-44 pb-[140px]"
         dir={isRTL ? "rtl" : "ltr"}
       >
         <Container>

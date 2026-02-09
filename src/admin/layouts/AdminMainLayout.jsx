@@ -78,7 +78,7 @@ function AdminMainLayout() {
           Admin Dashboard
         </span>
         <div className="text-gray-600" style={{ fontSize: "10px" }}>
-          v6 - Feb 8 2026 at 05:08 PM
+          v7 - Feb 9 2026 at 02:55 AM
         </div>
       </div>
 

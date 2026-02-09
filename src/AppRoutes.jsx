@@ -1,5 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { LanguageProvider } from "./context/LanguageContext";
+import { Routes, Route } from "react-router-dom";
 import { OverlayProvider } from "./context/OverlayContext";
 import ScrollToTop from "./components/ScrollToTop";
 import Landing from "./features/static/landing/Landing";
@@ -30,7 +29,6 @@ const data = [
   "adjust-image",
   "crop-image",
   "create-collage",
-  // "object-removal",
 ];
 
 export default function AppRoutes() {

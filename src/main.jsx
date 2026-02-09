@@ -10,37 +10,20 @@ import { useContext } from "react";
 import { Provider } from "react-redux";
 import { adminStore } from "./admin/store/adminStore";
 
-import English from "/src/i18n/english.json";
-import Arabic from "/src/i18n/arabic.json";
-import French from "/src/i18n/french.json";
-import Portuguese from "/src/i18n/portuguese.json";
-import Spanish from "/src/i18n/spanish.json";
-import Hindi from "/src/i18n/hindi.json";
-import Indonesian from "/src/i18n/indonesian.json";
 import AdminApp from "./admin/AdminApp";
-
-const translations = {
-  English,
-  Arabic,
-  French,
-  Portuguese,
-  Spanish,
-  Hindi,
-  Indonesian,
-};
+import { ViewProvider } from "./context/ViewContext";
 
 if ("scrollRestoration" in window.history) {
   window.history.scrollRestoration = "manual";
 }
 
 function AppWrapper() {
-  const { language, direction } = useContext(LanguageContext);
-  const t = translations[language] || translations["English"];
+  const { direction } = useContext(LanguageContext);
   const isRTL = direction === "rtl";
 
   return (
     <>
-      <AppRoutes t={t} isRTL={isRTL} />
+      <AppRoutes />
       <ToastContainer
         position={isRTL ? "top-left" : "top-right"}
         hideProgressBar
@@ -56,7 +39,7 @@ createRoot(document.getElementById("root")).render(
   <LanguageProvider>
     <BrowserRouter>
       <Routes>
-        {/* admin portal */}
+        {/* Admin Portal */}
         <Route
           path="/admin8yut91b9e22a/*"
           element={
@@ -66,13 +49,15 @@ createRoot(document.getElementById("root")).render(
           }
         />
 
-        {/* user portal */}
+        {/* User Portal */}
         <Route
           path="/*"
           element={
-            <AuthProvider>
-              <AppWrapper />
-            </AuthProvider>
+            <ViewProvider>
+              <AuthProvider>
+                <AppWrapper />
+              </AuthProvider>
+            </ViewProvider>
           }
         />
       </Routes>

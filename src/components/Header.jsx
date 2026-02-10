@@ -20,6 +20,10 @@ import Spanish from "/src/i18n/spanish.json";
 import Hindi from "/src/i18n/hindi.json";
 import Indonesian from "/src/i18n/indonesian.json";
 
+import { FaHome } from "react-icons/fa";
+import { FaTools } from "react-icons/fa";
+import { IoMdPricetags } from "react-icons/io";
+
 const translations = {
   English,
   Arabic,
@@ -121,9 +125,21 @@ export default function Header() {
           }`}
         >
           {[
-            { img: "home", label: t.Home, to: "/" },
-            { img: "extra-features", label: t.Tools, icon: <FiChevronDown /> },
-            { img: "tags", label: t.Pricing, to: "/pricing" },
+            {
+              img: <FaHome className="text-[#1B2337] text-[20px]" />,
+              label: t.Home,
+              to: "/",
+            },
+            {
+              img: <FaTools className="text-[#1B2337] text-[18px]" />,
+              label: t.Tools,
+              icon: <FiChevronDown />,
+            },
+            {
+              img: <IoMdPricetags className="text-[#1B2337] text-[22px]" />,
+              label: t.Pricing,
+              to: "/pricing",
+            },
           ].map(({ img, label, icon, to }, index) => (
             <Link
               to={to}
@@ -136,7 +152,7 @@ export default function Header() {
                 if (label === t.Home) setActiveView("Home");
               }}
             >
-              <img src={`/images/${img}.png`} alt={label} />
+              {img}
               <span>{label}</span>
               {icon}
               <span
@@ -235,9 +251,21 @@ export default function Header() {
             } rounded-b-[10px]`}
           >
             {[
-              { img: "home", label: t.Home, to: "/" },
-              { img: "extra-features", label: t.Tools, to: "/" },
-              { img: "tags", label: t.Pricing, to: "/pricing" },
+              {
+                img: <FaHome className="text-[#1B2337] text-[20px]" />,
+                label: t.Home,
+                to: "/",
+              },
+              {
+                img: <FaTools className="text-[#1B2337] text-[20px]" />,
+                label: t.Tools,
+                to: "/",
+              },
+              {
+                img: <IoMdPricetags className="text-[#1B2337] text-[22px]" />,
+                label: t.Pricing,
+                to: "/pricing",
+              },
             ].map(({ img, label, to }) => (
               <Link
                 to={to}
@@ -247,8 +275,7 @@ export default function Header() {
                 } cursor-pointer`}
                 onClick={() => handleChangeView(label)}
               >
-                <img src={`/images/${img}.png`} alt={label} />
-                <span>{label}</span>
+                {img} <span>{label}</span>
               </Link>
             ))}
 

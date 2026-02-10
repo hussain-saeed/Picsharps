@@ -5,6 +5,11 @@ import ChangeLanguage from "./ChangeLanguage";
 import { LanguageContext } from "../context/LanguageContext";
 import { ViewContext } from "../context/ViewContext";
 
+import { SlSocialFacebook } from "react-icons/sl";
+import { FaInstagram } from "react-icons/fa";
+import { RiTwitterXFill } from "react-icons/ri";
+import { SlSocialLinkedin } from "react-icons/sl";
+
 import English from "/src/i18n/english.json";
 import Arabic from "/src/i18n/arabic.json";
 import French from "/src/i18n/french.json";
@@ -140,17 +145,17 @@ function Footer() {
               isRTL ? "flex-row-reverse" : ""
             }`}
           >
-            <a style={{ cursor: "pointer" }}>
-              <img src="/images/facebook.png" alt="facebook" />
+            <a style={{ cursor: "pointer", fontSize: "24px" }}>
+              <SlSocialFacebook />
             </a>
-            <a style={{ cursor: "pointer" }}>
-              <img src="/images/instagram.png" alt="instagram" />
+            <a style={{ cursor: "pointer", fontSize: "23px" }}>
+              <FaInstagram />
             </a>
-            <a style={{ cursor: "pointer" }}>
-              <img src="/images/x.png" alt="x" />
+            <a style={{ cursor: "pointer", fontSize: "23px" }}>
+              <RiTwitterXFill />
             </a>
-            <a style={{ cursor: "pointer" }}>
-              <img src="/images/social-media.png" alt="social-media" />
+            <a style={{ cursor: "pointer", fontSize: "24px" }}>
+              <SlSocialLinkedin />
             </a>
           </div>
         </div>

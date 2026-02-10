@@ -12,6 +12,11 @@ import Spanish from "/src/i18n/spanish.json";
 import Hindi from "/src/i18n/hindi.json";
 import Indonesian from "/src/i18n/indonesian.json";
 
+import { PiSelectionBackgroundBold } from "react-icons/pi";
+import { IoSparklesOutline } from "react-icons/io5";
+import { HiOutlinePaintBrush } from "react-icons/hi2";
+import { IoIosResize } from "react-icons/io";
+
 const translations = {
   English,
   Arabic,
@@ -31,7 +36,9 @@ function ToolsMenuMobile() {
   const data = [
     {
       title: t["Background & Object Editing"],
-      image: "/images/background-99.png",
+      image: (
+        <PiSelectionBackgroundBold className="text-[#00B0FF] text-[18px]" />
+      ),
       links: [
         { name: t["Remove Background"], to: "/remove-background" },
         { name: t["Blur Image"], to: "/blur-image" },
@@ -39,7 +46,7 @@ function ToolsMenuMobile() {
     },
     {
       title: t["Image Enhancement"],
-      image: "/images/magic-1.png",
+      image: <IoSparklesOutline className="text-[#00B0FF] text-[18px]" />,
       links: [
         { name: t["AI Image Enhancer"], to: "/ai-image-enhancer" },
         { name: t["Sharpen Image"], to: "/sharpen-image" },
@@ -48,7 +55,7 @@ function ToolsMenuMobile() {
     },
     {
       title: t["Artistic Effects & Filters"],
-      image: "/images/idea-1.png",
+      image: <HiOutlinePaintBrush className="text-[#00B0FF] text-[18px]" />,
       links: [
         { name: t["Photo to Cartoon"], to: "/photo-to-cartoon" },
         { name: t["Grayscale Image"], to: "/grayscale-image" },
@@ -57,7 +64,7 @@ function ToolsMenuMobile() {
     },
     {
       title: t["Basic Adjustments & Resize"],
-      image: "/images/edit-1.png",
+      image: <IoIosResize className="text-[#00B0FF] text-[20px]" />,
       links: [
         { name: t["Adjust Image"], to: "/adjust-image" },
         { name: t["Crop Image"], to: "/crop-image" },
@@ -91,7 +98,7 @@ function ToolsMenuMobile() {
                   alignItems: "center",
                 }}
               >
-                <img className="w-4 h-4" src={tool.image} alt="tool" />
+                {tool.image}
               </div>
 
               <div className="flex-1">

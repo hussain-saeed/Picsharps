@@ -10,6 +10,11 @@ import Spanish from "/src/i18n/spanish.json";
 import Hindi from "/src/i18n/hindi.json";
 import Indonesian from "/src/i18n/indonesian.json";
 
+import { PiSelectionBackgroundBold } from "react-icons/pi";
+import { IoSparklesOutline } from "react-icons/io5";
+import { HiOutlinePaintBrush } from "react-icons/hi2";
+import { IoIosResize } from "react-icons/io";
+
 const translations = {
   English,
   Arabic,
@@ -28,7 +33,9 @@ function ToolsMenu({ toolsMenuOpen }) {
   const data1 = [
     {
       title: t["Background & Object Editing"],
-      image: "/images/background-99.png",
+      image: (
+        <PiSelectionBackgroundBold className="text-[#00B0FF] text-[14px]" />
+      ),
       links: [
         { name: t["Remove Background"], to: "/remove-background" },
         {
@@ -39,7 +46,7 @@ function ToolsMenu({ toolsMenuOpen }) {
     },
     {
       title: t["Image Enhancement"],
-      image: "/images/magic-1.png",
+      image: <IoSparklesOutline className="text-[#00B0FF] text-[14px]" />,
       links: [
         { name: t["AI Image Enhancer"], to: "/ai-image-enhancer" },
         { name: t["Sharpen Image"], to: "/sharpen-image" },
@@ -51,7 +58,7 @@ function ToolsMenu({ toolsMenuOpen }) {
   const data2 = [
     {
       title: t["Artistic Effects & Filters"],
-      image: "/images/idea-1.png",
+      image: <HiOutlinePaintBrush className="text-[#00B0FF] text-[14px]" />,
       links: [
         { name: t["Photo to Cartoon"], to: "/photo-to-cartoon" },
         { name: t["Grayscale Image"], to: "/grayscale-image" },
@@ -60,7 +67,7 @@ function ToolsMenu({ toolsMenuOpen }) {
     },
     {
       title: t["Basic Adjustments & Resize"],
-      image: "/images/edit-1.png",
+      image: <IoIosResize className="text-[#00B0FF] text-[16px]" />,
       links: [
         { name: t["Adjust Image"], to: "/adjust-image" },
         { name: t["Crop Image"], to: "/crop-image" },
@@ -97,7 +104,7 @@ function ToolsMenu({ toolsMenuOpen }) {
                 backgroundColor: "rgba(195, 231, 249, 1)",
               }}
             >
-              <img src={tool.image} alt="tool" />
+              {tool.image}
             </div>
 
             <div>
@@ -144,7 +151,7 @@ function ToolsMenu({ toolsMenuOpen }) {
                 backgroundColor: "rgba(195, 231, 249, 1)",
               }}
             >
-              <img src={tool.image} alt="tool" />
+              {tool.image}
             </div>
 
             <div>

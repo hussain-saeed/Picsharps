@@ -183,8 +183,8 @@ function Countries({ markAsDone }) {
 
       {/* Error State */}
       {isError && !isFetching && (
-        <div style={{ textAlign: "center", padding: "40px", color: "#d32f2f" }}>
-          Something went wrong while fetching statistics.
+        <div className="text-xl font-medium text-red-500">
+          Something went wrong while fetching Geographic Analytics!
         </div>
       )}
 
@@ -192,8 +192,8 @@ function Countries({ markAsDone }) {
       {!isFetching &&
         !isError &&
         (!processedData || !processedData.hasData) && (
-          <div style={{ textAlign: "center", padding: "40px", color: "#666" }}>
-            No data available
+          <div className="text-xl font-medium">
+            No data available!
           </div>
         )}
 

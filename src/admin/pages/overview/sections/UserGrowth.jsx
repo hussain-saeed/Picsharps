@@ -197,8 +197,6 @@ function UserGrowth({ markAsDone }) {
 
   // Function to determine value change indicator
   const getValueIndicator = (currentValue, previousValue, fieldName) => {
-    // Use strict comparison to check if previousValue is null or undefined
-    // 0 should be treated as a valid number, not as falsy
     if (previousValue === null || previousValue === undefined) {
       return { color: "#00B0FF", icon: null };
     }
@@ -281,7 +279,9 @@ function UserGrowth({ markAsDone }) {
       )}
 
       {isError && !isFetching && (
-        <div>Something went wrong while fetching growth data.</div>
+        <div className="text-xl font-medium text-red-500">
+          Something went wrong while fetching user growth data!
+        </div>
       )}
 
       {/* Chart */}

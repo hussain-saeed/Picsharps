@@ -137,18 +137,16 @@ function RecentActivities({ markAsDone }) {
         </div>
       )}
 
-      {/* Loading */}
-
       {/* Error */}
       {(!hasData || isError) && !isInitialLoading && (
-        <div style={{ color: "red" }}>
-          Something went wrong while fetching activities.
+        <div className="text-xl font-medium text-red-500">
+          Something went wrong while fetching activities!
         </div>
       )}
 
       {/* Empty */}
       {hasData && !isInitialLoading && items.length === 0 && (
-        <div>No recent activities.</div>
+        <div className="text-xl font-medium">No recent activities!</div>
       )}
 
       {/* List */}

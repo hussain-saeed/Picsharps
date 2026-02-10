@@ -93,15 +93,15 @@ function Revenue({ markAsDone }) {
 
       {/* Error State */}
       {isError && !isFetching && (
-        <div style={{ textAlign: "center", padding: "40px", color: "#d32f2f" }}>
-          Something went wrong while fetching statistics.
+        <div className="text-xl font-medium text-red-500 text-center pt-5">
+          Something went wrong while fetching revenue data!
         </div>
       )}
 
       {/* No Data State */}
       {!isFetching && !isError && (!hasData || !stats) && (
-        <div style={{ textAlign: "center", padding: "40px", color: "#666" }}>
-          No data available
+        <div className="text-xl font-medium text-center pt-5">
+          No data available!
         </div>
       )}
 

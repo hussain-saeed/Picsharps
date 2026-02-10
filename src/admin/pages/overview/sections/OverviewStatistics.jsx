@@ -159,8 +159,17 @@ function OverviewStatistics({ markAsDone }) {
       </div>
     );
   if (isError || !hasData)
-    return <div>Something went wrong while fetching statistics.</div>;
-  if (hasData && !stats) return <div>No data yet</div>;
+    return (
+      <div className="text-xl font-medium text-red-500">
+        Something went wrong while fetching statistics!
+      </div>
+    );
+  if (hasData && !stats)
+    return (
+      <div className="text-xl font-medium">
+        No statistics yet!
+      </div>
+    );
 
   return (
     <div className="grid sm:grid-cols-2 xl:grid-cols-4 gap-4.5">

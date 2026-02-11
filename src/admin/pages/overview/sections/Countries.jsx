@@ -9,7 +9,10 @@ import {
   ResponsiveContainer,
   Cell,
 } from "recharts";
-import { useGetCountriesQuery } from "../../../features/core/adminCoreApi";
+import {
+  useGetCountriesLoginsQuery,
+  useGetCountriesVisitsQuery,
+} from "../../../features/core/adminCoreApi";
 import {
   FiChevronLeft,
   FiChevronRight,
@@ -30,8 +33,10 @@ import { useRef } from "react";
 import useExportPDF from "../../../hooks/useExportPDF";
 import ShowAsPDF from "../../../components/ShowAsPDF";
 import { LoadingDots } from "../../../components/LoadingDots";
+import { FaDoorOpen } from "react-icons/fa6";
 
 function Countries({ markAsDone }) {
+  const [activeTab, setActiveTab] = useState("visits"); 
   const { isOpen, openModal, closeModal } = useGeneralModal();
   const [selectedItem, setSelectedItem] = useState(null);
   const handleOpenModal = (item) => {
@@ -45,9 +50,18 @@ function Countries({ markAsDone }) {
     await exportToPDF(chartRef);
   };
 
-  const { data, isFetching, isError } = useGetCountriesQuery(undefined, {
+  const loginsQuery = useGetCountriesLoginsQuery(undefined, {
+    skip: activeTab !== "logins",
     refetchOnMountOrArgChange: true,
   });
+
+  const visitsQuery = useGetCountriesVisitsQuery(undefined, {
+    skip: activeTab !== "visits",
+    refetchOnMountOrArgChange: true,
+  });
+
+  const currentQuery = activeTab === "logins" ? loginsQuery : visitsQuery;
+  const { data, isFetching, isError } = currentQuery;
 
   useEffect(() => {
     let timeoutId;
@@ -64,7 +78,7 @@ function Countries({ markAsDone }) {
       if (timeoutId) clearTimeout(timeoutId);
       markAsDone(false);
     };
-  }, [isFetching]);
+  }, [isFetching, activeTab]); 
 
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
@@ -72,14 +86,29 @@ function Countries({ markAsDone }) {
 
   // Process data according to requirements
   const processedData = useMemo(() => {
-    if (!data || data.status !== "success" || !data.data) return null;
+    if (!data || data.status !== "success") return null;
 
-    // 1. Remove objects where countryCode equals countryName (like "LO": "LO")
-    const filteredData = data.data.filter(
-      (item) => item.countryCode !== item.countryName,
+    let baseData = [];
+
+    if (activeTab === "visits" && data.data?.countries) {
+      baseData = data.data.countries.map((item) => ({
+        countryCode: item.country_code,
+        countryName: item.country_name,
+        userCount: item.visitor_count,
+      }));
+    } else {
+      baseData = data.data || [];
+    }
+
+    // 1. Remove objects where countryCode equals countryName OR Name is Unknown OR Code is LO
+    const filteredData = baseData.filter(
+      (item) =>
+        item.countryCode !== item.countryName &&
+        item.countryName?.toLowerCase() !== "unknown" &&
+        item.countryCode?.toLowerCase() !== "lo",
     );
 
-    // 2. Calculate total userCount
+    // 2. Calculate total count
     const totalUsers = filteredData.reduce(
       (sum, item) => sum + item.userCount,
       0,
@@ -103,7 +132,7 @@ function Countries({ markAsDone }) {
       totalUsers,
       hasData: sortedData.length > 0,
     };
-  }, [data]);
+  }, [data, activeTab]);
 
   // Calculate pagination for table
   const tablePagination = useMemo(() => {
@@ -142,7 +171,8 @@ function Countries({ markAsDone }) {
             {item.countryName}
           </p>
           <p style={{ margin: "5px 0 0 0", color: "#555", fontSize: "13px" }}>
-            Logins: {item.userCount} of {processedData.totalUsers}
+            {activeTab === "logins" ? "Logins" : "Visits"}: {item.userCount} of{" "}
+            {processedData.totalUsers}
           </p>
           <p
             style={{
@@ -165,12 +195,43 @@ function Countries({ markAsDone }) {
 
   return (
     <div>
-      {/* Title */}
-      <h2 className="text-xl font-semibold">Geographic Analytics</h2>
+      {/* Title & Switcher */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4">
+        <div className="flex bg-gray-100 p-1 rounded-lg border border-gray-200 shadow-sm w-full sm:w-fit">
+          <button
+            onClick={() => {
+              setActiveTab("visits");
+              setCurrentPage(1);
+            }}
+            className={`flex justify-center w-[50%] items-center gap-2 px-6 py-2.5 rounded-md text-lg font-bold transition-all ${
+              activeTab === "visits"
+                ? "bg-white text-green-600 shadow-sm"
+                : "text-gray-500 cursor-pointer"
+            }`}
+          >
+            <FaDoorOpen className="text-2xl mb-1.5" />
+            Visits
+          </button>
+          <button
+            onClick={() => {
+              setActiveTab("logins");
+              setCurrentPage(1);
+            }}
+            className={`flex justify-center w-[50%] items-center gap-2 px-6 py-2.5 rounded-md text-lg font-bold transition-all ${
+              activeTab === "logins"
+                ? "bg-white text-blue-600 shadow-sm"
+                : "text-gray-500 cursor-pointer"
+            }`}
+          >
+            <HiUsers className="text-3xl mb-1" />
+            Logins
+          </button>
+        </div>
+      </div>
 
       {/* Loading State */}
       {isFetching && (
-        <div className="min-h-[492px]">
+        <div className="min-h-[518px]">
           <LoadingDots
             loadingSize="20px"
             loadingWeight="500"
@@ -192,17 +253,34 @@ function Countries({ markAsDone }) {
       {!isFetching &&
         !isError &&
         (!processedData || !processedData.hasData) && (
-          <div className="text-xl font-medium">
-            No data available!
-          </div>
+          <div className="text-xl font-medium">No data available!</div>
         )}
 
       {/* Chart and Table Display */}
       {!isFetching && !isError && processedData && processedData.hasData && (
         <>
-          <div className="flex flex-col mt-1 text-gray-600 mb-10">
-            <span>Total Countries: {processedData.allData.length}</span>
-            <span>Total Logins Identified: {processedData.totalUsers}</span>
+          <div
+            className={`bg-gray-50 border-l-5 ${activeTab === "logins" ? "border-blue-600" : "border-green-600"} px-8 py-5 rounded-r-xl mb-8 w-full sm:w-fit`}
+          >
+            <div className="flex flex-col gap-1">
+              <div className="flex items-baseline gap-2">
+                <span className="text-[14px] uppercase tracking-wider font-semibold text-gray-400">
+                  Total Countries
+                </span>
+                <span className="text-sm font-bold text-gray-800">
+                  {processedData.allData.length}
+                </span>
+              </div>
+
+              <div className="flex items-baseline gap-2">
+                <span className="text-[14px] uppercase tracking-wider font-semibold text-gray-400">
+                  Total {activeTab === "logins" ? "Logins" : "Visits"}
+                </span>
+                <span className="text-sm font-bold text-gray-800">
+                  {processedData.totalUsers.toLocaleString()}
+                </span>
+              </div>
+            </div>
           </div>
 
           <div className="flex gap-8 xl:gap-4 xl:flex-row flex-col items-start">
@@ -215,7 +293,13 @@ function Countries({ markAsDone }) {
                   <div className="w-full overflow-hidden">
                     <table className="w-full bg-white table-fixed sm:table-auto">
                       <thead>
-                        <tr className="bg-linear-to-r from-[#00c853] to-[#00b0ff]">
+                        <tr
+                          className={
+                            activeTab === "logins"
+                              ? "bg-linear-to-r from-[#00b0ff] to-[#6a11cb]"
+                              : "bg-linear-to-r from-[#00c853] to-[#00b0ff]"
+                          }
+                        >
                           <th className="px-3 sm:pl-6 sm:pr-6 py-4 text-left w-2/3 sm:w-auto">
                             <div className="flex items-center gap-2 text-white font-semibold text-xs sm:text-sm">
                               <IoEarth className="w-5 h-5 hidden sm:block" />
@@ -225,8 +309,15 @@ function Countries({ markAsDone }) {
 
                           <th className="px-5 py-4 text-left hidden sm:table-cell">
                             <div className="flex items-center gap-2 text-white font-semibold text-sm">
-                              <HiUsers className="w-5 h-5" />
-                              <span>Logins Identified</span>
+                              {activeTab === "logins" ? (
+                                <HiUsers className="w-5 h-5" />
+                              ) : (
+                                <FaDoorOpen className="w-5 h-5" />
+                              )}
+                              <span>
+                                {activeTab === "logins" ? "Logins" : "Visits"}{" "}
+                                Identified
+                              </span>
                             </div>
                           </th>
                           <th className="px-6 py-4 text-left hidden sm:table-cell">
@@ -311,7 +402,8 @@ function Countries({ markAsDone }) {
                         </h2>
                         <div className="flex items-center gap-1 mb-0.5">
                           <span className="text-gray-500 text-sm">
-                            Logins Identified:
+                            {activeTab === "logins" ? "Logins" : "Visits"}{" "}
+                            Identified:
                           </span>
                           <span className="font-semibold">
                             {selectedItem.userCount.toLocaleString()}
@@ -474,7 +566,7 @@ function Countries({ markAsDone }) {
                           domain={[0, "dataMax"]}
                           tick={{ fontSize: 12 }}
                           label={{
-                            value: "Number of Identified Logins",
+                            value: `Number of Identified ${activeTab === "logins" ? "Logins" : "Visits"}`,
                             position: "insideBottom",
                             offset: -10,
                             style: { textAnchor: "middle", fontSize: 14 },

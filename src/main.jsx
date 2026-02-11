@@ -1,4 +1,5 @@
 import { createRoot } from "react-dom/client";
+import { useEffect } from "react";
 import AppRoutes from "./AppRoutes";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./features/auth/AuthProvider";
@@ -9,6 +10,7 @@ import { LanguageProvider, LanguageContext } from "./context/LanguageContext";
 import { useContext } from "react";
 import { Provider } from "react-redux";
 import { adminStore } from "./admin/store/adminStore";
+import { BACKEND_URL } from "./api";
 
 import AdminApp from "./admin/AdminApp";
 import { ViewProvider } from "./context/ViewContext";
@@ -20,6 +22,28 @@ if ("scrollRestoration" in window.history) {
 function AppWrapper() {
   const { direction } = useContext(LanguageContext);
   const isRTL = direction === "rtl";
+
+  useEffect(() => {
+    const trackVisit = async () => {
+      const hasTracked = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("visit_tracked="));
+
+      if (!hasTracked) {
+        fetch(`${BACKEND_URL}/stats/visitors`, {
+          method: "POST",
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.status === "success") {
+              document.cookie = "visit_tracked=true; path=/; SameSite=Lax";
+            }
+          });
+      }
+    };
+
+    trackVisit();
+  }, []);
 
   return (
     <>

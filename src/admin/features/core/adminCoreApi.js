@@ -26,8 +26,11 @@ export const adminCoreApi = createApi({
       query: () => "/stats/overview",
     }),
 
-    // endpoint to get revenue statistics
-    getCountries: builder.query({
+    getCountriesVisits: builder.query({
+      query: () => `/stats/visitors/by-country`,
+    }),
+
+    getCountriesLogins: builder.query({
       query: () => `/stats/users-by-country`,
     }),
 
@@ -153,7 +156,8 @@ export const adminCoreApi = createApi({
 
 export const {
   useGetOverviewStatisticsQuery,
-  useGetCountriesQuery,
+  useGetCountriesVisitsQuery,
+  useGetCountriesLoginsQuery,
   useGetUserGrowthQuery,
   useGetRevenueQuery,
   useGetRecentActivityQuery,

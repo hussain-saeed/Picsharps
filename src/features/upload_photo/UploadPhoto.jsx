@@ -174,15 +174,21 @@ function UploadPhoto() {
   }, [location.pathname, isRTL]);
 
   return (
-    <>
+    <div
+      className="flex flex-col"
+      style={{
+        minHeight: "calc(100dvh + 350px)",
+      }}
+    >
       <Header />
       <div
+        className="flex-1 flex flex-col"
         style={{
           backgroundColor: "rgba(238, 238, 238)",
           padding: "140px 0 135px 0",
         }}
       >
-        <Container className="text-center">
+        <Container className="text-center flex-1 flex flex-col">
           <h2
             style={{
               fontWeight: "900",
@@ -206,15 +212,15 @@ function UploadPhoto() {
             {description}
           </p>
 
-          {["/crop-image"].includes(location.pathname) ? (
-            <CropDropZone />
-          ) : ["/object-removal"].includes(location.pathname) ? (
-            <ObjectRemovalDropZone />
-          ) : ["/create-collage"].includes(location.pathname) ? (
-            <CreateCollegeDropZone />
-          ) : (
-            <DropZone />
-          )}
+            {["/crop-image"].includes(location.pathname) ? (
+              <CropDropZone />
+            ) : ["/object-removal"].includes(location.pathname) ? (
+              <ObjectRemovalDropZone />
+            ) : ["/create-collage"].includes(location.pathname) ? (
+              <CreateCollegeDropZone />
+            ) : (
+              <DropZone />
+            )}
 
           <div
             className={`w-full flex flex-wrap justify-between gap-4 mt-36 ${
@@ -247,7 +253,7 @@ function UploadPhoto() {
         </Container>
       </div>
       <Footer />
-    </>
+    </div>
   );
 }
 

@@ -79,7 +79,7 @@ function ToolsMenu({ toolsMenuOpen }) {
 
   return (
     <div
-      className={`bg-white absolute px-18 py-12 shadow-md gap-22 z-200 lg:h-100 xl:h-94 excluded ${
+      className={`bg-white absolute px-14 py-12 shadow-md gap-14 z-200 lg:h-100 xl:h-94 excluded ${
         isRTL ? "flex-row-reverse" : ""
       }`}
       style={{

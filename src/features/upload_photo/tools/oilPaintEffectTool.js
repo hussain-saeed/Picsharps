@@ -30,6 +30,22 @@ export const oilPaintEffect = async ({
 
     const data = await res.json();
 
+    if (data.status === "fail") {
+      // Check for 404 "Source image not found" error
+      if (
+        (res.status === 404 || res.status === 400) &&
+        (data?.message === "Source image not found" ||
+          data?.message?.includes("Source image not found") ||
+          data?.data?.message === "Source image not found")
+      ) {
+        // Throw specific error for self-healing mechanism
+        const error = new Error("SOURCE_IMAGE_NOT_FOUND");
+        error.status = res.status;
+        error.data = data;
+        throw error;
+      }
+    }
+
     if (data.status === "success") {
       return {
         previewUrl: data.data.previewUrl,
@@ -57,6 +73,10 @@ export const oilPaintEffect = async ({
     }
     toast.error(generalMsg);
   } catch (err) {
+    // Re-throw SOURCE_IMAGE_NOT_FOUND error for self-healing mechanism
+    if (err.message === "SOURCE_IMAGE_NOT_FOUND") {
+      throw err;
+    }
     toast.error(generalMsg);
   }
 };

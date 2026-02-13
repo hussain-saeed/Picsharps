@@ -273,6 +273,27 @@ const DropZone = () => {
     [toolConfig], // Dependency: toolConfig for option handling
   );
 
+  // Helper function to silently re-upload and get new IDs
+  const silentReupload = async (file) => {
+    const formData = new FormData();
+    formData.append("image", file);
+
+    const uploadRes = await fetch(`${BACKEND_URL}/image/upload`, {
+      method: "POST",
+      body: formData,
+    });
+
+    const uploadData = await uploadRes.json();
+
+    if (uploadData.status === "success") {
+      return {
+        sourceImageId: uploadData.data.sourceImageId,
+        sourceUrl: uploadData.data.sourceUrl,
+      };
+    }
+    throw new Error("Re-upload failed");
+  };
+
   const processImage = useCallback(async () => {
     scrollToVH(30);
 
@@ -281,6 +302,10 @@ const DropZone = () => {
       toast.error(t["Something Went Wrong!"]);
       return;
     }
+
+    let hasRetried = false; // Safety lock to prevent infinite loops
+    let currentSourceImageId = sourceImageId;
+    let currentUploadedImageUrl = uploadedImageUrl;
 
     try {
       // Set processing state
@@ -292,45 +317,116 @@ const DropZone = () => {
 
       // Image enhancement tool
       if (currentTool === TOOL_TYPES.ENHANCE) {
-        toolResult = await enhanceImage({
-          sourceImageId,
-          imageUrl: uploadedImageUrl,
-          upscaleFactor: options.upscaleFactor || 2, // Enhancement level
-          accessToken,
-          customMsg:
-            t[
-              "You have used up your free attempts! Please log in to continue."
-            ],
-          customMsg2:
-            t[
-              "Your points are insufficient or your subscription has expired! Please check the subscriptions section."
-            ],
-          generalMsg: t["Something Went Wrong!"],
-          openLoginPopup,
-          resetComponent,
-          navigate,
-        });
+        try {
+          toolResult = await enhanceImage({
+            sourceImageId: currentSourceImageId,
+            imageUrl: currentUploadedImageUrl,
+            upscaleFactor: options.upscaleFactor || 2, // Enhancement level
+            accessToken,
+            customMsg:
+              t[
+                "You have used up your free attempts! Please log in to continue."
+              ],
+            customMsg2:
+              t[
+                "Your points are insufficient or your subscription has expired! Please check the subscriptions section."
+              ],
+            generalMsg: t["Something Went Wrong!"],
+            openLoginPopup,
+            resetComponent,
+            navigate,
+          });
+        } catch (error) {
+          // Handle 404 "Source image not found" error with self-healing
+          if (
+            error.message === "SOURCE_IMAGE_NOT_FOUND" &&
+            uploadedFile &&
+            !hasRetried
+          ) {
+            hasRetried = true;
+            const newIds = await silentReupload(uploadedFile);
+            currentSourceImageId = newIds.sourceImageId;
+            currentUploadedImageUrl = newIds.sourceUrl;
+            setSourceImageId(newIds.sourceImageId);
+            setUploadedImageUrl(newIds.sourceUrl);
+            // Retry with new IDs
+            toolResult = await enhanceImage({
+              sourceImageId: newIds.sourceImageId,
+              imageUrl: newIds.sourceUrl,
+              upscaleFactor: options.upscaleFactor || 2,
+              accessToken,
+              customMsg:
+                t[
+                  "You have used up your free attempts! Please log in to continue."
+                ],
+              customMsg2:
+                t[
+                  "Your points are insufficient or your subscription has expired! Please check the subscriptions section."
+                ],
+              generalMsg: t["Something Went Wrong!"],
+              openLoginPopup,
+              resetComponent,
+              navigate,
+            });
+          } else {
+            throw error;
+          }
+        }
       }
 
       // Cartoon effect tool
       else if (currentTool === TOOL_TYPES.CARTOON) {
-        toolResult = await cartoonPhoto({
-          sourceImageId,
-          imageUrl: uploadedImageUrl,
-          accessToken,
-          customMsg:
-            t[
-              "You have used up your free attempts! Please log in to continue."
-            ],
-          customMsg2:
-            t[
-              "Your points are insufficient or your subscription has expired! Please check the subscriptions section."
-            ],
-          generalMsg: t["Something Went Wrong!"],
-          openLoginPopup,
-          resetComponent,
-          navigate,
-        });
+        try {
+          toolResult = await cartoonPhoto({
+            sourceImageId: currentSourceImageId,
+            imageUrl: currentUploadedImageUrl,
+            accessToken,
+            customMsg:
+              t[
+                "You have used up your free attempts! Please log in to continue."
+              ],
+            customMsg2:
+              t[
+                "Your points are insufficient or your subscription has expired! Please check the subscriptions section."
+              ],
+            generalMsg: t["Something Went Wrong!"],
+            openLoginPopup,
+            resetComponent,
+            navigate,
+          });
+        } catch (error) {
+          if (
+            error.message === "SOURCE_IMAGE_NOT_FOUND" &&
+            uploadedFile &&
+            !hasRetried
+          ) {
+            hasRetried = true;
+            const newIds = await silentReupload(uploadedFile);
+            currentSourceImageId = newIds.sourceImageId;
+            currentUploadedImageUrl = newIds.sourceUrl;
+            setSourceImageId(newIds.sourceImageId);
+            setUploadedImageUrl(newIds.sourceUrl);
+            toolResult = await cartoonPhoto({
+              sourceImageId: newIds.sourceImageId,
+              imageUrl: newIds.sourceUrl,
+              accessToken,
+              customMsg:
+                t[
+                  "You have used up your free attempts! Please log in to continue."
+                ],
+              customMsg2:
+                t[
+                  "Your points are insufficient or your subscription has expired! Please check the subscriptions section."
+                ],
+              generalMsg: t["Something Went Wrong!"],
+              openLoginPopup,
+              resetComponent,
+              navigate,
+            });
+          } else {
+            throw error;
+          }
+        }
       }
 
       // Image resizing tool
@@ -341,189 +437,478 @@ const DropZone = () => {
           return;
         }
 
-        toolResult = await resizeImage({
-          sourceImageId,
-          imageUrl: uploadedImageUrl,
-          width: options.width, // Target width in pixels
-          height: options.height, // Target height in pixels
-          mode: "scale", // Always use scale mode
-          accessToken,
-          customMsg:
-            t[
-              "You have used up your free attempts! Please log in to continue."
-            ],
-          customMsg2:
-            t[
-              "Your points are insufficient or your subscription has expired! Please check the subscriptions section."
-            ],
-          generalMsg: t["Something Went Wrong!"],
-          openLoginPopup,
-          resetComponent,
-          navigate,
-        });
+        try {
+          toolResult = await resizeImage({
+            sourceImageId: currentSourceImageId,
+            imageUrl: currentUploadedImageUrl,
+            width: options.width, // Target width in pixels
+            height: options.height, // Target height in pixels
+            mode: "scale", // Always use scale mode
+            accessToken,
+            customMsg:
+              t[
+                "You have used up your free attempts! Please log in to continue."
+              ],
+            customMsg2:
+              t[
+                "Your points are insufficient or your subscription has expired! Please check the subscriptions section."
+              ],
+            generalMsg: t["Something Went Wrong!"],
+            openLoginPopup,
+            resetComponent,
+            navigate,
+          });
+        } catch (error) {
+          if (
+            error.message === "SOURCE_IMAGE_NOT_FOUND" &&
+            uploadedFile &&
+            !hasRetried
+          ) {
+            hasRetried = true;
+            const newIds = await silentReupload(uploadedFile);
+            currentSourceImageId = newIds.sourceImageId;
+            currentUploadedImageUrl = newIds.sourceUrl;
+            setSourceImageId(newIds.sourceImageId);
+            setUploadedImageUrl(newIds.sourceUrl);
+            toolResult = await resizeImage({
+              sourceImageId: newIds.sourceImageId,
+              imageUrl: newIds.sourceUrl,
+              width: options.width,
+              height: options.height,
+              mode: "scale",
+              accessToken,
+              customMsg:
+                t[
+                  "You have used up your free attempts! Please log in to continue."
+                ],
+              customMsg2:
+                t[
+                  "Your points are insufficient or your subscription has expired! Please check the subscriptions section."
+                ],
+              generalMsg: t["Something Went Wrong!"],
+              openLoginPopup,
+              resetComponent,
+              navigate,
+            });
+          } else {
+            throw error;
+          }
+        }
       }
 
       // Image sharpening tool
       else if (currentTool === TOOL_TYPES.SHARPEN) {
-        toolResult = await sharpenImage({
-          sourceImageId,
-          imageUrl: uploadedImageUrl,
-          strength: options.strength || 500, // Sharpening intensity
-          accessToken,
-          customMsg:
-            t[
-              "You have used up your free attempts! Please log in to continue."
-            ],
-          customMsg2:
-            t[
-              "Your points are insufficient or your subscription has expired! Please check the subscriptions section."
-            ],
-          generalMsg: t["Something Went Wrong!"],
-          openLoginPopup,
-          resetComponent,
-          navigate,
-        });
+        try {
+          toolResult = await sharpenImage({
+            sourceImageId: currentSourceImageId,
+            imageUrl: currentUploadedImageUrl,
+            strength: options.strength || 500, // Sharpening intensity
+            accessToken,
+            customMsg:
+              t[
+                "You have used up your free attempts! Please log in to continue."
+              ],
+            customMsg2:
+              t[
+                "Your points are insufficient or your subscription has expired! Please check the subscriptions section."
+              ],
+            generalMsg: t["Something Went Wrong!"],
+            openLoginPopup,
+            resetComponent,
+            navigate,
+          });
+        } catch (error) {
+          if (
+            error.message === "SOURCE_IMAGE_NOT_FOUND" &&
+            uploadedFile &&
+            !hasRetried
+          ) {
+            hasRetried = true;
+            const newIds = await silentReupload(uploadedFile);
+            currentSourceImageId = newIds.sourceImageId;
+            currentUploadedImageUrl = newIds.sourceUrl;
+            setSourceImageId(newIds.sourceImageId);
+            setUploadedImageUrl(newIds.sourceUrl);
+            toolResult = await sharpenImage({
+              sourceImageId: newIds.sourceImageId,
+              imageUrl: newIds.sourceUrl,
+              strength: options.strength || 500,
+              accessToken,
+              customMsg:
+                t[
+                  "You have used up your free attempts! Please log in to continue."
+                ],
+              customMsg2:
+                t[
+                  "Your points are insufficient or your subscription has expired! Please check the subscriptions section."
+                ],
+              generalMsg: t["Something Went Wrong!"],
+              openLoginPopup,
+              resetComponent,
+              navigate,
+            });
+          } else {
+            throw error;
+          }
+        }
       }
 
       // Background removal tool
       else if (currentTool === TOOL_TYPES.REMOVE) {
-        const payload = {
-          sourceImageId,
-          imageUrl: uploadedImageUrl,
-          outputType: "cutout", // Type of output (cutout image)
-          format: "png", // Output format (PNG for transparency)
-          accessToken,
-          customMsg:
-            t[
-              "You have used up your free attempts! Please log in to continue."
-            ],
-          customMsg2:
-            t[
-              "Your points are insufficient or your subscription has expired! Please check the subscriptions section."
-            ],
-          generalMsg: t["Something Went Wrong!"],
-          openLoginPopup,
-          resetComponent,
-          navigate,
-        };
+        try {
+          const payload = {
+            sourceImageId: currentSourceImageId,
+            imageUrl: currentUploadedImageUrl,
+            outputType: "cutout", // Type of output (cutout image)
+            format: "png", // Output format (PNG for transparency)
+            accessToken,
+            customMsg:
+              t[
+                "You have used up your free attempts! Please log in to continue."
+              ],
+            customMsg2:
+              t[
+                "Your points are insufficient or your subscription has expired! Please check the subscriptions section."
+              ],
+            generalMsg: t["Something Went Wrong!"],
+            openLoginPopup,
+            resetComponent,
+            navigate,
+          };
 
-        if (options.bgColor && options.bgColor !== "transparent") {
-          payload.bgColor = options.bgColor; // Hex color value
+          if (options.bgColor && options.bgColor !== "transparent") {
+            payload.bgColor = options.bgColor; // Hex color value
+          }
+
+          toolResult = await removeBackground(payload);
+        } catch (error) {
+          if (
+            error.message === "SOURCE_IMAGE_NOT_FOUND" &&
+            uploadedFile &&
+            !hasRetried
+          ) {
+            hasRetried = true;
+            const newIds = await silentReupload(uploadedFile);
+            currentSourceImageId = newIds.sourceImageId;
+            currentUploadedImageUrl = newIds.sourceUrl;
+            setSourceImageId(newIds.sourceImageId);
+            setUploadedImageUrl(newIds.sourceUrl);
+            const retryPayload = {
+              sourceImageId: newIds.sourceImageId,
+              imageUrl: newIds.sourceUrl,
+              outputType: "cutout",
+              format: "png",
+              accessToken,
+              customMsg:
+                t[
+                  "You have used up your free attempts! Please log in to continue."
+                ],
+              customMsg2:
+                t[
+                  "Your points are insufficient or your subscription has expired! Please check the subscriptions section."
+                ],
+              generalMsg: t["Something Went Wrong!"],
+              openLoginPopup,
+              resetComponent,
+              navigate,
+            };
+            if (options.bgColor && options.bgColor !== "transparent") {
+              retryPayload.bgColor = options.bgColor;
+            }
+            toolResult = await removeBackground(retryPayload);
+          } else {
+            throw error;
+          }
         }
-
-        toolResult = await removeBackground(payload);
       }
 
       // blur tool
       else if (currentTool === TOOL_TYPES.BLUR) {
-        toolResult = await blurImage({
-          sourceImageId,
-          imageUrl: uploadedImageUrl,
-          amount: options.amount || 250, // Enhancement level
-          accessToken,
-          customMsg:
-            t[
-              "You have used up your free attempts! Please log in to continue."
-            ],
-          customMsg2:
-            t[
-              "Your points are insufficient or your subscription has expired! Please check the subscriptions section."
-            ],
-          generalMsg: t["Something Went Wrong!"],
-          openLoginPopup,
-          resetComponent,
-          navigate,
-        });
+        try {
+          toolResult = await blurImage({
+            sourceImageId: currentSourceImageId,
+            imageUrl: currentUploadedImageUrl,
+            amount: options.amount || 250, // Enhancement level
+            accessToken,
+            customMsg:
+              t[
+                "You have used up your free attempts! Please log in to continue."
+              ],
+            customMsg2:
+              t[
+                "Your points are insufficient or your subscription has expired! Please check the subscriptions section."
+              ],
+            generalMsg: t["Something Went Wrong!"],
+            openLoginPopup,
+            resetComponent,
+            navigate,
+          });
+        } catch (error) {
+          if (
+            error.message === "SOURCE_IMAGE_NOT_FOUND" &&
+            uploadedFile &&
+            !hasRetried
+          ) {
+            hasRetried = true;
+            const newIds = await silentReupload(uploadedFile);
+            currentSourceImageId = newIds.sourceImageId;
+            currentUploadedImageUrl = newIds.sourceUrl;
+            setSourceImageId(newIds.sourceImageId);
+            setUploadedImageUrl(newIds.sourceUrl);
+            toolResult = await blurImage({
+              sourceImageId: newIds.sourceImageId,
+              imageUrl: newIds.sourceUrl,
+              amount: options.amount || 250,
+              accessToken,
+              customMsg:
+                t[
+                  "You have used up your free attempts! Please log in to continue."
+                ],
+              customMsg2:
+                t[
+                  "Your points are insufficient or your subscription has expired! Please check the subscriptions section."
+                ],
+              generalMsg: t["Something Went Wrong!"],
+              openLoginPopup,
+              resetComponent,
+              navigate,
+            });
+          } else {
+            throw error;
+          }
+        }
       }
 
       // grayscale tool
       else if (currentTool === TOOL_TYPES.GRAYSCALE) {
-        toolResult = await grayscalePhoto({
-          sourceImageId,
-          imageUrl: uploadedImageUrl,
-          accessToken,
-          customMsg:
-            t[
-              "You have used up your free attempts! Please log in to continue."
-            ],
-          customMsg2:
-            t[
-              "Your points are insufficient or your subscription has expired! Please check the subscriptions section."
-            ],
-          generalMsg: t["Something Went Wrong!"],
-          openLoginPopup,
-          resetComponent,
-          navigate,
-        });
+        try {
+          toolResult = await grayscalePhoto({
+            sourceImageId: currentSourceImageId,
+            imageUrl: currentUploadedImageUrl,
+            accessToken,
+            customMsg:
+              t[
+                "You have used up your free attempts! Please log in to continue."
+              ],
+            customMsg2:
+              t[
+                "Your points are insufficient or your subscription has expired! Please check the subscriptions section."
+              ],
+            generalMsg: t["Something Went Wrong!"],
+            openLoginPopup,
+            resetComponent,
+            navigate,
+          });
+        } catch (error) {
+          if (
+            error.message === "SOURCE_IMAGE_NOT_FOUND" &&
+            uploadedFile &&
+            !hasRetried
+          ) {
+            hasRetried = true;
+            const newIds = await silentReupload(uploadedFile);
+            currentSourceImageId = newIds.sourceImageId;
+            currentUploadedImageUrl = newIds.sourceUrl;
+            setSourceImageId(newIds.sourceImageId);
+            setUploadedImageUrl(newIds.sourceUrl);
+            toolResult = await grayscalePhoto({
+              sourceImageId: newIds.sourceImageId,
+              imageUrl: newIds.sourceUrl,
+              accessToken,
+              customMsg:
+                t[
+                  "You have used up your free attempts! Please log in to continue."
+                ],
+              customMsg2:
+                t[
+                  "Your points are insufficient or your subscription has expired! Please check the subscriptions section."
+                ],
+              generalMsg: t["Something Went Wrong!"],
+              openLoginPopup,
+              resetComponent,
+              navigate,
+            });
+          } else {
+            throw error;
+          }
+        }
       }
 
       // rounded
       else if (currentTool === TOOL_TYPES.ROUNDED) {
-        toolResult = await roundedCornerImage({
-          sourceImageId,
-          imageUrl: uploadedImageUrl,
-          radius: options.radius || 250,
-          accessToken,
-          customMsg:
-            t[
-              "You have used up your free attempts! Please log in to continue."
-            ],
-          customMsg2:
-            t[
-              "Your points are insufficient or your subscription has expired! Please check the subscriptions section."
-            ],
-          generalMsg: t["Something Went Wrong!"],
-          openLoginPopup,
-          resetComponent,
-          navigate,
-        });
+        try {
+          toolResult = await roundedCornerImage({
+            sourceImageId: currentSourceImageId,
+            imageUrl: currentUploadedImageUrl,
+            radius: options.radius || 250,
+            accessToken,
+            customMsg:
+              t[
+                "You have used up your free attempts! Please log in to continue."
+              ],
+            customMsg2:
+              t[
+                "Your points are insufficient or your subscription has expired! Please check the subscriptions section."
+              ],
+            generalMsg: t["Something Went Wrong!"],
+            openLoginPopup,
+            resetComponent,
+            navigate,
+          });
+        } catch (error) {
+          if (
+            error.message === "SOURCE_IMAGE_NOT_FOUND" &&
+            uploadedFile &&
+            !hasRetried
+          ) {
+            hasRetried = true;
+            const newIds = await silentReupload(uploadedFile);
+            currentSourceImageId = newIds.sourceImageId;
+            currentUploadedImageUrl = newIds.sourceUrl;
+            setSourceImageId(newIds.sourceImageId);
+            setUploadedImageUrl(newIds.sourceUrl);
+            toolResult = await roundedCornerImage({
+              sourceImageId: newIds.sourceImageId,
+              imageUrl: newIds.sourceUrl,
+              radius: options.radius || 250,
+              accessToken,
+              customMsg:
+                t[
+                  "You have used up your free attempts! Please log in to continue."
+                ],
+              customMsg2:
+                t[
+                  "Your points are insufficient or your subscription has expired! Please check the subscriptions section."
+                ],
+              generalMsg: t["Something Went Wrong!"],
+              openLoginPopup,
+              resetComponent,
+              navigate,
+            });
+          } else {
+            throw error;
+          }
+        }
       }
 
       // oiling
       else if (currentTool === TOOL_TYPES.OILING) {
-        toolResult = await oilPaintEffect({
-          sourceImageId,
-          imageUrl: uploadedImageUrl,
-          amount: options.amount || 25,
-          accessToken,
-          customMsg:
-            t[
-              "You have used up your free attempts! Please log in to continue."
-            ],
-          customMsg2:
-            t[
-              "Your points are insufficient or your subscription has expired! Please check the subscriptions section."
-            ],
-          generalMsg: t["Something Went Wrong!"],
-          openLoginPopup,
-          resetComponent,
-          navigate,
-        });
+        try {
+          toolResult = await oilPaintEffect({
+            sourceImageId: currentSourceImageId,
+            imageUrl: currentUploadedImageUrl,
+            amount: options.amount || 25,
+            accessToken,
+            customMsg:
+              t[
+                "You have used up your free attempts! Please log in to continue."
+              ],
+            customMsg2:
+              t[
+                "Your points are insufficient or your subscription has expired! Please check the subscriptions section."
+              ],
+            generalMsg: t["Something Went Wrong!"],
+            openLoginPopup,
+            resetComponent,
+            navigate,
+          });
+        } catch (error) {
+          if (
+            error.message === "SOURCE_IMAGE_NOT_FOUND" &&
+            uploadedFile &&
+            !hasRetried
+          ) {
+            hasRetried = true;
+            const newIds = await silentReupload(uploadedFile);
+            currentSourceImageId = newIds.sourceImageId;
+            currentUploadedImageUrl = newIds.sourceUrl;
+            setSourceImageId(newIds.sourceImageId);
+            setUploadedImageUrl(newIds.sourceUrl);
+            toolResult = await oilPaintEffect({
+              sourceImageId: newIds.sourceImageId,
+              imageUrl: newIds.sourceUrl,
+              amount: options.amount || 25,
+              accessToken,
+              customMsg:
+                t[
+                  "You have used up your free attempts! Please log in to continue."
+                ],
+              customMsg2:
+                t[
+                  "Your points are insufficient or your subscription has expired! Please check the subscriptions section."
+                ],
+              generalMsg: t["Something Went Wrong!"],
+              openLoginPopup,
+              resetComponent,
+              navigate,
+            });
+          } else {
+            throw error;
+          }
+        }
       }
 
       // adjust
       else if (currentTool === TOOL_TYPES.ADJUST) {
-        toolResult = await adjustImage({
-          sourceImageId,
-          imageUrl: uploadedImageUrl,
-          brightness: options.brightness,
-          contrast: options.contrast,
-          saturation: options.saturation,
-          gamma: options.gamma,
-          accessToken,
-          customMsg:
-            t[
-              "You have used up your free attempts! Please log in to continue."
-            ],
-          customMsg2:
-            t[
-              "Your points are insufficient or your subscription has expired! Please check the subscriptions section."
-            ],
-          generalMsg: t["Something Went Wrong!"],
-          openLoginPopup,
-          resetComponent,
-          navigate,
-        });
+        try {
+          toolResult = await adjustImage({
+            sourceImageId: currentSourceImageId,
+            imageUrl: currentUploadedImageUrl,
+            brightness: options.brightness,
+            contrast: options.contrast,
+            saturation: options.saturation,
+            gamma: options.gamma,
+            accessToken,
+            customMsg:
+              t[
+                "You have used up your free attempts! Please log in to continue."
+              ],
+            customMsg2:
+              t[
+                "Your points are insufficient or your subscription has expired! Please check the subscriptions section."
+              ],
+            generalMsg: t["Something Went Wrong!"],
+            openLoginPopup,
+            resetComponent,
+            navigate,
+          });
+        } catch (error) {
+          if (
+            error.message === "SOURCE_IMAGE_NOT_FOUND" &&
+            uploadedFile &&
+            !hasRetried
+          ) {
+            hasRetried = true;
+            const newIds = await silentReupload(uploadedFile);
+            currentSourceImageId = newIds.sourceImageId;
+            currentUploadedImageUrl = newIds.sourceUrl;
+            setSourceImageId(newIds.sourceImageId);
+            setUploadedImageUrl(newIds.sourceUrl);
+            toolResult = await adjustImage({
+              sourceImageId: newIds.sourceImageId,
+              imageUrl: newIds.sourceUrl,
+              brightness: options.brightness,
+              contrast: options.contrast,
+              saturation: options.saturation,
+              gamma: options.gamma,
+              accessToken,
+              customMsg:
+                t[
+                  "You have used up your free attempts! Please log in to continue."
+                ],
+              customMsg2:
+                t[
+                  "Your points are insufficient or your subscription has expired! Please check the subscriptions section."
+                ],
+              generalMsg: t["Something Went Wrong!"],
+              openLoginPopup,
+              resetComponent,
+              navigate,
+            });
+          } else {
+            throw error;
+          }
+        }
       }
 
       // Handle successful processing result
@@ -536,9 +921,9 @@ const DropZone = () => {
         setRenderedResultBefore(true); // Mark that result has been rendered
 
         const resultData = {
-          sourceImageId,
+          sourceImageId: currentSourceImageId,
           previewUrl: toolResult.previewUrl,
-          originalUrl: uploadedImageUrl,
+          originalUrl: currentUploadedImageUrl,
           tool: currentTool, // Track which tool created this result
         };
         localStorage.setItem(
@@ -550,15 +935,204 @@ const DropZone = () => {
         throw new Error("Tool processing returned no result");
       }
     } catch (error) {
-      // Handle processing errors
-      setStatus(COMPONENT_STATES.ERROR);
+      // Handle 404 "Source image not found" error with self-healing
+      if (
+        error.message === "SOURCE_IMAGE_NOT_FOUND" &&
+        uploadedFile &&
+        !hasRetried
+      ) {
+        try {
+          hasRetried = true;
+          const newIds = await silentReupload(uploadedFile);
+          currentSourceImageId = newIds.sourceImageId;
+          currentUploadedImageUrl = newIds.sourceUrl;
+          setSourceImageId(newIds.sourceImageId);
+          setUploadedImageUrl(newIds.sourceUrl);
+          
+          // Retry the tool call with new IDs - manually call the appropriate tool
+          let retryToolResult = null;
+          
+          if (currentTool === TOOL_TYPES.ENHANCE) {
+            retryToolResult = await enhanceImage({
+              sourceImageId: newIds.sourceImageId,
+              imageUrl: newIds.sourceUrl,
+              upscaleFactor: options.upscaleFactor || 2,
+              accessToken,
+              customMsg: t["You have used up your free attempts! Please log in to continue."],
+              customMsg2: t["Your points are insufficient or your subscription has expired! Please check the subscriptions section."],
+              generalMsg: t["Something Went Wrong!"],
+              openLoginPopup,
+              resetComponent,
+              navigate,
+            });
+          } else if (currentTool === TOOL_TYPES.CARTOON) {
+            retryToolResult = await cartoonPhoto({
+              sourceImageId: newIds.sourceImageId,
+              imageUrl: newIds.sourceUrl,
+              accessToken,
+              customMsg: t["You have used up your free attempts! Please log in to continue."],
+              customMsg2: t["Your points are insufficient or your subscription has expired! Please check the subscriptions section."],
+              generalMsg: t["Something Went Wrong!"],
+              openLoginPopup,
+              resetComponent,
+              navigate,
+            });
+          } else if (currentTool === TOOL_TYPES.RESIZE) {
+            retryToolResult = await resizeImage({
+              sourceImageId: newIds.sourceImageId,
+              imageUrl: newIds.sourceUrl,
+              width: options.width,
+              height: options.height,
+              mode: "scale",
+              accessToken,
+              customMsg: t["You have used up your free attempts! Please log in to continue."],
+              customMsg2: t["Your points are insufficient or your subscription has expired! Please check the subscriptions section."],
+              generalMsg: t["Something Went Wrong!"],
+              openLoginPopup,
+              resetComponent,
+              navigate,
+            });
+          } else if (currentTool === TOOL_TYPES.SHARPEN) {
+            retryToolResult = await sharpenImage({
+              sourceImageId: newIds.sourceImageId,
+              imageUrl: newIds.sourceUrl,
+              strength: options.strength || 500,
+              accessToken,
+              customMsg: t["You have used up your free attempts! Please log in to continue."],
+              customMsg2: t["Your points are insufficient or your subscription has expired! Please check the subscriptions section."],
+              generalMsg: t["Something Went Wrong!"],
+              openLoginPopup,
+              resetComponent,
+              navigate,
+            });
+          } else if (currentTool === TOOL_TYPES.REMOVE) {
+            const payload = {
+              sourceImageId: newIds.sourceImageId,
+              imageUrl: newIds.sourceUrl,
+              outputType: "cutout",
+              format: "png",
+              accessToken,
+              customMsg: t["You have used up your free attempts! Please log in to continue."],
+              customMsg2: t["Your points are insufficient or your subscription has expired! Please check the subscriptions section."],
+              generalMsg: t["Something Went Wrong!"],
+              openLoginPopup,
+              resetComponent,
+              navigate,
+            };
+            if (options.bgColor && options.bgColor !== "transparent") {
+              payload.bgColor = options.bgColor;
+            }
+            retryToolResult = await removeBackground(payload);
+          } else if (currentTool === TOOL_TYPES.BLUR) {
+            retryToolResult = await blurImage({
+              sourceImageId: newIds.sourceImageId,
+              imageUrl: newIds.sourceUrl,
+              amount: options.amount || 250,
+              accessToken,
+              customMsg: t["You have used up your free attempts! Please log in to continue."],
+              customMsg2: t["Your points are insufficient or your subscription has expired! Please check the subscriptions section."],
+              generalMsg: t["Something Went Wrong!"],
+              openLoginPopup,
+              resetComponent,
+              navigate,
+            });
+          } else if (currentTool === TOOL_TYPES.GRAYSCALE) {
+            retryToolResult = await grayscalePhoto({
+              sourceImageId: newIds.sourceImageId,
+              imageUrl: newIds.sourceUrl,
+              accessToken,
+              customMsg: t["You have used up your free attempts! Please log in to continue."],
+              customMsg2: t["Your points are insufficient or your subscription has expired! Please check the subscriptions section."],
+              generalMsg: t["Something Went Wrong!"],
+              openLoginPopup,
+              resetComponent,
+              navigate,
+            });
+          } else if (currentTool === TOOL_TYPES.ROUNDED) {
+            retryToolResult = await roundedCornerImage({
+              sourceImageId: newIds.sourceImageId,
+              imageUrl: newIds.sourceUrl,
+              radius: options.radius || 250,
+              accessToken,
+              customMsg: t["You have used up your free attempts! Please log in to continue."],
+              customMsg2: t["Your points are insufficient or your subscription has expired! Please check the subscriptions section."],
+              generalMsg: t["Something Went Wrong!"],
+              openLoginPopup,
+              resetComponent,
+              navigate,
+            });
+          } else if (currentTool === TOOL_TYPES.OILING) {
+            retryToolResult = await oilPaintEffect({
+              sourceImageId: newIds.sourceImageId,
+              imageUrl: newIds.sourceUrl,
+              amount: options.amount || 25,
+              accessToken,
+              customMsg: t["You have used up your free attempts! Please log in to continue."],
+              customMsg2: t["Your points are insufficient or your subscription has expired! Please check the subscriptions section."],
+              generalMsg: t["Something Went Wrong!"],
+              openLoginPopup,
+              resetComponent,
+              navigate,
+            });
+          } else if (currentTool === TOOL_TYPES.ADJUST) {
+            retryToolResult = await adjustImage({
+              sourceImageId: newIds.sourceImageId,
+              imageUrl: newIds.sourceUrl,
+              brightness: options.brightness,
+              contrast: options.contrast,
+              saturation: options.saturation,
+              gamma: options.gamma,
+              accessToken,
+              customMsg: t["You have used up your free attempts! Please log in to continue."],
+              customMsg2: t["Your points are insufficient or your subscription has expired! Please check the subscriptions section."],
+              generalMsg: t["Something Went Wrong!"],
+              openLoginPopup,
+              resetComponent,
+              navigate,
+            });
+          }
+          
+          // Handle retry result
+          if (retryToolResult) {
+            setProcessedImage(retryToolResult.previewUrl);
+            setToolKey(retryToolResult.toolKey);
+            setStatus(COMPONENT_STATES.DONE);
+            setShowOptions(true);
+            setRenderedResultBefore(true);
+            
+            const resultData = {
+              sourceImageId: newIds.sourceImageId,
+              previewUrl: retryToolResult.previewUrl,
+              originalUrl: newIds.sourceUrl,
+              tool: currentTool,
+            };
+            localStorage.setItem(`dropzone_last_result`, JSON.stringify(resultData));
+            return;
+          } else {
+            throw new Error("Retry failed - no result");
+          }
+        } catch (reuploadError) {
+          // Re-upload or retry failed, log and show error
+          console.error("=== SELF-HEALING FAILED ===");
+          console.error("Error:", reuploadError);
+          console.error("===========================");
+          setStatus(COMPONENT_STATES.ERROR);
+          if (toolConfig && toolConfig.hasOptions) {
+            setShowOptions(true);
+          }
+          return;
+        }
+      } else {
+        // Handle other processing errors
+        setStatus(COMPONENT_STATES.ERROR);
 
-      // Restore options panel on error for user to retry
-      if (toolConfig && toolConfig.hasOptions) {
-        setShowOptions(true);
+        // Restore options panel on error for user to retry
+        if (toolConfig && toolConfig.hasOptions) {
+          setShowOptions(true);
+        }
       }
     }
-  }, [sourceImageId, uploadedImageUrl, currentTool, options, toolConfig]);
+  }, [sourceImageId, uploadedImageUrl, currentTool, options, toolConfig, uploadedFile, silentReupload]);
 
   const handleOptionChange = (optionKey, value) => {
     const newOptions = { ...options, [optionKey]: value };

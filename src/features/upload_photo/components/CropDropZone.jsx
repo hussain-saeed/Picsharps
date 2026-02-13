@@ -71,6 +71,11 @@ const CropDropZone = () => {
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const [imageSize, setImageSize] = useState({ width: 0, height: 0 });
   const [aspectRatio, setAspectRatio] = useState("free");
+  const [imageScale, setImageScale] = useState(1);
+  const [containerSize, setContainerSize] = useState({
+    width: 300,
+    height: 300,
+  });
   const scrollToVH = useScrollToVH();
 
   useEffect(() => {
@@ -165,6 +170,18 @@ const CropDropZone = () => {
     setShowOptions(false);
     setCropArea({ x: 50, y: 50, width: 200, height: 200 });
     setAspectRatio("free");
+    setImageScale(1);
+
+    // Reset image element styles if it exists
+    const img = document.getElementById("crop-image");
+    if (img) {
+      img.style.width = "";
+      img.style.height = "";
+      img.style.position = "";
+      img.style.left = "";
+      img.style.top = "";
+      img.style.imageRendering = "";
+    }
   };
 
   const resetComponent = () => {
@@ -217,164 +234,384 @@ const CropDropZone = () => {
 
   const handleImageLoad = (e) => {
     const img = e.target;
+    const { naturalWidth, naturalHeight } = img;
 
-    // Store both displayed and natural dimensions
-    setImageSize({
-      width: img.width,
-      height: img.height,
-      naturalWidth: img.naturalWidth,
-      naturalHeight: img.naturalHeight,
-      offsetLeft: img.offsetLeft,
-      offsetTop: img.offsetTop,
-    });
+    // Get container dimensions
+    const container = img.parentElement;
+    const containerRect = container.getBoundingClientRect();
+    const containerWidth = containerRect.width;
+    const containerHeight = containerRect.height;
 
-    // Initialize crop in center - 50% of image size
-    const cropWidth = img.width * 0.5;
-    const cropHeight = img.height * 0.5;
+    setContainerSize({ width: containerWidth, height: containerHeight });
 
-    setCropArea({
-      x: (img.width - cropWidth) / 2,
-      y: (img.height - cropHeight) / 2,
-      width: cropWidth,
-      height: cropHeight,
-    });
-  };
+    // Calculate how image fits with object-fit: contain (base size)
+    const containerAspect = containerWidth / containerHeight;
+    const imageAspect = naturalWidth / naturalHeight;
 
-  const handleMouseDown = (e, handle = null) => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    if (handle) {
-      setIsResizing(true);
-      setResizeHandle(handle);
+    let baseRenderedWidth, baseRenderedHeight;
+    if (imageAspect > containerAspect) {
+      // Image is wider - fit to width
+      baseRenderedWidth = containerWidth;
+      baseRenderedHeight = containerWidth / imageAspect;
     } else {
-      setIsDragging(true);
+      // Image is taller - fit to height
+      baseRenderedHeight = containerHeight;
+      baseRenderedWidth = containerHeight * imageAspect;
     }
 
-    setDragStart({
-      x: e.clientX,
-      y: e.clientY,
-      cropX: cropArea.x,
-      cropY: cropArea.y,
-      cropWidth: cropArea.width,
-      cropHeight: cropArea.height,
+    // Calculate scale for small images (if naturalWidth < 300px)
+    // This determines the actual rendered size the image will be displayed at
+    let scale = 1;
+    let renderedWidth = baseRenderedWidth;
+    let renderedHeight = baseRenderedHeight;
+
+    if (naturalWidth < 300) {
+      // Calculate the scale needed to make the image at least 300px wide
+      // while maintaining aspect ratio and fitting in container
+      const minDisplayWidth = Math.min(300, containerWidth * 0.9);
+      const scaleByWidth = minDisplayWidth / baseRenderedWidth;
+
+      // Also check height constraint
+      const scaledHeight = baseRenderedHeight * scaleByWidth;
+      const scaleByHeight =
+        scaledHeight > containerHeight * 0.9
+          ? (containerHeight * 0.9) / baseRenderedHeight
+          : scaleByWidth;
+
+      scale = Math.min(scaleByWidth, scaleByHeight);
+
+      // Calculate actual rendered dimensions (the image will be displayed at this size)
+      renderedWidth = baseRenderedWidth * scale;
+      renderedHeight = baseRenderedHeight * scale;
+    }
+
+    setImageScale(scale);
+
+    // Calculate offset (centered position)
+    // The image will be positioned at these offsets and sized to renderedWidth x renderedHeight
+    const offsetLeft = (containerWidth - renderedWidth) / 2;
+    const offsetTop = (containerHeight - renderedHeight) / 2;
+
+    // Set the image element's actual dimensions to match the rendered size
+    // This ensures the image fills the same area as the crop overlay
+    img.style.width = `${renderedWidth}px`;
+    img.style.height = `${renderedHeight}px`;
+    img.style.position = "absolute";
+    img.style.left = `${offsetLeft}px`;
+    img.style.top = `${offsetTop}px`;
+
+    // Use pixelated rendering for small images to keep pixels sharp when zoomed
+    if (naturalWidth < 300) {
+      img.style.imageRendering = "pixelated";
+    } else {
+      img.style.imageRendering = "auto";
+    }
+
+    setImageSize({
+      width: renderedWidth,
+      height: renderedHeight,
+      naturalWidth,
+      naturalHeight,
+      offsetTop,
+      offsetLeft,
     });
-  };
 
-  const handleMouseMove = (e) => {
-    if (!isDragging && !isResizing) return;
-
-    const deltaX = e.clientX - dragStart.x;
-    const deltaY = e.clientY - dragStart.y;
-
-    if (isDragging) {
-      const newX = Math.max(
-        0,
-        Math.min(imageSize.width - cropArea.width, dragStart.cropX + deltaX),
-      );
-      const newY = Math.max(
-        0,
-        Math.min(imageSize.height - cropArea.height, dragStart.cropY + deltaY),
-      );
-
+    // Initialize crop area if it's the first load (width is 0)
+    // Otherwise, preserve existing crop area values
+    if (cropArea.width === 0) {
+      setCropArea({
+        x: 10,
+        y: 10,
+        width: renderedWidth * 0.5,
+        height: renderedHeight * 0.5,
+      });
+    } else {
+      // Clamp existing cropArea to new boundaries
       setCropArea((prev) => ({
-        ...prev,
-        x: newX,
-        y: newY,
+        x: Math.max(
+          0,
+          Math.min(prev.x, renderedWidth - Math.min(prev.width, renderedWidth)),
+        ),
+        y: Math.max(
+          0,
+          Math.min(
+            prev.y,
+            renderedHeight - Math.min(prev.height, renderedHeight),
+          ),
+        ),
+        width: Math.min(prev.width, renderedWidth),
+        height: Math.min(prev.height, renderedHeight),
       }));
-    } else if (isResizing) {
-      let newCrop = { ...cropArea };
-      const aspectValue = getAspectRatioValue();
-
-      switch (resizeHandle) {
-        case "tl":
-          newCrop.width = Math.max(50, dragStart.cropWidth - deltaX);
-          newCrop.height = aspectValue
-            ? newCrop.width / aspectValue
-            : Math.max(50, dragStart.cropHeight - deltaY);
-          newCrop.x = dragStart.cropX + (dragStart.cropWidth - newCrop.width);
-          newCrop.y = dragStart.cropY + (dragStart.cropHeight - newCrop.height);
-          break;
-        case "tr":
-          newCrop.width = Math.max(50, dragStart.cropWidth + deltaX);
-          newCrop.height = aspectValue
-            ? newCrop.width / aspectValue
-            : Math.max(50, dragStart.cropHeight - deltaY);
-          newCrop.y = dragStart.cropY + (dragStart.cropHeight - newCrop.height);
-          break;
-        case "bl":
-          newCrop.width = Math.max(50, dragStart.cropWidth - deltaX);
-          newCrop.height = aspectValue
-            ? newCrop.width / aspectValue
-            : Math.max(50, dragStart.cropHeight + deltaY);
-          newCrop.x = dragStart.cropX + (dragStart.cropWidth - newCrop.width);
-          break;
-        case "br":
-          newCrop.width = Math.max(50, dragStart.cropWidth + deltaX);
-          newCrop.height = aspectValue
-            ? newCrop.width / aspectValue
-            : Math.max(50, dragStart.cropHeight + deltaY);
-          break;
-        case "t":
-          newCrop.height = Math.max(50, dragStart.cropHeight - deltaY);
-          newCrop.width = aspectValue
-            ? newCrop.height * aspectValue
-            : newCrop.width;
-          newCrop.y = dragStart.cropY + (dragStart.cropHeight - newCrop.height);
-          break;
-        case "b":
-          newCrop.height = Math.max(50, dragStart.cropHeight + deltaY);
-          newCrop.width = aspectValue
-            ? newCrop.height * aspectValue
-            : newCrop.width;
-          break;
-        case "l":
-          newCrop.width = Math.max(50, dragStart.cropWidth - deltaX);
-          newCrop.height = aspectValue
-            ? newCrop.width / aspectValue
-            : newCrop.height;
-          newCrop.x = dragStart.cropX + (dragStart.cropWidth - newCrop.width);
-          break;
-        case "r":
-          newCrop.width = Math.max(50, dragStart.cropWidth + deltaX);
-          newCrop.height = aspectValue
-            ? newCrop.width / aspectValue
-            : newCrop.height;
-          break;
-      }
-
-      // Boundaries
-      if (newCrop.x < 0) newCrop.x = 0;
-      if (newCrop.y < 0) newCrop.y = 0;
-      if (newCrop.x + newCrop.width > imageSize.width) {
-        newCrop.width = imageSize.width - newCrop.x;
-        if (aspectValue) newCrop.height = newCrop.width / aspectValue;
-      }
-      if (newCrop.y + newCrop.height > imageSize.height) {
-        newCrop.height = imageSize.height - newCrop.y;
-        if (aspectValue) newCrop.width = newCrop.height * aspectValue;
-      }
-
-      setCropArea(newCrop);
     }
   };
 
-  const handleMouseUp = () => {
+  // Helper function to get coordinates from mouse or touch event
+  const getEventCoordinates = useCallback((e) => {
+    if (e.touches && e.touches.length > 0) {
+      return { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    }
+    return { x: e.clientX, y: e.clientY };
+  }, []);
+
+  // Unified handler for mouse and touch start events
+  const handleStart = useCallback(
+    (e, handle = null) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      const coords = getEventCoordinates(e);
+
+      if (handle) {
+        setIsResizing(true);
+        setResizeHandle(handle);
+      } else {
+        setIsDragging(true);
+      }
+
+      setDragStart({
+        x: coords.x,
+        y: coords.y,
+        cropX: cropArea.x,
+        cropY: cropArea.y,
+        cropWidth: cropArea.width,
+        cropHeight: cropArea.height,
+      });
+    },
+    [cropArea, getEventCoordinates],
+  );
+
+  // Get aspect ratio value helper
+  const getAspectRatioValue = useCallback(() => {
+    switch (aspectRatio) {
+      case "1:1":
+        return 1;
+      case "16:9":
+        return 16 / 9;
+      case "9:16":
+        return 9 / 16;
+      case "4:3":
+        return 4 / 3;
+      case "3:4":
+        return 3 / 4;
+      case "21:9":
+        return 21 / 9;
+      case "2:3":
+        return 2 / 3;
+      case "3:2":
+        return 3 / 2;
+      case "5:4":
+        return 5 / 4;
+      case "4:5":
+        return 4 / 5;
+      case "free":
+      default:
+        return null;
+    }
+  }, [aspectRatio]);
+
+  // Unified handler for mouse and touch move events
+  const handleMove = useCallback(
+    (e) => {
+      if (!isDragging && !isResizing) return;
+      if (!imageSize.width || !imageSize.height) return;
+
+      const coords = getEventCoordinates(e);
+      const deltaX = coords.x - dragStart.x;
+      const deltaY = coords.y - dragStart.y;
+
+      if (isDragging) {
+        // Strict boundary clamping - ensure cropArea stays within visible image
+        const maxX = imageSize.width - cropArea.width;
+        const maxY = imageSize.height - cropArea.height;
+
+        const newX = Math.max(0, Math.min(maxX, dragStart.cropX + deltaX));
+        const newY = Math.max(0, Math.min(maxY, dragStart.cropY + deltaY));
+
+        setCropArea((prev) => ({
+          ...prev,
+          x: newX,
+          y: newY,
+        }));
+      } else if (isResizing) {
+        let newCrop = { ...cropArea };
+        const aspectValue = getAspectRatioValue();
+
+        switch (resizeHandle) {
+          case "tl":
+            newCrop.width = Math.max(50, dragStart.cropWidth - deltaX);
+            newCrop.height = aspectValue
+              ? newCrop.width / aspectValue
+              : Math.max(50, dragStart.cropHeight - deltaY);
+            newCrop.x = dragStart.cropX + (dragStart.cropWidth - newCrop.width);
+            newCrop.y =
+              dragStart.cropY + (dragStart.cropHeight - newCrop.height);
+            break;
+          case "tr":
+            newCrop.width = Math.max(50, dragStart.cropWidth + deltaX);
+            newCrop.height = aspectValue
+              ? newCrop.width / aspectValue
+              : Math.max(50, dragStart.cropHeight - deltaY);
+            newCrop.y =
+              dragStart.cropY + (dragStart.cropHeight - newCrop.height);
+            break;
+          case "bl":
+            newCrop.width = Math.max(50, dragStart.cropWidth - deltaX);
+            newCrop.height = aspectValue
+              ? newCrop.width / aspectValue
+              : Math.max(50, dragStart.cropHeight + deltaY);
+            newCrop.x = dragStart.cropX + (dragStart.cropWidth - newCrop.width);
+            break;
+          case "br":
+            newCrop.width = Math.max(50, dragStart.cropWidth + deltaX);
+            newCrop.height = aspectValue
+              ? newCrop.width / aspectValue
+              : Math.max(50, dragStart.cropHeight + deltaY);
+            break;
+          case "t":
+            newCrop.height = Math.max(50, dragStart.cropHeight - deltaY);
+            newCrop.width = aspectValue
+              ? newCrop.height * aspectValue
+              : newCrop.width;
+            newCrop.y =
+              dragStart.cropY + (dragStart.cropHeight - newCrop.height);
+            break;
+          case "b":
+            newCrop.height = Math.max(50, dragStart.cropHeight + deltaY);
+            newCrop.width = aspectValue
+              ? newCrop.height * aspectValue
+              : newCrop.width;
+            break;
+          case "l":
+            newCrop.width = Math.max(50, dragStart.cropWidth - deltaX);
+            newCrop.height = aspectValue
+              ? newCrop.width / aspectValue
+              : newCrop.height;
+            newCrop.x = dragStart.cropX + (dragStart.cropWidth - newCrop.width);
+            break;
+          case "r":
+            newCrop.width = Math.max(50, dragStart.cropWidth + deltaX);
+            newCrop.height = aspectValue
+              ? newCrop.width / aspectValue
+              : newCrop.height;
+            break;
+        }
+
+        // Strict boundary clamping - ensure cropArea stays within visible image boundaries
+        // Clamp position first
+        if (newCrop.x < 0) {
+          const adjustX = -newCrop.x;
+          newCrop.x = 0;
+          if (resizeHandle?.includes("l")) {
+            newCrop.width = Math.max(50, newCrop.width - adjustX);
+            if (aspectValue) newCrop.height = newCrop.width / aspectValue;
+          }
+        }
+        if (newCrop.y < 0) {
+          const adjustY = -newCrop.y;
+          newCrop.y = 0;
+          if (resizeHandle?.includes("t")) {
+            newCrop.height = Math.max(50, newCrop.height - adjustY);
+            if (aspectValue) newCrop.width = newCrop.height * aspectValue;
+          }
+        }
+
+        // Clamp dimensions to stay within image boundaries
+        if (newCrop.x + newCrop.width > imageSize.width) {
+          newCrop.width = Math.max(50, imageSize.width - newCrop.x);
+          if (aspectValue) {
+            newCrop.height = newCrop.width / aspectValue;
+            // Re-check height constraint
+            if (newCrop.y + newCrop.height > imageSize.height) {
+              newCrop.height = Math.max(50, imageSize.height - newCrop.y);
+              newCrop.width = newCrop.height * aspectValue;
+            }
+          }
+        }
+        if (newCrop.y + newCrop.height > imageSize.height) {
+          newCrop.height = Math.max(50, imageSize.height - newCrop.y);
+          if (aspectValue) {
+            newCrop.width = newCrop.height * aspectValue;
+            // Re-check width constraint
+            if (newCrop.x + newCrop.width > imageSize.width) {
+              newCrop.width = Math.max(50, imageSize.width - newCrop.x);
+              newCrop.height = newCrop.width / aspectValue;
+            }
+          }
+        }
+
+        // Final boundary check - ensure minimum size and within bounds
+        newCrop.width = Math.max(
+          50,
+          Math.min(newCrop.width, imageSize.width - newCrop.x),
+        );
+        newCrop.height = Math.max(
+          50,
+          Math.min(newCrop.height, imageSize.height - newCrop.y),
+        );
+
+        // If aspect ratio is locked, maintain it after clamping
+        if (aspectValue) {
+          const currentRatio = newCrop.width / newCrop.height;
+          if (Math.abs(currentRatio - aspectValue) > 0.01) {
+            // Adjust to maintain aspect ratio
+            if (newCrop.width / aspectValue <= imageSize.height - newCrop.y) {
+              newCrop.height = newCrop.width / aspectValue;
+            } else {
+              newCrop.width = (imageSize.height - newCrop.y) * aspectValue;
+              newCrop.height = imageSize.height - newCrop.y;
+              // Adjust position if needed
+              if (newCrop.x + newCrop.width > imageSize.width) {
+                newCrop.x = imageSize.width - newCrop.width;
+              }
+            }
+          }
+        }
+
+        setCropArea(newCrop);
+      }
+    },
+    [
+      isDragging,
+      isResizing,
+      imageSize,
+      dragStart,
+      cropArea,
+      resizeHandle,
+      getAspectRatioValue,
+      getEventCoordinates,
+    ],
+  );
+
+  // Unified handler for mouse and touch end events
+  const handleEnd = useCallback((e) => {
+    if (e) {
+      e.preventDefault();
+    }
     setIsDragging(false);
     setIsResizing(false);
     setResizeHandle(null);
-  };
+  }, []);
 
+  // Event listeners for both mouse and touch events
   useEffect(() => {
     if (isDragging || isResizing) {
-      document.addEventListener("mousemove", handleMouseMove);
-      document.addEventListener("mouseup", handleMouseUp);
+      // Mouse events
+      document.addEventListener("mousemove", handleMove);
+      document.addEventListener("mouseup", handleEnd);
+      // Touch events - prevent default to avoid scrolling
+      document.addEventListener("touchmove", handleMove, { passive: false });
+      document.addEventListener("touchend", handleEnd, { passive: false });
+      document.addEventListener("touchcancel", handleEnd, { passive: false });
+
       return () => {
-        document.removeEventListener("mousemove", handleMouseMove);
-        document.removeEventListener("mouseup", handleMouseUp);
+        document.removeEventListener("mousemove", handleMove);
+        document.removeEventListener("mouseup", handleEnd);
+        document.removeEventListener("touchmove", handleMove);
+        document.removeEventListener("touchend", handleEnd);
+        document.removeEventListener("touchcancel", handleEnd);
       };
     }
-  }, [isDragging, isResizing, cropArea, dragStart, imageSize]);
+  }, [isDragging, isResizing, handleMove, handleEnd]);
 
   const processImage = async () => {
     scrollToVH(30);
@@ -390,11 +627,13 @@ const CropDropZone = () => {
       // Get image element to calculate correct coordinates
       const img = document.getElementById("crop-image");
 
-      // Calculate scale between displayed and natural size
-      const scaleX = img.naturalWidth / img.width;
-      const scaleY = img.naturalHeight / img.height;
+      // Calculate scale between rendered size and natural size
+      // imageSize.width/height represent the rendered dimensions on screen
+      const scaleX = img.naturalWidth / imageSize.width;
+      const scaleY = img.naturalHeight / imageSize.height;
 
-      // Convert crop coordinates from displayed pixels to natural pixels
+      // Convert crop coordinates from rendered pixels to natural pixels
+      // ActualCropX = CropAreaX * (NaturalWidth / RenderedWidth)
       const naturalCrop = {
         x: Math.round(cropArea.x * scaleX),
         y: Math.round(cropArea.y * scaleY),
@@ -560,33 +799,136 @@ const CropDropZone = () => {
       status === COMPONENT_STATES.PROCESSING,
   });
 
-  const getAspectRatioValue = () => {
-    switch (aspectRatio) {
-      case "1:1":
-        return 1;
-      case "16:9":
-        return 16 / 9;
-      case "9:16":
-        return 9 / 16;
-      case "4:3":
-        return 4 / 3;
-      case "3:4":
-        return 3 / 4;
-      case "21:9":
-        return 21 / 9;
-      case "2:3":
-        return 2 / 3;
-      case "3:2":
-        return 3 / 2;
-      case "5:4":
-        return 5 / 4;
-      case "4:5":
-        return 4 / 5;
-      case "free":
-      default:
-        return null;
+  useEffect(() => {
+    if (imageSize.width > 0 && aspectRatio !== "free") {
+      const [aspectW, aspectH] = aspectRatio.split(":").map(Number);
+      const targetRatio = aspectW / aspectH;
+
+      setCropArea((prev) => {
+        let newWidth = prev.width;
+        let newHeight = newWidth / targetRatio;
+
+        // If height exceeds image bounds, reduce width
+        if (newHeight > imageSize.height) {
+          newHeight = imageSize.height;
+          newWidth = newHeight * targetRatio;
+        }
+
+        // If width exceeds image bounds, reduce height
+        if (newWidth > imageSize.width) {
+          newWidth = imageSize.width;
+          newHeight = newWidth / targetRatio;
+        }
+
+        return {
+          ...prev,
+          width: newWidth,
+          height: newHeight,
+          // Keep X and Y within allowed bounds
+          x: Math.min(prev.x, imageSize.width - newWidth),
+          y: Math.min(prev.y, imageSize.height - newHeight),
+        };
+      });
     }
-  };
+  }, [aspectRatio, imageSize.width, imageSize.height]);
+
+  // Recalculate image dimensions on window resize
+  useEffect(() => {
+    if (!uploadedImageUrl || !imageSize.naturalWidth) return;
+
+    const handleResize = () => {
+      const img = document.getElementById("crop-image");
+      if (!img) return;
+
+      const container = img.parentElement;
+      if (!container) return;
+
+      const containerRect = container.getBoundingClientRect();
+      const containerWidth = containerRect.width;
+      const containerHeight = containerRect.height;
+
+      setContainerSize({ width: containerWidth, height: containerHeight });
+
+      // Recalculate with same logic as handleImageLoad
+      const containerAspect = containerWidth / containerHeight;
+      const imageAspect = imageSize.naturalWidth / imageSize.naturalHeight;
+
+      let baseRenderedWidth, baseRenderedHeight;
+      if (imageAspect > containerAspect) {
+        baseRenderedWidth = containerWidth;
+        baseRenderedHeight = containerWidth / imageAspect;
+      } else {
+        baseRenderedHeight = containerHeight;
+        baseRenderedWidth = containerHeight * imageAspect;
+      }
+
+      let scale = 1;
+      let renderedWidth = baseRenderedWidth;
+      let renderedHeight = baseRenderedHeight;
+
+      if (imageSize.naturalWidth < 300) {
+        const minDisplayWidth = Math.min(300, containerWidth * 0.9);
+        const scaleByWidth = minDisplayWidth / baseRenderedWidth;
+        const scaledHeight = baseRenderedHeight * scaleByWidth;
+        const scaleByHeight =
+          scaledHeight > containerHeight * 0.9
+            ? (containerHeight * 0.9) / baseRenderedHeight
+            : scaleByWidth;
+        scale = Math.min(scaleByWidth, scaleByHeight);
+
+        renderedWidth = baseRenderedWidth * scale;
+        renderedHeight = baseRenderedHeight * scale;
+      }
+
+      setImageScale(scale);
+
+      const offsetLeft = (containerWidth - renderedWidth) / 2;
+      const offsetTop = (containerHeight - renderedHeight) / 2;
+
+      // Update image element's actual dimensions to match
+      if (img) {
+        img.style.width = `${renderedWidth}px`;
+        img.style.height = `${renderedHeight}px`;
+        img.style.position = "absolute";
+        img.style.left = `${offsetLeft}px`;
+        img.style.top = `${offsetTop}px`;
+
+        if (imageSize.naturalWidth < 300) {
+          img.style.imageRendering = "pixelated";
+        } else {
+          img.style.imageRendering = "auto";
+        }
+      }
+
+      setImageSize((prev) => ({
+        ...prev,
+        width: renderedWidth,
+        height: renderedHeight,
+        offsetTop,
+        offsetLeft,
+      }));
+
+      // Clamp cropArea to new boundaries
+      setCropArea((prev) => ({
+        x: Math.max(
+          0,
+          Math.min(prev.x, renderedWidth - Math.min(prev.width, renderedWidth)),
+        ),
+        y: Math.max(
+          0,
+          Math.min(
+            prev.y,
+            renderedHeight - Math.min(prev.height, renderedHeight),
+          ),
+        ),
+        width: Math.min(prev.width, renderedWidth),
+        height: Math.min(prev.height, renderedHeight),
+      }));
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [uploadedImageUrl, imageSize.naturalWidth]);
 
   return (
     <div dir={isRTL ? "rtl" : "ltr"}>
@@ -736,7 +1078,28 @@ const CropDropZone = () => {
                 justifyContent: "center",
               }}
             >
-              <div>
+              <div className="relative">
+                <div
+                  style={{
+                    position: "absolute",
+                    zIndex: "100",
+                    top: "-30px",
+                    backgroundColor: "#1976d2",
+                    color: "white",
+                    padding: "4px 12px",
+                    borderRadius: "8px 8px 0 0",
+                    fontSize: "14px",
+                    fontWeight: "bold",
+                    width: "fit-content",
+                    boxShadow: "0 -2px 10px rgba(0,0,0,0.1)",
+                  }}
+                >
+                  {imageSize.width > 0
+                    ? `${Math.round(cropArea.width * (imageSize.naturalWidth / imageSize.width))}px × 
+       ${Math.round(cropArea.height * (imageSize.naturalHeight / imageSize.height))}px`
+                    : "Calculating..."}
+                </div>
+
                 <div
                   style={{
                     position: "relative",
@@ -755,22 +1118,29 @@ const CropDropZone = () => {
                     alt="Original"
                     onLoad={handleImageLoad}
                     style={{
-                      maxWidth: "100%",
-                      maxHeight: "100%",
-                      objectFit: "contain",
+                      display: "block",
+                      userSelect: "none",
+                      WebkitUserDrag: "none",
+                      // Dimensions and position will be set by handleImageLoad
+                      // to ensure pixel-perfect matching with crop overlay
                     }}
                   />
 
                   {/* Crop Overlay */}
+                  {/* Border is 2px, so we adjust position and size to ensure cropArea represents inner content */}
                   <div
-                    onMouseDown={handleMouseDown}
+                    onMouseDown={handleStart}
+                    onTouchStart={handleStart}
                     style={{
                       position: "absolute",
-                      left: `${imageSize.offsetLeft + cropArea.x}px`,
-                      top: `${imageSize.offsetTop + cropArea.y}px`,
-                      width: `${cropArea.width}px`,
-                      height: `${cropArea.height}px`,
-                      border: "5.5px solid #1976d2",
+                      // Position accounts for border: move left/top by border width so inner area starts at cropArea.x/y
+                      left: `${imageSize.offsetLeft + cropArea.x - 2}px`,
+                      top: `${imageSize.offsetTop + cropArea.y - 2}px`,
+                      // Size includes border: add 4px (2px on each side) so inner area equals cropArea.width/height
+                      width: `${cropArea.width + 4}px`,
+                      height: `${cropArea.height + 4}px`,
+                      border: "2px solid #1976d2",
+                      boxSizing: "border-box",
                       cursor: "move",
                       boxShadow: "0 0 0 9999px rgba(0,0,0,0.5)",
                     }}
@@ -780,19 +1150,21 @@ const CropDropZone = () => {
                       (handle) => (
                         <div
                           key={handle}
-                          onMouseDown={(e) => handleMouseDown(e, handle)}
+                          onMouseDown={(e) => handleStart(e, handle)}
+                          onTouchStart={(e) => handleStart(e, handle)}
                           style={{
                             position: "absolute",
                             background: "#1976d2",
                             ...(handle.length === 2
                               ? {
-                                  width: "8px",
-                                  height: "8px",
+                                  width: "6px",
+                                  height: "6px",
                                   [handle.includes("t") ? "top" : "bottom"]:
-                                    "-5px",
+                                    "-4px",
                                   [handle.includes("l") ? "left" : "right"]:
-                                    "-5px",
+                                    "-4px",
                                   cursor: `${handle}-resize`,
+                                  borderRadius: "1px",
                                 }
                               : {
                                   [handle === "t" || handle === "b"
@@ -800,14 +1172,14 @@ const CropDropZone = () => {
                                     : "height"]: "100%",
                                   [handle === "t" || handle === "b"
                                     ? "height"
-                                    : "width"]: "10px",
+                                    : "width"]: "8px",
                                   [handle === "t"
                                     ? "top"
                                     : handle === "b"
                                       ? "bottom"
                                       : handle === "l"
                                         ? "left"
-                                        : "right"]: "-5px",
+                                        : "right"]: "-4px",
                                   [handle === "t" || handle === "b"
                                     ? "left"
                                     : "top"]: "0",
@@ -894,7 +1266,10 @@ const CropDropZone = () => {
                           <Select
                             value={aspectRatio}
                             label="Aspect Ratio"
-                            onChange={(e) => setAspectRatio(e.target.value)}
+                            onChange={(e) => {
+                              setAspectRatio(e.target.value);
+                              // Aspect ratio change will trigger useEffect to recalculate cropArea
+                            }}
                           >
                             <MenuItem value="free">Free (Any Size)</MenuItem>
                             <MenuItem value="1:1">Square (1:1)</MenuItem>

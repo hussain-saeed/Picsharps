@@ -77,7 +77,7 @@ const CropDropZone = () => {
     height: 300,
   });
   const scrollToVH = useScrollToVH();
-  
+
   // Ref to track if this is the first image load (not returning from processing)
   const isFirstLoadRef = useRef(true);
   const hasUserAdjustedCropRef = useRef(false);
@@ -178,7 +178,7 @@ const CropDropZone = () => {
     setCropArea({ x: 0, y: 0, width: 0, height: 0 });
     setAspectRatio("free");
     setImageScale(1);
-    
+
     // Reset refs to allow first load logic to run again
     isFirstLoadRef.current = true;
     hasUserAdjustedCropRef.current = false;
@@ -329,26 +329,30 @@ const CropDropZone = () => {
 
     // Initialize crop area only on the very first load (all zeros and first load flag)
     // Check if cropArea is completely empty (all zeros) AND this is the first load
-    const isCropAreaEmpty = 
-      cropArea.x === 0 && 
-      cropArea.y === 0 && 
-      cropArea.width === 0 && 
+    const isCropAreaEmpty =
+      cropArea.x === 0 &&
+      cropArea.y === 0 &&
+      cropArea.width === 0 &&
       cropArea.height === 0;
-    
-    if (isCropAreaEmpty && isFirstLoadRef.current && !hasUserAdjustedCropRef.current) {
+
+    if (
+      isCropAreaEmpty &&
+      isFirstLoadRef.current &&
+      !hasUserAdjustedCropRef.current
+    ) {
       // First load: Set default small centered rectangle (150x100)
       const defaultWidth = 200;
       const defaultHeight = 300;
       const centerX = (renderedWidth - defaultWidth) / 2;
       const centerY = (renderedHeight - defaultHeight) / 2;
-      
+
       setCropArea({
         x: Math.max(0, centerX),
         y: Math.max(0, centerY),
         width: Math.min(defaultWidth, renderedWidth),
         height: Math.min(defaultHeight, renderedHeight),
       });
-      
+
       // Mark that we've done the first load
       isFirstLoadRef.current = false;
     } else if (!isCropAreaEmpty) {
@@ -453,13 +457,13 @@ const CropDropZone = () => {
         const newX = Math.max(0, Math.min(maxX, dragStart.cropX + deltaX));
         const newY = Math.max(0, Math.min(maxY, dragStart.cropY + deltaY));
 
-      setCropArea((prev) => ({
-        ...prev,
-        x: newX,
-        y: newY,
-      }));
-      // Mark that user has adjusted the crop
-      hasUserAdjustedCropRef.current = true;
+        setCropArea((prev) => ({
+          ...prev,
+          x: newX,
+          y: newY,
+        }));
+        // Mark that user has adjusted the crop
+        hasUserAdjustedCropRef.current = true;
       } else if (isResizing) {
         let newCrop = { ...cropArea };
         const aspectValue = getAspectRatioValue();
@@ -729,8 +733,10 @@ const CropDropZone = () => {
 
             if (uploadData.status === "success") {
               // Update state with new IDs
-              const { sourceImageId: newSourceImageId, sourceUrl: newSourceUrl } =
-                uploadData.data;
+              const {
+                sourceImageId: newSourceImageId,
+                sourceUrl: newSourceUrl,
+              } = uploadData.data;
               setSourceImageId(newSourceImageId);
               setUploadedImageUrl(newSourceUrl);
 
@@ -749,7 +755,9 @@ const CropDropZone = () => {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",
-                  ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
+                  ...(accessToken && {
+                    Authorization: `Bearer ${accessToken}`,
+                  }),
                 },
                 body: JSON.stringify(retryRequestBody),
                 credentials: "include",
@@ -775,38 +783,21 @@ const CropDropZone = () => {
                 );
                 return;
               } else {
-                // Retry also failed, log and show error
-                console.error("=== CROP RETRY FAILED ===");
-                console.error("Response Status Code:", retryRes.status);
-                console.error("Response Data:", JSON.stringify(retryData, null, 2));
-                console.error("=========================");
+                // Retry also failed
                 throw new Error("Retry failed");
               }
             } else {
-              // Re-upload failed, log and show error
-              console.error("=== RE-UPLOAD FAILED ===");
-              console.error("Upload Response:", JSON.stringify(uploadData, null, 2));
-              console.error("=========================");
+              // Re-upload failed
               throw new Error("Re-upload failed");
             }
           } catch (reuploadError) {
-            // Re-upload or retry failed, show error
-            console.error("=== SELF-HEALING FAILED ===");
-            console.error("Error:", reuploadError);
-            console.error("===========================");
+            // Re-upload or retry failed
             toast.error(t["Something Went Wrong!"]);
             setStatus(COMPONENT_STATES.ERROR);
             setShowOptions(true);
             return;
           }
         } else {
-          // No file available or already retried, show error
-          console.error("=== SOURCE IMAGE NOT FOUND ===");
-          console.error("Response Status Code:", res.status);
-          console.error("Error Message:", data?.message);
-          console.error("Has uploadedFile:", !!uploadedFile);
-          console.error("Has retried:", hasRetried);
-          console.error("==============================");
           toast.error(t["Something Went Wrong!"]);
           setStatus(COMPONENT_STATES.ERROR);
           setShowOptions(true);
@@ -861,24 +852,10 @@ const CropDropZone = () => {
         }
       }
 
-      // Log generic failure
-      console.error("=== CROP REQUEST FAILED ===");
-      console.error("Response Status Code:", res.status);
-      console.error("Response Data:", JSON.stringify(data, null, 2));
-      console.error("===========================");
-
       toast.error(t["Something Went Wrong!"]);
       setStatus(COMPONENT_STATES.ERROR);
       setShowOptions(true);
     } catch (error) {
-      // Enhanced error logging for exceptions
-      console.error("=== CROP REQUEST EXCEPTION ===");
-      console.error("Error:", error);
-      console.error("Error Message:", error?.message);
-      console.error("Error Stack:", error?.stack);
-      console.error("Request Payload:", JSON.stringify(requestBody, null, 2));
-      console.error("=============================");
-
       toast.error(t["Something Went Wrong!"]);
       setStatus(COMPONENT_STATES.ERROR);
       setShowOptions(true);
@@ -898,17 +875,8 @@ const CropDropZone = () => {
   };
 
   const saveResultTwice = async () => {
-    // Log state before download to check if anything changes
-    console.log("=== BEFORE DOWNLOAD ===");
-    console.log("sourceImageId:", sourceImageId);
-    console.log("uploadedImageUrl:", uploadedImageUrl);
-    console.log("processedImage:", processedImage);
-    console.log("toolKey:", toolKey);
-    console.log("hasAccessToken:", !!accessToken);
-    console.log("======================");
-
     setIsDownloading(true);
-    
+
     try {
       const downloadPromise = downloadImage(
         processedImage,
@@ -933,43 +901,6 @@ const CropDropZone = () => {
         serverPromise,
       ]);
 
-      // Log download results
-      console.log("=== DOWNLOAD RESULTS ===");
-      console.log("Local Download Success:", downloadRes.status === "fulfilled");
-      if (downloadRes.status === "rejected") {
-        console.error("Local Download Error:", downloadRes.reason);
-      }
-      console.log("Server Save Success:", serverRes.status === "fulfilled");
-      if (serverRes.status === "rejected") {
-        console.error("Server Save Error:", serverRes.reason);
-      }
-      if (serverRes.status === "fulfilled") {
-        try {
-          const serverResponse = serverRes.value;
-          console.log("Server Response Status:", serverResponse.status);
-          console.log("Server Response Status Text:", serverResponse.statusText);
-          const serverData = await serverResponse.json();
-          console.log("Server Response Data:", JSON.stringify(serverData, null, 2));
-          if (serverResponse.status !== 200) {
-            console.error("Server Save Failed with Status:", serverResponse.status);
-            console.error("Server Error Response:", JSON.stringify(serverData, null, 2));
-          }
-        } catch (parseError) {
-          console.error("Failed to parse server response:", parseError);
-          console.error("Server Response Text:", await serverRes.value.text());
-        }
-      }
-      console.log("=======================");
-
-      // Log state after download to check if anything changed
-      console.log("=== AFTER DOWNLOAD ===");
-      console.log("sourceImageId:", sourceImageId);
-      console.log("uploadedImageUrl:", uploadedImageUrl);
-      console.log("processedImage:", processedImage);
-      console.log("toolKey:", toolKey);
-      console.log("hasAccessToken:", !!accessToken);
-      console.log("=====================");
-
       const localSuccess = downloadRes.status === "fulfilled";
       const serverSuccess = serverRes.status === "fulfilled";
 
@@ -987,18 +918,6 @@ const CropDropZone = () => {
         );
       }
     } catch (error) {
-      console.error("=== DOWNLOAD EXCEPTION ===");
-      console.error("Error:", error);
-      console.error("Error Message:", error?.message);
-      console.error("Error Stack:", error?.stack);
-      console.error("Current State:", {
-        sourceImageId,
-        uploadedImageUrl,
-        processedImage,
-        toolKey,
-        hasAccessToken: !!accessToken,
-      });
-      console.error("=========================");
       toast.error(t["Something Went Wrong!"]);
     } finally {
       setIsDownloading(false);
@@ -1006,34 +925,10 @@ const CropDropZone = () => {
   };
 
   const saveResultLocally = async () => {
-    // Log state before download to check if anything changes
-    console.log("=== BEFORE LOCAL DOWNLOAD ===");
-    console.log("sourceImageId:", sourceImageId);
-    console.log("uploadedImageUrl:", uploadedImageUrl);
-    console.log("processedImage:", processedImage);
-    console.log("============================");
-
     setIsDownloading(true);
     try {
       await downloadImage(processedImage, `${currentTool}-result.png`);
-      
-      // Log state after download to check if anything changed
-      console.log("=== AFTER LOCAL DOWNLOAD ===");
-      console.log("sourceImageId:", sourceImageId);
-      console.log("uploadedImageUrl:", uploadedImageUrl);
-      console.log("processedImage:", processedImage);
-      console.log("===========================");
     } catch (error) {
-      console.error("=== LOCAL DOWNLOAD EXCEPTION ===");
-      console.error("Error:", error);
-      console.error("Error Message:", error?.message);
-      console.error("Error Stack:", error?.stack);
-      console.error("Current State:", {
-        sourceImageId,
-        uploadedImageUrl,
-        processedImage,
-      });
-      console.error("===============================");
       toast.error(t["Something Went Wrong!"]);
     } finally {
       setIsDownloading(false);

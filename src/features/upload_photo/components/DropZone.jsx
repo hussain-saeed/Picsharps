@@ -1112,10 +1112,6 @@ const DropZone = () => {
             throw new Error("Retry failed - no result");
           }
         } catch (reuploadError) {
-          // Re-upload or retry failed, log and show error
-          console.error("=== SELF-HEALING FAILED ===");
-          console.error("Error:", reuploadError);
-          console.error("===========================");
           setStatus(COMPONENT_STATES.ERROR);
           if (toolConfig && toolConfig.hasOptions) {
             setShowOptions(true);

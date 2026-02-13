@@ -6,7 +6,7 @@ export const resizeImage = async ({
   imageUrl,
   width,
   height,
-  mode = "fill",
+  mode = "scale",
   accessToken,
   customMsg,
   customMsg2,

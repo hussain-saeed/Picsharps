@@ -102,7 +102,7 @@ const CropDropZone = () => {
         } else {
           resetToInitialState();
         }
-      } catch (error) {
+      } catch {
         toast.error(t["Something Went Wrong!"]);
         resetToInitialState();
       }
@@ -225,7 +225,7 @@ const CropDropZone = () => {
       setUploadedImageUrl(sourceUrl);
       setStatus(COMPONENT_STATES.DONE);
       setShowOptions(true);
-    } catch (error) {
+    } catch {
       setStatus(COMPONENT_STATES.ERROR);
       toast.error(t["Something Went Wrong!"]);
       resetComponent();
@@ -713,7 +713,7 @@ const CropDropZone = () => {
       toast.error(t["Something Went Wrong!"]);
       setStatus(COMPONENT_STATES.ERROR);
       setShowOptions(true);
-    } catch (err) {
+    } catch {
       toast.error(t["Something Went Wrong!"]);
       setStatus(COMPONENT_STATES.ERROR);
       setShowOptions(true);
@@ -798,6 +798,41 @@ const CropDropZone = () => {
       status === COMPONENT_STATES.UPLOADING ||
       status === COMPONENT_STATES.PROCESSING,
   });
+
+  // Calculate available tools for chaining operations (exclude current tool, flip, and rotate)
+  const availableTools = Object.keys(TOOL_CONFIG)
+    .filter(
+      (tool) =>
+        tool !== currentTool &&
+        tool !== "flip-image" &&
+        tool !== "rotate-image",
+    )
+    .map((tool) => ({
+      path: tool,
+      label: TOOL_CONFIG[tool].name,
+    }));
+
+  // Navigate to selected tool with processed image
+  const goToTool = (toolPath) => {
+    // Validate that we have a processed image
+    if (!processedImage) {
+      return;
+    }
+
+    localStorage.setItem("came_from_tool", "true");
+
+    // Save current result for the next tool
+    const resultData = {
+      sourceImageId,
+      previewUrl: processedImage,
+      originalUrl: uploadedImageUrl,
+      tool: currentTool, // Track source tool for context
+    };
+    localStorage.setItem(`dropzone_last_result`, JSON.stringify(resultData));
+
+    // Navigate to the selected tool
+    navigate(`/${toolPath}`);
+  };
 
   useEffect(() => {
     if (imageSize.width > 0 && aspectRatio !== "free") {
@@ -1097,7 +1132,7 @@ const CropDropZone = () => {
                   {imageSize.width > 0
                     ? `${Math.round(cropArea.width * (imageSize.naturalWidth / imageSize.width))}px × 
        ${Math.round(cropArea.height * (imageSize.naturalHeight / imageSize.height))}px`
-                    : "Calculating..."}
+                    : t["Loading ..."]}
                 </div>
 
                 <div
@@ -1487,54 +1522,168 @@ const CropDropZone = () => {
             </>
           )}
 
-          <button
-            dir={isRTL ? "rtl" : "ltr"}
-            onClick={() => {
-              isDownloading === true
-                ? null
-                : accessToken
-                  ? saveResultTwice()
-                  : saveResultLocally();
-            }}
-            disabled={isDownloading === true}
+          {/* Post-processing action buttons */}
+          <div
             style={{
-              cursor: isDownloading === true ? "not-allowed" : "pointer",
-              opacity: isDownloading === true ? "0.5" : "1",
-              padding: "10px 18px",
-              background: "var(--gradient-color)",
-              color: "white",
-              border: "none",
-              borderRadius: "5px",
+              width: "100%",
               display: "flex",
-              alignItems: "center",
-              gap: "8px",
-              fontSize: "15px",
-              fontWeight: 500,
+              justifyContent: "center",
             }}
           >
-            <Download size={18} />
-            {isDownloading === true ? t["Loading ..."] : t["Download Result"]}
-          </button>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "12px",
+                width: "100%",
+              }}
+              className={`items-center`}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  gap: "15px",
+                  justifyContent: "center",
+                  width: "100%",
+                  alignItems: "center",
+                }}
+              >
+                {/* Download button for processed image */}
+                <button
+                  dir={isRTL ? "rtl" : "ltr"}
+                  onClick={() => {
+                    isDownloading === true
+                      ? null
+                      : accessToken
+                        ? saveResultTwice()
+                        : saveResultLocally();
+                  }}
+                  disabled={isDownloading === true}
+                  style={{
+                    cursor: isDownloading === true ? "not-allowed" : "pointer",
+                    opacity: isDownloading === true ? "0.5" : "1",
+                    padding: "10px 18px",
+                    background: "var(--gradient-color)",
+                    color: "white",
+                    border: "none",
+                    borderRadius: "5px",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "8px",
+                    fontSize: "15px",
+                    fontWeight: 500,
+                  }}
+                >
+                  <Download size={18} />
+                  {isDownloading === true
+                    ? t["Loading ..."]
+                    : t["Download Result"]}
+                </button>
 
-          <button
-            onClick={resetComponent}
-            style={{
-              padding: "10px 18px",
-              background: "var(--gradient-color-2)",
-              color: "white",
-              border: "none",
-              borderRadius: "5px",
-              cursor: "pointer",
-              display: "flex",
-              alignItems: "center",
-              gap: "8px",
-              fontSize: "15px",
-              fontWeight: 500,
-            }}
-          >
-            <RefreshCw size={18} />
-            {t["Change Photo"]}
-          </button>
+                {/* Tool selection dropdown for chaining operations */}
+                {availableTools.length > 0 ? (
+                  <FormControl
+                    size="medium"
+                    sx={{
+                      width: {
+                        xs: "100%",
+                        sm: "440px",
+                      },
+                      direction: isRTL ? "rtl" : "ltr",
+                      "& *": {
+                        fontFamily: "inherit !important",
+                      },
+                      "& .MuiInputLabel-root": {
+                        right: isRTL ? 0 : "auto",
+                        left: isRTL ? "auto" : 0,
+                        top: isRTL ? -5 : "auto",
+                        width: "100%",
+                        textAlign: isRTL ? "right" : "left",
+                        transformOrigin: isRTL ? "right" : "left",
+                        paddingRight: isRTL ? "24px" : "0",
+                      },
+                      "& .MuiInputLabel-shrink": {
+                        transform: isRTL
+                          ? "translate(0, -1.5px) scale(0.75)"
+                          : "translate(14px, -9px) scale(0.75)",
+                      },
+                      "& .MuiOutlinedInput-notchedOutline": {
+                        textAlign: isRTL ? "right" : "left",
+                      },
+                      "& .MuiSelect-icon": {
+                        right: isRTL ? "unset" : "7px",
+                        left: isRTL ? "7px" : "unset",
+                      },
+                    }}
+                  >
+                    <InputLabel id="tool-select-label">
+                      {t["Select a tool to process the result with ..."]}
+                    </InputLabel>
+
+                    <Select
+                      labelId="tool-select-label"
+                      defaultValue=""
+                      label={t["Select a tool to process the result with ..."]}
+                      onChange={(e) => goToTool(e.target.value)}
+                      sx={{
+                        borderRadius: "8px",
+                        background: "transparent",
+                        ".MuiOutlinedInput-notchedOutline": {
+                          borderColor: "#ccc",
+                        },
+                        "&:hover .MuiOutlinedInput-notchedOutline": {
+                          borderColor: "#aaa",
+                        },
+                        "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                          borderColor: "#1976d2",
+                        },
+                      }}
+                      MenuProps={{
+                        dir: isRTL ? "rtl" : "ltr",
+                        PaperProps: {
+                          sx: {
+                            "& .MuiMenuItem-root": {
+                              fontFamily: "inherit",
+                            },
+                          },
+                        },
+                      }}
+                    >
+                      {availableTools.map((tool) => (
+                        <MenuItem key={tool.path} value={tool.path}>
+                          {tool.label}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                ) : (
+                  ""
+                )}
+              </div>
+
+              {/* Reset button to start over with new photo */}
+              <button
+                onClick={resetComponent}
+                style={{
+                  padding: "10px 18px",
+                  background: "var(--gradient-color-2)",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "5px",
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "8px",
+                  fontSize: "16px",
+                  marginLeft: "0",
+                }}
+              >
+                <RefreshCw size={18} />
+                {t["Change Photo"]}
+              </button>
+            </div>
+          </div>
         </div>
       )}
 

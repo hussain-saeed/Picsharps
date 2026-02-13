@@ -45,24 +45,6 @@ export const TOOL_CONFIG = {
         min: 5,
         max: 5000,
       },
-      mode: {
-        type: "radio",
-        label: "Resize Mode",
-        default: "fill",
-        values: [
-          {
-            label: "Fill",
-            value: "fill",
-            description:
-              "Resizes to fill width/height, may crop parts of the image",
-          },
-          {
-            label: "Scale",
-            value: "scale",
-            description: "Scales the image ignoring aspect ratio",
-          },
-        ],
-      },
     },
   },
 

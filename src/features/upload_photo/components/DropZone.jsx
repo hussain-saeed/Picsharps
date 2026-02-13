@@ -346,7 +346,7 @@ const DropZone = () => {
           imageUrl: uploadedImageUrl,
           width: options.width, // Target width in pixels
           height: options.height, // Target height in pixels
-          mode: options.mode, // Resize mode (contain, cover, etc.)
+          mode: "scale", // Always use scale mode
           accessToken,
           customMsg:
             t[
@@ -1068,63 +1068,6 @@ const DropZone = () => {
                                       }
                                       InputProps={{ inputProps: { min: 5 } }}
                                     />
-                                  </div>
-
-                                  <div style={{ display: "flex", gap: "10px" }}>
-                                    {toolConfig.options.mode.values.map(
-                                      (option) => {
-                                        const isSelected =
-                                          options.mode === option.value;
-
-                                        return (
-                                          <label
-                                            key={option.value}
-                                            style={{
-                                              display: "flex",
-                                              alignItems: "center",
-                                              gap: "10px",
-                                              padding: "10px 14px",
-                                              borderRadius: "8px",
-                                              border: isSelected
-                                                ? "2px solid #00c853"
-                                                : "1px solid #ccc",
-                                              cursor: "pointer",
-                                              userSelect: "none",
-                                            }}
-                                          >
-                                            <Radio
-                                              name="mode"
-                                              value={option.value}
-                                              checked={isSelected}
-                                              onChange={(e) =>
-                                                handleOptionChange(
-                                                  "mode",
-                                                  e.target.value,
-                                                )
-                                              }
-                                              disabled={
-                                                status ===
-                                                COMPONENT_STATES.PROCESSING
-                                              }
-                                              sx={{
-                                                padding: 0,
-                                                "& .MuiSvgIcon-root": {
-                                                  fontSize: 16,
-                                                },
-                                              }}
-                                            />
-                                            <span
-                                              style={{
-                                                fontWeight: 500,
-                                                color: "#333",
-                                              }}
-                                            >
-                                              {t[option.label]}
-                                            </span>
-                                          </label>
-                                        );
-                                      },
-                                    )}
                                   </div>
 
                                   <button
